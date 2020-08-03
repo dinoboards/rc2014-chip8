@@ -1,0 +1,8 @@
+; one comment
+; two comment
+
+  LD  I, LABEL
+  LD V1, 1
+LABEL:
+  LD I, LABEL
+  RET

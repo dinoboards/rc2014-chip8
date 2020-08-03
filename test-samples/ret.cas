@@ -1,0 +1,19 @@
+
+  CALL  MYSUB
+  LD  V1, 10
+  CALL TESTVXVY
+  RET
+
+TESTVXVY:
+  LD  V3, 20
+  LD  V4, 21
+  SE  V3, V4
+  LD  VD, 255
+  RET
+
+MYSUB:
+  LD  V2, 20
+  LD  V1, 1
+  SE  V1, 1
+  LD  VE, 255
+  RET

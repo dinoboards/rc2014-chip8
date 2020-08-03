@@ -1,0 +1,4 @@
+  LD V1, 1
+  ADD V1, 10
+  LD I, 2048
+  RET

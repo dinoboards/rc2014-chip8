@@ -1,0 +1,11 @@
+
+; this file attempts to have 2 labels defined
+
+JUSTALABEL:
+  RET
+
+THISISALABEL:
+  RET
+
+THISISALABEL:
+  RET
