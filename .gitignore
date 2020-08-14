@@ -22,3 +22,4 @@ stack.asm
 instr_output.asm
 token_parser.asm
 emitters.asm
+assembler.asm

@@ -14,10 +14,11 @@ chip8asm/emitters.asm: chip8asm/emitters.h datatypes.h chip8asm/systemstate.h
 chip8asm/expr.asm: xstdio.h chip8asm/labels.h chip8asm/expr.h chip8asm/chartesters.h datatypes.h
 chip8asm/filereader.asm: chip8asm/filereader.h charconstants.h cpm.h datatypes.h
 chip8asm/labels.asm: chip8asm/labels.h datatypes.h xstdio.h
-chip8asm/main.asm: cpm.h hbios.h xstdio.h charconstants.h chip8asm/tokenreader.h datatypes.h chip8asm/systemstate.h chip8asm/emitters.h chip8asm/token_parser.h
+chip8asm/main.asm: cpm.h xstdio.h chip8asm/assembler.h chip8asm/labels.h chip8asm/systemstate.h
 chip8asm/systemstate.asm: chip8asm/systemstate.h datatypes.h
 chip8asm/token_parser.asm: chip8asm/token_parser.h datatypes.h chip8asm/expr.h
 chip8asm/tokenreader.asm: chip8asm/tokenreader.h chip8asm/chartesters.h datatypes.h
+chip8asm/assembler.asm: chip8asm/assembler.h xstdio.h chip8asm/tokenreader.h datatypes.h chip8asm/systemstate.h chip8asm/emitters.h chip8asm/token_parser.h chip8asm/labels.h
 hbios.asm: hbios.h
 xstdio.asm: xstdio.h hbios.h datatypes.h
 
@@ -93,6 +94,7 @@ clean:
 	@rm -f ./chip8asm/main.asm
 	@rm -f ./chip8asm/token_parser.asm
 	@rm -f ./chip8asm/tokenreader.asm
+	@rm -f ./chip8asm/assembler.asm
 	@rm -f hbios.asm
 	@rm -f xstdio.asm
 	@rm -f zcc_opt.def
