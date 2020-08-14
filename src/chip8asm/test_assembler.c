@@ -78,7 +78,9 @@ void shouldError(const char *source, const char *errorMessage) {
 }
 
 void main() {
+  shouldAssemble("LD V3, va", 0x83A0);
   shouldAssemble("LD V1, 10", 0x610A);
+  shouldAssemble("LD I, 1234", 0xA4D2);
   shouldAssemble("DRW V2, V3, 11", 0xD23B);
   shouldError("BAD INSTRUCTION", "Expected Instruction but found BAD");
 

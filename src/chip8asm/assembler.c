@@ -18,17 +18,30 @@ inline static void assRet() { emit(0x00EE); }
 Set Vx = kk.
 
 The interpreter puts the value kk into register Vx.
+--------------
+8xy0 - LD Vx, Vy
+Set Vx = Vy.
+
+Stores the value of register Vy in register Vx.
 */
 inline static void assLdVx() {
-  const byte vRegister = expectToBeVRegister();
+  const byte x = expectToBeVRegister();
 
   getNext();
   expectToBeComma();
 
   getNext();
-  const byte x = expectToBeByte();
 
-  emit((0x6000 | (((int)vRegister) << 8)) | x);
+  if (currentIsVRegister()) {
+    const byte y = expectToBeVRegister();
+
+    emitNibbles(0x8, x, y, 0);
+    return;
+  }
+
+  const byte data = expectToBeByte();
+
+  emit((0x6000 | (((int)x) << 8)) | data);
 }
 
 /*
@@ -49,17 +62,6 @@ inline static void assLdI() {
   emit(0xA000 | x);
 }
 
-/*
-8xy0 - LD Vx, Vy
-Set Vx = Vy.
-
-Stores the value of register Vy in register Vx.
---------------
-Annn - LD I, addr
-Set I = nnn.
-
-The value of register I is set to nnn.
-*/
 inline static void assLd() {
   getNext();
 
