@@ -52,6 +52,20 @@ void setup_add_ve_1() {
 
 void verify_add_ve_1() { expectEqualBytes(registers[0xE], 4, "VE"); }
 
+void setup_se_v4_15_skips() {
+  registers[4] = 15;
+  programStorage[0] = invertByteOrder(SE_V4_15);
+}
+
+void verify_se_v4_15_skips() { expectEqualPtrs(chip8PC, (uint16_t *)0x204, "PC"); }
+
+void setup_se_v4_15_no_skips() {
+  registers[4] = 1;
+  programStorage[0] = invertByteOrder(SE_V4_15);
+}
+
+void verify_se_v4_15_no_skips() { expectEqualPtrs(chip8PC, (uint16_t *)0x202, "PC"); }
+
 void main() {
 
   assert(ld_v1_10);
@@ -65,6 +79,10 @@ void main() {
   assert(final_ret);
 
   assert(add_ve_1);
+
+  assert(se_v4_15_skips);
+
+  assert(se_v4_15_no_skips);
 
   xprintf(testFailure ? "Tests Failed\r\n" : "All Done\r\n");
 }

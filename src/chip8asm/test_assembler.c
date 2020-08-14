@@ -93,7 +93,7 @@ void main() {
   shouldAssemble("CLS", 0x00E0);
   shouldAssemble("RET", RET);
   shouldAssemble("ADD VE, 1", ADD_VE_1);
-  shouldAssemble("SE V4, 15", 0x340F);
+  shouldAssemble("SE V4, 15", SE_V4_15);
   shouldAssemble("SE V4, v9", 0x5490);
   shouldError("BAD INSTRUCTION", "Expected Instruction but found BAD");
 
