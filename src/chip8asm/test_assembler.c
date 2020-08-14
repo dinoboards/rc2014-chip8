@@ -94,7 +94,7 @@ void main() {
   shouldAssemble("RET", RET);
   shouldAssemble("ADD VE, 1", ADD_VE_1);
   shouldAssemble("SE V4, 15", SE_V4_15);
-  shouldAssemble("SE V4, v9", 0x5490);
+  shouldAssemble("SE V4, v9", SE_V4_V9);
   shouldError("BAD INSTRUCTION", "Expected Instruction but found BAD");
 
   xprintf(testFailure ? "Tests Failed\r\n" : "All Done\r\n");

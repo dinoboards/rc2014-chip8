@@ -7,3 +7,7 @@
 #define seVxByte()                        \
   if (registers[secondNibble] == lowByte) \
   chip8PC += 1
+
+#define seVxVy()                                         \
+  if (registers[secondNibble] == registers[thirdNibble]) \
+  chip8PC += 1

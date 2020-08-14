@@ -28,6 +28,7 @@ inline uint16_t readInstruction() {
 #define CH8_CALL_NIB       0x2
 #define CH8_ADDVX_NIB      0x7
 #define CH8_SE_VX_BYTE_NIB 0x3
+#define CH8_SE_VX_VY_NIB   0x5
 
 uint16_t invertByteOrder(uint16_t word) __naked __z88dk_fastcall {
   (void)word;
@@ -97,6 +98,10 @@ bool executeSingleInstruction() {
       break;
     }
 
+    case CH8_SE_VX_VY_NIB: {
+      seVxVy();
+      break;
+    }
     default:
       xprintf("Bad instruction %04X at %p\r\n", invertByteOrder(currentInstruction), chip8PC);
       return false;
