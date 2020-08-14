@@ -3,3 +3,4 @@
 #define LD_I_1234 0xA4D2
 #define CALL_1025 0x2401
 #define RET       0x00EE
+#define ADD_VE_1  0x7E01

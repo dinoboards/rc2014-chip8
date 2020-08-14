@@ -9,58 +9,7 @@
 #include <stdio.h>
 #include <string.h>
 
-bool testFailure = false;
-bool appRunning = false;
-
-void expectFalse(bool a, const char *msg) {
-  if (!a) {
-    xprintf("\t%s == false\r\n", msg);
-    return;
-  }
-
-  testFailure = true;
-  xprintf("Expected %s to be false but was %d\r\n", msg, (int)a);
-}
-
-void expectTrue(bool a, const char *msg) {
-  if (a) {
-    xprintf("\t%s == true\r\n", msg);
-    return;
-  }
-
-  testFailure = true;
-  xprintf("Expected %s to be true but was %d\r\n", msg, (int)a);
-}
-
-void expectEqualBytes(byte a, byte b, const char *msg) {
-  if (a == b) {
-    xprintf("\t%s == %d\r\n", msg, a);
-    return;
-  }
-
-  testFailure = true;
-  xprintf("Expected %s to equal %d, but was %d\r\n", msg, b, a);
-}
-
-void expectEqualInts(int a, int b, const char *msg) {
-  if (a == b) {
-    xprintf("\t%s == %d\r\n", msg, a);
-    return;
-  }
-
-  testFailure = true;
-  xprintf("Expected %s to equal %d, but was %d\r\n", msg, b, a);
-}
-
-void expectEqualPtrs(uint16_t *a, uint16_t *b, const char *msg) {
-  if (a == b) {
-    xprintf("\t%s == %p\r\n", msg, a);
-    return;
-  }
-
-  testFailure = true;
-  xprintf("Expected %s to equal %p, but was %p\r\n", msg, b, a);
-}
+#include "test_helpers.h"
 
 void setup_ld_v1_10() { programStorage[0] = invertByteOrder(LD_V1_10); }
 
@@ -96,15 +45,12 @@ void setup_final_ret() {
 
 void verify_final_ret() { expectFalse(appRunning, "appRunning"); }
 
-#define assert(a)                            \
-  {                                          \
-    xprintf(#a "\r\n");                      \
-    initSystemState();                       \
-    setup_##a();                             \
-    appRunning = executeSingleInstruction(); \
-    verify_##a();                            \
-    xprintf("\r\n");                         \
-  }
+void setup_add_ve_1() {
+  registers[0xE] = 3;
+  programStorage[0] = invertByteOrder(ADD_VE_1);
+}
+
+void verify_add_ve_1() { expectEqualBytes(registers[0xE], 4, "VE"); }
 
 void main() {
 
@@ -117,6 +63,8 @@ void main() {
   assert(ret_from_subroutine);
 
   assert(final_ret);
+
+  assert(add_ve_1);
 
   xprintf(testFailure ? "Tests Failed\r\n" : "All Done\r\n");
 }
