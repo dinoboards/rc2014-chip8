@@ -12,6 +12,11 @@ chip8asm:
 	@cp ./test-samples/*.cas ./bin/
 	@cp ./test-samples/*.ch8 ./bin/
 
+test:
+	@mkdir -p ./bin
+	@$(MAKE) -C ./src ../bin/tstasmbl.com -s -j 4
+	@(cd bin && cpm tstasmbl)
+
 .PHONY: chip8
 chip8:
 	@mkdir -p ./bin

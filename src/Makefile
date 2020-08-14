@@ -1,5 +1,5 @@
 .PHONY: all
-all: ../bin/chip8.com ../bin/chip8asm.com
+all: ../bin/chip8.com ../bin/chip8asm.com ../bin/tstasmbl.com
 
 RELOCASSEMBLER=node ./apploader.js --page-align
 ASSEMBLER=z80asm
@@ -14,18 +14,22 @@ chip8asm/emitters.asm: chip8asm/emitters.h datatypes.h chip8asm/systemstate.h
 chip8asm/expr.asm: xstdio.h chip8asm/labels.h chip8asm/expr.h chip8asm/chartesters.h datatypes.h
 chip8asm/filereader.asm: chip8asm/filereader.h charconstants.h cpm.h datatypes.h
 chip8asm/labels.asm: chip8asm/labels.h datatypes.h xstdio.h
-chip8asm/main.asm: cpm.h xstdio.h chip8asm/assembler.h chip8asm/labels.h chip8asm/systemstate.h
+chip8asm/main.asm: cpm.h xstdio.h chip8asm/assembler.h chip8asm/labels.h chip8asm/systemstate.h chip8asm/exit.h
 chip8asm/systemstate.asm: chip8asm/systemstate.h datatypes.h
 chip8asm/token_parser.asm: chip8asm/token_parser.h datatypes.h chip8asm/expr.h
 chip8asm/tokenreader.asm: chip8asm/tokenreader.h chip8asm/chartesters.h datatypes.h
 chip8asm/assembler.asm: chip8asm/assembler.h xstdio.h chip8asm/tokenreader.h datatypes.h chip8asm/systemstate.h chip8asm/emitters.h chip8asm/token_parser.h chip8asm/labels.h
 hbios.asm: hbios.h
 xstdio.asm: xstdio.h hbios.h datatypes.h
+chip8asm/test_assembler.asm: cpm.h xstdio.h chip8asm/assembler.h chip8asm/labels.h chip8asm/systemstate.h
+chip8asm/exit.asm: chip8asm/exit.h
+chip8asm/error.asm: chip8asm/error.h xstdio.h
+chip8asm/error_reports.asm: chip8asm/error_reports.h chip8asm/exit.h chip8asm/error.h chip8asm/tokenreader.h
 
 chip8asm_sources = $(wildcard ./chip8asm/*.c) $(wildcard ./chip8asm/*.asm)
-chip8asm_objects = crt.o cpm.o hbios_cio.o hbios.o memap.o nonreloccrt.o xstdio.o $(patsubst %.asm,%.o,$(patsubst %.c,%.o,$(chip8asm_sources)))
+chip8asm_objects = crt.o memap.o cpm.o hbios_cio.o hbios.o memap.o nonreloccrt.o xstdio.o $(patsubst %.asm,%.o,$(patsubst %.c,%.o,$(chip8asm_sources)))
 
-../bin/chip8asm.com: $(chip8asm_objects)
+../bin/chip8asm.com: $(filter-out %test_assembler.o, $(chip8asm_objects))
 	@$(ASSEMBLER) --output=$(basename $<).bin -mz80 -b \
 	-D__SDCC -D__SDCC_IY \
 	-I"${ZCCCFG}/../../libsrc/_DEVELOPMENT/target/cpm" \
@@ -39,6 +43,23 @@ chip8asm_objects = crt.o cpm.o hbios_cio.o hbios.o memap.o nonreloccrt.o xstdio.
 	@mkdir -p ../bin
 	@mv crt_code_crt_init.bin ../bin/chip8asm.com
 	@echo "\nBuilt ./bin/chip8asm.com"
+
+exclude_from_tests = %main.o %filereader.o %exit.o %error.o
+../bin/tstasmbl.com: $(filter-out $(exclude_from_tests),$(chip8asm_objects))
+	@$(ASSEMBLER) --output=$(basename $<).bin -mz80 -b \
+	--output=tstasmbl \
+	-D__SDCC -D__SDCC_IY \
+	-I"${ZCCCFG}/../../libsrc/_DEVELOPMENT/target/cpm" \
+	-I"${ZCCCFG}/../../libsrc/_DEVELOPMENT/target/z80" \
+	-I"${ZCCCFG}/../../libsrc/_DEVELOPMENT/target/hbios" \
+	-I"${ZCCCFG}/../../lib" \
+	-L. \
+	-L"${ZCCCFG}/../../libsrc/_DEVELOPMENT/lib/sdcc_iy" \
+	-imath32 \
+	--list -iz80 memap.o $(filter-out memap.o,$^)
+	@mkdir -p ../bin
+	@mv tstasmbl_code_crt_init.bin ../bin/tstasmbl.com
+	@echo "\nBuilt ./bin/tstasmbl.com"
 
 chip8_sources = $(wildcard ./chip8/*.c) $(wildcard ./chip8/*.asm)
 chip8_objects = memap.o relocmem.asm crt.o reloccrt.o hbios.o hbios_cio.o cpm.o xstdio.o $(patsubst %.asm,%.o,$(patsubst %.c,%.o,$(chip8_sources)))
@@ -95,6 +116,9 @@ clean:
 	@rm -f ./chip8asm/token_parser.asm
 	@rm -f ./chip8asm/tokenreader.asm
 	@rm -f ./chip8asm/assembler.asm
+	@rm -f ./chip8asm/test_assembler.asm
+	@rm -f ./chip8asm/error_reports.asm
+	@rm -f ./chip8asm/error.asm
 	@rm -f hbios.asm
 	@rm -f xstdio.asm
 	@rm -f zcc_opt.def

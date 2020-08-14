@@ -16,7 +16,7 @@ void openFileStream() {
 
 void closeFileStream() { chk(fClose(defaultFCB)); }
 
-static char getNextCharRaw() {
+char getNextCharRaw() {
   if (diskBufferP >= &diskBuffer[128]) {
     chk(fDmaOff(diskBuffer));
     chk(fRead(defaultFCB));
@@ -27,11 +27,4 @@ static char getNextCharRaw() {
     return '\0';
 
   return *diskBufferP++;
-}
-
-char getNextChar() {
-  char c = CR;
-  while (c == CR)
-    c = getNextCharRaw();
-  return c;
 }

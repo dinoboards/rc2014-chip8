@@ -23,3 +23,7 @@ instr_output.asm
 token_parser.asm
 emitters.asm
 assembler.asm
+test_assembler.asm
+error_reports.asm
+error.asm
+

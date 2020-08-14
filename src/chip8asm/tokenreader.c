@@ -18,6 +18,13 @@ int lineNumber;
 
 bool newLineStarted = true;
 
+static char getNextChar() {
+  char c = CR;
+  while (c == CR)
+    c = getNextCharRaw();
+  return c;
+}
+
 static inline char getNext() {
   const char result = getNextChar();
   if (newLineStarted) {

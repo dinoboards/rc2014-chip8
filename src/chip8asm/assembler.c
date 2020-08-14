@@ -1,6 +1,7 @@
 // #include "charconstants.h"
 #include "assembler.h"
 #include "chip8asm/emitters.h"
+#include "chip8asm/error_reports.h"
 #include "chip8asm/systemstate.h"
 #include "chip8asm/token_parser.h"
 #include "chip8asm/tokenreader.h"
@@ -13,10 +14,10 @@ inline static void assLabel(int parseCount) { addLabel(token.value, currentAddre
 inline static void assRet() { emit(0x00EE); }
 
 /*
-8xy0 - LD Vx, Vy
-Set Vx = Vy.
+6xkk - LD Vx, byte
+Set Vx = kk.
 
-Stores the value of register Vy in register Vx.
+The interpreter puts the value kk into register Vx.
 */
 inline static void assLdVx() {
   const byte vRegister = expectToBeVRegister();
@@ -228,8 +229,7 @@ void assemble(int parseCount) __z88dk_fastcall {
       break;
 
     default:
-      xprintf("Unexpected token %d, %s\r\n", (int)token.type, token.value);
-      exit(-1);
+      return expectedError("Instruction");
     }
 
     // xtracef("%02X: %d : '%s'\r\n", (int)token.terminatorChar, (int)token.type, token.value);
