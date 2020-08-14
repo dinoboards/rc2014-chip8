@@ -14,8 +14,19 @@ chip8asm:
 
 test:
 	@mkdir -p ./bin
+	@$(MAKE) -C ./src ../bin/tstinstr.com ../bin/tstasmbl.com -s -j 4
+	@(cd bin && cpm tstasmbl && cpm tstinstr)
+
+tstinstr:
+	@mkdir -p ./bin
+	@$(MAKE) -C ./src ../bin/tstinstr.com -s -j 4
+	@(cd bin && cpm tstinstr)
+
+tstasmbl:
+	@mkdir -p ./bin
 	@$(MAKE) -C ./src ../bin/tstasmbl.com -s -j 4
-	@(cd bin && cpm tstasmbl)
+	@(cd bin && cpm tstinstr)
+
 
 .PHONY: chip8
 chip8:

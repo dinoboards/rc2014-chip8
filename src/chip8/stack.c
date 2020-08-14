@@ -1,9 +1,8 @@
-#include "stack.h"
+#include "chip8/stack.h"
+#include "chip8/systemstate.h"
 #include "datatypes.h"
-#include "systemstate.h"
 #include "xstdio.h"
 
-#define MAX_STACK 16
 uint16_t stack[MAX_STACK];
 byte     stackIndex = 0;
 

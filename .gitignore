@@ -26,4 +26,6 @@ assembler.asm
 test_assembler.asm
 error_reports.asm
 error.asm
+byte_code_executor.asm
+test_instruction.asm
 

@@ -2,11 +2,12 @@ const fs = require('fs')
 const util = require('util')
 const childProcess = require('child_process')
 const path = require('path')
+const os = require('os')
 
 const mainSection = 'code_crt_init'
-const fileAt100 = "/tmp/100"
-const fileAt200 = "/tmp/200"
-const loaderAsm = '/tmp/loader.asm'
+const _fileAt100 = "/100"
+const _fileAt200 = "/200"
+const _loaderAsm = '/loader.asm'
 
 function exec(command) {
   //console.log(`$: ${command}`)
@@ -50,7 +51,14 @@ function convertToBitmap(hits, dataLength) {
 
 async function main(...options) {
 
+  fs.mkdtemp(path.join(os.tmpdir(), 'x-'), async (err, directory) => {
+
   const output = options.find(x => x.startsWith('-o')) || options.find(x => x.startsWith('--output')).slice(7)
+  const fileName = output.slice(2)
+
+  const fileAt100 = `${directory}/${_fileAt100}`
+  const fileAt200 = `${directory}/${_fileAt200}`
+  const loaderAsm = `${directory}/${_loaderAsm}`
 
   const pageAlign = options.find(x => x == '--page-align')
 
@@ -76,9 +84,8 @@ async function main(...options) {
       hits.push(i - 1)
   }
 
-  const fileName = output.slice(2)
   //console.log('assembled filename:', fileName)
-  const relocFileName = `/tmp/100.reloc`
+  const relocFileName = `${directory}/100.reloc`
 
   const data = convertToBitmap(hits, data2.length)
 
@@ -89,9 +96,10 @@ async function main(...options) {
 
   const defines = pageAlign ? "-DPAGEALIGN" : ""
 
-  await exec(`gpp --includemarker "; #include line: %, file:%" -n ${defines} -o /tmp/loader.asmpp ${loaderAsm}`)
+  await exec(`gpp --includemarker "; #include line: %, file:%" -n ${defines} -o ${directory}/loader.asmpp ${loaderAsm}`)
 
-  await exec(`z80asm -r=256 -o"${fileName}" -b "/tmp/loader.asmpp"`)
+  await exec(`z80asm -r=256 -o"${fileName}" -b "${directory}/loader.asmpp"`)
+})
 }
 
 main(...[...process.argv].slice(2)).catch(err => {

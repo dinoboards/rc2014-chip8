@@ -2,6 +2,7 @@
 #include "chip8asm/labels.h"
 #include "chip8asm/systemstate.h"
 #include "cpm.h"
+#include "test_opcodes.h"
 #include "xstdio.h"
 #include <stdarg.h>
 #include <stdio.h>
@@ -39,8 +40,10 @@ void shouldAssemble(const char *source, uint16_t expectedWord) {
 
   initLabelStorage();
   assemble(1);
+  content = (char *)source;
+  assemble(2);
 
-  xprintf("%s should assemble to %04X\r\n", source, expectedWord);
+  xprintf("%04X should be assembled from:\r\n  %s\r\n\r\n", expectedWord, source);
 
   if (testErrored) {
     xprintf("  Failed.  %s\r\n", pbuffer);
@@ -49,7 +52,7 @@ void shouldAssemble(const char *source, uint16_t expectedWord) {
   }
 
   if (programStorage[0] != (byte)(expectedWord >> 8) || programStorage[1] != (byte)(expectedWord & 0xFF)) {
-    xprintf("   Failure: translated to %02X%02X\r\n", (int)programStorage[0], (int)programStorage[1]);
+    xprintf("  Failure: translated to %02X%02X\r\n\r\n", (int)programStorage[0], (int)programStorage[1]);
     testFailure = true;
   }
 }
@@ -62,14 +65,16 @@ void shouldError(const char *source, const char *errorMessage) {
 
   initLabelStorage();
   assemble(1);
+  content = (char *)source;
+  assemble(2);
 
-  xprintf("%s should report error '%s'\r\n", source, errorMessage);
+  xprintf("%s should be reported from:\r\n'%s'\r\n\r\n", errorMessage, source);
 
   if (testErrored) {
     if (strstr(pbuffer, errorMessage) != NULL)
       return;
 
-    xprintf("  Failed: incorrect error message of %s\r\n", pbuffer);
+    xprintf("  Failed: incorrect error message of %s\r\n\r\n", pbuffer);
     testFailure = true;
     return;
   }
@@ -78,13 +83,13 @@ void shouldError(const char *source, const char *errorMessage) {
 }
 
 void main() {
-  shouldAssemble("LD V3, va", 0x83A0);
-  shouldAssemble("LD V1, 10", 0x610A);
-  shouldAssemble("LD I, 1234", 0xA4D2);
+  shouldAssemble("LD V3, va", LD_V3_VA);
+  shouldAssemble("LD V1, 10", LD_V1_10);
+  shouldAssemble("LD I, 1234", LD_I_1234);
   shouldAssemble("DRW V2, V3, 11", 0xD23B);
   shouldAssemble("DB 2, 255", 0x02FF);
-  shouldAssemble("CALL 1025", 0x2401);
-  shouldAssemble("LABL: CALL LABL", 0x2200);
+  shouldAssemble("CALL 1025", CALL_1025);
+  shouldAssemble("CALL LABL\r\n  LABL: RET", 0x2202);
   shouldAssemble("CLS", 0x00E0);
   shouldAssemble("RET", 0x00EE);
   shouldAssemble("ADD VE, 1", 0x7E01);

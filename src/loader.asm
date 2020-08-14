@@ -85,12 +85,12 @@ STKSAV:		DEFS	STKSIZ		; STACK
 STACK:		EQU	ASMPC		; STACK TOP
 
 RELOC:
-BINARY	"/tmp/100.reloc"
+BINARY	"./100.reloc"
 RELOCSIZE:	EQU	ASMPC - RELOC
 
 
 APP:
-BINARY "/tmp/100_code_crt_init.bin"
+BINARY "./100_code_crt_init.bin"
 APPEND:
 APPSIZE:	EQU	ASMPC - APP
 
