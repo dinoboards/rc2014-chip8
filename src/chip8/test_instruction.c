@@ -84,7 +84,15 @@ void verify_se_v4_v9_no_skips() { expectEqualPtrs(chip8PC, (uint16_t *)0x202, "P
 
 void setup_cls() { programStorage[0] = invertByteOrder(CLS); }
 
-void verify_cls() { expectEqualEscapedString(pbuffer, "\033[2J\033[0;0H"); }
+void verify_cls() { expectEqualEscapedString(buffer, "\033[2J\033[0;0H"); }
+
+void setup_draw() { programStorage[0] = invertByteOrder(DRAW_V2_V3_11); }
+
+void verify_draw() {
+  expectEqualEscapedString(buffer, "\033[1;0H\033[47;1m \033[40m\033[1;1H\033[47;1m \033[40m\033[1;6H\033[47;1m \033[40m\033[1;7H\033[47;1m \033[40m\033[2;6H\033[47;1m \033[40m\033[2;7H\033[47;1m \033[40m\033[3;0H\033[47;1m "
+                                   "\033[40m\033[3;1H\033[47;1m \033[40m\033[3;2H\033[47;1m \033[40m\033[3;4H\033[47;1m \033[40m\033[3;6H\033[47;1m \033[40m\033[6;0H\033[47;1m \033[40m\033[6;1H\033[47;1m \033[40m\033[6;6H \033[6;7H "
+                                   "\033[7;5H\033[47;1m \033[40m\033[7;6H \033[8;0H\033[47;1m \033[40m\033[8;1H\033[47;1m \033[40m\033[8;3H\033[47;1m \033[40m\033[8;4H\033[47;1m \033[40m\033[8;5H\033[47;1m \033[40m");
+}
 
 void main() {
   assert(ld_v1_10);
@@ -106,6 +114,8 @@ void main() {
   assert(se_v4_v9_no_skips);
 
   assert(cls);
+
+  assert(draw);
 
   xprintf(testFailure ? "Tests Failed\r\n" : "All Done\r\n");
 }

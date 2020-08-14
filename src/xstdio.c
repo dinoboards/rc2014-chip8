@@ -4,25 +4,23 @@
 #include <stdarg.h>
 #include <stdio.h>
 
-#define MAX_MESSAGE_TEXT 256
+char xbuffer[MAX_MESSAGE_TEXT];
 
 void xprintf(const char *msg, ...) {
-  char    pbuffer[MAX_MESSAGE_TEXT];
   va_list arg;
   va_start(arg, msg);
-  vsnprintf(pbuffer, MAX_MESSAGE_TEXT - 1, (char *)msg, arg);
+  vsnprintf(xbuffer, MAX_MESSAGE_TEXT - 1, (char *)msg, arg);
   va_end(arg);
-  print(pbuffer);
+  print(xbuffer);
 }
 
 #ifdef XTRACE
 void xtracef(const char *msg, ...) {
-  char    pbuffer[MAX_MESSAGE_TEXT];
   va_list arg;
   va_start(arg, msg);
-  vsnprintf(pbuffer, MAX_MESSAGE_TEXT - 1, (char *)msg, arg);
+  vsnprintf(xbuffer, MAX_MESSAGE_TEXT - 1, (char *)msg, arg);
   va_end(arg);
-  print(pbuffer);
+  print(xbuffer);
 }
 #else
 void xtracef(const char *msg, ...) { (void)msg; }

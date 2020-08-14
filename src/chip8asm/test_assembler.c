@@ -16,13 +16,10 @@ void openFileStream() {}
 
 void closeFileStream() {}
 
-#define MAX_MESSAGE_TEXT 256
-char pbuffer[MAX_MESSAGE_TEXT];
-
 void logError(const char *msg, ...) {
   va_list arg;
   va_start(arg, msg);
-  vsnprintf(pbuffer, MAX_MESSAGE_TEXT - 1, (char *)msg, arg);
+  vsnprintf(xbuffer, MAX_MESSAGE_TEXT - 1, (char *)msg, arg);
   va_end(arg);
 }
 
@@ -45,7 +42,7 @@ void shouldAssemble(const char *source, uint16_t expectedWord) {
   xprintf("%04X should be assembled from:\r\n  %s\r\n\r\n", expectedWord, source);
 
   if (testErrored) {
-    xprintf("  Failed.  %s\r\n", pbuffer);
+    xprintf("  Failed.  %s\r\n", xbuffer);
     testFailure = true;
     return;
   }
@@ -70,10 +67,10 @@ void shouldError(const char *source, const char *errorMessage) {
   xprintf("'%s' should be reported from:\r\n%s\r\n\r\n", errorMessage, source);
 
   if (testErrored) {
-    if (strstr(pbuffer, errorMessage) != NULL)
+    if (strstr(xbuffer, errorMessage) != NULL)
       return;
 
-    xprintf("  Failed: incorrect error message of %s\r\n\r\n", pbuffer);
+    xprintf("  Failed: incorrect error message of %s\r\n\r\n", xbuffer);
     testFailure = true;
     return;
   }
@@ -85,7 +82,7 @@ void main() {
   shouldAssemble("LD V3, va", LD_V3_VA);
   shouldAssemble("LD V1, 10", LD_V1_10);
   shouldAssemble("LD I, 1234", LD_I_1234);
-  shouldAssemble("DRW V2, V3, 11", 0xD23B);
+  shouldAssemble("DRW V2, V3, 11", DRAW_V2_V3_11);
   shouldAssemble("DB 2, 255", 0x02FF);
   shouldAssemble("CALL 1025", CALL_1025);
   shouldAssemble("CALL LABL\r\n  LABL: RET", 0x2202);

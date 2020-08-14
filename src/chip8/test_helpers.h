@@ -5,6 +5,7 @@ bool appRunning = false;
 #define assert(a)                            \
   {                                          \
     xprintf(#a "\r\n");                      \
+    resetCaptureCommands();                  \
     initSystemState();                       \
     setup_##a();                             \
     appRunning = executeSingleInstruction(); \
@@ -68,10 +69,7 @@ void replace(char *string, char from, char to) {
       string[i] = to;
 }
 
-void unescape(const char *string) {
-  replace((char *)string, '\033', '~');
-  replace((char *)string, '\x1b', '`');
-}
+void unescape(const char *string) { replace((char *)string, '\033', '~'); }
 
 void expectEqualEscapedString(const char *a, const char *b) {
   if (strcmp(a, b) == 0) {
@@ -88,12 +86,16 @@ void expectEqualEscapedString(const char *a, const char *b) {
   xprintf("Expected output of \"%s\" but got \"%s\"\r\n", b, a);
 }
 
-#define MAX_MESSAGE_TEXT 256
-char pbuffer[MAX_MESSAGE_TEXT];
+#define MAX_CAPTURE_TEXT 256 * 10
+char buffer[MAX_CAPTURE_TEXT];
+
+void resetCaptureCommands() { buffer[0] = '\0'; }
 
 void sendDrawCommands(const char *msg, ...) {
   va_list arg;
   va_start(arg, msg);
-  vsnprintf(pbuffer, MAX_MESSAGE_TEXT - 1, (char *)msg, arg);
+  char *pBuffer = buffer + strlen(buffer);
+  int   max = MAX_CAPTURE_TEXT - strlen(buffer);
+  vsnprintf(pBuffer, max - 1, (char *)msg, arg);
   va_end(arg);
 }
