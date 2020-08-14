@@ -82,6 +82,14 @@ void main() {
   shouldAssemble("LD V1, 10", 0x610A);
   shouldAssemble("LD I, 1234", 0xA4D2);
   shouldAssemble("DRW V2, V3, 11", 0xD23B);
+  shouldAssemble("DB 2, 255", 0x02FF);
+  shouldAssemble("CALL 1025", 0x2401);
+  shouldAssemble("LABL: CALL LABL", 0x2200);
+  shouldAssemble("CLS", 0x00E0);
+  shouldAssemble("RET", 0x00EE);
+  shouldAssemble("ADD VE, 1", 0x7E01);
+  shouldAssemble("SE V4, 15", 0x340F);
+  shouldAssemble("SE V4, v9", 0x5490);
   shouldError("BAD INSTRUCTION", "Expected Instruction but found BAD");
 
   xprintf(testFailure ? "Tests Failed\r\n" : "All Done\r\n");
