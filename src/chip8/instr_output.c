@@ -1,8 +1,8 @@
-#include "instr_output.h"
+#include "chip8/instr_output.h"
+#include "chip8/systemstate.h"
+#include "chip8/tty.h"
 #include "datatypes.h"
 #include "hbios.h"
-#include "systemstate.h"
-#include "xstdio.h"
 
 byte videoMemory[64 * 32 / 8];
 
@@ -14,10 +14,10 @@ inline void togglePixelAt(int index, byte x, byte y) {
     return;
 
   if (current)
-    xprintf("\033[%d;%dH\x1b[47;1m \x1b[40m", y, x);
+    sendDrawCommands("\033[%d;%dH\x1b[47;1m \x1b[40m", y, x);
   else {
     registers[0xF] = 1;
-    xprintf("\033[%d;%dH ", y, x);
+    sendDrawCommands("\033[%d;%dH ", y, x);
   }
 }
 
@@ -41,4 +41,4 @@ void draw() {
   }
 }
 
-void cls() { print("\033[2J\033[0;0H"); }
+void cls() { sendDrawCommands("\033[2J\033[0;0H"); }

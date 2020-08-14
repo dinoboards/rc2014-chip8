@@ -49,10 +49,7 @@ function convertToBitmap(hits, dataLength) {
   return data
 }
 
-async function main(...options) {
-
-  fs.mkdtemp(path.join(os.tmpdir(), 'x-'), async (err, directory) => {
-
+async function main(directory, ...options) {
   const output = options.find(x => x.startsWith('-o')) || options.find(x => x.startsWith('--output')).slice(7)
   const fileName = output.slice(2)
 
@@ -99,12 +96,12 @@ async function main(...options) {
   await exec(`gpp --includemarker "; #include line: %, file:%" -n ${defines} -o ${directory}/loader.asmpp ${loaderAsm}`)
 
   await exec(`z80asm -r=256 -o"${fileName}" -b "${directory}/loader.asmpp"`)
-})
 }
 
-main(...[...process.argv].slice(2)).catch(err => {
-  //console.log(err.stack)
-  console.log("");
-  process.exit(1)
+fs.mkdtemp(path.join(os.tmpdir(), 'x-'), async (err, directory) => {
+  main(directory, ...[...process.argv].slice(2)).catch(err => {
+    //console.log(err.stack)
+    console.log("");
+    process.exit(1)
+  })
 })
-

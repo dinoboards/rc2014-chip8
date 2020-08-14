@@ -82,8 +82,11 @@ void setup_se_v4_v9_no_skips() {
 
 void verify_se_v4_v9_no_skips() { expectEqualPtrs(chip8PC, (uint16_t *)0x202, "PC"); }
 
-void main() {
+void setup_cls() { programStorage[0] = invertByteOrder(CLS); }
 
+void verify_cls() { expectEqualEscapedString(pbuffer, "\033[2J\033[0;0H"); }
+
+void main() {
   assert(ld_v1_10);
 
   assert(ld_i_1234);
@@ -101,6 +104,8 @@ void main() {
 
   assert(se_v4_v9_skips);
   assert(se_v4_v9_no_skips);
+
+  assert(cls);
 
   xprintf(testFailure ? "Tests Failed\r\n" : "All Done\r\n");
 }

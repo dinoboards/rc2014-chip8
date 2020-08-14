@@ -16,12 +16,13 @@ ASS_FLAGS=-mz80 \
 	--list -iz80
 
 # C HEADER INCLUDE DEPENDENCIES
+chip8/tty.asm: chip8/tty.h xstdio.h
 chip8/byte_code_executor.asm: chip8/byte_code_executor.h xstdio.h datatypes.h chip8/systemstate.h chip8/stack.h chip8/instr_output.h chip8/instr_registers.h chip8/instr_pc.h
-chip8/instr_output.asm: chip8/instr_output.h datatypes.h xstdio.h chip8/systemstate.h hbios.h
+chip8/instr_output.asm: chip8/instr_output.h datatypes.h xstdio.h chip8/systemstate.h hbios.h chip8/tty.h
 chip8/main.asm: cpm.h hbios.h xstdio.h datatypes.h chip8/systemstate.h  chip8/byte_code_executor.h chip8/instr_output.h
 chip8/stack.asm: chip8/stack.h datatypes.h xstdio.h chip8/systemstate.h
 chip8/systemstate.asm: chip8/systemstate.h datatypes.h
-chip8/test_instruction.asm: chip8/stack.h test_opcodes.h datatypes.h chip8/systemstate.h xstdio.h chip8/byte_code_executor.h
+chip8/test_instruction.asm: chip8/stack.h test_opcodes.h datatypes.h chip8/systemstate.h xstdio.h chip8/byte_code_executor.h chip8/test_helpers.h
 chip8asm/assembler.asm: chip8asm/assembler.h xstdio.h chip8asm/tokenreader.h datatypes.h chip8asm/systemstate.h chip8asm/emitters.h chip8asm/token_parser.h chip8asm/labels.h
 chip8asm/chartesters.asm: chip8asm/chartesters.h
 chip8asm/emitters.asm: chip8asm/emitters.h datatypes.h chip8asm/systemstate.h
@@ -48,7 +49,7 @@ chip8asm_objects = crt.o memap.o cpm.o hbios_cio.o hbios.o memap.o nonreloccrt.o
 	@mv crt_code_crt_init.bin ../bin/chip8asm.com
 	@echo "\nBuilt ./bin/chip8asm.com"
 
-exclude_from_tests = %main.o %filereader.o %exit.o %error.o
+exclude_from_tests = %main.o %filereader.o %exit.o %error.o %tty.o
 ../bin/tstasmbl.com: $(filter-out $(exclude_from_tests),$(chip8asm_objects))
 	@$(ASSEMBLER) --output=tstasmbl.bin -b $(ASS_FLAGS) memap.o $(filter-out memap.o,$^)
 	@mkdir -p ../bin
@@ -91,6 +92,7 @@ clean:
 	@rm -f ./chip8/instr_output.asm
 	@rm -f ./chip8/main.asm
 	@rm -f ./chip8/stack.asm
+	@rm -f ./chip8/tty.asm
 	@rm -f ./chip8/systemstate.asm
 	@rm -f ./chip8asm/assembler.asm
 	@rm -f ./chip8asm/chartesters.asm

@@ -24,7 +24,6 @@ void logError(const char *msg, ...) {
   va_start(arg, msg);
   vsnprintf(pbuffer, MAX_MESSAGE_TEXT - 1, (char *)msg, arg);
   va_end(arg);
-  // print(pbuffer);
 }
 
 bool testFailure = false;
@@ -90,7 +89,7 @@ void main() {
   shouldAssemble("DB 2, 255", 0x02FF);
   shouldAssemble("CALL 1025", CALL_1025);
   shouldAssemble("CALL LABL\r\n  LABL: RET", 0x2202);
-  shouldAssemble("CLS", 0x00E0);
+  shouldAssemble("CLS", CLS);
   shouldAssemble("RET", RET);
   shouldAssemble("ADD VE, 1", ADD_VE_1);
   shouldAssemble("SE V4, 15", SE_V4_15);

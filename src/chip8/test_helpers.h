@@ -61,3 +61,39 @@ void expectEqualPtrs(uint16_t *a, uint16_t *b, const char *msg) {
   testFailure = true;
   xprintf("Expected %s to equal %p, but was %p\r\n", msg, b, a);
 }
+
+void replace(char *string, char from, char to) {
+  for (int i = 0; i < strlen(string); ++i)
+    if (string[i] == from)
+      string[i] = to;
+}
+
+void unescape(const char *string) {
+  replace((char *)string, '\033', '~');
+  replace((char *)string, '\x1b', '`');
+}
+
+void expectEqualEscapedString(const char *a, const char *b) {
+  if (strcmp(a, b) == 0) {
+    unescape(a);
+    xprintf("\tSent: \"%s\"\r\n", a);
+    return;
+  }
+
+  testFailure = true;
+
+  unescape(a);
+  unescape(b);
+
+  xprintf("Expected output of \"%s\" but got \"%s\"\r\n", b, a);
+}
+
+#define MAX_MESSAGE_TEXT 256
+char pbuffer[MAX_MESSAGE_TEXT];
+
+void sendDrawCommands(const char *msg, ...) {
+  va_list arg;
+  va_start(arg, msg);
+  vsnprintf(pbuffer, MAX_MESSAGE_TEXT - 1, (char *)msg, arg);
+  va_end(arg);
+}

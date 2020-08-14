@@ -28,4 +28,5 @@ error_reports.asm
 error.asm
 byte_code_executor.asm
 test_instruction.asm
+tty.asm
 
