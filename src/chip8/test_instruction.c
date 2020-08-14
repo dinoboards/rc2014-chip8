@@ -10,10 +10,31 @@
 #include <string.h>
 
 bool testFailure = false;
+bool appRunning = false;
+
+void expectFalse(bool a, const char *msg) {
+  if (!a) {
+    xprintf("\t%s == false\r\n", msg);
+    return;
+  }
+
+  testFailure = true;
+  xprintf("Expected %s to be false but was %d\r\n", msg, (int)a);
+}
+
+void expectTrue(bool a, const char *msg) {
+  if (a) {
+    xprintf("\t%s == true\r\n", msg);
+    return;
+  }
+
+  testFailure = true;
+  xprintf("Expected %s to be true but was %d\r\n", msg, (int)a);
+}
 
 void expectEqualBytes(byte a, byte b, const char *msg) {
   if (a == b) {
-    xprintf("\r\n\t%s == %d\r\n", msg, a);
+    xprintf("\t%s == %d\r\n", msg, a);
     return;
   }
 
@@ -23,7 +44,7 @@ void expectEqualBytes(byte a, byte b, const char *msg) {
 
 void expectEqualInts(int a, int b, const char *msg) {
   if (a == b) {
-    xprintf("\r\n\t%s == %d\r\n", msg, a);
+    xprintf("\t%s == %d\r\n", msg, a);
     return;
   }
 
@@ -33,7 +54,7 @@ void expectEqualInts(int a, int b, const char *msg) {
 
 void expectEqualPtrs(uint16_t *a, uint16_t *b, const char *msg) {
   if (a == b) {
-    xprintf("\r\n\t%s == %p\r\n", msg, a);
+    xprintf("\t%s == %p\r\n", msg, a);
     return;
   }
 
@@ -57,13 +78,32 @@ void verify_call_1025() {
   expectEqualPtrs((uint16_t *)stack[0], (uint16_t *)0x202, "Stack Index");
 }
 
-#define assert(a)               \
-  {                             \
-    xprintf(" " #a "  ");       \
-    initSystemState();          \
-    setup_##a();                \
-    executeSingleInstruction(); \
-    verify_##a();               \
+void setup_ret_from_subroutine() {
+  stack[0] = 0xF000;
+  stackIndex = 1;
+  programStorage[0] = invertByteOrder(RET);
+}
+
+void verify_ret_from_subroutine() {
+  expectEqualPtrs(chip8PC, (uint16_t *)0xF000, "PC");
+  expectTrue(appRunning, "appRunning");
+}
+
+void setup_final_ret() {
+  stackIndex = 0;
+  programStorage[0] = invertByteOrder(RET);
+}
+
+void verify_final_ret() { expectFalse(appRunning, "appRunning"); }
+
+#define assert(a)                            \
+  {                                          \
+    xprintf(#a "\r\n");                      \
+    initSystemState();                       \
+    setup_##a();                             \
+    appRunning = executeSingleInstruction(); \
+    verify_##a();                            \
+    xprintf("\r\n");                         \
   }
 
 void main() {
@@ -73,6 +113,10 @@ void main() {
   assert(ld_i_1234);
 
   assert(call_1025);
+
+  assert(ret_from_subroutine);
+
+  assert(final_ret);
 
   xprintf(testFailure ? "Tests Failed\r\n" : "All Done\r\n");
 }

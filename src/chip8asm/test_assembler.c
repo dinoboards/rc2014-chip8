@@ -68,7 +68,7 @@ void shouldError(const char *source, const char *errorMessage) {
   content = (char *)source;
   assemble(2);
 
-  xprintf("%s should be reported from:\r\n'%s'\r\n\r\n", errorMessage, source);
+  xprintf("'%s' should be reported from:\r\n%s\r\n\r\n", errorMessage, source);
 
   if (testErrored) {
     if (strstr(pbuffer, errorMessage) != NULL)
@@ -91,7 +91,7 @@ void main() {
   shouldAssemble("CALL 1025", CALL_1025);
   shouldAssemble("CALL LABL\r\n  LABL: RET", 0x2202);
   shouldAssemble("CLS", 0x00E0);
-  shouldAssemble("RET", 0x00EE);
+  shouldAssemble("RET", RET);
   shouldAssemble("ADD VE, 1", 0x7E01);
   shouldAssemble("SE V4, 15", 0x340F);
   shouldAssemble("SE V4, v9", 0x5490);
