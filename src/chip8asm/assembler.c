@@ -197,6 +197,19 @@ inline static void assJp() {
   emit(0x1000 | addr);
 }
 
+/*
+Ex9E - SKP Vx
+Skip next instruction if key with the value of Vx is pressed.
+
+Checks the keyboard, and if the key corresponding to the value of Vx is currently in the down position, PC is increased by 2.*/
+inline static void assSkpVx() {
+  getNext();
+  const byte x = expectToBeVRegister();
+
+  emit2Nibble(0xE, x);
+  emitByte(0x9E);
+}
+
 void assemble(int parseCount) __z88dk_fastcall {
   currentAddress = 0x200;
   programPtr = programStorage;
@@ -245,6 +258,10 @@ void assemble(int parseCount) __z88dk_fastcall {
 
     case InstructionJp:
       assJp();
+      break;
+
+    case InstructionSkp:
+      assSkpVx();
       break;
 
     default:

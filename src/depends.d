@@ -3,15 +3,15 @@
  chip8/instr_output.h chip8/instr_pc.h chip8/instr_registers.h \
  chip8/stack.h chip8/systemstate.h xstdio.h
 ./chip8/instr_output.asm: chip8/instr_output.c chip8/instr_output.h datatypes.h \
- chip8/systemstate.h chip8/tty.h hbios.h
+ chip8/systemstate.h chip8/tty.h
 ./chip8/main.asm: chip8/main.c chip8/byte_code_executor.h datatypes.h \
  chip8/instr_output.h cpm.h hbios.h chip8/systemstate.h xstdio.h
 ./chip8/stack.asm: chip8/stack.c chip8/stack.h datatypes.h chip8/systemstate.h \
  xstdio.h
 ./chip8/systemstate.asm: chip8/systemstate.c chip8/systemstate.h datatypes.h
 ./chip8/test_instruction.asm: chip8/test_instruction.c chip8/byte_code_executor.h \
- datatypes.h chip8/stack.h chip8/systemstate.h test_opcodes.h xstdio.h \
- chip8/instr_output.h chip8/test_helpers.h
+ datatypes.h chip8/instr_output.h chip8/stack.h chip8/systemstate.h \
+ test_opcodes.h xstdio.h chip8/test_helpers.h
 ./chip8/tty.asm: chip8/tty.c chip8/tty.h hbios.h xstdio.h
 ./chip8asm/assembler.asm: chip8asm/assembler.c chip8asm/assembler.h \
  chip8asm/emitters.h datatypes.h chip8asm/error_reports.h \

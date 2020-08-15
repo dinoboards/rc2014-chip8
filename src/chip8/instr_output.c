@@ -2,7 +2,6 @@
 #include "chip8/systemstate.h"
 #include "chip8/tty.h"
 #include "datatypes.h"
-#include "hbios.h"
 
 byte videoMemory[64 * 32 / 8];
 
