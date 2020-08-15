@@ -14,4 +14,8 @@ extern uint8_t   lowByte;
 extern uint8_t   fourthNibble;
 extern uint16_t  addr;
 
+extern byte     currentPressedKey;
+extern uint16_t currentKeyTimeout;
+extern bool     keyPressed;
+
 #endif

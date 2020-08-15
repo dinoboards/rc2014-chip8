@@ -1,9 +1,12 @@
 
 ./chip8/byte_code_executor.asm: chip8/byte_code_executor.c datatypes.h \
  chip8/instr_output.h chip8/instr_pc.h chip8/instr_registers.h \
- chip8/stack.h chip8/systemstate.h xstdio.h
+ chip8/key_monitor.h chip8/stack.h chip8/systemstate.h xstdio.h
 ./chip8/instr_output.asm: chip8/instr_output.c chip8/instr_output.h datatypes.h \
  chip8/systemstate.h chip8/tty.h
+./chip8/keys.asm: chip8/keys.c chip8/keys.h datatypes.h hbios.h
+./chip8/key_monitor.asm: chip8/key_monitor.c chip8/keys.h datatypes.h \
+ chip8/systemstate.h xstdio.h
 ./chip8/main.asm: chip8/main.c chip8/byte_code_executor.h datatypes.h \
  chip8/instr_output.h cpm.h hbios.h chip8/systemstate.h xstdio.h
 ./chip8/stack.asm: chip8/stack.c chip8/stack.h datatypes.h chip8/systemstate.h \

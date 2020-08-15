@@ -13,3 +13,7 @@
   chip8PC += 1
 
 #define jp() chip8PC = (uint16_t *)addr;
+
+#define skpVx()                                     \
+  if (registers[secondNibble] == currentPressedKey) \
+    chip8PC += 1;

@@ -6,6 +6,7 @@ bool appRunning = false;
   {                                          \
     xprintf(#a "\r\n");                      \
     resetCaptureCommands();                  \
+    resetKeySimulator();                     \
     initSystemState();                       \
     setup_##a();                             \
     appRunning = executeSingleInstruction(); \
@@ -98,4 +99,21 @@ void sendDrawCommands(const char *msg, ...) {
   int   max = MAX_CAPTURE_TEXT - strlen(buffer);
   vsnprintf(pBuffer, max - 1, (char *)msg, arg);
   va_end(arg);
+}
+
+bool simulateKeyReady;
+char simulatedKeyValue;
+
+void resetKeySimulator() {
+  simulateKeyReady = false;
+  simulatedKeyValue = 0;
+}
+
+bool keyReady() { return simulateKeyReady; }
+
+void getKey(char *r) { *r = simulatedKeyValue; }
+
+void simulateKey(const char k) {
+  simulateKeyReady = true;
+  simulatedKeyValue = k;
 }

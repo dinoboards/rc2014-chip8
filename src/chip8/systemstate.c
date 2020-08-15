@@ -12,3 +12,7 @@ uint8_t  thirdNibble;
 uint8_t  lowByte;
 uint8_t  fourthNibble;
 uint16_t addr;
+
+byte     currentPressedKey;
+uint16_t currentKeyTimeout;
+bool     keyPressed;

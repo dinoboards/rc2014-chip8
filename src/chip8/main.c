@@ -16,8 +16,26 @@ void chkMsg(int result, const char *msg) {
   }
 }
 
+#define BF_CIO       $00
+#define BF_CIOIN     BF_CIO + 0 /* CHARACTER INPUT */
+#define BF_CIOOUT    BF_CIO + 1 /* CHARACTER OUTPUT */
+#define BF_CIOIST    BF_CIO + 2 /* CHARACTER INPUT STATUS */
+#define BF_CIOOST    BF_CIO + 3 /* CHARACTER OUTPUT STATUS */
+#define BF_CIOINIT   BF_CIO + 4 /* INIT/RESET DEVICE/LINE CONFIG */
+#define BF_CIOQUERY  BF_CIO + 5 /* REPORT DEVICE/LINE CONFIG */
+#define BF_CIODEVICE BF_CIO + 6 /* REPORT DEVICE INFO */
+
+byte result = 'X';
+
 void main() {
   print("running ch8 app\r\n");
+
+  // while (!hbCioIst(0))
+  //   ;
+
+  // hbCioIn(0, &result);
+
+  // xprintf("xxx %c xxx\r\n", result);
 
   cls();
 

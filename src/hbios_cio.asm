@@ -1,6 +1,5 @@
 
-	PUBLIC	_hbCioIn
-	PUBLIC	_hbCioOut
+	PUBLIC	_hbCioIn, _hbCioIst, _hbCioOut
 
 	SECTION CODE
 
@@ -29,19 +28,27 @@ _hbCioIn:
 	POP	IX
 	RET
 
+	;extern byte hbCioIst(byte driver) __z88dk_fastcall;
+_hbCioIst:
+	PUSH	IX
+	LD	B, BF_CIOIST
+  	LD 	C, L			; DRIVER INDEX
+	RST	08
+	LD	L, A			; RETURN SUCCESS/FAIL
+	POP	IX
+	RET
+
 	; extern byte hbCioOut(byte, char);
 _hbCioOut:
 	push	ix
 	LD	HL, 4			; REFERENCE C ARGS ON STACK
 	ADD	HL, SP
-	push	iy
 	LD	B, BF_CIOOUT
   	LD 	C, (HL)			; DRIVER INDEX
 	INC	HL
 	LD	E, (HL)			; CHAR TO WRITE
 	RST	08
 	LD	L, A			; RETURN SUCCESS/FAIL
-	pop	iy
 	pop	ix
 	RET
 

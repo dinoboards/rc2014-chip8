@@ -1,0 +1,10 @@
+
+  LD  V3, 10
+LOOP:
+  SKP V3
+  JP  LOOP
+  RET
+  RET
+  RET
+  RET
+  RET

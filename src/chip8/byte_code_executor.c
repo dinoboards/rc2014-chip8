@@ -2,6 +2,7 @@
 #include "instr_output.h"
 #include "instr_pc.h"
 #include "instr_registers.h"
+#include "key_monitor.h"
 #include "stack.h"
 #include "systemstate.h"
 #include "xstdio.h"
@@ -28,9 +29,6 @@ inline uint16_t readInstruction() {
 
   xtracef("Read instruction %04X @ %p\r\n", invertByteOrder(r), chip8PC);
 
-  // if (r == 0x4612)
-  //   exit(1);
-
   chip8PC++;
   return r;
 }
@@ -46,6 +44,9 @@ inline uint16_t readInstruction() {
 #define CH8_SE_VX_BYTE_NIB 0x3
 #define CH8_SE_VX_VY_NIB   0x5
 
+#define CH8_SKP_VX_NIB      0xE
+#define CH8_SKP_VX_LOW_BYTE 0x9E
+
 void initSystemState() {
   memset(registers, 0, sizeof(registers));
   registerI = 0;
@@ -56,6 +57,8 @@ bool executeSingleInstruction() {
   uint16_t currentInstruction = readInstruction(); // high/low bytes in inverted order
 
   // xprintf("\033[34;1HY");
+
+  checkForKeyPresses();
 
   switch (currentInstruction) {
   case CH8_CLS:
@@ -114,8 +117,15 @@ bool executeSingleInstruction() {
       break;
     }
 
+    case CH8_SKP_VX_NIB: {
+      if (lowByte == CH8_SKP_VX_LOW_BYTE) {
+        skpVx();
+        break;
+      }
+    }
+
     default:
-      xprintf("Bad instruction %04X at %p\r\n", invertByteOrder(currentInstruction), chip8PC);
+      xprintf("Bad instruction %04X at %p\r\n", invertByteOrder(currentInstruction), chip8PC - 1);
       return false;
     }
   }

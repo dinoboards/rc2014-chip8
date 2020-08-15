@@ -124,6 +124,30 @@ void setup_jp_1026() { programStorage[0] = invertByteOrder(JP_1026); }
 
 void verify_jp_1026() { expectEqualPtrs(chip8PC, (uint16_t *)0x402, "PC"); }
 
+void setup_skp_v3_skips() {
+  registers[3] = 0xA;
+  simulateKey('A');
+  programStorage[0] = invertByteOrder(SKP_V3);
+}
+
+void verify_skp_v3_skips() { expectEqualPtrs(chip8PC, (uint16_t *)0x204, "PC"); }
+
+void setup_skp_v3_no_skips() {
+  registers[3] = 0xA;
+  // simulateKey('A');
+  programStorage[0] = invertByteOrder(SKP_V3);
+}
+
+void verify_skp_v3_no_skips() { expectEqualPtrs(chip8PC, (uint16_t *)0x202, "PC"); }
+
+void setup_skp_v3_wrong_key() {
+  registers[3] = 0xA;
+  simulateKey('B');
+  programStorage[0] = invertByteOrder(SKP_V3);
+}
+
+void verify_skp_v3_wrong_key() { expectEqualPtrs(chip8PC, (uint16_t *)0x202, "PC"); }
+
 void main() {
   assert(ld_v1_10);
 
@@ -149,6 +173,10 @@ void main() {
   assert(draw_xor);
 
   assert(jp_1026);
+
+  assert(skp_v3_skips);
+  assert(skp_v3_no_skips);
+  assert(skp_v3_wrong_key);
 
   xprintf(testFailure ? "Tests Failed\r\n" : "All Done\r\n");
 }

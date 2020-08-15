@@ -34,3 +34,5 @@ node_modules
 package-log.json
 package.json
 spike*
+key_monitor.asm
+keys.asm

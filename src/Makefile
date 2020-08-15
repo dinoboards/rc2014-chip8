@@ -32,7 +32,7 @@ chip8asm_objects = crt.o memap.o cpm.o hbios_cio.o hbios.o memap.o nonreloccrt.o
 	@mv crt_code_crt_init.bin ../bin/chip8asm.com
 	@echo "\nBuilt ./bin/chip8asm.com"
 
-exclude_from_tests = %main.o %filereader.o %exit.o %error.o %tty.o
+exclude_from_tests = %main.o %filereader.o %exit.o %error.o %tty.o %keys.o
 ../bin/tstasmbl.com: $(filter-out $(exclude_from_tests),$(chip8asm_objects))
 	@$(ASSEMBLER) --output=tstasmbl.bin -b $(ASS_FLAGS) memap.o $(filter-out memap.o,$^)
 	@mkdir -p ../bin
@@ -86,10 +86,12 @@ clean:
 	@rm -f ../bin/*
 	@rm -f ./chip8/byte_code_executor.asm
 	@rm -f ./chip8/instr_output.asm
+	@rm -f ./chip8/key_monitor.asm
+	@rm -f ./chip8/keys.asm
 	@rm -f ./chip8/main.asm
 	@rm -f ./chip8/stack.asm
-	@rm -f ./chip8/tty.asm
 	@rm -f ./chip8/systemstate.asm
+	@rm -f ./chip8/tty.asm
 	@rm -f ./chip8asm/assembler.asm
 	@rm -f ./chip8asm/chartesters.asm
 	@rm -f ./chip8asm/emitters.asm
