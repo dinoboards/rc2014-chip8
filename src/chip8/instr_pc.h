@@ -11,3 +11,5 @@
 #define seVxVy()                                         \
   if (registers[secondNibble] == registers[thirdNibble]) \
   chip8PC += 1
+
+#define jp() chip8PC = (uint16_t *)addr;

@@ -6,38 +6,44 @@
 
 byte videoMemory[64 * 32 / 8];
 
-inline void togglePixelAt(int index, byte x, byte y) {
-  byte bit = 1 << (x % 8);
-  byte current = videoMemory[index] ^= bit;
-
-  if (!bit)
-    return;
-
-  if (current)
-    sendDrawCommands("\033[%d;%dH\x1b[47;1m \x1b[40m", y, x);
-  else {
-    registers[0xF] = 1;
-    sendDrawCommands("\033[%d;%dH ", y, x);
-  }
-}
+byte *spritePtr;
+byte  indexForY;
+byte  spriteByte;
+byte  x;
+byte  y;
+byte  index;
+byte  bit;
+byte  current;
+byte  bitCounter;
+byte  startingY;
 
 void draw() {
-  const byte x = registers[secondNibble];
-  const byte y = registers[thirdNibble];
+  x = registers[secondNibble] + 1;
+  startingY = registers[thirdNibble] + 1;
 
-  registers[0xF] = 0;
+  spritePtr = (byte *)registerI;
 
-  byte *spritePtr = (byte *)registerI;
-  byte  index = (y * (64 / 8)) + (x / 8);
+  for (y = startingY; y < startingY + fourthNibble; y++) {
+    spriteByte = *spritePtr++;
+    indexForY = y * (64 / 8);
 
-  for (byte i = y + 1; i < y + fourthNibble + 1; i++) {
-    byte b = *spritePtr++;
-    for (byte k = x; k < x + 8; k++) {
-      if (b & 0x80)
-        togglePixelAt(index, k, i);
-      b = b << 1;
-      index += (64 / 8);
+    for (bitCounter = 0; bitCounter < 8; bitCounter++) {
+      if (spriteByte & 0x80) {
+
+        index = indexForY + (x >> 3);
+        bit = 1 << (x % 8);
+        current = (videoMemory[index] ^= bit) & bit;
+
+        if (current)
+          sendDrawCommands("\033[%d;%dH\x1b[47;1m \x1b[40m", y, x);
+        else
+          sendDrawCommands("\033[%d;%dH ", y, x);
+      }
+
+      spriteByte = spriteByte << 1;
+      x++;
     }
+    x -= 8;
   }
 }
 

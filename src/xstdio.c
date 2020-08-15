@@ -23,5 +23,5 @@ void xtracef(const char *msg, ...) {
   print(xbuffer);
 }
 #else
-void xtracef(const char *msg, ...) { (void)msg; }
+// void xtracef(const char *msg, ...) { (void)msg; }
 #endif

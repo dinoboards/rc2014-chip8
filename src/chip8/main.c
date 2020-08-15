@@ -11,8 +11,7 @@
 
 void chkMsg(int result, const char *msg) {
   if (result) {
-    xtracef(msg);
-    xtracef("\r\n");
+    xprintf("%s\r\n", msg);
     exit(1);
   }
 }
@@ -24,10 +23,16 @@ void main() {
 
   initSystemState();
 
-  // TODO: Read all the file
+  uint16_t *ptr = programStorage;
+  int       noMoreData = 0;
+
   chkMsg(fOpen(defaultFCB), "Unable to open file");
-  chk(fDmaOff(programStorage));
-  chkMsg(fRead(defaultFCB), "unable to read");
+
+  while (!noMoreData) {
+    chkMsg(fDmaOff(ptr), "dma");
+    ptr += 64;
+    noMoreData = fRead(defaultFCB);
+  }
   chkMsg(fClose(defaultFCB), "unable to close");
 
   while (executeSingleInstruction())

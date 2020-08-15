@@ -11,25 +11,6 @@
 
 const uint16_t *programStorage = (uint16_t *)0x200;
 
-inline uint16_t readInstruction() {
-  const uint16_t r = *chip8PC;
-
-  xtracef("Read instruction %04X @ %p\r\n", r, chip8PC);
-
-  chip8PC++;
-  return r;
-}
-
-#define CH8_LD_VX_BYTE_NIB 6
-#define CH8_CLS            0xE000
-#define CH8_RET            0xEE00
-#define CH8_LD_I_ADDR_NIB  0xA
-#define CH8_DRW_NIB        0xD
-#define CH8_CALL_NIB       0x2
-#define CH8_ADDVX_NIB      0x7
-#define CH8_SE_VX_BYTE_NIB 0x3
-#define CH8_SE_VX_VY_NIB   0x5
-
 uint16_t invertByteOrder(uint16_t word) __naked __z88dk_fastcall {
   (void)word;
   // clang-format off
@@ -42,6 +23,29 @@ uint16_t invertByteOrder(uint16_t word) __naked __z88dk_fastcall {
   // clang-format on
 }
 
+inline uint16_t readInstruction() {
+  const uint16_t r = *chip8PC;
+
+  xtracef("Read instruction %04X @ %p\r\n", invertByteOrder(r), chip8PC);
+
+  // if (r == 0x4612)
+  //   exit(1);
+
+  chip8PC++;
+  return r;
+}
+
+#define CH8_ADDVX_NIB      0x7
+#define CH8_CALL_NIB       0x2
+#define CH8_CLS            0xE000
+#define CH8_DRW_NIB        0xD
+#define CH8_JP_NIB         0x1
+#define CH8_LD_I_ADDR_NIB  0xA
+#define CH8_LD_VX_BYTE_NIB 0x6
+#define CH8_RET            0xEE00
+#define CH8_SE_VX_BYTE_NIB 0x3
+#define CH8_SE_VX_VY_NIB   0x5
+
 void initSystemState() {
   memset(registers, 0, sizeof(registers));
   registerI = 0;
@@ -50,6 +54,8 @@ void initSystemState() {
 
 bool executeSingleInstruction() {
   uint16_t currentInstruction = readInstruction(); // high/low bytes in inverted order
+
+  // xprintf("\033[34;1HY");
 
   switch (currentInstruction) {
   case CH8_CLS:
@@ -102,6 +108,12 @@ bool executeSingleInstruction() {
       seVxVy();
       break;
     }
+
+    case CH8_JP_NIB: {
+      jp();
+      break;
+    }
+
     default:
       xprintf("Bad instruction %04X at %p\r\n", invertByteOrder(currentInstruction), chip8PC);
       return false;
