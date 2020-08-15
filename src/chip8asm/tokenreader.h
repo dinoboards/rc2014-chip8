@@ -27,6 +27,7 @@ typedef enum {
   RegisterVE,
   RegisterVF,
   RegisterI,
+  SoundTimer,
 
   InstructionRet,
   InstructionLd,

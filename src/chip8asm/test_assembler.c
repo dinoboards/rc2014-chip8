@@ -97,7 +97,9 @@ void main() {
   shouldAssemble("SE V4, 15", SE_V4_15);
   shouldAssemble("SE V4, v9", SE_V4_V9);
   shouldAssemble("JP 1026", JP_1026);
+  shouldAssemble("LD ST, V2", LD_ST_V2);
   shouldAssemble("SKP V3", SKP_V3);
+
   shouldError("BAD INSTRUCTION", "Expected Instruction but found BAD");
 
   xprintf(testFailure ? "Tests Failed\r\n" : "All Done\r\n");

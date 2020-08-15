@@ -123,6 +123,7 @@ static void tokeniseAlphaNumericString() {
   }
 
   if (isOnlyLetters) {
+    tokenMap("st", SoundTimer);
     token.isVRegister = true;
     tokenMap("va", RegisterVA);
     tokenMap("vb", RegisterVB);

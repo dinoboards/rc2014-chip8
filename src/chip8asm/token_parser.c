@@ -43,6 +43,11 @@ byte expectToBeVRegister() {
   return getRegisterIndex(token.type);
 }
 
+void expectToBeSoundTimer() {
+  if (!currentIsSoundTimer())
+    expectedError("ST");
+}
+
 void expectToBeComma() {
   if (strcmp(token.value, ",") != 0) {
     expectedError(",");

@@ -62,11 +62,38 @@ inline static void assLdI() {
   emit(0xA000 | x);
 }
 
+/*
+Fx18 - LD ST, Vx
+Set sound timer = Vx.
+
+ST is set equal to the value of Vx.
+*/
+
+inline static void addLdStVx() {
+  expectToBeSoundTimer();
+
+  getNext();
+  expectToBeComma();
+
+  getNext();
+  const int x = expectToBeVRegister();
+
+  emit2Nibble(0xF, x);
+  emitByte(0x18);
+}
+/*
+  Ld Vx, Vy
+  Ld Vx, <byte>
+  Ld I, <addr>
+  ld st, Vx
+*/
 inline static void assLd() {
   getNext();
 
   if (currentIsIRegister())
     assLdI();
+  else if (currentIsSoundTimer())
+    addLdStVx();
   else
     assLdVx();
 }
