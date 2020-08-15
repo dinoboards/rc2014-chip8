@@ -16,3 +16,5 @@ uint16_t addr;
 byte     currentPressedKey;
 uint16_t currentKeyTimeout;
 bool     keyPressed;
+
+byte soundTimer;

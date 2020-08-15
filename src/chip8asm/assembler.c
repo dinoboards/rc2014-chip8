@@ -69,7 +69,7 @@ Set sound timer = Vx.
 ST is set equal to the value of Vx.
 */
 
-inline static void addLdStVx() {
+inline static void assLdStVx() {
   expectToBeSoundTimer();
 
   getNext();
@@ -93,7 +93,7 @@ inline static void assLd() {
   if (currentIsIRegister())
     assLdI();
   else if (currentIsSoundTimer())
-    addLdStVx();
+    assLdStVx();
   else
     assLdVx();
 }

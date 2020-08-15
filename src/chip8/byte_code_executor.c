@@ -5,6 +5,8 @@
 #include "key_monitor.h"
 #include "stack.h"
 #include "systemstate.h"
+#include "timers.h"
+#include "tty.h"
 #include "xstdio.h"
 #include <stdarg.h>
 #include <stdio.h>
@@ -44,8 +46,10 @@ inline uint16_t readInstruction() {
 #define CH8_SE_VX_BYTE_NIB 0x3
 #define CH8_SE_VX_VY_NIB   0x5
 
-#define CH8_SKP_VX_NIB      0xE
-#define CH8_SKP_VX_LOW_BYTE 0x9E
+#define CH8_SKP_VX_NIB        0xE
+#define CH8_SKP_VX_LOW_BYTE   0x9E
+#define CH8_LD_ST_VX_NIB      0xF
+#define CH8_LD_ST_VX_LOW_BYTE 0x18
 
 void initSystemState() {
   memset(registers, 0, sizeof(registers));
@@ -53,12 +57,20 @@ void initSystemState() {
   chip8PC = (uint16_t *)programStorage;
 }
 
+byte terminalPingCounter = 0;
+
 bool executeSingleInstruction() {
   uint16_t currentInstruction = readInstruction(); // high/low bytes in inverted order
 
   // xprintf("\033[34;1HY");
 
   checkForKeyPresses();
+  manageTimers();
+
+  terminalPingCounter++;
+  if (terminalPingCounter == 0) {
+    sendDrawCommands("\x1b[40m");
+  }
 
   switch (currentInstruction) {
   case CH8_CLS:
@@ -117,6 +129,15 @@ bool executeSingleInstruction() {
       break;
     }
 
+    case CH8_LD_ST_VX_NIB: {
+      if (lowByte == CH8_LD_ST_VX_LOW_BYTE) {
+        ldStVx();
+        break;
+      }
+
+      goto badInstruction;
+    }
+
     case CH8_SKP_VX_NIB: {
       if (lowByte == CH8_SKP_VX_LOW_BYTE) {
         skpVx();
@@ -125,6 +146,7 @@ bool executeSingleInstruction() {
     }
 
     default:
+    badInstruction:
       xprintf("Bad instruction %04X at %p\r\n", invertByteOrder(currentInstruction), chip8PC - 1);
       return false;
     }

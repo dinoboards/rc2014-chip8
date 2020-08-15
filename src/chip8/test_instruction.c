@@ -1,10 +1,11 @@
 
-#include "chip8/byte_code_executor.h"
-#include "chip8/instr_output.h"
-#include "chip8/stack.h"
-#include "chip8/systemstate.h"
+#include "byte_code_executor.h"
 #include "datatypes.h"
+#include "instr_output.h"
+#include "stack.h"
+#include "systemstate.h"
 #include "test_opcodes.h"
+#include "timers.h"
 #include "xstdio.h"
 #include <stdarg.h>
 #include <stdio.h>
@@ -85,7 +86,7 @@ void verify_se_v4_v9_no_skips() { expectEqualPtrs(chip8PC, (uint16_t *)0x202, "P
 
 void setup_cls() { programStorage[0] = invertByteOrder(CLS); }
 
-void verify_cls() { expectEqualEscapedString(buffer, "\033[2J\033[0;0H"); }
+void verify_cls() { expectEqualEscapedString(buffer, "\033[?25l\033[2J\033[0;0H"); }
 
 void setup_draw_top_right() {
   memset(videoMemory, 0, sizeof(videoMemory));
@@ -148,6 +149,17 @@ void setup_skp_v3_wrong_key() {
 
 void verify_skp_v3_wrong_key() { expectEqualPtrs(chip8PC, (uint16_t *)0x202, "PC"); }
 
+void setup_ld_st_v2() {
+  registers[2] = 16;
+  programStorage[0] = invertByteOrder(LD_ST_V2);
+}
+
+void verify_ld_st_v2() {
+  expectEqualBytes(soundTimer, 16, "ST");
+  simulateTimerTick();
+  expectEqualBytes(soundTimer, 15, "ST");
+}
+
 void main() {
   assert(ld_v1_10);
 
@@ -177,6 +189,8 @@ void main() {
   assert(skp_v3_skips);
   assert(skp_v3_no_skips);
   assert(skp_v3_wrong_key);
+
+  assert(ld_st_v2);
 
   xprintf(testFailure ? "Tests Failed\r\n" : "All Done\r\n");
 }

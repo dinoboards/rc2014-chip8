@@ -49,4 +49,4 @@ void draw() {
   }
 }
 
-void cls() { sendDrawCommands("\033[2J\033[0;0H"); }
+void cls() { sendDrawCommands("\033[?25l\033[2J\033[0;0H"); }

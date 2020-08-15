@@ -9,6 +9,11 @@
   LD V0, 2
   LD V1, 1
   DRW v0, v1, 4
+
+  ld  v1, 60
+  ld  st, v1
+loop:
+  jp  loop
   RET
 
 MYSPRITE:

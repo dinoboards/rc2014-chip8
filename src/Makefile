@@ -32,7 +32,7 @@ chip8asm_objects = crt.o memap.o cpm.o hbios_cio.o hbios.o memap.o nonreloccrt.o
 	@mv crt_code_crt_init.bin ../bin/chip8asm.com
 	@echo "\nBuilt ./bin/chip8asm.com"
 
-exclude_from_tests = %main.o %filereader.o %exit.o %error.o %tty.o %keys.o
+exclude_from_tests = %main.o %filereader.o %exit.o %error.o %tty.o %keys.o %systimer.o
 ../bin/tstasmbl.com: $(filter-out $(exclude_from_tests),$(chip8asm_objects))
 	@$(ASSEMBLER) --output=tstasmbl.bin -b $(ASS_FLAGS) memap.o $(filter-out memap.o,$^)
 	@mkdir -p ../bin
@@ -40,7 +40,7 @@ exclude_from_tests = %main.o %filereader.o %exit.o %error.o %tty.o %keys.o
 	@echo "\nBuilt ./bin/tstasmbl.com"
 
 chip8_sources = $(wildcard ./chip8/*.c) $(wildcard ./chip8/*.asm)
-chip8_objects = memap.o relocmem.asm crt.o reloccrt.o hbios.o hbios_cio.o cpm.o xstdio.o $(patsubst %.asm,%.o,$(patsubst %.c,%.o,$(chip8_sources)))
+chip8_objects = memap.o relocmem.asm crt.o reloccrt.o hbios.o hbios_cio.o hbios_sys.o cpm.o xstdio.o $(patsubst %.asm,%.o,$(patsubst %.c,%.o,$(chip8_sources)))
 
 ../bin/chip8.com: $(filter-out %test_instruction.o, $(chip8_objects))
 	@$(RELOCASSEMBLER) --output=$(basename $<).bin -b $(ASS_FLAGS) memap.o $(filter-out memap.o,$^)
@@ -77,11 +77,11 @@ deps:
 	@echo "Assembled $(basename $<).asm to $(basename $<).o"
 
 clean:
-	@find . -type f -name '*.o' -delete
 	@find . -type f -name '*.bin' -delete
 	@find . -type f -name '*.com' -delete
 	@find . -type f -name '*.err' -delete
 	@find . -type f -name '*.lis' -delete
+	@find . -type f -name '*.o' -delete
 	@find . -type f -name '*.sym' -delete
 	@rm -f ../bin/*
 	@rm -f ./chip8/byte_code_executor.asm
@@ -91,6 +91,7 @@ clean:
 	@rm -f ./chip8/main.asm
 	@rm -f ./chip8/stack.asm
 	@rm -f ./chip8/systemstate.asm
+	@rm -f ./chip8/systimer.asm
 	@rm -f ./chip8/tty.asm
 	@rm -f ./chip8asm/assembler.asm
 	@rm -f ./chip8asm/chartesters.asm

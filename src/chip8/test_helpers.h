@@ -5,6 +5,7 @@ bool appRunning = false;
 #define assert(a)                            \
   {                                          \
     xprintf(#a "\r\n");                      \
+    soundTimer = 0;                          \
     resetCaptureCommands();                  \
     resetKeySimulator();                     \
     initSystemState();                       \
@@ -116,4 +117,13 @@ void getKey(char *r) { *r = simulatedKeyValue; }
 void simulateKey(const char k) {
   simulateKeyReady = true;
   simulatedKeyValue = k;
+}
+
+long simulatedNextTimerTick = 0;
+
+long getSysTimer() { return simulatedNextTimerTick; }
+
+void simulateTimerTick() {
+  simulatedNextTimerTick++;
+  manageTimers();
 }
