@@ -2,6 +2,7 @@
 #define CALL_1025     0x2401
 #define CLS           0x00E0
 #define DRAW_V2_V3_11 0xD23B
+#define JP_1026       0x1402
 #define LD_I_1234     0xA4D2
 #define LD_V1_10      0x610A
 #define LD_V3_VA      0x83A0

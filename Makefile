@@ -31,7 +31,7 @@ tstinstr:
 tstasmbl:
 	@mkdir -p ./bin
 	@$(MAKE) -C ./src ../bin/tstasmbl.com -s -j 4
-	@(cd bin && cpm tstinstr)
+	@(cd bin && cpm tstasmbl)
 
 
 .PHONY: chip8

@@ -59,19 +59,18 @@ chip8_objects = memap.o relocmem.asm crt.o reloccrt.o hbios.o hbios_cio.o cpm.o 
 	@zcc +embedded -subtype=none -lm -clib=sdcc_iy -vn -cleanup -m -S --list $< -o $@  -create-app -Cs --Werror
 	@echo "compiled $(basename $<).c to $(basename $<).asm"
 
-.ONESHELL:
-bash: SHELL := bash
+deps: SHELL := bash
 deps:
-	@echo "" > ./depends.d
-	@find -name "*.c" | while read -r file; do
-	@	file_no_ext="$${file%.*}" 							# ./chip8asm/blah
-	@	filename=$$(basename $$file_no_ext)			# blah
-	@	from="$$filename.rel"										# blah.rel
-	@	to="$$file_no_ext.asm"									# ./chip8asm/blah.asm
-	@	zsdcpp ${ZSDCPP_FLAGS} -MM -MF /tmp/deps.deps $$file
-	@	sed "s+$$from+$$to+g" /tmp/deps.deps >> ./depends.d
-	@done
-	@echo "./depends.d created"
+	@echo "" > ./depends.d && \
+	find -name "*.c" | while read -r file; do \
+		file_no_ext="$${file%.*}" 							; \
+		filename=$$(basename $$file_no_ext)			; \
+		from="$$filename.rel"										; \
+		to="$$file_no_ext.asm"									; \
+		zsdcpp ${ZSDCPP_FLAGS} -MM -MF /tmp/deps.deps $$file; \
+		sed "s+$$from+$$to+g" /tmp/deps.deps >> ./depends.d; \
+	done && \
+	echo "./depends.d created"
 
 %.o: %.asm
 	@$(ASSEMBLER) --output=$(basename $<).bin $(ASS_FLAGS) $(basename $<).asm

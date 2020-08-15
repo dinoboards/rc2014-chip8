@@ -184,6 +184,19 @@ inline static void assSe() {
   emitByte(b);
 }
 
+/*
+1nnn - JP addr
+Jump to location nnn.
+
+The interpreter sets the program counter to nnn.
+*/
+inline static void assJp() {
+  getNext();
+  const uint16_t addr = expectToBeInt();
+
+  emit(0x1000 | addr);
+}
+
 void assemble(int parseCount) __z88dk_fastcall {
   currentAddress = 0x200;
   programPtr = programStorage;
@@ -228,6 +241,10 @@ void assemble(int parseCount) __z88dk_fastcall {
 
     case InstructionSe:
       assSe();
+      break;
+
+    case InstructionJp:
+      assJp();
       break;
 
     default:

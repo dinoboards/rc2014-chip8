@@ -16,10 +16,13 @@ void openFileStream() {}
 
 void closeFileStream() {}
 
+#define MAX_LOG_CAPTURE 256
+char logBuffer[MAX_LOG_CAPTURE];
+
 void logError(const char *msg, ...) {
   va_list arg;
   va_start(arg, msg);
-  vsnprintf(xbuffer, MAX_MESSAGE_TEXT - 1, (char *)msg, arg);
+  vsnprintf(logBuffer, MAX_LOG_CAPTURE - 1, (char *)msg, arg);
   va_end(arg);
 }
 
@@ -33,6 +36,7 @@ void shouldAssemble(const char *source, uint16_t expectedWord) {
   programStorage[0] = 0;
   programStorage[1] = 0;
   testErrored = false;
+  xbuffer[0] = '\0';
 
   initLabelStorage();
   assemble(1);
@@ -42,7 +46,7 @@ void shouldAssemble(const char *source, uint16_t expectedWord) {
   xprintf("%04X should be assembled from:\r\n  %s\r\n\r\n", expectedWord, source);
 
   if (testErrored) {
-    xprintf("  Failed.  %s\r\n", xbuffer);
+    xprintf("  Failed.  %s\r\n", logBuffer);
     testFailure = true;
     return;
   }
@@ -91,6 +95,7 @@ void main() {
   shouldAssemble("ADD VE, 1", ADD_VE_1);
   shouldAssemble("SE V4, 15", SE_V4_15);
   shouldAssemble("SE V4, v9", SE_V4_V9);
+  shouldAssemble("JP 1026", JP_1026);
   shouldError("BAD INSTRUCTION", "Expected Instruction but found BAD");
 
   xprintf(testFailure ? "Tests Failed\r\n" : "All Done\r\n");
