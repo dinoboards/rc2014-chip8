@@ -15,30 +15,13 @@ ASS_FLAGS=-mz80 \
 	-imath32 \
 	--list -iz80
 
-# C HEADER INCLUDE DEPENDENCIES
-chip8/tty.asm: chip8/tty.h xstdio.h
-chip8/byte_code_executor.asm: chip8/byte_code_executor.h xstdio.h datatypes.h chip8/systemstate.h chip8/stack.h chip8/instr_output.h chip8/instr_registers.h chip8/instr_pc.h
-chip8/instr_output.asm: chip8/instr_output.h datatypes.h xstdio.h chip8/systemstate.h hbios.h chip8/tty.h
-chip8/main.asm: cpm.h hbios.h xstdio.h datatypes.h chip8/systemstate.h  chip8/byte_code_executor.h chip8/instr_output.h
-chip8/stack.asm: chip8/stack.h datatypes.h xstdio.h chip8/systemstate.h
-chip8/systemstate.asm: chip8/systemstate.h datatypes.h
-chip8/test_instruction.asm: chip8/stack.h test_opcodes.h datatypes.h chip8/systemstate.h xstdio.h chip8/byte_code_executor.h chip8/test_helpers.h
-chip8asm/assembler.asm: chip8asm/assembler.h xstdio.h chip8asm/tokenreader.h datatypes.h chip8asm/systemstate.h chip8asm/emitters.h chip8asm/token_parser.h chip8asm/labels.h
-chip8asm/chartesters.asm: chip8asm/chartesters.h
-chip8asm/emitters.asm: chip8asm/emitters.h datatypes.h chip8asm/systemstate.h
-chip8asm/error_reports.asm: chip8asm/error_reports.h chip8asm/exit.h chip8asm/error.h chip8asm/tokenreader.h
-chip8asm/error.asm: chip8asm/error.h xstdio.h
-chip8asm/exit.asm: chip8asm/exit.h
-chip8asm/expr.asm: xstdio.h chip8asm/labels.h chip8asm/expr.h chip8asm/chartesters.h datatypes.h
-chip8asm/filereader.asm: chip8asm/filereader.h charconstants.h cpm.h datatypes.h
-chip8asm/labels.asm: chip8asm/labels.h datatypes.h xstdio.h
-chip8asm/main.asm: cpm.h xstdio.h chip8asm/assembler.h chip8asm/labels.h chip8asm/systemstate.h chip8asm/exit.h
-chip8asm/systemstate.asm: chip8asm/systemstate.h datatypes.h
-chip8asm/test_assembler.asm: test_opcodes.h cpm.h xstdio.h chip8asm/assembler.h chip8asm/labels.h chip8asm/systemstate.h
-chip8asm/token_parser.asm: chip8asm/token_parser.h datatypes.h chip8asm/expr.h
-chip8asm/tokenreader.asm: chip8asm/tokenreader.h chip8asm/chartesters.h datatypes.h
-hbios.asm: hbios.h
-xstdio.asm: xstdio.h hbios.h datatypes.h
+ZSDCPP_FLAGS=-iquote"." \
+	-D__Z88DK -D__EMBEDDED -DEMBEDDED -D__EMBEDDED_Z80 -D__Z80 -DZ80 \
+	-D__SDCC -D__SDCC_IY \
+	-D__SDCC 						\
+	-isystem"${ZCCCFG}/../../include/_DEVELOPMENT/sdcc"
+
+include ./depends.d
 
 chip8asm_sources = $(wildcard ./chip8asm/*.c) $(wildcard ./chip8asm/*.asm)
 chip8asm_objects = crt.o memap.o cpm.o hbios_cio.o hbios.o memap.o nonreloccrt.o xstdio.o $(patsubst %.asm,%.o,$(patsubst %.c,%.o,$(chip8asm_sources)))
@@ -73,8 +56,22 @@ chip8_objects = memap.o relocmem.asm crt.o reloccrt.o hbios.o hbios_cio.o cpm.o 
 
 #--max-allocs-per-node200000
 %.asm: %.c
-	@zcc +embedded -subtype=none -lm -clib=sdcc_iy -v -cleanup -m -S  --list $< -o $@  -create-app -Cs --Werror -vn
+	@zcc +embedded -subtype=none -lm -clib=sdcc_iy -vn -cleanup -m -S --list $< -o $@  -create-app -Cs --Werror
 	@echo "compiled $(basename $<).c to $(basename $<).asm"
+
+.ONESHELL:
+bash: SHELL := bash
+deps:
+	@echo "" > ./depends.d
+	@find -name "*.c" | while read -r file; do
+	@	file_no_ext="$${file%.*}" 							# ./chip8asm/blah
+	@	filename=$$(basename $$file_no_ext)			# blah
+	@	from="$$filename.rel"										# blah.rel
+	@	to="$$file_no_ext.asm"									# ./chip8asm/blah.asm
+	@	zsdcpp ${ZSDCPP_FLAGS} -MM -MF /tmp/deps.deps $$file
+	@	sed "s+$$from+$$to+g" /tmp/deps.deps >> ./depends.d
+	@done
+	@echo "./depends.d created"
 
 %.o: %.asm
 	@$(ASSEMBLER) --output=$(basename $<).bin $(ASS_FLAGS) $(basename $<).asm

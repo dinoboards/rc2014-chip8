@@ -5,6 +5,12 @@ all:
 	@cp ./test-samples/*.cas ./bin/
 	@cp ./test-samples/*.ch8 ./bin/
 
+header_files = $(wildcard ./chip8asm/*.h) $(wildcard ./chip8/*.h) $(wildcard ./*.h)
+
+.PHONY: deps
+deps:
+	@$(MAKE) -C ./src deps -s -j 4
+
 .PHONY: chip8asm
 chip8asm:
 	@mkdir -p ./bin
