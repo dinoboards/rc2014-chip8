@@ -18,6 +18,7 @@ byte  bitCounter;
 byte  startingY;
 
 void draw() {
+  registers[0x0F] = 0;
   x = registers[secondNibble] + 1;
   startingY = registers[thirdNibble] + 1;
 
@@ -36,8 +37,10 @@ void draw() {
 
         if (current)
           sendDrawCommands("\033[%d;%dH\x1b[47;1m \x1b[40m", y, x);
-        else
+        else {
+          registers[0x0F] = 1;
           sendDrawCommands("\033[%d;%dH ", y, x);
+        }
       }
 
       spriteByte = spriteByte << 1;

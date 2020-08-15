@@ -1,5 +1,6 @@
 
 #include "chip8/byte_code_executor.h"
+#include "chip8/instr_output.h"
 #include "chip8/stack.h"
 #include "chip8/systemstate.h"
 #include "datatypes.h"
@@ -86,13 +87,37 @@ void setup_cls() { programStorage[0] = invertByteOrder(CLS); }
 
 void verify_cls() { expectEqualEscapedString(buffer, "\033[2J\033[0;0H"); }
 
-void setup_draw() { programStorage[0] = invertByteOrder(DRAW_V2_V3_11); }
+void setup_draw_top_right() {
+  memset(videoMemory, 0, sizeof(videoMemory));
 
-void verify_draw() {
-  expectEqualEscapedString(
-      buffer, "\033[1;1H\033[47;1m \033[40m\033[1;2H\033[47;1m \033[40m\033[1;7H\033[47;1m \033[40m\033[1;8H\033[47;1m \033[40m\033[2;7H\033[47;1m \033[40m\033[2;8H\033[47;1m \033[40m\033[3;1H\033[47;1m \033[40m\033[3;2H\033[47;1m "
-              "\033[40m\033[3;3H\033[47;1m \033[40m\033[3;5H\033[47;1m \033[40m\033[3;7H\033[47;1m \033[40m\033[6;1H\033[47;1m \033[40m\033[6;2H\033[47;1m \033[40m\033[6;7H\033[47;1m \033[40m\033[6;8H\033[47;1m \033[40m\033[7;6H\033[47;1m "
-              "\033[40m\033[7;7H\033[47;1m \033[40m\033[8;1H\033[47;1m \033[40m\033[8;2H\033[47;1m \033[40m\033[8;4H\033[47;1m \033[40m\033[8;5H\033[47;1m \033[40m\033[8;6H\033[47;1m \033[40m");
+  registers[2] = 0;
+  registers[3] = 0;
+  registerI = 0x202;
+  programStorage[0] = invertByteOrder(DRAW_V2_V3_1);
+  programStorage[(registerI - 0x200) / 2] = 0x80;
+}
+
+void verify_draw_top_right() {
+  expectEqualEscapedString(buffer, "\033[1;1H\033[47;1m \033[40m");
+  expectEqualBytes(registers[0x0F], 0, "VF");
+}
+
+void setup_draw_xor() {
+  memset(videoMemory, 0, sizeof(videoMemory));
+
+  registers[2] = 0;
+  registers[3] = 0;
+  registerI = 0x202;
+  programStorage[0] = invertByteOrder(DRAW_V2_V3_1);
+  programStorage[(registerI - 0x200) / 2] = 0x80;
+}
+
+void verify_draw_xor() {
+  chip8PC = (uint16_t *)0x200; /* re-execute the instruction to erase sprite */
+  executeSingleInstruction();
+
+  expectEqualEscapedString(buffer, "\033[1;1H\033[47;1m \033[40m\033[1;1H ");
+  expectEqualBytes(registers[0x0F], 1, "VF");
 }
 
 void setup_jp_1026() { programStorage[0] = invertByteOrder(JP_1026); }
@@ -120,7 +145,8 @@ void main() {
 
   assert(cls);
 
-  assert(draw);
+  assert(draw_top_right);
+  assert(draw_xor);
 
   assert(jp_1026);
 

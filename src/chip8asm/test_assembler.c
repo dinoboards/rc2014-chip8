@@ -87,6 +87,7 @@ void main() {
   shouldAssemble("LD V1, 10", LD_V1_10);
   shouldAssemble("LD I, 1234", LD_I_1234);
   shouldAssemble("DRW V2, V3, 11", DRAW_V2_V3_11);
+  shouldAssemble("DRW V2, V3, 1", DRAW_V2_V3_1);
   shouldAssemble("DB 2, 255", 0x02FF);
   shouldAssemble("CALL 1025", CALL_1025);
   shouldAssemble("CALL LABL\r\n  LABL: RET", 0x2202);
