@@ -4,5 +4,5 @@ long result;
 
 long getSysTimer() {
   hbSysGetTimer(&result);
-  return result / 10;
+  return result;
 }

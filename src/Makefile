@@ -54,7 +54,7 @@ chip8_objects = memap.o relocmem.asm crt.o reloccrt.o hbios.o hbios_cio.o hbios_
 	@mv tstinstr.bin ../bin/tstinstr.com
 	@echo "\nBuilt ./bin/tstinstr.com"
 
-#--max-allocs-per-node200000
+#--max-allocs-per-node100000
 %.asm: %.c
 	@zcc +embedded -subtype=none -lm -clib=sdcc_iy -vn -cleanup -m -S --list $< -o $@  -create-app -Cs --Werror
 	@echo "compiled $(basename $<).c to $(basename $<).asm"

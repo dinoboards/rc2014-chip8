@@ -10,6 +10,8 @@
 #include "xstdio.h"
 #include <stdio.h>
 
+long xstrtol(const char *str, char **endptr, int base);
+
 #define MAX_WORKING_BUFFER 64
 static char        token[MAX_WORKING_BUFFER];
 static int         tokenIndex = 0;
@@ -196,7 +198,7 @@ number unsigned_factor() {
   number result = 0;
   switch (lookAhead) {
   case NUMBER:
-    sscanf(token, "%d", &result);
+    result = xstrtol(token, (char *)0, 10);
     scan();
     break;
 
