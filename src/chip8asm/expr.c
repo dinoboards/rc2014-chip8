@@ -1,12 +1,4 @@
 // Bare bones scanner and parser for the following LL(1) grammar:
-// expr -> term { [+-] term }     ; An expression is terms separated by add ops.
-// term -> factor { [*/] factor } ; A term is factors separated by mul ops.
-// factor -> unsigned_factor      ; A signed factor is a factor,
-//         | - unsigned_factor    ;   possibly with leading minus sign
-// unsigned_factor -> ( expr )    ; An unsigned factor is a parenthesized expression
-//         | NUMBER               ;   or a number
-//
-// The parser returns the floating point value of the expression.
 
 #include "expr.h"
 #include "chartesters.h"
@@ -24,7 +16,7 @@ static int         tokenIndex = 0;
 static char        currentChar;
 static const char *expressionPtr;
 
-typedef enum { ADD_OP, MUL_OP, LEFT_PAREN, RIGHT_PAREN, NUMBER, ALPHA, END_INPUT } LookAheadTokens;
+typedef enum { ADD_SUB_OP, MUL_DIV_REM_OP, OP_OR, AND_OP, LEFT_PAREN, RIGHT_PAREN, NUMBER, ALPHA, END_INPUT } LookAheadTokens;
 
 static LookAheadTokens lookAhead;
 
@@ -86,14 +78,24 @@ START:
   case '-':
   case '+':
     read();
-    lookAhead = ADD_OP;
+    lookAhead = ADD_SUB_OP;
     return;
 
   case '*':
   case '/':
   case '%':
     read();
-    lookAhead = MUL_OP;
+    lookAhead = MUL_DIV_REM_OP;
+    return;
+
+  case '|':
+    read();
+    lookAhead = OP_OR;
+    return;
+
+  case '&':
+    read();
+    lookAhead = AND_OP;
     return;
 
   case '(':
@@ -223,16 +225,16 @@ number unsigned_factor() {
 }
 
 number factor() {
-  if (lookAhead == ADD_OP && token[0] == '-') {
+  if (lookAhead == ADD_SUB_OP && token[0] == '-') {
     scan();
     return -unsigned_factor();
   }
   return unsigned_factor();
 }
 
-number term() {
+number operatorMulDivRem() {
   number result = factor();
-  while (lookAhead == MUL_OP) {
+  while (lookAhead == MUL_DIV_REM_OP) {
     switch (token[0]) {
     case '*':
       scan();
@@ -253,18 +255,44 @@ number term() {
   return result;
 }
 
-number expr() {
-  number result = term();
-  while (lookAhead == ADD_OP) {
+number operatorAddSub() {
+  number result = operatorMulDivRem();
+  while (lookAhead == ADD_SUB_OP) {
     switch (token[0]) {
     case '+':
       scan();
-      result += term();
+      result += operatorMulDivRem();
       break;
 
     case '-':
       scan();
-      result -= term();
+      result -= operatorMulDivRem();
+      break;
+    }
+  }
+  return result;
+}
+
+number operatorAnd() {
+  number result = operatorAddSub();
+  while (lookAhead == AND_OP) {
+    switch (token[0]) {
+    case '&':
+      scan();
+      result &= operatorAddSub();
+      break;
+    }
+  }
+  return result;
+}
+
+number expr() { // Operator |
+  number result = operatorAnd();
+  while (lookAhead == OP_OR) {
+    switch (token[0]) {
+    case '|':
+      scan();
+      result |= operatorAnd();
       break;
     }
   }
