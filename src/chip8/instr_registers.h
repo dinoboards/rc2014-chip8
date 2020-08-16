@@ -13,4 +13,10 @@
     (soundTimer = registers[secondNibble]); \
   }
 
+#define ldDtVx()                            \
+  {                                         \
+    initTimers();                           \
+    (delayTimer = registers[secondNibble]); \
+  }
+
 #endif

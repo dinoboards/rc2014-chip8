@@ -336,6 +336,7 @@
 	GLOBAL _print
 	GLOBAL _sendDrawCommands
 	GLOBAL _xbuffer
+	GLOBAL _delayTimer
 	GLOBAL _soundTimer
 	GLOBAL _keyPressed
 	GLOBAL _currentKeyTimeout
@@ -391,6 +392,7 @@ ENDIF
 ; Function initTimers
 ; ---------------------------------
 _initTimers:
+	call	_manageTimers
 	call	_getSysTimer
 	ld	c, l
 	ld	b, h
@@ -410,7 +412,11 @@ _initTimers:
 _manageTimers:
 	ld	a,(_soundTimer)
 	or	a, a
-	jr	Z,l_manageTimers_00109
+	jr	NZ,l_manageTimers_00102
+	ld	a,(_delayTimer)
+	or	a, a
+	jp	Z,l_manageTimers_00123
+l_manageTimers_00102:
 	call	_getSysTimer
 	ld	c, l
 	ld	b, h
@@ -427,31 +433,26 @@ _manageTimers:
 	ld	c, (hl)
 	sub	a, c
 	ld	c, a
+	ld	b, c
 	ld	hl,_soundTimer
 	ld	a, (hl)
+	or	a, a
+	jr	Z,l_manageTimers_00113
+	ld	a, (hl)
 	sub	a, c
-	jr	NC,l_manageTimers_00104
+	jr	NC,l_manageTimers_00108
 	ld	(hl),0x00
-	jr	l_manageTimers_00105
-l_manageTimers_00104:
+	jr	l_manageTimers_00109
+l_manageTimers_00108:
 	ld	hl,_soundTimer
 	ld	a, (hl)
 	sub	a, c
 	ld	(hl), a
-l_manageTimers_00105:
-	push	hl
-	ld	a,(_currentTimerTick)
-	ld	(_lastTimerTick),a
-	ld	a,(_currentTimerTick + 1)
-	ld	(_lastTimerTick + 1),a
-	ld	a,(_currentTimerTick + 2)
-	ld	(_lastTimerTick + 2),a
-	ld	a,(_currentTimerTick + 3)
-	ld	(_lastTimerTick + 3),a
-	pop	hl
+l_manageTimers_00109:
 	ld	a,(_soundTimer)
 	rrca
-	jr	NC,l_manageTimers_00107
+	jr	NC,l_manageTimers_00111
+	push	bc
 	ld	hl,0x0046
 	push	hl
 	ld	l,0x01
@@ -462,8 +463,10 @@ l_manageTimers_00105:
 	ld	hl,6
 	add	hl, sp
 	ld	sp, hl
-	jr	l_manageTimers_00109
-l_manageTimers_00107:
+	pop	bc
+	jr	l_manageTimers_00113
+l_manageTimers_00111:
+	push	bc
 	ld	hl,0x0046
 	push	hl
 	ld	l,0x01
@@ -474,7 +477,60 @@ l_manageTimers_00107:
 	ld	hl,6
 	add	hl, sp
 	ld	sp, hl
-l_manageTimers_00109:
+	pop	bc
+l_manageTimers_00113:
+	ld	hl,_delayTimer
+	ld	a, (hl)
+	or	a, a
+	jr	Z,l_manageTimers_00122
+	ld	a, (hl)
+	sub	a, b
+	jr	NC,l_manageTimers_00117
+	ld	(hl),0x00
+	jr	l_manageTimers_00118
+l_manageTimers_00117:
+	ld	hl,_delayTimer
+	ld	a, (hl)
+	sub	a, b
+	ld	(hl), a
+l_manageTimers_00118:
+	ld	a,(_delayTimer)
+	rrca
+	jr	NC,l_manageTimers_00120
+	ld	hl,0x0047
+	push	hl
+	ld	l,0x01
+	push	hl
+	ld	hl,___str_2
+	push	hl
+	call	_sendDrawCommands
+	ld	hl,6
+	add	hl, sp
+	ld	sp, hl
+	jr	l_manageTimers_00122
+l_manageTimers_00120:
+	ld	hl,0x0047
+	push	hl
+	ld	l,0x01
+	push	hl
+	ld	hl,___str_1
+	push	hl
+	call	_sendDrawCommands
+	ld	hl,6
+	add	hl, sp
+	ld	sp, hl
+l_manageTimers_00122:
+	push	hl
+	ld	a,(_currentTimerTick)
+	ld	(_lastTimerTick),a
+	ld	a,(_currentTimerTick + 1)
+	ld	(_lastTimerTick + 1),a
+	ld	a,(_currentTimerTick + 2)
+	ld	(_lastTimerTick + 2),a
+	ld	a,(_currentTimerTick + 3)
+	ld	(_lastTimerTick + 3),a
+	pop	hl
+l_manageTimers_00123:
 	ret
 	SECTION rodata_compiler
 ___str_0:
@@ -486,5 +542,11 @@ ___str_0:
 ___str_1:
 	DEFB 0x1b
 	DEFM "[%d;%dH "
+	DEFB 0x00
+	SECTION rodata_compiler
+___str_2:
+	DEFB 0x1b
+	DEFM "[%d;%dHD"
+	DEFB 0x07
 	DEFB 0x00
 	SECTION IGNORE

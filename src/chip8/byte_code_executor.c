@@ -48,8 +48,9 @@ inline uint16_t readInstruction() {
 
 #define CH8_SKP_VX_NIB        0xE
 #define CH8_SKP_VX_LOW_BYTE   0x9E
-#define CH8_LD_ST_VX_NIB      0xF
+#define CH8_0XF_SERIES_NIB    0xF
 #define CH8_LD_ST_VX_LOW_BYTE 0x18
+#define CH8_LD_DT_VX_LOW_BYTE 0x15
 
 void initSystemState() {
   memset(registers, 0, sizeof(registers));
@@ -129,13 +130,21 @@ bool executeSingleInstruction() {
       break;
     }
 
-    case CH8_LD_ST_VX_NIB: {
-      if (lowByte == CH8_LD_ST_VX_LOW_BYTE) {
+    case CH8_0XF_SERIES_NIB: {
+      switch (lowByte) {
+      case CH8_LD_ST_VX_LOW_BYTE: {
         ldStVx();
         break;
       }
 
-      goto badInstruction;
+      case CH8_LD_DT_VX_LOW_BYTE: {
+        ldDtVx();
+        break;
+      }
+      default:
+        goto badInstruction;
+      }
+      break;
     }
 
     case CH8_SKP_VX_NIB: {

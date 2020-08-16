@@ -161,6 +161,17 @@ void verify_ld_st_v2() {
   expectEqualBytes(soundTimer, 15, "ST");
 }
 
+void setup_ld_dt_v3() {
+  registers[3] = 12;
+  programStorage[0] = invertByteOrder(LD_DT_V3);
+}
+
+void verify_ld_dt_v3() {
+  expectEqualBytes(delayTimer, 12, "DT");
+  simulateTimerTick();
+  expectEqualBytes(delayTimer, 11, "DT");
+}
+
 void main() {
   assert(ld_v1_10);
 
@@ -192,6 +203,7 @@ void main() {
   assert(skp_v3_wrong_key);
 
   assert(ld_st_v2);
+  assert(ld_dt_v3);
 
   xprintf(testFailure ? RED "Tests Failed\r\n" RESET : BRIGHT_WHITE "All Passed\r\n" RESET);
 }

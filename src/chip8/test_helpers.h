@@ -22,7 +22,7 @@ void expectFalse(bool a, const char *msg) {
   }
 
   testFailure = true;
-  xprintf("Expected %s to be false but was %d\r\n", msg, (int)a);
+  xprintf(RED "Expected %s to be false but was %d\r\n" RESET, msg, (int)a);
 }
 
 void expectTrue(bool a, const char *msg) {
@@ -32,7 +32,7 @@ void expectTrue(bool a, const char *msg) {
   }
 
   testFailure = true;
-  xprintf("Expected %s to be true but was %d\r\n", msg, (int)a);
+  xprintf(RED "Expected %s to be true but was %d\r\n" RESET, msg, (int)a);
 }
 
 void expectEqualBytes(byte a, byte b, const char *msg) {
@@ -42,7 +42,7 @@ void expectEqualBytes(byte a, byte b, const char *msg) {
   }
 
   testFailure = true;
-  xprintf("Expected %s to equal %d, but was %d\r\n", msg, b, a);
+  xprintf(RED "Expected %s to equal %d, but was %d\r\n" RESET, msg, b, a);
 }
 
 void expectEqualInts(int a, int b, const char *msg) {
@@ -52,7 +52,7 @@ void expectEqualInts(int a, int b, const char *msg) {
   }
 
   testFailure = true;
-  xprintf("Expected %s to equal %d, but was %d\r\n", msg, b, a);
+  xprintf(RED "Expected %s to equal %d, but was %d\r\n" RESET, msg, b, a);
 }
 
 void expectEqualPtrs(uint16_t *a, uint16_t *b, const char *msg) {
@@ -62,7 +62,7 @@ void expectEqualPtrs(uint16_t *a, uint16_t *b, const char *msg) {
   }
 
   testFailure = true;
-  xprintf("Expected %s to equal %p, but was %p\r\n", msg, b, a);
+  xprintf(RED "Expected %s to equal %p, but was %p\r\n" RESET, msg, b, a);
 }
 
 void replace(char *string, char from, char to) {
@@ -76,7 +76,6 @@ void unescape(const char *string) { replace((char *)string, '\033', '~'); }
 void expectEqualEscapedString(const char *a, const char *b) {
   if (strcmp(a, b) == 0) {
     unescape(a);
-    xprintf("\tSent: \"%s\"\r\n", a);
     return;
   }
 
@@ -85,7 +84,7 @@ void expectEqualEscapedString(const char *a, const char *b) {
   unescape(a);
   unescape(b);
 
-  xprintf("Expected output of \"%s\" but got \"%s\"\r\n", b, a);
+  xprintf(RED "Expected output of \"%s\" but got \"%s\"\r\n" RESET, b, a);
 }
 
 #define MAX_CAPTURE_TEXT 256 * 10

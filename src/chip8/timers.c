@@ -8,27 +8,58 @@
 long lastTimerTick;
 long currentTimerTick;
 
-void initTimers() { lastTimerTick = getSysTimer(); }
+void initTimers() {
+  manageTimers();
+  lastTimerTick = getSysTimer();
+}
 
-void manageTimers() {
-  if (soundTimer == 0) {
-    return;
-  }
-
+inline byte getTimerTicks() {
   currentTimerTick = getSysTimer();
 
-  byte diff = (byte)(currentTimerTick - lastTimerTick);
+  return (byte)(currentTimerTick - lastTimerTick);
+}
+
+inline void tickSoundTimer(byte diff) {
+  if (soundTimer == 0)
+    return;
 
   if (diff > soundTimer)
     soundTimer = 0;
   else
     soundTimer -= diff;
 
-  lastTimerTick = currentTimerTick;
-
   if (soundTimer & 1) {
     sendDrawCommands("\033[%d;%dHS\007", 1, 70);
   } else {
     sendDrawCommands("\033[%d;%dH ", 1, 70);
   }
+}
+
+inline void tickDelayTimer(byte diff) {
+  if (delayTimer == 0)
+    return;
+
+  if (diff > delayTimer)
+    delayTimer = 0;
+  else
+    delayTimer -= diff;
+
+  if (delayTimer & 1) {
+    sendDrawCommands("\033[%d;%dHD\007", 1, 71);
+  } else {
+    sendDrawCommands("\033[%d;%dH ", 1, 71);
+  }
+}
+
+void manageTimers() {
+  if (soundTimer == 0 && delayTimer == 0) {
+    return;
+  }
+
+  byte diff = getTimerTicks();
+
+  tickSoundTimer(diff);
+  tickDelayTimer(diff);
+
+  lastTimerTick = currentTimerTick;
 }

@@ -19,5 +19,6 @@ extern uint16_t currentKeyTimeout;
 extern bool     keyPressed;
 
 extern byte soundTimer;
+extern byte delayTimer;
 
 #endif

@@ -18,3 +18,4 @@ uint16_t currentKeyTimeout;
 bool     keyPressed;
 
 byte soundTimer;
+byte delayTimer;
