@@ -11,7 +11,6 @@ void expectedError(const char *msg) {
 
 void unknownLabelError(const char *label) {
   getToLineEnd();
-  (void)label;
   logError("\r\n%s\r\n\r\nUnknown label '%s' referenced at line number %d\r\n", token.currentLine, label, getCurrentLineNumber());
   errorExit();
 }

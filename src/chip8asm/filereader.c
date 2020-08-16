@@ -23,7 +23,9 @@ char getNextCharRaw() {
     diskBufferP = diskBuffer;
   }
 
-  if (*diskBufferP == CTRL_Z)
+  const char b = *diskBuffer;
+
+  if (b == CTRL_Z || b == 0)
     return '\0';
 
   return *diskBufferP++;

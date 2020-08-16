@@ -11,7 +11,8 @@
 #define LD_V3_VA      0x83A0
 #define LD_VA_DT      0xFA07
 #define RET           0x00EE
+#define RND_VE_15     0xCE0F
 #define SE_V4_15      0x340F
 #define SE_V4_V9      0x5490
 #define SKP_V3        0xE39E
-#define RND_VE_15     0xCE0F
+#define SNE_V0_123    0x4078

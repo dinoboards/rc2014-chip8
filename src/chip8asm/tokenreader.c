@@ -28,6 +28,12 @@ static char getNextChar() {
 
 static inline char getNext() {
   const char result = getNextChar();
+
+  token.currentLine[currentLineIndex] = '\0';
+
+  if (!result)
+    return '\0';
+
   if (newLineStarted) {
     lineNumber++;
     token.currentLine[0] = '\0';
@@ -234,8 +240,9 @@ void getNextToken() {
 
 void getToLineEnd() {
   char c = token.currentChar;
-  while (c != '\n')
+  while (c && c != '\n') {
     c = getNext();
+  }
 }
 
 void openTokenStream() {

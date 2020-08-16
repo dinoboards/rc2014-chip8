@@ -5,7 +5,12 @@ char *content;
 bool  testFailure = false;
 bool  testErrored = false;
 
-char getNextCharRaw() { return *content++; }
+char getNextCharRaw() {
+  const char b = *content;
+  if (b)
+    content++;
+  return b;
+}
 
 void openFileStream() {}
 
@@ -32,6 +37,7 @@ void shouldAssemble(const char *source, uint16_t expectedWord) {
   programStorage[1] = 0;
   testErrored = false;
   xbuffer[0] = '\0';
+  logBuffer[0] = '\0';
 
   initLabelStorage();
   assemble(1);
