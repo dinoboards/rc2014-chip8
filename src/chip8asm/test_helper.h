@@ -1,4 +1,5 @@
 #include "terminal_codes.h"
+#include "tokenreader.h"
 
 char *content;
 bool  testFailure = false;

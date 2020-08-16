@@ -1,12 +1,12 @@
 // #include "charconstants.h"
 #include "assembler.h"
-#include "chip8asm/emitters.h"
-#include "chip8asm/error_reports.h"
-#include "chip8asm/systemstate.h"
-#include "chip8asm/token_parser.h"
-#include "chip8asm/tokenreader.h"
 #include "datatypes.h"
+#include "emitters.h"
+#include "error_reports.h"
 #include "labels.h"
+#include "systemstate.h"
+#include "token_parser.h"
+#include "tokenreader.h"
 #include "xstdio.h"
 
 inline static void assLabel(int parseCount) { addLabel(token.value, currentAddress, parseCount != 1); }
@@ -258,7 +258,8 @@ inline static void assSkpVx() {
   emitByte(0x9E);
 }
 
-void assemble(int parseCount) __z88dk_fastcall {
+void assemble(byte pc) __z88dk_fastcall {
+  parseCount = pc;
   currentAddress = 0x200;
   programPtr = programStorage;
 

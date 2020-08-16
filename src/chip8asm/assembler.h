@@ -2,6 +2,8 @@
 #ifndef __ASSEMBLER
 #define __ASSEMBLER
 
-void assemble(int parseCount) __z88dk_fastcall;
+#include "datatypes.h"
+
+void assemble(byte parseCount) __z88dk_fastcall;
 
 #endif

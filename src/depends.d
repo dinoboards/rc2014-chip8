@@ -21,14 +21,14 @@
 ./chip8/timers.asm: chip8/timers.c chip8/timers.h chip8/tty.h hbios.h \
  chip8/systemstate.h datatypes.h chip8/systimer.h xstdio.h
 ./chip8/tty.asm: chip8/tty.c chip8/tty.h hbios.h xstdio.h
-./chip8asm/assembler.asm: chip8asm/assembler.c chip8asm/assembler.h \
- chip8asm/emitters.h datatypes.h chip8asm/error_reports.h \
- chip8asm/systemstate.h chip8asm/token_parser.h chip8asm/tokenreader.h \
- chip8asm/labels.h xstdio.h
+./chip8asm/assembler.asm: chip8asm/assembler.c chip8asm/assembler.h datatypes.h \
+ chip8asm/emitters.h chip8asm/error_reports.h chip8asm/systemstate.h \
+ chip8asm/token_parser.h chip8asm/tokenreader.h chip8asm/labels.h \
+ xstdio.h
 ./chip8asm/chartesters.asm: chip8asm/chartesters.c chip8asm/chartesters.h
 ./chip8asm/emitters.asm: chip8asm/emitters.c chip8asm/emitters.h datatypes.h \
  chip8asm/systemstate.h
-./chip8asm/error.asm: chip8asm/error.c chip8asm/error.h xstdio.h
+./chip8asm/error.asm: chip8asm/error.c chip8asm/error.h xstdio.h hbios.h
 ./chip8asm/error_reports.asm: chip8asm/error_reports.c chip8asm/error_reports.h \
  chip8asm/error.h chip8asm/exit.h chip8asm/tokenreader.h
 ./chip8asm/exit.asm: chip8asm/exit.c
@@ -36,14 +36,16 @@
  datatypes.h chip8asm/error.h chip8asm/exit.h chip8asm/labels.h xstdio.h
 ./chip8asm/filereader.asm: chip8asm/filereader.c chip8asm/filereader.h \
  charconstants.h cpm.h datatypes.h
-./chip8asm/labels.asm: chip8asm/labels.c chip8asm/labels.h datatypes.h xstdio.h
-./chip8asm/main.asm: chip8asm/main.c chip8asm/assembler.h chip8asm/labels.h \
- datatypes.h chip8asm/systemstate.h cpm.h xstdio.h
+./chip8asm/labels.asm: chip8asm/labels.c chip8asm/labels.h datatypes.h xstdio.h \
+ chip8asm/error_reports.h chip8asm/systemstate.h
+./chip8asm/main.asm: chip8asm/main.c chip8asm/assembler.h datatypes.h \
+ chip8asm/labels.h chip8asm/systemstate.h cpm.h xstdio.h
 ./chip8asm/systemstate.asm: chip8asm/systemstate.c chip8asm/systemstate.h \
  datatypes.h
 ./chip8asm/test_assembler.asm: chip8asm/test_assembler.c chip8asm/assembler.h \
- chip8asm/labels.h datatypes.h chip8asm/systemstate.h cpm.h \
- test_opcodes.h xstdio.h chip8asm/test_helper.h terminal_codes.h
+ datatypes.h chip8asm/labels.h chip8asm/systemstate.h cpm.h \
+ test_opcodes.h xstdio.h chip8asm/test_helper.h terminal_codes.h \
+ chip8asm/tokenreader.h
 ./chip8asm/tokenreader.asm: chip8asm/tokenreader.c chip8asm/tokenreader.h \
  charconstants.h chip8asm/chartesters.h chip8asm/filereader.h cpm.h \
  datatypes.h chip8asm/error.h chip8asm/exit.h hbios.h

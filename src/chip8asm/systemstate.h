@@ -7,5 +7,6 @@
 extern byte     programStorage[MAX_PROGRAM_SIZE];
 extern uint16_t currentAddress;
 extern byte *   programPtr;
+extern byte     parseCount;
 
 #endif

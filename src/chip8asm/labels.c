@@ -1,5 +1,7 @@
 #include "labels.h"
 #include "datatypes.h"
+#include "error_reports.h"
+#include "systemstate.h"
 #include "xstdio.h"
 #include <string.h>
 
@@ -38,6 +40,9 @@ uint16_t findLabelAddress(const char *label) __z88dk_fastcall {
   labelAddresses *p = findLabel(label);
   if (p)
     return p->address;
+
+  if (parseCount > 1)
+    unknownLabelError(label);
 
   return 0;
 }

@@ -239,7 +239,7 @@ void getToLineEnd() {
 
 void openTokenStream() {
   openFileStream();
-  lineNumber = 0;
+  lineNumber = 1;
 
   char nextChar = getNext();
   token.currentChar = nextChar;

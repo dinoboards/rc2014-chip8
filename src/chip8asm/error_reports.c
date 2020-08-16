@@ -8,3 +8,10 @@ void expectedError(const char *msg) {
   logError("\r\n%s\r\n\r\nExpected %s but found %s\r\n at line number %d\r\n", token.currentLine, msg, token.value, getCurrentLineNumber());
   errorExit();
 }
+
+void unknownLabelError(const char *label) {
+  getToLineEnd();
+  (void)label;
+  logError("\r\n%s\r\n\r\nUnknown label '%s' referenced at line number %d\r\n", token.currentLine, label, getCurrentLineNumber());
+  errorExit();
+}

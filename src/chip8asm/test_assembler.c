@@ -28,9 +28,11 @@ void main() {
   shouldAssemble("LD ST, V2", LD_ST_V2);
   shouldAssemble("LD DT, V3", LD_DT_V3);
   shouldAssemble("SKP V3", SKP_V3);
+  // shouldAssemble("LD VA, DT", LD_V4_DT);
 
   shouldError("BAD INSTRUCTION", "Expected Instruction but found BAD");
   shouldError("LD BADREG, 123", "Expected one of Vx, I, ST or DT but found BADREG");
+  shouldError("JP NOWHERE", "Unknown label 'NOWHERE' referenced at line number 1");
 
   xprintf(testFailure ? RED "Tests Failed\r\n" RESET : BRIGHT_WHITE "All Passed\r\n" RESET);
 }
