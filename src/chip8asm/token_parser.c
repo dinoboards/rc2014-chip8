@@ -59,6 +59,16 @@ void expectToBeOneOfVxOrIOrStOrDt() {
   expectedError("one of Vx, I, ST or DT");
 }
 
+void expectToBeVxOrIRegister() {
+  if (currentIsVRegister())
+    return;
+
+  if (currentIsIRegister())
+    return;
+
+  expectedError("one of Vx or I");
+}
+
 void expectToBeST() {
   if (!currentIsST())
     expectedError("ST");

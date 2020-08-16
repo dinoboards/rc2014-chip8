@@ -55,6 +55,14 @@ void setup_add_ve_1() {
 
 void verify_add_ve_1() { expectEqualBytes(registers[0xE], 4, "VE"); }
 
+void setup_add_i_v9() {
+  registers[0x9] = 3;
+  registerI = 100;
+  programStorage[0] = invertByteOrder(ADD_I_V9);
+}
+
+void verify_add_i_v9() { expectEqualBytes(registerI, 103, "I"); }
+
 void setup_se_v4_15_skips() {
   registers[4] = 15;
   programStorage[0] = invertByteOrder(SE_V4_15);
@@ -252,6 +260,7 @@ void main() {
   assert(final_ret);
 
   assert(add_ve_1);
+  assert(add_i_v9);
 
   assert(se_v4_15_skips);
   assert(se_v4_15_no_skips);

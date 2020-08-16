@@ -34,6 +34,8 @@ void main() {
   shouldAssemble("LD VA, DT", LD_VA_DT);
   shouldAssemble("RND vE, 15", RND_VE_15);
 
+  shouldAssemble("ADD I, V9", ADD_I_V9);
+
   shouldError("BAD INSTRUCTION", "Expected Instruction but found BAD");
   shouldError("LD BADREG, 123", "Expected one of Vx, I, ST or DT but found BADREG");
   shouldError("JP NOWHERE", "Unknown label 'NOWHERE' referenced at line number 1");

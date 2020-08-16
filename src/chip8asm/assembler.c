@@ -197,7 +197,6 @@ Set Vx = Vx + kk.
 Adds the value kk to the value of register Vx, then stores the result in Vx.
 */
 inline static void assAddVx() {
-  getNext();
   const byte x = expectToBeVRegister();
 
   getNext();
@@ -208,6 +207,34 @@ inline static void assAddVx() {
 
   emit2Nibble(0x7, x);
   emitByte(b);
+}
+
+/*Fx1E - ADD I, Vx
+Set I = I + Vx.
+
+The values of I and Vx are added, and the results are stored in I.
+*/
+inline static void assAddI() {
+  expectToBeIRegister();
+
+  getNext();
+  expectToBeComma();
+
+  getNext();
+  const byte x = expectToBeVRegister();
+
+  emit2Nibble(0xF, x);
+  emitByte(0x1E);
+}
+
+inline static void assAdd() {
+  getNext();
+  expectToBeVxOrIRegister();
+
+  if (currentIsIRegister())
+    assAddI();
+  else
+    assAddVx();
 }
 
 /*
@@ -376,7 +403,7 @@ void assemble(byte pc) __z88dk_fastcall {
       break;
 
     case InstructionAdd:
-      assAddVx();
+      assAdd();
       break;
 
     case InstructionSe:

@@ -13,8 +13,10 @@ extern uint16_t expectToBeInt();
 extern void     expectToBeComma();
 extern void     expectToBeIRegister();
 extern void     expectToBeOneOfVxOrIOrStOrDt();
-extern void     expectToBeST();
-extern void     expectToBeDT();
+extern void     expectToBeVxOrIRegister();
+
+extern void expectToBeST();
+extern void expectToBeDT();
 
 #define currentIsIRegister() (token.type == RegisterI)
 #define currentIsST()        (token.type == RegisterST)

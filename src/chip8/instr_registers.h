@@ -21,4 +21,6 @@
 
 #define ldVxDt() (registers[secondNibble] = delayTimer)
 
+#define addIVx() (registerI += registers[secondNibble])
+
 #endif
