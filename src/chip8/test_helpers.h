@@ -104,7 +104,7 @@ void sendDrawCommands(const char *msg, ...) {
 bool simulateKeyReady;
 char simulatedKeyValue;
 
-void resetKeySimulator() {
+inline void resetKeySimulator() {
   simulateKeyReady = false;
   simulatedKeyValue = 0;
 }
@@ -113,7 +113,7 @@ bool keyReady() { return simulateKeyReady; }
 
 void getKey(char *r) { *r = simulatedKeyValue; }
 
-void simulateKey(const char k) {
+inline void simulateKey(const char k) {
   simulateKeyReady = true;
   simulatedKeyValue = k;
 }
@@ -122,7 +122,13 @@ long simulatedNextTimerTick = 0;
 
 long getSysTimer() { return simulatedNextTimerTick; }
 
-void simulateTimerTick() {
+inline void simulateTimerTick() {
   simulatedNextTimerTick++;
   manageTimers();
 }
+
+byte nextRandomNumber = 0;
+
+byte chip8Rand() { return nextRandomNumber; }
+
+inline void simulateRandomNumber(byte b) { nextRandomNumber = b; }

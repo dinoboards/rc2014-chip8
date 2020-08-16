@@ -29,6 +29,7 @@ void main() {
   shouldAssemble("LD DT, V3", LD_DT_V3);
   shouldAssemble("SKP V3", SKP_V3);
   shouldAssemble("LD VA, DT", LD_VA_DT);
+  shouldAssemble("RND vE, 15", RND_VE_15);
 
   shouldError("BAD INSTRUCTION", "Expected Instruction but found BAD");
   shouldError("LD BADREG, 123", "Expected one of Vx, I, ST or DT but found BADREG");

@@ -269,6 +269,26 @@ inline static void assSkpVx() {
   emitByte(0x9E);
 }
 
+/*
+Cxkk - RND Vx, byte
+Set Vx = random byte AND kk.
+
+The interpreter generates a random number from 0 to 255, which is then ANDed with the value kk. The results are stored in Vx. See instruction 8xy2 for more information on AND.
+*/
+inline static void assRndVx() {
+  getNext();
+  const byte x = expectToBeVRegister();
+
+  getNext();
+  expectToBeComma();
+
+  getNext();
+  const byte b = expectToBeByte();
+
+  emit2Nibble(0xC, x);
+  emitByte(b);
+}
+
 void assemble(byte pc) __z88dk_fastcall {
   parseCount = pc;
   currentAddress = 0x200;
@@ -322,6 +342,10 @@ void assemble(byte pc) __z88dk_fastcall {
 
     case InstructionSkp:
       assSkpVx();
+      break;
+
+    case InstructionRnd:
+      assRndVx();
       break;
 
     default:

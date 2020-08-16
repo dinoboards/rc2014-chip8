@@ -1,8 +1,9 @@
-#include "chip8/byte_code_executor.h"
-#include "chip8/instr_output.h"
+#include "byte_code_executor.h"
 #include "cpm.h"
 #include "datatypes.h"
 #include "hbios.h"
+#include "instr_output.h"
+#include "random.h"
 #include "systemstate.h"
 #include "xstdio.h"
 #include <stdarg.h>
@@ -22,6 +23,7 @@ void main() {
   cls();
 
   initSystemState();
+  seedRandom();
 
   uint16_t *ptr = programStorage;
   int       noMoreData = 0;

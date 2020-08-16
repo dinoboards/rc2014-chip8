@@ -1,6 +1,7 @@
 #include "datatypes.h"
 #include "instr_output.h"
 #include "instr_pc.h"
+#include "instr_random.h"
 #include "instr_registers.h"
 #include "key_monitor.h"
 #include "stack.h"
@@ -52,6 +53,8 @@ inline uint16_t readInstruction() {
 #define CH8_LD_ST_VX_LOW_BYTE 0x18
 #define CH8_LD_DT_VX_LOW_BYTE 0x15
 #define CH8_LD_VX_DT_LOW_BYTE 0x07
+
+#define CH8_RND_VX_NIB 0xC
 
 void initSystemState() {
   memset(registers, 0, sizeof(registers));
@@ -128,6 +131,11 @@ bool executeSingleInstruction() {
 
     case CH8_JP_NIB: {
       jp();
+      break;
+    }
+
+    case CH8_RND_VX_NIB: {
+      rnd();
       break;
     }
 

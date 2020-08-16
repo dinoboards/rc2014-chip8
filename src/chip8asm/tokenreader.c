@@ -111,6 +111,7 @@ static void testForInstructions() {
   tokenMap("se", InstructionSe);
   tokenMap("jp", InstructionJp);
   tokenMap("skp", InstructionSkp);
+  tokenMap("rnd", InstructionRnd);
 
   token.isInstruction = false;
   token.type = TokenAlphanumeric;

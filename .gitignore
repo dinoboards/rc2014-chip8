@@ -37,3 +37,4 @@ spike*
 key_monitor.asm
 keys.asm
 systimer.asm
+random.asm

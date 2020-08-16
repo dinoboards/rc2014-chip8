@@ -179,6 +179,13 @@ void setup_ld_va_dt() {
 
 void verify_ld_va_dt() { expectEqualBytes(registers[0xA], 0x45, "VA"); }
 
+void setup_rnd_ve_15() {
+  simulateRandomNumber(12 + 64);
+  programStorage[0] = invertByteOrder(RND_VE_15);
+}
+
+void verify_rnd_ve_15() { expectEqualBytes(registers[0xE], 12, "VE"); }
+
 void main() {
   assert(ld_v1_10);
 
@@ -212,6 +219,8 @@ void main() {
   assert(ld_st_v2);
   assert(ld_dt_v3);
   assert(ld_va_dt);
+
+  assert(rnd_ve_15);
 
   xprintf(testFailure ? RED "Tests Failed\r\n" RESET : BRIGHT_WHITE "All Passed\r\n" RESET);
 }
