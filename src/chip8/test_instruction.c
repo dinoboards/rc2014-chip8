@@ -18,6 +18,13 @@ void setup_ld_v1_10() { programStorage[0] = invertByteOrder(LD_V1_10); }
 
 void verify_ld_v1_10() { expectEqualBytes(registers[1], 10, "V1"); }
 
+void setup_ld_v3_va() {
+  registers[0xA] = 23;
+  programStorage[0] = invertByteOrder(LD_V3_VA);
+}
+
+void verify_ld_v3_va() { expectEqualBytes(registers[3], 23, "V3"); }
+
 void setup_ld_i_1234() { programStorage[0] = invertByteOrder(LD_I_1234); }
 
 void verify_ld_i_1234() { expectEqualInts(registerI, 1234, "I"); }
@@ -250,7 +257,7 @@ void verify_rnd_ve_15() { expectEqualBytes(registers[0xE], 12, "VE"); }
 
 void main() {
   assert(ld_v1_10);
-
+  assert(ld_v3_va); // LD_V3_VA)
   assert(ld_i_1234);
 
   assert(call_1025);

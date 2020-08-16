@@ -36,29 +36,29 @@ inline uint16_t readInstruction() {
   return r;
 }
 
-#define CH8_ADDVX_NIB       0x7
-#define CH8_CALL_NIB        0x2
-#define CH8_CLS             0xE000
-#define CH8_DRW_NIB         0xD
 #define CH8_JP_NIB          0x1
-#define CH8_LD_I_ADDR_NIB   0xA
-#define CH8_LD_VX_BYTE_NIB  0x6
-#define CH8_RET             0xEE00
+#define CH8_CALL_NIB        0x2
 #define CH8_SE_VX_BYTE_NIB  0x3
 #define CH8_SNE_VX_BYTE_NIB 0x4
 #define CH8_SE_VX_VY_NIB    0x5
+#define CH8_LD_VX_BYTE_NIB  0x6
+#define CH8_ADDVX_NIB       0x7
+#define CH8_LD_VX_VY_NIB    0x8
 #define CH8_SNE_VX_VY_NIB   0x9
+#define CH8_LD_I_ADDR_NIB   0xA
+#define CH8_RND_VX_NIB      0xC
+#define CH8_DRW_NIB         0xD
+#define CH8_0XE_SERIES_NIB  0xE
+#define CH8_CLS             0xE000
+#define CH8_RET             0xEE00
+#define CH8_0XF_SERIES_NIB  0xF
 
-#define CH8_0XE_SERIES_NIB    0xE
 #define CH8_SKP_VX_LOW_BYTE   0x9E
 #define CH8_SKNP_VX_LOW_BYTE  0xA1
-#define CH8_0XF_SERIES_NIB    0xF
 #define CH8_LD_ST_VX_LOW_BYTE 0x18
 #define CH8_LD_DT_VX_LOW_BYTE 0x15
 #define CH8_LD_VX_DT_LOW_BYTE 0x07
 #define CH8_ADD_I_VX_LOW_BYTE 0x1E
-
-#define CH8_RND_VX_NIB 0xC
 
 void initSystemState() {
   memset(registers, 0, sizeof(registers));
@@ -100,6 +100,10 @@ bool executeSingleInstruction() {
     addr = (currentInstruction >> 8) + (((int)secondNibble) << 8);
 
     switch (firstNibble) {
+    case CH8_LD_VX_VY_NIB:
+      ldVxVy();
+      break;
+
     case CH8_LD_VX_BYTE_NIB:
       ldVxByte();
       break;

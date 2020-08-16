@@ -23,4 +23,6 @@
 
 #define addIVx() (registerI += registers[secondNibble])
 
+#define ldVxVy() (registers[secondNibble] = registers[thirdNibble])
+
 #endif

@@ -33,7 +33,6 @@ void main() {
   shouldAssemble("SKNP VD", SKNP_VD);
   shouldAssemble("LD VA, DT", LD_VA_DT);
   shouldAssemble("RND vE, 15", RND_VE_15);
-
   shouldAssemble("ADD I, V9", ADD_I_V9);
 
   shouldError("BAD INSTRUCTION", "Expected Instruction but found BAD");
