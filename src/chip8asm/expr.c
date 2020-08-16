@@ -21,22 +21,22 @@
 #define MAX_WORKING_BUFFER 64
 static char        token[MAX_WORKING_BUFFER];
 static int         tokenIndex = 0;
-static int         ch;
+static char        currentChar;
 static const char *expressionPtr;
 
-enum { ADD_OP, MUL_OP, LEFT_PAREN, RIGHT_PAREN, NUMBER, ALPHA, END_INPUT } lookAhead;
+typedef enum { ADD_OP, MUL_OP, LEFT_PAREN, RIGHT_PAREN, NUMBER, ALPHA, END_INPUT } LookAheadTokens;
 
-int    scan();
+static LookAheadTokens lookAhead;
+
+void   scan();
 number expr(void);
-
-// inline void advance() { scan(); }
 
 inline void reset() {
   tokenIndex = 0;
   token[0] = '\0';
 }
 
-inline void ignore() { ch = *expressionPtr++; }
+inline void ignore() { currentChar = *expressionPtr++; }
 
 number evaluate(const char *myexpression) {
   expressionPtr = (char *)myexpression;
@@ -56,7 +56,7 @@ number evaluate(const char *myexpression) {
 }
 
 inline void abortEvaluation() {
-  while (ch)
+  while (currentChar)
     ignore();
   lookAhead = END_INPUT;
 }
@@ -68,15 +68,15 @@ void read() {
     return;
   }
 
-  token[tokenIndex++] = ch;
+  token[tokenIndex++] = currentChar;
   token[tokenIndex] = '\0';
-  ch = *expressionPtr++;
+  currentChar = *expressionPtr++;
 }
 
-int scan() {
+void scan() {
   reset();
 START:
-  switch (ch) {
+  switch (currentChar) {
   case ' ':
   case '\t':
   case '\r':
@@ -86,20 +86,24 @@ START:
   case '-':
   case '+':
     read();
-    return lookAhead = ADD_OP;
+    lookAhead = ADD_OP;
+    return;
 
   case '*':
   case '/':
     read();
-    return lookAhead = MUL_OP;
+    lookAhead = MUL_OP;
+    return;
 
   case '(':
     read();
-    return lookAhead = LEFT_PAREN;
+    lookAhead = LEFT_PAREN;
+    return;
 
   case ')':
     read();
-    return lookAhead = RIGHT_PAREN;
+    lookAhead = RIGHT_PAREN;
+    return;
 
   case '0':
   case '1':
@@ -116,21 +120,23 @@ START:
 
   case '\n':
   case '\0':
-    ch = ' '; // delayed ignore()
-    return lookAhead = END_INPUT;
+    currentChar = ' '; // delayed ignore()
+    lookAhead = END_INPUT;
+    return;
 
   default:
-    if (isCharLetter(ch) || ch == '_') {
+    if (isCharLetter(currentChar) || currentChar == '_') {
       read();
       goto IN_LEADING_ALPHA;
     }
-    errorUnexpectedCharacter(ch);
+    errorUnexpectedCharacter(currentChar);
     abortEvaluation();
-    return lookAhead = END_INPUT;
+    lookAhead = END_INPUT;
+    return;
   }
 
 IN_LEADING_DIGITS:
-  switch (ch) {
+  switch (currentChar) {
   case '0':
   case '1':
   case '2':
@@ -149,18 +155,21 @@ IN_LEADING_DIGITS:
     goto IN_TRAILING_DIGITS;
 
   default:
-    return lookAhead = NUMBER;
+    lookAhead = NUMBER;
+    return;
   }
 
 IN_LEADING_ALPHA:
-  if (isCharAlpha(ch)) {
+  if (isCharAlpha(currentChar)) {
     read();
     goto IN_LEADING_ALPHA;
-  } else
-    return lookAhead = ALPHA;
+  } else {
+    lookAhead = ALPHA;
+    return;
+  }
 
 IN_TRAILING_DIGITS:
-  switch (ch) {
+  switch (currentChar) {
   case '0':
   case '1':
   case '2':
@@ -175,26 +184,27 @@ IN_TRAILING_DIGITS:
     goto IN_TRAILING_DIGITS;
 
   default:
-    return lookAhead = NUMBER;
+    lookAhead = NUMBER;
+    return;
   }
 }
 
 number unsigned_factor() {
-  number rtn = 0;
+  number result = 0;
   switch (lookAhead) {
   case NUMBER:
-    sscanf(token, "%d", &rtn);
+    sscanf(token, "%d", &result);
     scan();
     break;
 
   case ALPHA:
-    rtn = findLabelAddress(token);
+    result = findLabelAddress(token);
     scan();
     break;
 
   case LEFT_PAREN:
     scan();
-    rtn = expr();
+    result = expr();
     if (lookAhead != RIGHT_PAREN) {
       errorExpectedChar(')');
       abortEvaluation();
@@ -208,52 +218,49 @@ number unsigned_factor() {
     abortEvaluation();
     return 0;
   }
-  return rtn;
+  return result;
 }
 
 number factor() {
-  number rtn = 0;
-  // If there is a leading minus...
   if (lookAhead == ADD_OP && token[0] == '-') {
     scan();
-    rtn = -unsigned_factor();
-  } else
-    rtn = unsigned_factor();
-  return rtn;
+    return -unsigned_factor();
+  }
+  return unsigned_factor();
 }
 
 number term() {
-  number rtn = factor();
+  number result = factor();
   while (lookAhead == MUL_OP) {
     switch (token[0]) {
     case '*':
       scan();
-      rtn *= factor();
+      result *= factor();
       break;
 
     case '/':
       scan();
-      rtn /= factor();
+      result /= factor();
       break;
     }
   }
-  return rtn;
+  return result;
 }
 
 number expr() {
-  number rtn = term();
+  number result = term();
   while (lookAhead == ADD_OP) {
     switch (token[0]) {
     case '+':
       scan();
-      rtn += term();
+      result += term();
       break;
 
     case '-':
       scan();
-      rtn -= term();
+      result -= term();
       break;
     }
   }
-  return rtn;
+  return result;
 }

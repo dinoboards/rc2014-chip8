@@ -16,6 +16,13 @@ void testEvaluation() {
   shouldEvaluate("1234", 1234);
   shouldEvaluate("10*2", 20);
 
+  shouldEvaluate("-123", -123);
+  shouldEvaluate("-123*10", -1230);
+  shouldEvaluate("100/10", 10);
+  shouldEvaluate("100+10", 110);
+  shouldEvaluate("100+10*2", 120);
+  shouldEvaluate("(100+10)*2", 220);
+
   shouldEvaluateError("A1234567890A1234567890A1234567890A1234567890A1234567890A1234567890A1234567890*10", "Expression item too long");
 
   shouldEvaluateError("@@@", "Expression had unexpected character '@' at line number 0");
