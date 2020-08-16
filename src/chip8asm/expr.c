@@ -91,6 +91,7 @@ START:
 
   case '*':
   case '/':
+  case '%':
     read();
     lookAhead = MUL_OP;
     return;
@@ -241,6 +242,11 @@ number term() {
     case '/':
       scan();
       result /= factor();
+      break;
+
+    case '%':
+      scan();
+      result %= factor();
       break;
     }
   }

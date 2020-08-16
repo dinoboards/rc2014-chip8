@@ -17,11 +17,12 @@ void testEvaluation() {
   shouldEvaluate("10*2", 20);
 
   shouldEvaluate("-123", -123);
-  shouldEvaluate("-123*10", -1230);
-  shouldEvaluate("100/10", 10);
-  shouldEvaluate("100+10", 110);
-  shouldEvaluate("100+10*2", 120);
-  shouldEvaluate("(100+10)*2", 220);
+  shouldEvaluate("-123*10", -123 * 10);
+  shouldEvaluate("100/10", 100 / 10);
+  shouldEvaluate("100+10", 100 + 10);
+  shouldEvaluate("100+10*2", 100 + 10 * 2);
+  shouldEvaluate("(100+10)*2", (100 + 10) * 2);
+  shouldEvaluate("110 % 10", 100 % 10);
 
   shouldEvaluateError("A1234567890A1234567890A1234567890A1234567890A1234567890A1234567890A1234567890*10", "Expression item too long");
 
