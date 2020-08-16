@@ -4,8 +4,9 @@
 #include "chip8asm/filereader.h"
 #include "cpm.h"
 #include "datatypes.h"
+#include "error.h"
+#include "exit.h"
 #include "hbios.h"
-#include "xstdio.h"
 #include <string.h>
 
 Token        token;
@@ -225,8 +226,8 @@ void getNextToken() {
   if (isComma())
     return;
 
-  xprintf("Unexpected token '%c'\r\n", token.currentChar);
-  exit(-1);
+  logError("Unexpected token '%c'\r\n", token.currentChar);
+  errorExit();
 }
 
 void getToLineEnd() {

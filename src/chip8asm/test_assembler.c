@@ -8,79 +8,7 @@
 #include <stdio.h>
 #include <string.h>
 
-char *content;
-
-char getNextCharRaw() { return *content++; }
-
-void openFileStream() {}
-
-void closeFileStream() {}
-
-#define MAX_LOG_CAPTURE 256
-char logBuffer[MAX_LOG_CAPTURE];
-
-void logError(const char *msg, ...) {
-  va_list arg;
-  va_start(arg, msg);
-  vsnprintf(logBuffer, MAX_LOG_CAPTURE - 1, (char *)msg, arg);
-  va_end(arg);
-}
-
-bool testFailure = false;
-bool testErrored = false;
-
-void errorExit() { testErrored = true; }
-
-void shouldAssemble(const char *source, uint16_t expectedWord) {
-  content = (char *)source;
-  programStorage[0] = 0;
-  programStorage[1] = 0;
-  testErrored = false;
-  xbuffer[0] = '\0';
-
-  initLabelStorage();
-  assemble(1);
-  content = (char *)source;
-  assemble(2);
-
-  xprintf("%04X should be assembled from:\r\n  %s\r\n\r\n", expectedWord, source);
-
-  if (testErrored) {
-    xprintf("  Failed.  %s\r\n", logBuffer);
-    testFailure = true;
-    return;
-  }
-
-  if (programStorage[0] != (byte)(expectedWord >> 8) || programStorage[1] != (byte)(expectedWord & 0xFF)) {
-    xprintf("  Failure: translated to %02X%02X\r\n\r\n", (int)programStorage[0], (int)programStorage[1]);
-    testFailure = true;
-  }
-}
-
-void shouldError(const char *source, const char *errorMessage) {
-  content = (char *)source;
-  programStorage[0] = 0;
-  programStorage[1] = 0;
-  testErrored = false;
-
-  initLabelStorage();
-  assemble(1);
-  content = (char *)source;
-  assemble(2);
-
-  xprintf("'%s' should be reported from:\r\n%s\r\n\r\n", errorMessage, source);
-
-  if (testErrored) {
-    if (strstr(xbuffer, errorMessage) != NULL)
-      return;
-
-    xprintf("  Failed: incorrect error message of %s\r\n\r\n", xbuffer);
-    testFailure = true;
-    return;
-  }
-
-  xprintf("  Failed.  no error message reported.\r\n");
-}
+#include "test_helper.h"
 
 void main() {
   shouldAssemble("LD V3, va", LD_V3_VA);
@@ -98,9 +26,11 @@ void main() {
   shouldAssemble("SE V4, v9", SE_V4_V9);
   shouldAssemble("JP 1026", JP_1026);
   shouldAssemble("LD ST, V2", LD_ST_V2);
+  // shouldAssemble("LD DT, V3", LD_DT_V3);
   shouldAssemble("SKP V3", SKP_V3);
 
   shouldError("BAD INSTRUCTION", "Expected Instruction but found BAD");
+  shouldError("LD BADREG, 123", "Expected one of Vx, I or ST but found BADREG");
 
-  xprintf(testFailure ? "Tests Failed\r\n" : "All Done\r\n");
+  xprintf(testFailure ? RED "Tests Failed\r\n" RESET : BRIGHT_WHITE "All Passed\r\n" RESET);
 }

@@ -43,6 +43,19 @@ byte expectToBeVRegister() {
   return getRegisterIndex(token.type);
 }
 
+void expectToBeOneOfVxOrIOrSt() {
+  if (currentIsVRegister())
+    return;
+
+  if (currentIsIRegister())
+    return;
+
+  if (currentIsSoundTimer())
+    return;
+
+  expectedError("one of Vx, I or ST");
+}
+
 void expectToBeSoundTimer() {
   if (!currentIsSoundTimer())
     expectedError("ST");

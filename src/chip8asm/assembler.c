@@ -89,6 +89,7 @@ inline static void assLdStVx() {
 */
 inline static void assLd() {
   getNext();
+  expectToBeOneOfVxOrIOrSt();
 
   if (currentIsIRegister())
     assLdI();

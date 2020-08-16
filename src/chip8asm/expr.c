@@ -11,6 +11,8 @@
 #include "expr.h"
 #include "chartesters.h"
 #include "datatypes.h"
+#include "error.h"
+#include "exit.h"
 #include "labels.h"
 #include "xstdio.h"
 #include <stdio.h>
@@ -51,8 +53,8 @@ number evaluate(const char *myexpression) {
 
 // Just die on any error.
 void error(const char *msg) __z88dk_fastcall {
-  xprintf("Error: %s. I quit.\r\n", msg);
-  // exit(1);
+  logError("Error: %s. I quit.\r\n", msg);
+  errorExit();
 }
 
 // Buffer the current character and read a new one.
@@ -129,6 +131,7 @@ START:
       goto IN_LEADING_ALPHA;
     }
     error("bad character");
+    return 0;
   }
 
 IN_LEADING_DIGITS:
@@ -209,13 +212,16 @@ number unsigned_factor() {
   case LEFT_PAREN:
     advance();
     rtn = expr();
-    if (look_ahead != RIGHT_PAREN)
+    if (look_ahead != RIGHT_PAREN) {
       error("missing ')'");
+      return 0;
+    }
     advance();
     break;
 
   default:
     error("unexpected token");
+    return 0;
   }
   return rtn;
 }

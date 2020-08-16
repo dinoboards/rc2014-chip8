@@ -4,6 +4,7 @@
 #include "instr_output.h"
 #include "stack.h"
 #include "systemstate.h"
+#include "terminal_codes.h"
 #include "test_opcodes.h"
 #include "timers.h"
 #include "xstdio.h"
@@ -192,5 +193,5 @@ void main() {
 
   assert(ld_st_v2);
 
-  xprintf(testFailure ? "Tests Failed\r\n" : "All Done\r\n");
+  xprintf(testFailure ? RED "Tests Failed\r\n" RESET : BRIGHT_WHITE "All Passed\r\n" RESET);
 }

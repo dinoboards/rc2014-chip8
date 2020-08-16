@@ -7,14 +7,16 @@
 #define getNext()  getNextToken()
 
 extern byte     expectToBeByte();
-extern uint16_t expectToBeInt();
-extern void     expectToBeIRegister();
-extern byte     expectToBeVRegister();
-extern void     expectToBeSoundTimer();
-extern void     expectToBeComma();
 extern byte     expectToBeNibble();
+extern byte     expectToBeVRegister();
+extern uint16_t expectToBeInt();
+extern void     expectToBeComma();
+extern void     expectToBeIRegister();
+extern void     expectToBeOneOfVxOrIOrSt();
+extern void     expectToBeSoundTimer();
 
 #define currentIsIRegister()  (token.type == RegisterI)
-#define currentIsVRegister()  (token.isVRegister)
 #define currentIsSoundTimer() (token.type == SoundTimer)
+#define currentIsVRegister()  (token.isVRegister)
+
 #endif
