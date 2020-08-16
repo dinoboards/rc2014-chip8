@@ -93,11 +93,11 @@ void setup_sne_v0_123_skips() {
 void verify_sne_v0_123_skips() { expectEqualPtrs(chip8PC, (uint16_t *)0x204, "PC"); }
 
 void setup_sne_v0_123_no_skips() {
-  registers[4] = 123;
+  registers[0] = 123;
   programStorage[0] = invertByteOrder(SNE_V0_123);
 }
 
-void verify_sne_v0_123_no_skips() { expectEqualPtrs(chip8PC, (uint16_t *)0x204, "PC"); }
+void verify_sne_v0_123_no_skips() { expectEqualPtrs(chip8PC, (uint16_t *)0x202, "PC"); }
 
 void setup_sne_v0_v2_skips() {
   registers[0] = 15;
@@ -106,6 +106,14 @@ void setup_sne_v0_v2_skips() {
 }
 
 void verify_sne_v0_v2_skips() { expectEqualPtrs(chip8PC, (uint16_t *)0x204, "PC"); }
+
+void setup_sne_v0_v2_no_skips() {
+  registers[0] = 25;
+  registers[2] = 25;
+  programStorage[0] = invertByteOrder(SNE_V0_V2);
+}
+
+void verify_sne_v0_v2_no_skips() { expectEqualPtrs(chip8PC, (uint16_t *)0x202, "PC"); }
 
 void setup_cls() { programStorage[0] = invertByteOrder(CLS); }
 
@@ -229,6 +237,7 @@ void main() {
   assert(sne_v0_123_skips);
   assert(sne_v0_123_no_skips);
   assert(sne_v0_v2_skips);
+  assert(sne_v0_v2_no_skips);
 
   assert(cls);
 
