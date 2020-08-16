@@ -17,3 +17,4 @@
 #define SKP_V3        0xE39E
 #define SNE_V0_123    0x407B
 #define SNE_V0_V2     0x9020
+#define SKNP_VD       0xEDA1

@@ -30,6 +30,7 @@ void main() {
   shouldAssemble("LD ST, V2", LD_ST_V2);
   shouldAssemble("LD DT, V3", LD_DT_V3);
   shouldAssemble("SKP V3", SKP_V3);
+  shouldAssemble("SKNP VD", SKNP_VD);
   shouldAssemble("LD VA, DT", LD_VA_DT);
   shouldAssemble("RND vE, 15", RND_VE_15);
 

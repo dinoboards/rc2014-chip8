@@ -180,6 +180,30 @@ void setup_skp_v3_wrong_key() {
 
 void verify_skp_v3_wrong_key() { expectEqualPtrs(chip8PC, (uint16_t *)0x202, "PC"); }
 
+void setup_sknp_vd_skips() {
+  registers[0xD] = 0xB;
+  simulateKey('A');
+  programStorage[0] = invertByteOrder(SKNP_VD);
+}
+
+void verify_sknp_vd_skips() { expectEqualPtrs(chip8PC, (uint16_t *)0x204, "PC"); }
+
+void setup_sknp_vd_no_skips() {
+  registers[0xD] = 0xB;
+  simulateKey('B');
+  programStorage[0] = invertByteOrder(SKNP_VD);
+}
+
+void verify_sknp_vd_no_skips() { expectEqualPtrs(chip8PC, (uint16_t *)0x202, "PC"); }
+
+void setup_sknp_vd_no_keys_pressed() {
+  registers[0xD] = 0xB;
+  // simulateKey('B');
+  programStorage[0] = invertByteOrder(SKNP_VD);
+}
+
+void verify_sknp_vd_no_keys_pressed() { expectEqualPtrs(chip8PC, (uint16_t *)0x204, "PC"); }
+
 void setup_ld_st_v2() {
   registers[2] = 16;
   programStorage[0] = invertByteOrder(LD_ST_V2);
@@ -249,6 +273,10 @@ void main() {
   assert(skp_v3_skips);
   assert(skp_v3_no_skips);
   assert(skp_v3_wrong_key);
+
+  assert(sknp_vd_skips);
+  assert(sknp_vd_no_skips);
+  assert(sknp_vd_no_keys_pressed);
 
   assert(ld_st_v2);
   assert(ld_dt_v3);

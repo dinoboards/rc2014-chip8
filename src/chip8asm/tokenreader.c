@@ -118,6 +118,7 @@ static void testForInstructions() {
   tokenMap("sne", InstructionSne);
   tokenMap("jp", InstructionJp);
   tokenMap("skp", InstructionSkp);
+  tokenMap("sknp", InstructionSknp);
   tokenMap("rnd", InstructionRnd);
 
   token.isInstruction = false;

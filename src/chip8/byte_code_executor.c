@@ -49,8 +49,9 @@ inline uint16_t readInstruction() {
 #define CH8_SE_VX_VY_NIB    0x5
 #define CH8_SNE_VX_VY_NIB   0x9
 
-#define CH8_SKP_VX_NIB        0xE
+#define CH8_0XE_SERIES_NIB    0xE
 #define CH8_SKP_VX_LOW_BYTE   0x9E
+#define CH8_SKNP_VX_LOW_BYTE  0xA1
 #define CH8_0XF_SERIES_NIB    0xF
 #define CH8_LD_ST_VX_LOW_BYTE 0x18
 #define CH8_LD_DT_VX_LOW_BYTE 0x15
@@ -174,11 +175,23 @@ bool executeSingleInstruction() {
       break;
     }
 
-    case CH8_SKP_VX_NIB: {
-      if (lowByte == CH8_SKP_VX_LOW_BYTE) {
+    case CH8_0XE_SERIES_NIB: {
+      switch (lowByte) {
+      case CH8_SKP_VX_LOW_BYTE: {
         skpVx();
         break;
       }
+
+      case CH8_SKNP_VX_LOW_BYTE: {
+        sknpVx();
+        break;
+      }
+
+      default:
+        goto badInstruction;
+      }
+
+      break;
     }
 
     default:

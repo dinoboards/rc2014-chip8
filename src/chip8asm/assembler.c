@@ -303,6 +303,20 @@ inline static void assSkpVx() {
 }
 
 /*
+ExA1 - SKNP Vx
+Skip next instruction if key with the value of Vx is not pressed.
+
+Checks the keyboard, and if the key corresponding to the value of Vx is currently in the up position, PC is increased by 2
+*/
+inline static void assSknpVx() {
+  getNext();
+  const byte x = expectToBeVRegister();
+
+  emit2Nibble(0xE, x);
+  emitByte(0xA1);
+}
+
+/*
 Cxkk - RND Vx, byte
 Set Vx = random byte AND kk.
 
@@ -379,6 +393,10 @@ void assemble(byte pc) __z88dk_fastcall {
 
     case InstructionSkp:
       assSkpVx();
+      break;
+
+    case InstructionSknp:
+      assSknpVx();
       break;
 
     case InstructionRnd:

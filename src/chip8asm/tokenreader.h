@@ -41,6 +41,7 @@ typedef enum {
   InstructionSne,
   InstructionJp,
   InstructionSkp,
+  InstructionSknp,
   InstructionRnd
 } TokenType;
 
