@@ -68,9 +68,8 @@ Set sound timer = Vx.
 
 ST is set equal to the value of Vx.
 */
-
 inline static void assLdStVx() {
-  expectToBeSoundTimer();
+  expectToBeST();
 
   getNext();
   expectToBeComma();
@@ -81,6 +80,25 @@ inline static void assLdStVx() {
   emit2Nibble(0xF, x);
   emitByte(0x18);
 }
+
+/*
+Fx15 - LD DT, Vx
+Set delay timer = Vx.
+
+DT is set equal to the value of Vx.
+*/
+inline static void assLdDtVx() {
+  expectToBeDT();
+
+  getNext();
+  expectToBeComma();
+
+  getNext();
+  const int x = expectToBeVRegister();
+
+  emit2Nibble(0xF, x);
+  emitByte(0x15);
+}
 /*
   Ld Vx, Vy
   Ld Vx, <byte>
@@ -89,12 +107,14 @@ inline static void assLdStVx() {
 */
 inline static void assLd() {
   getNext();
-  expectToBeOneOfVxOrIOrSt();
+  expectToBeOneOfVxOrIOrStOrDt();
 
   if (currentIsIRegister())
     assLdI();
-  else if (currentIsSoundTimer())
+  else if (currentIsST())
     assLdStVx();
+  else if (currentIsDT())
+    assLdDtVx();
   else
     assLdVx();
 }

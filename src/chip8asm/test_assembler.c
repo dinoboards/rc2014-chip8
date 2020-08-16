@@ -26,11 +26,11 @@ void main() {
   shouldAssemble("SE V4, v9", SE_V4_V9);
   shouldAssemble("JP 1026", JP_1026);
   shouldAssemble("LD ST, V2", LD_ST_V2);
-  // shouldAssemble("LD DT, V3", LD_DT_V3);
+  shouldAssemble("LD DT, V3", LD_DT_V3);
   shouldAssemble("SKP V3", SKP_V3);
 
   shouldError("BAD INSTRUCTION", "Expected Instruction but found BAD");
-  shouldError("LD BADREG, 123", "Expected one of Vx, I or ST but found BADREG");
+  shouldError("LD BADREG, 123", "Expected one of Vx, I, ST or DT but found BADREG");
 
   xprintf(testFailure ? RED "Tests Failed\r\n" RESET : BRIGHT_WHITE "All Passed\r\n" RESET);
 }

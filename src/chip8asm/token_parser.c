@@ -43,22 +43,30 @@ byte expectToBeVRegister() {
   return getRegisterIndex(token.type);
 }
 
-void expectToBeOneOfVxOrIOrSt() {
+void expectToBeOneOfVxOrIOrStOrDt() {
   if (currentIsVRegister())
     return;
 
   if (currentIsIRegister())
     return;
 
-  if (currentIsSoundTimer())
+  if (currentIsST())
     return;
 
-  expectedError("one of Vx, I or ST");
+  if (currentIsDT())
+    return;
+
+  expectedError("one of Vx, I, ST or DT");
 }
 
-void expectToBeSoundTimer() {
-  if (!currentIsSoundTimer())
+void expectToBeST() {
+  if (!currentIsST())
     expectedError("ST");
+}
+
+void expectToBeDT() {
+  if (!currentIsDT())
+    expectedError("DT");
 }
 
 void expectToBeComma() {

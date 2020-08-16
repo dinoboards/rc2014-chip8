@@ -12,11 +12,13 @@ extern byte     expectToBeVRegister();
 extern uint16_t expectToBeInt();
 extern void     expectToBeComma();
 extern void     expectToBeIRegister();
-extern void     expectToBeOneOfVxOrIOrSt();
-extern void     expectToBeSoundTimer();
+extern void     expectToBeOneOfVxOrIOrStOrDt();
+extern void     expectToBeST();
+extern void     expectToBeDT();
 
-#define currentIsIRegister()  (token.type == RegisterI)
-#define currentIsSoundTimer() (token.type == SoundTimer)
-#define currentIsVRegister()  (token.isVRegister)
+#define currentIsIRegister() (token.type == RegisterI)
+#define currentIsST()        (token.type == RegisterST)
+#define currentIsVRegister() (token.isVRegister)
+#define currentIsDT()        (token.type == RegisterDT)
 
 #endif

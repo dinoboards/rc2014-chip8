@@ -124,7 +124,8 @@ static void tokeniseAlphaNumericString() {
   }
 
   if (isOnlyLetters) {
-    tokenMap("st", SoundTimer);
+    tokenMap("st", RegisterST);
+    tokenMap("dt", RegisterDT);
     token.isVRegister = true;
     tokenMap("va", RegisterVA);
     tokenMap("vb", RegisterVB);
