@@ -172,6 +172,13 @@ void verify_ld_dt_v3() {
   expectEqualBytes(delayTimer, 11, "DT");
 }
 
+void setup_ld_va_dt() {
+  delayTimer = 0x45;
+  programStorage[0] = invertByteOrder(LD_VA_DT);
+}
+
+void verify_ld_va_dt() { expectEqualBytes(registers[0xA], 0x45, "VA"); }
+
 void main() {
   assert(ld_v1_10);
 
@@ -204,6 +211,7 @@ void main() {
 
   assert(ld_st_v2);
   assert(ld_dt_v3);
+  assert(ld_va_dt);
 
   xprintf(testFailure ? RED "Tests Failed\r\n" RESET : BRIGHT_WHITE "All Passed\r\n" RESET);
 }

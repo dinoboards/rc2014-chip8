@@ -19,4 +19,6 @@
     (delayTimer = registers[secondNibble]); \
   }
 
+#define ldVxDt() (registers[secondNibble] = delayTimer)
+
 #endif

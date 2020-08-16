@@ -51,6 +51,7 @@ inline uint16_t readInstruction() {
 #define CH8_0XF_SERIES_NIB    0xF
 #define CH8_LD_ST_VX_LOW_BYTE 0x18
 #define CH8_LD_DT_VX_LOW_BYTE 0x15
+#define CH8_LD_VX_DT_LOW_BYTE 0x07
 
 void initSystemState() {
   memset(registers, 0, sizeof(registers));
@@ -141,6 +142,12 @@ bool executeSingleInstruction() {
         ldDtVx();
         break;
       }
+
+      case CH8_LD_VX_DT_LOW_BYTE: {
+        ldVxDt();
+        break;
+      }
+
       default:
         goto badInstruction;
       }
