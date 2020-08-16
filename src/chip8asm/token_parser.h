@@ -4,7 +4,6 @@
 #include "datatypes.h"
 
 #define REGISTER_I 17
-#define getNext()  getNextToken()
 
 extern byte     expectToBeByte();
 extern byte     expectToBeNibble();
@@ -12,6 +11,7 @@ extern byte     expectToBeVRegister();
 extern uint16_t expectToBeInt();
 extern void     expectToBeComma();
 extern void     expectToBeIRegister();
+extern void     expectToBeIndexedI();
 extern void     expectToBeOneOfVxOrIOrStOrDt();
 extern void     expectToBeVxOrIRegister();
 
@@ -22,5 +22,6 @@ extern void expectToBeDT();
 #define currentIsST()        (token.type == RegisterST)
 #define currentIsVRegister() (token.isVRegister)
 #define currentIsDT()        (token.type == RegisterDT)
+#define currentIsIndexedI()  (token.type == RegisterIndexedI)
 
 #endif

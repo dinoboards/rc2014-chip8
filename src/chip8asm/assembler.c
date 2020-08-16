@@ -9,6 +9,8 @@
 #include "tokenreader.h"
 #include "xstdio.h"
 
+#define getNext() getNextToken()
+
 inline static void assLabel(int parseCount) { addLabel(token.value, currentAddress, parseCount != 1); }
 
 inline static void assRet() { emit(0x00EE); }
@@ -28,6 +30,11 @@ Fx07 - LD Vx, DT
 Set Vx = delay timer value.
 
 The value of DT is placed into Vx.
+-------------
+Fx65 - LD Vx, [I]
+Read registers V0 through Vx from memory starting at location I.
+
+The interpreter reads values from memory starting at location I into registers V0 through Vx.
 */
 inline static void assLdVx() {
   const byte x = expectToBeVRegister();
@@ -48,6 +55,11 @@ inline static void assLdVx() {
     emit2Nibble(0xF, x);
     emitByte(0x07);
     return;
+  } else if (currentIsIndexedI()) {
+    expectToBeIndexedI();
+
+    emit2Nibble(0xF, x);
+    emitByte(0x65);
   }
 
   const byte data = expectToBeByte();
@@ -113,6 +125,8 @@ inline static void assLdDtVx() {
 /*
   Ld Vx, Vy
   Ld Vx, <byte>
+  ld Vx, [i]
+  LD Vx, DT
   Ld I, <addr>
   ld st, Vx
 */

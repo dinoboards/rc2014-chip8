@@ -12,73 +12,67 @@
 #include "chartesters.h"
 #include "datatypes.h"
 #include "error.h"
+#include "error_reports.h"
 #include "exit.h"
 #include "labels.h"
 #include "xstdio.h"
 #include <stdio.h>
 
-// The token buffer. We never check for overflow! Do so in production code.
-char buf[1024];
-int  n = 0;
+#define MAX_WORKING_BUFFER 64
+static char        token[MAX_WORKING_BUFFER];
+static int         tokenIndex = 0;
+static int         ch;
+static const char *expressionPtr;
 
-// The current character.
-int ch;
+enum { ADD_OP, MUL_OP, LEFT_PAREN, RIGHT_PAREN, NUMBER, ALPHA, END_INPUT } lookAhead;
 
-// The look-ahead token.  This is the 1 in LL(1).
-enum { ADD_OP, MUL_OP, LEFT_PAREN, RIGHT_PAREN, NUMBER, ALPHA, END_INPUT } look_ahead;
-
-// Forward declarations.
-void   init(void);
-void   advance(void);
+int    scan();
 number expr(void);
-void   error(const char *msg) __z88dk_fastcall;
 
-// const char *myexpression = "1+2*4+bob\r\n\0\0\0\0";
-char *expressionPtr;
+// inline void advance() { scan(); }
 
-// Parse expressions, one per line.
+inline void reset() {
+  tokenIndex = 0;
+  token[0] = '\0';
+}
+
+inline void ignore() { ch = *expressionPtr++; }
+
 number evaluate(const char *myexpression) {
   expressionPtr = (char *)myexpression;
-  init();
+
+  reset();
+  ignore();
+  scan();
 
   number val = expr();
 
-  if (look_ahead != END_INPUT && look_ahead != '\0') {
-    xtracef("  %02X %s\r\n", (int)look_ahead, look_ahead);
-    error("junk after expression");
+  if (lookAhead != END_INPUT && lookAhead != '\0') {
+    errorUnexpectedContent();
+    return 0;
   }
 
   return val;
 }
 
-// Just die on any error.
-void error(const char *msg) __z88dk_fastcall {
-  logError("Error: %s. I quit.\r\n", msg);
-  errorExit();
+inline void abortEvaluation() {
+  while (ch)
+    ignore();
+  lookAhead = END_INPUT;
 }
 
-// Buffer the current character and read a new one.
 void read() {
-  buf[n++] = ch;
-  buf[n] = '\0'; // Terminate the string.
-  // xtracef("read  %c %p\r\n", *expressionPtr, expressionPtr);
+  if (tokenIndex >= MAX_WORKING_BUFFER) {
+    errorExpressionTooLong();
+    abortEvaluation();
+    return;
+  }
 
+  token[tokenIndex++] = ch;
+  token[tokenIndex] = '\0';
   ch = *expressionPtr++;
 }
 
-// Ignore the current character.
-void ignore() {
-  // xtracef("read  %c %p\r\n", *expressionPtr, expressionPtr);
-  ch = *expressionPtr++;
-}
-
-// Reset the token buffer.
-void reset() {
-  n = 0;
-  buf[0] = '\0';
-}
-
-// The scanner.  A tiny deterministic finite automaton.
 int scan() {
   reset();
 START:
@@ -92,20 +86,20 @@ START:
   case '-':
   case '+':
     read();
-    return ADD_OP;
+    return lookAhead = ADD_OP;
 
   case '*':
   case '/':
     read();
-    return MUL_OP;
+    return lookAhead = MUL_OP;
 
   case '(':
     read();
-    return LEFT_PAREN;
+    return lookAhead = LEFT_PAREN;
 
   case ')':
     read();
-    return RIGHT_PAREN;
+    return lookAhead = RIGHT_PAREN;
 
   case '0':
   case '1':
@@ -123,15 +117,16 @@ START:
   case '\n':
   case '\0':
     ch = ' '; // delayed ignore()
-    return END_INPUT;
+    return lookAhead = END_INPUT;
 
   default:
     if (isCharLetter(ch) || ch == '_') {
       read();
       goto IN_LEADING_ALPHA;
     }
-    error("bad character");
-    return 0;
+    errorUnexpectedCharacter(ch);
+    abortEvaluation();
+    return lookAhead = END_INPUT;
   }
 
 IN_LEADING_DIGITS:
@@ -154,7 +149,7 @@ IN_LEADING_DIGITS:
     goto IN_TRAILING_DIGITS;
 
   default:
-    return NUMBER;
+    return lookAhead = NUMBER;
   }
 
 IN_LEADING_ALPHA:
@@ -162,7 +157,7 @@ IN_LEADING_ALPHA:
     read();
     goto IN_LEADING_ALPHA;
   } else
-    return ALPHA;
+    return lookAhead = ALPHA;
 
 IN_TRAILING_DIGITS:
   switch (ch) {
@@ -180,47 +175,37 @@ IN_TRAILING_DIGITS:
     goto IN_TRAILING_DIGITS;
 
   default:
-    return NUMBER;
+    return lookAhead = NUMBER;
   }
-}
-
-// To advance is just to replace the look-ahead.
-void advance() { look_ahead = scan(); }
-
-// Clear the token buffer and read the first look-ahead.
-void init() {
-  reset();
-  ignore(); // junk current character
-  advance();
 }
 
 number unsigned_factor() {
   number rtn = 0;
-  switch (look_ahead) {
+  switch (lookAhead) {
   case NUMBER:
-    sscanf(buf, "%d", &rtn);
-    advance();
+    sscanf(token, "%d", &rtn);
+    scan();
     break;
 
   case ALPHA:
-    // xtracef("ALPHA: %s\r\n", buf);
-    rtn = findLabelAddress(buf);
-    // xtracef("= %d\r\n", rtn);
-    advance();
+    rtn = findLabelAddress(token);
+    scan();
     break;
 
   case LEFT_PAREN:
-    advance();
+    scan();
     rtn = expr();
-    if (look_ahead != RIGHT_PAREN) {
-      error("missing ')'");
+    if (lookAhead != RIGHT_PAREN) {
+      errorExpectedChar(')');
+      abortEvaluation();
       return 0;
     }
-    advance();
+    scan();
     break;
 
   default:
-    error("unexpected token");
+    errorBadExpression(token);
+    abortEvaluation();
     return 0;
   }
   return rtn;
@@ -229,8 +214,8 @@ number unsigned_factor() {
 number factor() {
   number rtn = 0;
   // If there is a leading minus...
-  if (look_ahead == ADD_OP && buf[0] == '-') {
-    advance();
+  if (lookAhead == ADD_OP && token[0] == '-') {
+    scan();
     rtn = -unsigned_factor();
   } else
     rtn = unsigned_factor();
@@ -239,15 +224,15 @@ number factor() {
 
 number term() {
   number rtn = factor();
-  while (look_ahead == MUL_OP) {
-    switch (buf[0]) {
+  while (lookAhead == MUL_OP) {
+    switch (token[0]) {
     case '*':
-      advance();
+      scan();
       rtn *= factor();
       break;
 
     case '/':
-      advance();
+      scan();
       rtn /= factor();
       break;
     }
@@ -257,15 +242,15 @@ number term() {
 
 number expr() {
   number rtn = term();
-  while (look_ahead == ADD_OP) {
-    switch (buf[0]) {
+  while (lookAhead == ADD_OP) {
+    switch (token[0]) {
     case '+':
-      advance();
+      scan();
       rtn += term();
       break;
 
     case '-':
-      advance();
+      scan();
       rtn -= term();
       break;
     }

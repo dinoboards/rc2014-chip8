@@ -170,6 +170,33 @@ static void tokeniseAlphaNumericString() {
   token.type = TokenExpression;
 }
 
+static bool isIndexedI() {
+  if (token.currentChar != '[')
+    return false;
+
+  token.currentChar = getNextChar();
+  token.currentChar = skipWhiteSpace(token.currentChar);
+
+  if (token.currentChar != 'I' && token.currentChar != 'i')
+    return false;
+
+  token.currentChar = getNextChar();
+  token.currentChar = skipWhiteSpace(token.currentChar);
+
+  const bool b = token.currentChar == ']';
+
+  token.currentChar = getNextChar();
+
+  token.value[0] = '[';
+  token.value[1] = 'I';
+  token.value[2] = ']';
+  token.value[3] = '\0';
+  token.terminatorChar = token.currentChar;
+  token.type = RegisterIndexedI;
+
+  return b;
+}
+
 static bool isAlphaNumeric() {
   if (!isCharAlpha(token.currentChar))
     return false;
@@ -206,7 +233,6 @@ static bool isComma() {
   token.value[0] = ',';
   token.value[1] = '\0';
   token.terminatorChar = token.currentChar;
-  token.currentChar = token.currentChar;
   token.type = TokenComma;
 
   return true;
@@ -228,6 +254,9 @@ void getNextToken() {
   }
 
   if (isDecimalNumber())
+    return;
+
+  if (isIndexedI())
     return;
 
   if (isAlphaNumeric())

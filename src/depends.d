@@ -19,7 +19,7 @@
 ./chip8/test_instruction.asm: chip8/test_instruction.c chip8/byte_code_executor.h \
  datatypes.h chip8/instr_output.h chip8/stack.h chip8/systemstate.h \
  terminal_codes.h test_opcodes.h chip8/timers.h xstdio.h \
- chip8/test_helpers.h
+ chip8/test_helpers.h test_expectations.h terminal_codes.h xstdio.h
 ./chip8/timers.asm: chip8/timers.c chip8/timers.h chip8/tty.h hbios.h \
  chip8/systemstate.h datatypes.h chip8/systimer.h xstdio.h
 ./chip8/tty.asm: chip8/tty.c chip8/tty.h hbios.h xstdio.h
@@ -35,7 +35,8 @@
  chip8asm/error.h chip8asm/exit.h chip8asm/tokenreader.h
 ./chip8asm/exit.asm: chip8asm/exit.c
 ./chip8asm/expr.asm: chip8asm/expr.c chip8asm/expr.h chip8asm/chartesters.h \
- datatypes.h chip8asm/error.h chip8asm/exit.h chip8asm/labels.h xstdio.h
+ datatypes.h chip8asm/error.h chip8asm/error_reports.h chip8asm/exit.h \
+ chip8asm/labels.h xstdio.h
 ./chip8asm/filereader.asm: chip8asm/filereader.c chip8asm/filereader.h \
  charconstants.h cpm.h datatypes.h
 ./chip8asm/labels.asm: chip8asm/labels.c chip8asm/labels.h datatypes.h \
@@ -46,8 +47,9 @@
  datatypes.h
 ./chip8asm/test_assembler.asm: chip8asm/test_assembler.c chip8asm/assembler.h \
  datatypes.h chip8asm/labels.h chip8asm/systemstate.h cpm.h \
- test_opcodes.h xstdio.h chip8asm/test_helper.h terminal_codes.h \
- chip8asm/tokenreader.h
+ chip8asm/expr.h test_opcodes.h xstdio.h chip8asm/test_helper.h \
+ terminal_codes.h chip8asm/tokenreader.h test_expectations.h \
+ terminal_codes.h xstdio.h
 ./chip8asm/tokenreader.asm: chip8asm/tokenreader.c chip8asm/tokenreader.h \
  charconstants.h chip8asm/chartesters.h chip8asm/filereader.h cpm.h \
  datatypes.h chip8asm/error.h chip8asm/exit.h hbios.h

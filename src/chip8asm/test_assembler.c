@@ -2,15 +2,29 @@
 #include "chip8asm/labels.h"
 #include "chip8asm/systemstate.h"
 #include "cpm.h"
+#include "expr.h"
 #include "test_opcodes.h"
 #include "xstdio.h"
 #include <stdarg.h>
 #include <stdio.h>
 #include <string.h>
 
+#include "test_expectations.h"
 #include "test_helper.h"
 
+void testEvaluation() {
+  shouldEvaluate("1234", 1234);
+  shouldEvaluate("10*2", 20);
+
+  shouldEvaluateError("A1234567890A1234567890A1234567890A1234567890A1234567890A1234567890A1234567890*10", "Expression item too long");
+
+  shouldEvaluateError("@@@", "Expression had unexpected character '@' at line number 0");
+  shouldEvaluateError("[I]", "Expression had unexpected character '[' at line number 0");
+}
 void main() {
+
+  testEvaluation();
+
   shouldAssemble("LD V3, va", LD_V3_VA);
   shouldAssemble("LD V1, 10", LD_V1_10);
   shouldAssemble("LD I, 1234", LD_I_1234);
@@ -34,6 +48,7 @@ void main() {
   shouldAssemble("LD VA, DT", LD_VA_DT);
   shouldAssemble("RND vE, 15", RND_VE_15);
   shouldAssemble("ADD I, V9", ADD_I_V9);
+  // shouldAssemble("LD VB, [i]", LD_VB_I);
 
   shouldError("BAD INSTRUCTION", "Expected Instruction but found BAD");
   shouldError("LD BADREG, 123", "Expected one of Vx, I, ST or DT but found BADREG");

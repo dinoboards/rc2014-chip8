@@ -43,6 +43,11 @@ byte expectToBeVRegister() {
   return getRegisterIndex(token.type);
 }
 
+void expectToBeIndexedI() {
+  if (!currentIsIndexedI())
+    expectedError("[I]");
+}
+
 void expectToBeOneOfVxOrIOrStOrDt() {
   if (currentIsVRegister())
     return;

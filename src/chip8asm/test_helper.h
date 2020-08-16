@@ -2,7 +2,6 @@
 #include "tokenreader.h"
 
 char *content;
-bool  testFailure = false;
 bool  testErrored = false;
 
 char getNextCharRaw() {
@@ -63,6 +62,8 @@ void shouldError(const char *source, const char *errorMessage) {
   programStorage[0] = 0;
   programStorage[1] = 0;
   testErrored = false;
+  logBuffer[0] = '\0';
+  xbuffer[0] = '\0';
 
   initLabelStorage();
   assemble(1);
@@ -73,6 +74,44 @@ void shouldError(const char *source, const char *errorMessage) {
 
   if (testErrored) {
     if (strstr(logBuffer, errorMessage) != NULL)
+      return;
+
+    xprintf(RED "  Failed: incorrect error message of %s\r\n\r\n" RESET, logBuffer);
+    testFailure = true;
+    return;
+  }
+
+  xprintf(RED "  Failed.  no error message reported.\r\n" RESET);
+}
+
+void shouldEvaluate(const char *expression, int expectedValue) {
+  testErrored = false;
+  xbuffer[0] = '\0';
+  logBuffer[0] = '\0';
+
+  xprintf("%s should evaluate to %d\r\n", expression, expectedValue);
+  int r = evaluate(expression);
+
+  if (testErrored) {
+    xprintf(RED "  Failed.  %s\r\n" RESET, logBuffer);
+    testFailure = true;
+    return;
+  }
+
+  expectEqualInts(r, expectedValue, "evaluation");
+}
+
+void shouldEvaluateError(const char *expression, const char *expectedErrorMessage) {
+  testErrored = false;
+  xbuffer[0] = '\0';
+  logBuffer[0] = '\0';
+
+  xprintf("%s should generate error of %s\r\n", expression, expectedErrorMessage);
+  int r = evaluate(expression);
+  expectEqualInts(r, 0, "evaluation");
+
+  if (testErrored) {
+    if (strstr(logBuffer, expectedErrorMessage) != NULL)
       return;
 
     xprintf(RED "  Failed: incorrect error message of %s\r\n\r\n" RESET, logBuffer);

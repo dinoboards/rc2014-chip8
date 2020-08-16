@@ -19,3 +19,4 @@
 #define SNE_V0_V2     0x9020
 #define SKNP_VD       0xEDA1
 #define ADD_I_V9      0xF91E
+#define LD_VB_I       0xFB65

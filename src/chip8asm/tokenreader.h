@@ -29,6 +29,7 @@ typedef enum {
   RegisterI,
   RegisterST,
   RegisterDT,
+  RegisterIndexedI,
 
   InstructionRet,
   InstructionLd,
