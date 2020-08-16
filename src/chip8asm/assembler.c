@@ -23,6 +23,11 @@ The interpreter puts the value kk into register Vx.
 Set Vx = Vy.
 
 Stores the value of register Vy in register Vx.
+--------------
+Fx07 - LD Vx, DT
+Set Vx = delay timer value.
+
+The value of DT is placed into Vx.
 */
 inline static void assLdVx() {
   const byte x = expectToBeVRegister();
@@ -36,6 +41,12 @@ inline static void assLdVx() {
     const byte y = expectToBeVRegister();
 
     emitNibbles(0x8, x, y, 0);
+    return;
+  } else if (currentIsDT()) {
+    expectToBeDT();
+
+    emit2Nibble(0xF, x);
+    emitByte(0x07);
     return;
   }
 

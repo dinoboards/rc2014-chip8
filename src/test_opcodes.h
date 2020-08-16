@@ -9,7 +9,7 @@
 #define LD_ST_V2      0xF218
 #define LD_V1_10      0x610A
 #define LD_V3_VA      0x83A0
-#define LD_V4_DT      0xF407
+#define LD_VA_DT      0xFA07
 #define RET           0x00EE
 #define SE_V4_15      0x340F
 #define SE_V4_V9      0x5490
