@@ -24,6 +24,8 @@ void main() {
   shouldAssemble("ADD VE, 1", ADD_VE_1);
   shouldAssemble("SE V4, 15", SE_V4_15);
   shouldAssemble("SE V4, v9", SE_V4_V9);
+  shouldAssemble("SNE V0, 123", SNE_V0_123);
+  shouldAssemble("SNE V0, V2", SNE_V0_V2);
   shouldAssemble("JP 1026", JP_1026);
   shouldAssemble("LD ST, V2", LD_ST_V2);
   shouldAssemble("LD DT, V3", LD_DT_V3);

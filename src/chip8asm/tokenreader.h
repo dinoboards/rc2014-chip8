@@ -38,6 +38,7 @@ typedef enum {
   InstructionCls,
   InstructionAdd,
   InstructionSe,
+  InstructionSne,
   InstructionJp,
   InstructionSkp,
   InstructionRnd

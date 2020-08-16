@@ -115,6 +115,7 @@ static void testForInstructions() {
   tokenMap("cls", InstructionCls);
   tokenMap("add", InstructionAdd);
   tokenMap("se", InstructionSe);
+  tokenMap("sne", InstructionSne);
   tokenMap("jp", InstructionJp);
   tokenMap("skp", InstructionSkp);
   tokenMap("rnd", InstructionRnd);

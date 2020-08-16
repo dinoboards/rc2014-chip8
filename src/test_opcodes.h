@@ -15,4 +15,5 @@
 #define SE_V4_15      0x340F
 #define SE_V4_V9      0x5490
 #define SKP_V3        0xE39E
-#define SNE_V0_123    0x4078
+#define SNE_V0_123    0x407B
+#define SNE_V0_V2     0x9020

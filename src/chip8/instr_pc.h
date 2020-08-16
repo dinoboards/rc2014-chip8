@@ -12,6 +12,14 @@
   if (registers[secondNibble] == registers[thirdNibble]) \
   chip8PC += 1
 
+#define sneVxByte()                       \
+  if (registers[secondNibble] != lowByte) \
+  chip8PC += 1
+
+#define sneVxVy()                                        \
+  if (registers[secondNibble] != registers[thirdNibble]) \
+  chip8PC += 1
+
 #define jp() chip8PC = (uint16_t *)addr;
 
 #define skpVx()                                     \

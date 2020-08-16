@@ -36,16 +36,18 @@ inline uint16_t readInstruction() {
   return r;
 }
 
-#define CH8_ADDVX_NIB      0x7
-#define CH8_CALL_NIB       0x2
-#define CH8_CLS            0xE000
-#define CH8_DRW_NIB        0xD
-#define CH8_JP_NIB         0x1
-#define CH8_LD_I_ADDR_NIB  0xA
-#define CH8_LD_VX_BYTE_NIB 0x6
-#define CH8_RET            0xEE00
-#define CH8_SE_VX_BYTE_NIB 0x3
-#define CH8_SE_VX_VY_NIB   0x5
+#define CH8_ADDVX_NIB       0x7
+#define CH8_CALL_NIB        0x2
+#define CH8_CLS             0xE000
+#define CH8_DRW_NIB         0xD
+#define CH8_JP_NIB          0x1
+#define CH8_LD_I_ADDR_NIB   0xA
+#define CH8_LD_VX_BYTE_NIB  0x6
+#define CH8_RET             0xEE00
+#define CH8_SE_VX_BYTE_NIB  0x3
+#define CH8_SNE_VX_BYTE_NIB 0x4
+#define CH8_SE_VX_VY_NIB    0x5
+#define CH8_SNE_VX_VY_NIB   0x9
 
 #define CH8_SKP_VX_NIB        0xE
 #define CH8_SKP_VX_LOW_BYTE   0x9E
@@ -126,6 +128,16 @@ bool executeSingleInstruction() {
 
     case CH8_SE_VX_VY_NIB: {
       seVxVy();
+      break;
+    }
+
+    case CH8_SNE_VX_BYTE_NIB: {
+      sneVxByte();
+      break;
+    }
+
+    case CH8_SNE_VX_VY_NIB: {
+      sneVxVy();
       break;
     }
 

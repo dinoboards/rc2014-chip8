@@ -244,6 +244,39 @@ inline static void assSe() {
 }
 
 /*
+4xkk - SNE Vx, byte
+Skip next instruction if Vx != kk.
+
+The interpreter compares register Vx to kk, and if they are not equal, increments the program counter by 2.
+--------
+9xy0 - SNE Vx, Vy
+Skip next instruction if Vx != Vy.
+
+The values of Vx and Vy are compared, and if they are not equal, the program counter is increased by 2..
+*/
+inline static void assSne() {
+  getNext();
+  const byte x = expectToBeVRegister();
+
+  getNext();
+  expectToBeComma();
+
+  getNext();
+  if (currentIsVRegister()) {
+    const byte y = expectToBeVRegister();
+    emit2Nibble(0x9, x);
+    emit2Nibble(y, 0);
+
+    return;
+  }
+
+  const byte b = expectToBeByte();
+
+  emit2Nibble(0x4, x);
+  emitByte(b);
+}
+
+/*
 1nnn - JP addr
 Jump to location nnn.
 
@@ -334,6 +367,10 @@ void assemble(byte pc) __z88dk_fastcall {
 
     case InstructionSe:
       assSe();
+      break;
+
+    case InstructionSne:
+      assSne();
       break;
 
     case InstructionJp:
