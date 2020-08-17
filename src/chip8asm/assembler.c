@@ -60,6 +60,7 @@ inline static void assLdVx() {
 
     emit2Nibble(0xF, x);
     emitByte(0x65);
+    return;
   }
 
   const byte data = expectToBeByte();

@@ -25,4 +25,11 @@
 
 #define ldVxVy() (registers[secondNibble] = registers[thirdNibble])
 
+#define _ldVxI(x)                                                     \
+  for (byte(i##x) = 0; (i##x) <= secondNibble; (i##x)++) {            \
+    registers[(i##x)] = ((byte *)programStorage)[registerI + (i##x)]; \
+  }
+
+#define ldVxI() _ldVxI(__LINE__)
+
 #endif

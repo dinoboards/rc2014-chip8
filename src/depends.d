@@ -47,9 +47,9 @@
  datatypes.h
 ./chip8asm/test_assembler.asm: chip8asm/test_assembler.c chip8asm/assembler.h \
  datatypes.h chip8asm/labels.h chip8asm/systemstate.h cpm.h \
- chip8asm/expr.h test_opcodes.h xstdio.h chip8asm/test_helper.h \
- terminal_codes.h chip8asm/tokenreader.h test_expectations.h \
- terminal_codes.h xstdio.h
+ chip8asm/expr.h test_opcodes.h xstdio.h test_expectations.h \
+ terminal_codes.h xstdio.h chip8asm/test_helper.h terminal_codes.h \
+ chip8asm/tokenreader.h
 ./chip8asm/tokenreader.asm: chip8asm/tokenreader.c chip8asm/tokenreader.h \
  charconstants.h chip8asm/chartesters.h chip8asm/filereader.h cpm.h \
  datatypes.h chip8asm/error.h chip8asm/exit.h hbios.h
