@@ -208,6 +208,7 @@
 ; Externals used
 ;--------------------------------------------------------
 	GLOBAL _xprintf
+	GLOBAL _wait
 	GLOBAL _getSysTimer
 	GLOBAL _ulltoa_callee
 	GLOBAL _ulltoa

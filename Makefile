@@ -86,3 +86,8 @@ draw:
 c8pic:
 	@cp ./test-samples/*.ch8 ./bin/
 	@cd bin && cpm chip8 C8PIC.ch8
+
+.PHONY: invaders
+invaders:
+	@cp ./test-samples/*.ch8 ./bin/
+	@cd bin && cpm chip8 invaders.ch8

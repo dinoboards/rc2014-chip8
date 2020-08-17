@@ -1,14 +1,22 @@
 #include "keys.h"
 #include "systemstate.h"
+#include "systimer.h"
 #include "xstdio.h"
 
 void checkForKeyPresses() {
 
-  currentPressedKey = '\0';
-  keyPressed = false;
+  if (!keyReady()) {
+    if (!keyPressed)
+      return;
 
-  if (!keyReady())
+    const uint16_t t = (uint16_t)getSysTimer();
+    if (t < currentKeyTimeout)
+      return;
+
+    currentPressedKey = '\0';
+    keyPressed = false;
     return;
+  }
 
   getKey(&currentPressedKey);
 
@@ -21,5 +29,6 @@ void checkForKeyPresses() {
   else if (currentPressedKey >= 'a' && currentPressedKey <= 'z')
     currentPressedKey += (-'a' + 10);
 
+  currentKeyTimeout = ((uint16_t)getSysTimer() + 2);
   keyPressed = true;
 }

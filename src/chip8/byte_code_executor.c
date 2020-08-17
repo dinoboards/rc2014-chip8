@@ -6,6 +6,7 @@
 #include "key_monitor.h"
 #include "stack.h"
 #include "systemstate.h"
+#include "systimer.h"
 #include "timers.h"
 #include "tty.h"
 #include "xstdio.h"
@@ -73,6 +74,8 @@ bool executeSingleInstruction() {
   uint16_t currentInstruction = readInstruction(); // high/low bytes in inverted order
 
   // xprintf("\033[34;1HY");
+
+  wait();
 
   checkForKeyPresses();
   manageTimers();

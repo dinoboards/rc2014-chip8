@@ -35,6 +35,9 @@ char simulatedKeyValue;
 inline void resetKeySimulator() {
   simulateKeyReady = false;
   simulatedKeyValue = 0;
+  currentPressedKey = '\0';
+  keyPressed = false;
+  currentKeyTimeout = 0;
 }
 
 bool keyReady() { return simulateKeyReady; }
@@ -60,3 +63,5 @@ byte nextRandomNumber = 0;
 byte chip8Rand() { return nextRandomNumber; }
 
 inline void simulateRandomNumber(byte b) { nextRandomNumber = b; }
+
+void wait() {}
