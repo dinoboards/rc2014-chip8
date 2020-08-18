@@ -69,16 +69,21 @@ duplabl:
 
 .PHONY: regs
 regs:
+	@cp ./test-samples/regs.cas ./bin/
+	@rm -f ./test-samples/regs.ch8
 	@cd bin && cpm chip8asm regs.cas
 	@cd bin && cpm chip8 regs.ch8
 
 .PHONY: symbols
 symbols:
+	@cp ./test-samples/*.ch8 ./bin/
 	@cd bin && cpm chip8asm symbols.cas
 	@cd bin && cpm chip8 symbols.ch8
 
 .PHONY: draw
 draw:
+	@cp ./test-samples/draw.cas ./bin/
+	@rm -f ./test-samples/draw.ch8
 	@cd bin && cpm chip8asm draw.cas
 	@cd bin && cpm chip8 draw.ch8
 

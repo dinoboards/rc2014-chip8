@@ -18,27 +18,27 @@ byte  startingY;
 
 void draw() {
   registers[0x0F] = 0;
-  x = registers[secondNibble] + 1;
-  startingY = registers[thirdNibble] + 1;
+  x = registers[secondNibble] & 63;
+  startingY = registers[thirdNibble] & 31;
 
   spritePtr = (byte *)registerI;
 
   for (y = startingY; y < startingY + fourthNibble; y++) {
     spriteByte = *spritePtr++;
-    indexForY = y * (64 / 8);
+    indexForY = (y&31) * (64 / 8);
 
     for (bitCounter = 0; bitCounter < 8; bitCounter++) {
       if (spriteByte & 0x80) {
 
-        index = indexForY + (x >> 3);
-        bit = 1 << (x % 8);
+        index = indexForY + ((x&63) >> 3);
+        bit = 1 << ((x&63) % 8);
         current = (videoMemory[index] ^= bit) & bit;
 
         if (current)
-          sendDrawCommands("\033[%d;%dH\x1b[47;1m \x1b[40m", y, x);
+          sendDrawCommands("\033[%d;%dH\x1b[47;1m \x1b[40m", (y & 31)+1, (x & 63)+1);
         else {
           registers[0x0F] = 1;
-          sendDrawCommands("\033[%d;%dH ", y, x);
+          sendDrawCommands("\033[%d;%dH ", (y&31)+1, (x&63)+1);
         }
       }
 

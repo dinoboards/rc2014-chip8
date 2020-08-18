@@ -1,21 +1,17 @@
 
   CLS
   LD I, MYSPRITE
-  LD V0, 1
+  LD V0, 0
   LD V1, 0
-  DRW v0, v1, 4
-  DRW v0, v1, 4
-  DRW v0, v1, 4
-  LD V0, 2
-  LD V1, 1
-  DRW v0, v1, 4
-
-  ld  v1, 60
-  ld  st, v1
-loop:
-  jp  loop
+LOOP:
+  DRW v0, v1, 9
+  DRW v0, v1, 9
+  ;ADD V0, 1
+  ADD V1, 1
+  JP LOOP
+  ;DRW v0, v1, 4
   RET
 
 MYSPRITE:
-  DB 1, 2, 3, 4
+  DB 1, 2, 4, 8, 16, 32, 64, 128, 255
 

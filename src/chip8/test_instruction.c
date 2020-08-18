@@ -32,7 +32,7 @@ void verify_ld_i_1234() { expectEqualInts(registerI, 1234, "I"); }
 void setup_ld_vb_i() {
   registerI = 0x600;
   for (int i = 0; i < 12; i++)
-    ((byte *)programStorage)[registerI + i] = i + 1;
+    ((byte *)registerI)[i] = i + 1;
   programStorage[0] = invertByteOrder(LD_VB_I);
   registers[0xC] = 99;
 }
