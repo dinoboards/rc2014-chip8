@@ -5,8 +5,8 @@
 #include "systimer.h"
 #include "xstdio.h"
 
-long lastTimerTick;
-long currentTimerTick;
+unsigned long lastTimerTick;
+unsigned long currentTimerTick;
 
 void initTimers() {
   manageTimers();

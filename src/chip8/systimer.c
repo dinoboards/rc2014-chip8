@@ -1,9 +1,9 @@
 #include "hbios.h"
 #include "xstdio.h"
 
-long result;
+unsigned long result;
 
-long getSysTimer() {
+unsigned long getSysTimer() {
   hbSysGetTimer(&result);
   return result;
 }

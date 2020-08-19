@@ -2,7 +2,7 @@
 #ifndef __SYSTIMER
 #define __SYSTIMER
 
-extern long getSysTimer();
+extern unsigned long getSysTimer();
 extern void wait();
 
 #endif

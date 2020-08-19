@@ -10,8 +10,8 @@
 #include <stdio.h>
 #include <string.h>
 
-void chkMsg(int result, const char *msg) {
-  if (result) {
+void chkMsg(uint16_t result, const char *msg) {
+  if (result == 0xFF) {
     xprintf("%s\r\n", msg);
     exit(1);
   }

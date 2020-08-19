@@ -59,7 +59,7 @@ _hbSysGetTimer:
 	LD	A, L
 	LD	(BC), A
 	INC	BC
-	LD	A, B
+	LD	A, H
 	LD	(BC), A
 	INC	BC
 	LD	A, E
