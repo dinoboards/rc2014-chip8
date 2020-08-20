@@ -94,6 +94,8 @@ clean:
 	@rm -f ./chip8/systemstate.asm
 	@rm -f ./chip8/systimer.asm
 	@rm -f ./chip8/tty.asm
+	@rm -f ./chip8/tms.asm
+	@rm -f ./chip8/timers.asm
 	@rm -f ./chip8asm/assembler.asm
 	@rm -f ./chip8asm/chartesters.asm
 	@rm -f ./chip8asm/emitters.asm

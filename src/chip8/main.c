@@ -5,6 +5,7 @@
 #include "instr_output.h"
 #include "random.h"
 #include "systemstate.h"
+#include "tms.h"
 #include "xstdio.h"
 #include <stdarg.h>
 #include <stdio.h>
@@ -18,7 +19,9 @@ void chkMsg(uint16_t result, const char *msg) {
 }
 
 void main() {
-  print("running ch8 app\r\n");
+  print("running ch8 app!!!!!\r\n");
+
+  captureTmsRegisters();
 
   cls();
 

@@ -1,5 +1,5 @@
 
-	PUBLIC	_hbSysGetTimer
+	PUBLIC	_hbSysGetTimer, _hbSysGetVda, _hbSysBankCopy
 
 	SECTION CODE
 
@@ -46,6 +46,8 @@ BF_SYSINT_INFO		EQU	$00	; GET INTERRUPT SYSTEM INFO
 BF_SYSINT_GET		EQU	$10	; GET INT VECTOR ADDRESS
 BF_SYSINT_SET		EQU	$20	; SET INT VECTOR ADDRESS
 
+SYSGET_VDAFN		EQU	(BF_SYSGET << 8) + BF_SYSGET_VDAFN
+
 	;extern byte hbSysGetTimer(long* result) __z88dk_fastcall;
 _hbSysGetTimer:
 	PUSH	IX
@@ -70,6 +72,100 @@ _hbSysGetTimer:
 	POP	AF
 
 	LD	L, A
+	POP	IX
+	RET
+
+; typedef struct  {
+;   uint8_t func;
+;   uint8_t unit;
+;   void* driverFnAddr;
+;   void* driverDataAddr;
+; } hbiosDriverEntry;
+; byte hbSysGetVda(hbiosDriverEntry* pData) __z88dk_fastcall
+
+_hbSysGetVda:
+	PUSH	IX
+
+	LD	BC, SYSGET_VDAFN
+	LD	D, (HL)
+	INC	HL		; VDAFN
+	LD	E, (HL)		; UNIT
+	INC	HL
+	PUSH	HL
+
+	RST	08		; DE NOW CONTAINS ADDR OF TMS DATA/CONFIG
+
+	PUSH	HL
+	POP	BC
+	POP	HL
+	PUSH	AF
+
+	LD	A, C
+	LD	(HL), A
+
+	INC	HL
+	LD	A, B
+	LD	(HL), A
+
+	INC	HL
+	LD	A, E
+	LD	(HL), A
+
+	INC	HL
+	LD	A, D
+	LD	(HL), A
+
+	POP	AF
+	LD	L, A
+	LD	H, 0
+	POP	IX
+	RET
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+; typedef struct {
+;   uint8_t destBank;
+;   uint8_t sourceBank;
+;   uint16_t byteCount;
+;   void* destAddr;
+;   void* sourceAddr;
+; } hbiosBankCopy;
+; uint8_t hbSysBankCopy(hbiosBankCopy* pData)  __z88dk_fastcall;
+
+_hbSysBankCopy:
+	PUSH	IX
+
+	LD	B, BF_SYSSETCPY
+	LD	D, (HL)
+	INC	HL
+	LD	E, (HL)
+	INC	HL
+	LD	A, (HL)
+	INC	HL
+	PUSH	HL
+	LD	H, (HL)
+	LD	L, A
+
+	RST	08		;
+	POP	HL
+	OR	A
+	JR	NZ, _hbSysBankCopyErr
+
+	INC	HL
+	LD	E, (HL)
+	INC	HL
+	LD	D, (HL)
+	INC	HL
+	LD	A, (HL)
+	INC	HL
+	LD	H, (HL)
+	LD	L, A
+	LD	B, BF_SYSBNKCPY
+	RST	08
+
+_hbSysBankCopyErr:
+	LD	L, A
+	LD	H, 0
 	POP	IX
 	RET
 

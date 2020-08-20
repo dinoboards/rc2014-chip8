@@ -3,6 +3,6 @@
 #define __SYSTIMER
 
 extern unsigned long getSysTimer();
-extern void wait();
+extern void          wait();
 
 #endif
