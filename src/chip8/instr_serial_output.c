@@ -1,3 +1,4 @@
+#include "chip8/instr_serial_output.h"
 #include "chip8/instr_output.h"
 #include "chip8/systemstate.h"
 #include "chip8/tty.h"
@@ -54,3 +55,5 @@ void cls() {
   memset(videoMemory, 0, sizeof(videoMemory));
   sendDrawCommands("\033[?25l\033[2J\033[0;0H");
 }
+
+void videoInit() { cls(); }

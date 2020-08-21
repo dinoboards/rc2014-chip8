@@ -19,11 +19,11 @@ void chkMsg(uint16_t result, const char *msg) {
 }
 
 void main() {
-  print("running ch8 app!!!!!\r\n");
+  print("running ch8 app\r\n");
 
-  captureTmsRegisters();
+  videoInit();
 
-  cls();
+  // print("done\r\n");
 
   initSystemState();
   seedRandom();

@@ -19,7 +19,8 @@ labels.asm
 chartesters.asm
 systemstate.asm
 stack.asm
-instr_output.asm
+instr_tms_output.asm
+instr_serial_output.asm
 token_parser.asm
 emitters.asm
 assembler.asm
@@ -40,3 +41,4 @@ systimer.asm
 random.asm
 tms.asm
 timers.asm
+exit.asm

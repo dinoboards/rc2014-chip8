@@ -28,11 +28,11 @@ inline void tickSoundTimer(byte diff) {
   else
     soundTimer -= diff;
 
-  if (soundTimer & 1) {
-    sendDrawCommands("\033[%d;%dHS\007", 1, 70);
-  } else {
-    sendDrawCommands("\033[%d;%dH ", 1, 70);
-  }
+  // if (soundTimer & 1) {
+  //   sendDrawCommands("\033[%d;%dHS\007", 1, 70);
+  // } else {
+  //   sendDrawCommands("\033[%d;%dH ", 1, 70);
+  // }
 }
 
 inline void tickDelayTimer(byte diff) {
@@ -44,11 +44,11 @@ inline void tickDelayTimer(byte diff) {
   else
     delayTimer -= diff;
 
-  if (delayTimer & 1) {
-    sendDrawCommands("\033[%d;%dHD\007", 1, 71);
-  } else {
-    sendDrawCommands("\033[%d;%dH ", 1, 71);
-  }
+  // if (delayTimer & 1) {
+  //   sendDrawCommands("\033[%d;%dHD\007", 1, 71);
+  // } else {
+  //   sendDrawCommands("\033[%d;%dH ", 1, 71);
+  // }
 }
 
 void manageTimers() {

@@ -68,22 +68,11 @@ void initSystemState() {
   chip8PC = (uint16_t *)programStorage;
 }
 
-byte terminalPingCounter = 0;
-
 bool executeSingleInstruction() {
   uint16_t currentInstruction = readInstruction(); // high/low bytes in inverted order
 
-  // xprintf("\033[34;1HY");
-
-  wait();
-
   checkForKeyPresses();
   manageTimers();
-
-  terminalPingCounter++;
-  if (terminalPingCounter == 0) {
-    sendDrawCommands("\x1b[40m");
-  }
 
   switch (currentInstruction) {
   case CH8_CLS:
