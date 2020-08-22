@@ -44,7 +44,7 @@ inline uint16_t readInstruction() {
 #define CH8_SE_VX_VY_NIB    0x5
 #define CH8_LD_VX_BYTE_NIB  0x6
 #define CH8_ADDVX_NIB       0x7
-#define CH8_LD_VX_VY_NIB    0x8
+#define CH8_0X8_SERIES_NIB  0x8
 #define CH8_SNE_VX_VY_NIB   0x9
 #define CH8_LD_I_ADDR_NIB   0xA
 #define CH8_RND_VX_NIB      0xC
@@ -61,6 +61,8 @@ inline uint16_t readInstruction() {
 #define CH8_LD_VX_DT_LOW_BYTE 0x07
 #define CH8_ADD_I_VX_LOW_BYTE 0x1E
 #define CH8_LD_VX_I_LOW_BYTE  0x65
+
+#define CH8_LD_VX_VY_NIB 0x0
 
 void initSystemState() {
   memset(registers, 0, sizeof(registers));
@@ -93,9 +95,18 @@ bool executeSingleInstruction() {
     addr = (currentInstruction >> 8) + (((int)secondNibble) << 8);
 
     switch (firstNibble) {
-    case CH8_LD_VX_VY_NIB:
-      ldVxVy();
+    case CH8_0X8_SERIES_NIB: {
+      switch (fourthNibble) {
+      case CH8_LD_VX_VY_NIB: {
+        ldVxVy();
+        break;
+      }
+
+      default:
+        goto badInstruction;
+      }
       break;
+    }
 
     case CH8_LD_VX_BYTE_NIB:
       ldVxByte();
