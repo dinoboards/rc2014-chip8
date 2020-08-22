@@ -69,6 +69,7 @@ void main() {
   shouldAssemble("RND vE, 15", RND_VE_15);
   shouldAssemble("ADD I, V9", ADD_I_V9);
   shouldAssemble("LD VB, [i]", LD_VB_I);
+  shouldAssemble("AND VA, VB", AND_VA_VB);
 
   shouldError("BAD INSTRUCTION", "Expected Instruction but found BAD");
   shouldError("LD BADREG, 123", "Expected one of Vx, I, ST or DT but found BADREG");

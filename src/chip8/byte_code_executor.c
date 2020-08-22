@@ -63,7 +63,8 @@ inline uint16_t readInstruction() {
 #define CH8_ADD_I_VX_LOW_BYTE 0x1E
 #define CH8_LD_VX_I_LOW_BYTE  0x65
 
-#define CH8_LD_VX_VY_NIB 0x0
+#define CH8_LD_VX_VY_NIB  0x0
+#define CH8_AND_VX_VY_NIB 0x2
 
 void initSystemState() {
   memset(registers, 0, sizeof(registers));
@@ -107,6 +108,10 @@ bool executeSingleInstruction() {
         break;
       }
 
+      case CH8_AND_VX_VY_NIB: {
+        andVxVy();
+        break;
+      }
       default:
         goto badInstruction;
       }

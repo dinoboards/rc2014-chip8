@@ -378,6 +378,25 @@ inline static void assRndVx() {
   emitByte(b);
 }
 
+/*
+8xy2 - AND Vx, Vy
+Set Vx = Vx AND Vy.
+
+Performs a bitwise AND on the values of Vx and Vy, then stores the result in Vx. A bitwise AND compares the corrseponding bits from two values, and if both bits are 1, then the same bit in the result is also 1. Otherwise, it is 0.
+*/
+inline static void assAnd() {
+  getNext();
+  const byte x = expectToBeVRegister();
+
+  getNext();
+  expectToBeComma();
+
+  getNext();
+  const byte y = expectToBeVRegister();
+
+  emitNibbles(0x8, x, y, 2);
+}
+
 void assemble(byte pc) __z88dk_fastcall {
   parseCount = pc;
   currentAddress = 0x200;
@@ -443,6 +462,10 @@ void assemble(byte pc) __z88dk_fastcall {
 
     case InstructionRnd:
       assRndVx();
+      break;
+
+    case InstructionAnd:
+      assAnd();
       break;
 
     default:

@@ -120,6 +120,7 @@ static void testForInstructions() {
   tokenMap("skp", InstructionSkp);
   tokenMap("sknp", InstructionSknp);
   tokenMap("rnd", InstructionRnd);
+  tokenMap("and", InstructionAnd);
 
   token.isInstruction = false;
   token.type = TokenAlphanumeric;

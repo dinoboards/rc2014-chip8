@@ -20,3 +20,4 @@
 #define SKNP_VD       0xEDA1
 #define ADD_I_V9      0xF91E
 #define LD_VB_I       0xFB65
+#define AND_VA_VB     0x8AB2
