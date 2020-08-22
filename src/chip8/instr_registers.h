@@ -46,4 +46,8 @@
 
 #define addVxVy() _addVxVy(__LINE__)
 
+#define subVxVy()                                                    \
+  registers[0xF] = registers[secondNibble] > registers[thirdNibble]; \
+  registers[secondNibble] -= registers[thirdNibble];
+
 #endif

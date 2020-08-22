@@ -430,6 +430,24 @@ inline static void assShr() {
   }
 }
 
+/*
+8xy5 - SUB Vx, Vy
+Set Vx = Vx - Vy, set VF = NOT borrow.
+
+If Vx > Vy, then VF is set to 1, otherwise 0. Then Vy is subtracted from Vx, and the results stored in Vx.*/
+inline static void assSub() {
+  getNext();
+  const byte x = expectToBeVRegister();
+
+  getNext();
+  expectToBeComma();
+
+  getNext();
+  const byte y = expectToBeVRegister();
+
+  emitNibbles(0x8, x, y, 5);
+}
+
 void assemble(byte pc) __z88dk_fastcall {
   parseCount = pc;
   currentAddress = 0x200;
@@ -503,6 +521,10 @@ void assemble(byte pc) __z88dk_fastcall {
 
     case InstructionShr:
       assShr();
+      break;
+
+    case InstructionSub:
+      assSub();
       break;
 
     default:

@@ -335,6 +335,32 @@ void verify_shr_va_vb_bit_unset() {
   expectEqualBytes(registers[0xF], 0x0, "VF");
 }
 
+void setup_sub_v3_ve_no_borrow() {
+  registers[0x3] = 0x20;
+  registers[0xE] = 0x10;
+  registers[0xF] = 0x00;
+  programStorage[0] = invertByteOrder(SUB_V3_VE);
+}
+
+void verify_sub_v3_ve_no_borrow() {
+  expectEqualBytes(registers[0x3], 0x10, "V3");
+  expectEqualBytes(registers[0xE], 0x10, "VE");
+  expectEqualBytes(registers[0xF], 0x1, "VF");
+}
+
+void setup_sub_v3_ve_with_borrow() {
+  registers[0x3] = 0x10;
+  registers[0xE] = 0x28;
+  registers[0xF] = 0x00;
+  programStorage[0] = invertByteOrder(SUB_V3_VE);
+}
+
+void verify_sub_v3_ve_with_borrow() {
+  expectEqualBytes(registers[0x3], 0xE8, "V3");
+  expectEqualBytes(registers[0xE], 0x28, "VE");
+  expectEqualBytes(registers[0xF], 0x0, "VF");
+}
+
 void main() {
   assert(ld_v1_10);
   assert(ld_v3_va); // LD_V3_VA)
@@ -387,6 +413,9 @@ void main() {
 
   assert(shr_va_vb_bit_set);
   assert(shr_va_vb_bit_unset);
+
+  assert(sub_v3_ve_no_borrow);
+  assert(sub_v3_ve_with_borrow);
 
   xprintf(testFailure ? RED "Tests Failed\r\n" RESET : BRIGHT_WHITE "All Passed\r\n" RESET);
 }
