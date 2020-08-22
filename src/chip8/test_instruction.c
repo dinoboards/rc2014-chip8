@@ -51,6 +51,7 @@ void verify_ld_vb_i() {
   expectEqualBytes(registers[0xA], 11, "VA");
   expectEqualBytes(registers[0xB], 12, "VB");
   expectEqualBytes(registers[0xC], 99, "VC");
+  expectEqualInts(registerI, 0x600 + 12, "I");
 }
 
 void setup_call_1025() { programStorage[0] = invertByteOrder(CALL_1025); }
@@ -361,6 +362,17 @@ void verify_sub_v3_ve_with_borrow() {
   expectEqualBytes(registers[0xF], 0x0, "VF");
 }
 
+void setup_xor_v3_ve() {
+  registers[0x3] = 0x41;
+  registers[0xE] = 0x40;
+  programStorage[0] = invertByteOrder(XOR_V3_VE);
+}
+
+void verify_xor_v3_ve() {
+  expectEqualBytes(registers[0x3], 0x01, "V3");
+  expectEqualBytes(registers[0xE], 0x40, "VE");
+}
+
 void main() {
   assert(ld_v1_10);
   assert(ld_v3_va); // LD_V3_VA)
@@ -416,6 +428,8 @@ void main() {
 
   assert(sub_v3_ve_no_borrow);
   assert(sub_v3_ve_with_borrow);
+
+  assert(xor_v3_ve);
 
   xprintf(testFailure ? RED "Tests Failed\r\n" RESET : BRIGHT_WHITE "All Passed\r\n" RESET);
 }

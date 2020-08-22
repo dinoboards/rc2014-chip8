@@ -65,6 +65,7 @@ inline uint16_t readInstruction() {
 
 #define CH8_LD_VX_VY_NIB  0x0
 #define CH8_AND_VX_VY_NIB 0x2
+#define CH8_XOR_VX_VY_NIB 0x3
 #define CH8_ADD_VX_VY_NIB 0x4
 #define CH8_SUB_VX_VY_NIB 0x5
 #define CH8_SHR_VX_VY_NIB 0x6
@@ -81,6 +82,11 @@ bool executeSingleInstruction() {
 #endif
 
   uint16_t currentInstruction = readInstruction(); // high/low bytes in inverted order
+
+  // xprintf("\033[%d;%dH");
+
+  // for(int ddd = 0; ddd < 6000; ddd++)
+  //   ;
 
   checkForKeyPresses();
   manageTimers();
@@ -127,6 +133,11 @@ bool executeSingleInstruction() {
       }
       case CH8_SUB_VX_VY_NIB: {
         subVxVy();
+        break;
+      }
+
+      case CH8_XOR_VX_VY_NIB: {
+        xorVxVy();
         break;
       }
       default:
@@ -251,6 +262,15 @@ bool executeSingleInstruction() {
     }
   }
   }
+
+  // if (registers[0x0] == 0x6)
+  //   startDebugging = true;
+
+  // if (registers[0x2] == 0x3)
+  //   startDebugging = true;
+
+  // if (registers[0xE] == 0xC)
+  //   startDebugging = true;
 
   return true;
 }

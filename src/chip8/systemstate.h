@@ -24,6 +24,7 @@ extern byte delayTimer;
 #ifdef DIAGNOSTICS_ON
 extern bool startCounting;
 extern int  drawCount;
+extern bool startDebugging;
 #endif
 
 #endif

@@ -46,7 +46,8 @@ typedef enum {
   InstructionRnd,
   InstructionAnd,
   InstructionShr,
-  InstructionSub
+  InstructionSub,
+  InstructionXor
 } TokenType;
 
 #define MAX_TOKEN_LENGTH 256

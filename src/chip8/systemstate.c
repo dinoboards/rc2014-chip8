@@ -24,4 +24,5 @@ byte delayTimer;
 /* diagnostic state */
 bool startCounting = false;
 int  drawCount = 0;
+bool startDebugging = false;
 #endif

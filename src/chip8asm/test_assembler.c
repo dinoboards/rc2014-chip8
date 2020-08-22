@@ -74,6 +74,7 @@ void main() {
   shouldAssemble("SHR VD", SHR_VD);
   shouldAssemble("ADD V6, V1", ADD_V6_V1);
   shouldAssemble("SUB V3, VE", SUB_V3_VE);
+  shouldAssemble("XOR V3, VE", XOR_V3_VE);
 
   shouldError("BAD INSTRUCTION", "Expected Instruction but found BAD");
   shouldError("LD BADREG, 123", "Expected one of Vx, I, ST or DT but found BADREG");

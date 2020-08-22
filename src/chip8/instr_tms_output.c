@@ -254,7 +254,7 @@ void draw() {
   }
 }
 
-static tmsClearParams colourParams = {TMS_MD1_COLOUR_TABLE, 32, (COL_WHITE << 4) + COL_BLACK};
+static tmsClearParams colourParams = {TMS_MD1_COLOUR_TABLE, 32, (COL_DRKGREEN << 4) + COL_BLACK};
 
 void videoInit() {
   tmsInit();

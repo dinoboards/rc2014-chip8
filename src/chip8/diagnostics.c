@@ -26,7 +26,7 @@ void updateMachineStateDisplay() {
   //   drawCount = 0;
   // }
 
-  if (drawCount >= 4) {
+  if (startDebugging) {
     xprintf("\033[%d;%dH I", 3, 80);
     for (i = 0; i < 16; i++)
       xprintf("\033[%d;%dH%p: %02X", 4 + i, 80, registerI + i, ((byte *)programStorage)[registerI + i]);
@@ -42,6 +42,9 @@ void updateMachineStateDisplay() {
 
     char r;
     getKey(&r);
+
+    if (r == 'x')
+      startDebugging = false;
 
     // exit(1);
   }

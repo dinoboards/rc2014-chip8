@@ -64,6 +64,7 @@ chip8_serial = $(filter-out %byte_code_executor_tms.o %instr_tms_output.o, $(chi
 
 chip8/byte_code_executor.asm:
 #--max-allocs-per-node500000 -Cs"--opt-code-speed" --allow-unsafe-read
+#-DDIAGNOSTICS_ON
 %.asm: %.c
 	@zcc +embedded -subtype=none -lm -clib=sdcc_iy -vn -cleanup -m -S --list $< -o $@  -create-app  -Cs --Werror --c-code-in-asm -Cs"--opt-code-speed" --allow-unsafe-read
 	@echo "compiled $< to $@"

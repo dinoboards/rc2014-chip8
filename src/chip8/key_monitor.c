@@ -20,6 +20,13 @@ void checkForKeyPresses() {
 
   getKey(&currentPressedKey);
 
+#ifdef DIAGNOSTICS_ON
+  if (currentPressedKey == 'x' || currentPressedKey == 'X') {
+    startDebugging = true;
+    return;
+  }
+#endif
+
   if (currentPressedKey >= '0' && currentPressedKey <= '9')
     currentPressedKey -= '0';
 
