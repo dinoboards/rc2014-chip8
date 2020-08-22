@@ -65,7 +65,7 @@ chip8_serial = $(filter-out %instr_tms_output.o, $(chip8_objects))
 #--max-allocs-per-node500000 -Cs"--opt-code-speed" --allow-unsafe-read
 %.asm: %.c
 	@zcc +embedded -subtype=none -lm -clib=sdcc_iy -vn -cleanup -m -S --list $< -o $@  -create-app  -Cs --Werror --c-code-in-asm -Cs"--opt-code-speed" --allow-unsafe-read
-	@echo "compiled $(basename $<).c to $(basename $<).asm"
+	@echo "compiled $< to $@"
 
 deps: SHELL := bash
 deps:
@@ -82,7 +82,7 @@ deps:
 
 %.o: %.asm
 	@$(ASSEMBLER) --output=$(basename $<).bin $(ASS_FLAGS) $(basename $<).asm
-	@echo "Assembled $(basename $<).asm to $(basename $<).o"
+	@echo "Assembled $< to $@"
 
 clean:
 	@find . -type f -name '*.bin' -delete
