@@ -23,3 +23,4 @@
 #define AND_VA_VB     0x8AB2
 #define SHR_VA_VB     0x8AB6
 #define SHR_VD        0x8DD6
+#define ADD_V6_V1     0x8614

@@ -38,4 +38,12 @@
   registers[0xF] = registers[thirdNibble] & 0x1; \
   registers[secondNibble] = registers[thirdNibble] >> 1;
 
+#define _addVxVy(x)                        \
+  uint16_t i##x = registers[secondNibble]; \
+  i##x += registers[thirdNibble];          \
+  registers[secondNibble] = (i##x);        \
+  registers[0xF] = i##x > 255;
+
+#define addVxVy() _addVxVy(__LINE__)
+
 #endif

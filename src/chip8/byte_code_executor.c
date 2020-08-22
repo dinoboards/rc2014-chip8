@@ -65,6 +65,7 @@ inline uint16_t readInstruction() {
 
 #define CH8_LD_VX_VY_NIB  0x0
 #define CH8_AND_VX_VY_NIB 0x2
+#define CH8_ADD_VX_VY_NIB 0x4
 #define CH8_SHR_VX_VY_NIB 0x6
 
 void initSystemState() {
@@ -116,6 +117,11 @@ bool executeSingleInstruction() {
 
       case CH8_SHR_VX_VY_NIB: {
         shrVxVy();
+        break;
+      }
+
+      case CH8_ADD_VX_VY_NIB: {
+        addVxVy();
         break;
       }
       default:

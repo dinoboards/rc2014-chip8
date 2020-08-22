@@ -94,6 +94,28 @@ void setup_add_i_v9() {
 
 void verify_add_i_v9() { expectEqualBytes(registerI, 103, "I"); }
 
+void setup_add_v6_v1_no_carry() {
+  registers[0x6] = 3;
+  registers[0x1] = 2;
+  programStorage[0] = invertByteOrder(ADD_V6_V1);
+}
+
+void verify_add_v6_v1_no_carry() {
+  expectEqualBytes(registers[0x6], 5, "V6");
+  expectEqualBytes(registers[0xF], 0, "VF");
+}
+
+void setup_add_v6_v1_with_carry() {
+  registers[0x6] = 255;
+  registers[0x1] = 20;
+  programStorage[0] = invertByteOrder(ADD_V6_V1);
+}
+
+void verify_add_v6_v1_with_carry() {
+  expectEqualBytes(registers[0x6], 19, "V6");
+  expectEqualBytes(registers[0xF], 1, "VF");
+}
+
 void setup_se_v4_15_skips() {
   registers[4] = 15;
   programStorage[0] = invertByteOrder(SE_V4_15);
@@ -327,6 +349,8 @@ void main() {
 
   assert(add_ve_1);
   assert(add_i_v9);
+  assert(add_v6_v1_no_carry);
+  assert(add_v6_v1_with_carry);
 
   assert(se_v4_15_skips);
   assert(se_v4_15_no_skips);
