@@ -32,7 +32,7 @@ chip8asm_objects = crt.o memap.o cpm.o hbios_cio.o hbios.o memap.o nonreloccrt.o
 	@mv crt_code_crt_init.bin ../bin/chip8asm.com
 	@echo "\nBuilt ./bin/chip8asm.com"
 
-exclude_from_tests = %main.o %filereader.o %exit.o %error.o %tty.o %keys.o %systimer.o %random.o
+exclude_from_tests = %main.o %filereader.o %exit.o %error.o %tty.o %keys.o %systimer.o %random.o %diagnostics.o
 ../bin/tstasmbl.com: $(filter-out $(exclude_from_tests),$(chip8asm_objects))
 	@$(ASSEMBLER) --output=tstasmbl.bin -b $(ASS_FLAGS) memap.o $(filter-out memap.o,$^)
 	@mkdir -p ../bin
@@ -41,8 +41,8 @@ exclude_from_tests = %main.o %filereader.o %exit.o %error.o %tty.o %keys.o %syst
 
 chip8_sources = $(wildcard ./chip8/*.c) $(wildcard ./chip8/*.asm)
 chip8_objects = memap.o relocmem.asm crt.o reloccrt.o hbios.o hbios_cio.o hbios_sys.o cpm.o xstdio.o $(patsubst %.asm,%.o,$(patsubst %.c,%.o,$(chip8_sources)))
-chip8_tms = $(filter-out %instr_serial_output.o, $(chip8_objects))
-chip8_serial = $(filter-out %instr_tms_output.o, $(chip8_objects))
+chip8_tms = $(filter-out %byte_code_executor_serial.o %diagnostics.o %instr_serial_output.o, $(chip8_objects))
+chip8_serial = $(filter-out %byte_code_executor_tms.o %instr_tms_output.o, $(chip8_objects))
 
 ../bin/chip8.com: $(filter-out %test_instruction.o, $(chip8_tms))
 	@$(RELOCASSEMBLER) --output=$(basename $<).bin -b $(ASS_FLAGS) memap.o $(filter-out memap.o,$^)
@@ -62,6 +62,7 @@ chip8_serial = $(filter-out %instr_tms_output.o, $(chip8_objects))
 	@mv tstinstr.bin ../bin/tstinstr.com
 	@echo "\nBuilt ./bin/tstinstr.com"
 
+chip8/byte_code_executor.asm:
 #--max-allocs-per-node500000 -Cs"--opt-code-speed" --allow-unsafe-read
 %.asm: %.c
 	@zcc +embedded -subtype=none -lm -clib=sdcc_iy -vn -cleanup -m -S --list $< -o $@  -create-app  -Cs --Werror --c-code-in-asm -Cs"--opt-code-speed" --allow-unsafe-read
@@ -93,6 +94,7 @@ clean:
 	@find . -type f -name '*.sym' -delete
 	@rm -f ../bin/*
 	@rm -f ./chip8/byte_code_executor.asm
+	@rm -f ./chip8/diagnostics.asm
 	@rm -f ./chip8/instr_serial_output.asm
 	@rm -f ./chip8/instr_tms_output.asm
 	@rm -f ./chip8/key_monitor.asm

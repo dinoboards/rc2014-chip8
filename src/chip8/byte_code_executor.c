@@ -1,4 +1,5 @@
 #include "datatypes.h"
+#include "diagnostics.h"
 #include "instr_output.h"
 #include "instr_pc.h"
 #include "instr_random.h"
@@ -71,6 +72,10 @@ void initSystemState() {
 }
 
 bool executeSingleInstruction() {
+#ifdef DIAGNOSTICS_ON
+  updateMachineStateDisplay();
+#endif
+
   uint16_t currentInstruction = readInstruction(); // high/low bytes in inverted order
 
   checkForKeyPresses();
@@ -118,6 +123,10 @@ bool executeSingleInstruction() {
 
     case CH8_DRW_NIB: {
       draw();
+#ifdef DIAGNOSTICS_ON
+      if (startCounting)
+        drawCount++;
+#endif
       break;
     }
 

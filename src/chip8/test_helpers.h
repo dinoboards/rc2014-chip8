@@ -63,3 +63,5 @@ byte nextRandomNumber = 0;
 byte chip8Rand() { return nextRandomNumber; }
 
 inline void simulateRandomNumber(byte b) { nextRandomNumber = b; }
+
+void updateMachineStateDisplay() {}

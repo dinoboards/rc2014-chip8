@@ -26,6 +26,15 @@
   if (keyPressed && registers[secondNibble] == currentPressedKey) \
     chip8PC += 1;
 
+#ifdef DIAGNOSTICS_ON
 #define sknpVx()                                                   \
   if (!keyPressed || registers[secondNibble] != currentPressedKey) \
-  chip8PC += 1
+    chip8PC += 1;                                                  \
+  else                                                             \
+    startCounting = true
+
+#else
+#define sknpVx()                                                   \
+  if (!keyPressed || registers[secondNibble] != currentPressedKey) \
+    chip8PC += 1;
+#endif

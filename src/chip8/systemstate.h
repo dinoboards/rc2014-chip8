@@ -21,4 +21,9 @@ extern bool     keyPressed;
 extern byte soundTimer;
 extern byte delayTimer;
 
+#ifdef DIAGNOSTICS_ON
+extern bool startCounting;
+extern int  drawCount;
+#endif
+
 #endif

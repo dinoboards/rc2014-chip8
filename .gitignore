@@ -42,3 +42,4 @@ random.asm
 tms.asm
 timers.asm
 exit.asm
+diagnostics.asm

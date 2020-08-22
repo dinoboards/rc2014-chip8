@@ -19,3 +19,9 @@ bool     keyPressed;
 
 byte soundTimer;
 byte delayTimer;
+
+#ifdef DIAGNOSTICS_ON
+/* diagnostic state */
+bool startCounting = false;
+int  drawCount = 0;
+#endif

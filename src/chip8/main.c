@@ -40,6 +40,12 @@ void main() {
   }
   chkMsg(fClose(defaultFCB), "unable to close");
 
+  // // registerI = 0x03CF;
+  // registerI = 0x0200;
+  // for(byte i = 0; i < 64; i++)
+  //   xprintf("\033[%d;%dH%p: %02X", 4 + i, 80, registerI+i, ((byte*)registerI)[i]);
+  // exit(1);
+
   while (executeSingleInstruction())
     ;
 
