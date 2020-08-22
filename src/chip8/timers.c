@@ -8,6 +8,12 @@
 unsigned long lastTimerTick;
 unsigned long currentTimerTick;
 
+#undef MEASURE_PERFORMANCE
+#ifdef MEASURE_PERFORMANCE
+unsigned long performanceMeasureTick = 0;
+unsigned long instructionCount = 0;
+#endif
+
 void initTimers() {
   manageTimers();
   lastTimerTick = getSysTimer();
@@ -51,12 +57,28 @@ inline void tickDelayTimer(byte diff) {
   // }
 }
 
+
 void manageTimers() {
+#ifdef MEASURE_PERFORMANCE
+  byte diff = getTimerTicks();
+  instructionCount++;
+
+  if (currentTimerTick > performanceMeasureTick) {
+    xprintf("Count: '%ld'\r\n", (instructionCount / 2));
+    instructionCount = 0;
+    performanceMeasureTick = currentTimerTick + 120;
+  }
+
+  if (soundTimer == 0 && delayTimer == 0) {
+    return;
+  }
+#else
   if (soundTimer == 0 && delayTimer == 0) {
     return;
   }
 
   byte diff = getTimerTicks();
+#endif
 
   tickSoundTimer(diff);
   tickDelayTimer(diff);
