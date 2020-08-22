@@ -57,7 +57,6 @@ inline void tickDelayTimer(byte diff) {
   // }
 }
 
-
 void manageTimers() {
 #ifdef MEASURE_PERFORMANCE
   byte diff = getTimerTicks();

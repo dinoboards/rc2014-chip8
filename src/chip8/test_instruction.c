@@ -319,7 +319,6 @@ void setup_shr_va_vb_bit_set() {
   programStorage[0] = invertByteOrder(SHR_VA_VB);
 }
 
-
 void verify_shr_va_vb_bit_set() {
   expectEqualBytes(registers[0xA], 0x40, "VA");
   // expectEqualBytes(registers[0xB], 0x81, "VB");

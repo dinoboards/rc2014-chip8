@@ -1,3 +1,4 @@
+#include "charconstants.h"
 #include "keys.h"
 #include "systemstate.h"
 #include "systimer.h"
@@ -26,6 +27,9 @@ void checkForKeyPresses() {
     return;
   }
 #endif
+
+  if (currentPressedKey == CTRL_Z)
+    exit(0);
 
   if (currentPressedKey >= '0' && currentPressedKey <= '9')
     currentPressedKey -= '0';

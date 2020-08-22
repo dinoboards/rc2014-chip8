@@ -13,8 +13,8 @@
 ./chip8/instr_tms_output.asm: chip8/instr_tms_output.c chip8/instr_output.h \
  chip8/systemstate.h datatypes.h chip8/tms.h xstdio.h
 ./chip8/keys.asm: chip8/keys.c chip8/keys.h datatypes.h hbios.h
-./chip8/key_monitor.asm: chip8/key_monitor.c chip8/keys.h datatypes.h \
- chip8/systemstate.h chip8/systimer.h xstdio.h
+./chip8/key_monitor.asm: chip8/key_monitor.c charconstants.h chip8/keys.h \
+ datatypes.h chip8/systemstate.h chip8/systimer.h xstdio.h
 ./chip8/main.asm: chip8/main.c chip8/byte_code_executor.h datatypes.h cpm.h \
  hbios.h chip8/instr_output.h chip8/random.h chip8/systemstate.h \
  chip8/tms.h xstdio.h
