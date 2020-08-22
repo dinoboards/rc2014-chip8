@@ -1,9 +1,5 @@
 #include "datatypes.h"
 #include "diagnostics.h"
-#include "instr_output.h"
-#include "instr_pc.h"
-#include "instr_random.h"
-#include "instr_registers.h"
 #include "key_monitor.h"
 #include "stack.h"
 #include "systemstate.h"
@@ -14,6 +10,11 @@
 #include <stdarg.h>
 #include <stdio.h>
 #include <string.h>
+
+#include "instr_output.h"
+#include "instr_pc.h"
+#include "instr_random.h"
+#include "instr_registers.h"
 
 const uint16_t *programStorage = (uint16_t *)0x200;
 
@@ -156,10 +157,6 @@ bool executeSingleInstruction() {
 
     case CH8_DRW_NIB: {
       draw();
-#ifdef DIAGNOSTICS_ON
-      if (startCounting)
-        drawCount++;
-#endif
       break;
     }
 
@@ -262,15 +259,6 @@ bool executeSingleInstruction() {
     }
   }
   }
-
-  // if (registers[0x0] == 0x6)
-  //   startDebugging = true;
-
-  // if (registers[0x2] == 0x3)
-  //   startDebugging = true;
-
-  // if (registers[0xE] == 0xC)
-  //   startDebugging = true;
 
   return true;
 }

@@ -25,14 +25,31 @@
 
 #define ldVxVy() (registers[secondNibble] = registers[thirdNibble])
 
-#define _ldVxI(x)                                          \
-  byte *p##x = (byte *)registerI;                          \
-  for (byte(i##x) = 0; (i##x) <= secondNibble; (i##x)++) { \
-    registers[(i##x)] = *p##x++;                           \
-  }                                                        \
-  registerI = (uint16_t)p##x;
+inline void ldVxI() {
+  // clang-format off
+  __asm
 
-#define ldVxI() _ldVxI(__LINE__)
+    LD	HL, _registerI
+    LD	A, (HL)
+    INC	HL
+    LD	H, (HL)
+    LD	L, A
+    LD	DE, _registers
+    LD  A, (_secondNibble)
+    LD  C, A
+    INC C
+    LD  B, 0
+    LDIR
+
+  	EX	DE, HL
+    LD	HL, _registerI
+    LD	(HL), E
+    INC	HL
+    LD	(HL), D
+
+  __endasm;
+  // clang-format on
+}
 
 #define andVxVy() registers[secondNibble] &= registers[thirdNibble];
 
