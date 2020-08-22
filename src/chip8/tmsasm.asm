@@ -32,10 +32,6 @@ _tmsInitCode:	; self modify code to point to correct io ports for TMS chip
 tmsIoDelay:
 	push af
 	pop	af
-	push	af
-	pop	af
-	push af
-	pop	af
 	RET
 
 ; 27 TSTATES
@@ -178,14 +174,11 @@ CMDREG9:	EQU	$-1
 	OR	$40
 	OUT	(0), A
 CMDREG10:	EQU	$-1
-	TMS_IODELAY
-	ei
 	RET
 
 
 ;extern void tmsSetReadAddr(void*) __z88dk_fastcall;
 _tmsSetReadAddr:
-	di
 	LD	A, l
 	OUT	(0), A
 CMDREG11:	EQU	$-1
@@ -194,33 +187,23 @@ CMDREG11:	EQU	$-1
 	AND	$3F
 	OUT	(0), A
 CMDREG12:	EQU	$-1
-	TMS_IODELAY
-	ei
 	RET
 
 
 ; extern void tmsWriteByte(byte) __z88dk_fastcall;
 
 _tmsWriteByte:
-	di
-	TMS_IODELAY
-
 	ld	a, l
 	OUT	(0), a
 DATREG4:	EQU	$-1
-	ei
 	RET
 
 ; extern byte tmsReadByte() __z88dk_fastcall;
 
 _tmsReadByte:
-	di
-	TMS_IODELAY
-
 	IN	a, (0)
 DATREG5:	EQU	$-1
 	ld	l, a
-	ei
 	RET
 
 	SECTION IGNORE

@@ -86,11 +86,6 @@ bool executeSingleInstruction() {
 
   currentInstruction = readInstruction(); // high/low bytes in inverted order
 
-  // xprintf("\033[%d;%dH");
-
-  // for(int ddd = 0; ddd < 6000; ddd++)
-  //   ;
-
   manageTimers();
   checkForKeyPresses();
 

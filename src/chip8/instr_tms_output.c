@@ -3,8 +3,6 @@
 #include "systemstate.h"
 #include "tms.h"
 
-#include "xstdio.h"
-
 typedef struct {
   byte     x;
   byte     y;
@@ -18,6 +16,16 @@ typedef struct {
 } bitsDrawCommand;
 
 static bitsDrawCommand drawCommand;
+
+// clang-format off
+#define TMS_DELAY \
+__asm             \
+  PUSH  AF        \
+  POP   AF        \
+  NOP             \
+  NOP             \
+__endasm;
+// clang-format on
 
 void drawBits() {
   drawCommand.data = tmsReadByte();
@@ -34,6 +42,7 @@ void drawBits() {
       registers[0xF] = 1;
   }
 
+  TMS_DELAY
   tmsSetWriteAddr(drawCommand.tmsAddress);
 
   drawCommand.top = false;
@@ -49,42 +58,40 @@ void drawBits() {
       registers[0xF] = 1;
   }
 
+  TMS_DELAY
   tmsWriteByte(drawCommand.data);
 }
 
-void incrementXBy2() {
+inline void incrementXBy2() {
   drawCommand.x += 2;
   drawCommand.tmsAddress += 1;
-  tmsSetReadAddr(drawCommand.tmsAddress);
 }
 
-void decrementXBy2() {
+inline void decrementXBy2() {
   drawCommand.x -= 2;
   drawCommand.tmsAddress -= 1;
-  tmsSetReadAddr(drawCommand.tmsAddress);
 }
 
 inline void moveToNextRow() {
   drawCommand.y += 2;
-  drawCommand.tmsAddress += 32;
+  drawCommand.tmsAddress += (32-4);
   drawCommand.x -= 8;
-  drawCommand.tmsAddress -= 4;
-  tmsSetReadAddr(drawCommand.tmsAddress);
+
 }
 
 inline void moveTo(byte xx, byte yy) {
   drawCommand.y = yy;
   drawCommand.x = xx;
   drawCommand.tmsAddress = TMS_MD1_NAME_TABLE + (drawCommand.y << 4) + (drawCommand.x >> 1);
-  tmsSetReadAddr(drawCommand.tmsAddress);
 }
 
-byte topPixelData = 0xAA;
-byte bottomPixelData = 0x55;
+static byte topPixelData;
+static byte bottomPixelData;
 
 void drawBytesEven() {
   byte end = drawCommand.x + 8;
   for (; drawCommand.x < end; incrementXBy2()) {
+    tmsSetReadAddr(drawCommand.tmsAddress);
     drawCommand.topBits = (topPixelData & 0xC0) >> 6;
     drawCommand.bottomBits = (bottomPixelData & 0xC0) >> 6;
     bottomPixelData <<= 2;
@@ -94,6 +101,7 @@ void drawBytesEven() {
 }
 
 void drawBytesOdd() {
+  tmsSetReadAddr(drawCommand.tmsAddress);
   drawCommand.topBits = (topPixelData & 0x80) >> 7;
   drawCommand.bottomBits = (bottomPixelData & 0x80) >> 7;
   bottomPixelData <<= 1;
@@ -105,6 +113,7 @@ void drawBytesOdd() {
   byte end = drawCommand.x + 7;
 
   for (; drawCommand.x < end; incrementXBy2()) {
+    tmsSetReadAddr(drawCommand.tmsAddress);
     drawCommand.topBits = (topPixelData & 0xC0) >> 6;
     drawCommand.bottomBits = (bottomPixelData & 0xC0) >> 6;
     bottomPixelData <<= 2;
@@ -217,23 +226,13 @@ void tmsInitPatterns() {
   tmsWriteData(&patternParams);
 }
 
-byte _mySprite[] = {1, 3, 7, 15, 31, 63, 127, 255};
-void simulateDraw(byte xx, byte yy, byte n) {
-  registers[0] = xx;
-  secondNibble = 0;
-  registers[1] = yy;
-  thirdNibble = 1;
-  fourthNibble = n;
-
-  registerI = (uint16_t)_mySprite;
-
-  draw();
-}
+static byte xx;
+static byte yy;
 
 void draw() {
   drawCommand.length = fourthNibble;
-  const byte xx = registers[secondNibble];
-  const byte yy = registers[thirdNibble];
+  xx = registers[secondNibble];
+  yy = registers[thirdNibble];
 
   registers[0xF] = 0;
 
@@ -261,24 +260,4 @@ void videoInit() {
   tmsSetMode1();
   tmsClearData(&colourParams);
   tmsInitPatterns();
-
-  // for(int i = 0; i < 100; i++) {
-  //   simulateDraw(10, 10, 8);
-  //   for (uint16_t z = 0; z < 10000; z++)
-  //     ;
-  // }
-
-  // xprintf("10000\r\n");
-  // for(int i = 0; i < 100; i++) {
-  //   simulateDraw(10, 10, 8);
-  //   for (uint16_t z = 0; z < 1000; z++)
-  //     ;
-  // }
-  // xprintf("1000\r\n");
-
-  // for(int i = 0; i < 100; i++) {
-  //   simulateDraw(10, 10, 8);
-  // }
-
-  // xprintf("0\r\n");
 }
