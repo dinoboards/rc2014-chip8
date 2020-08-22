@@ -44,12 +44,14 @@ bool keyReady() { return simulateKeyReady; }
 
 void getKey(char *r) { *r = simulatedKeyValue; }
 
+uint16_t simulatedNextTimerTick = 0;
+
 inline void simulateKey(const char k) {
   simulateKeyReady = true;
   simulatedKeyValue = k;
+  xprintf("Inc....\r\n");
+  simulatedNextTimerTick += 4;
 }
-
-uint16_t simulatedNextTimerTick = 0;
 
 uint16_t getSysTimer() { return simulatedNextTimerTick; }
 

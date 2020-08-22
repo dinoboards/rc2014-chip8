@@ -8,7 +8,7 @@
 static uint16_t lastTimerTick;
 uint16_t        currentTimerTick;
 
-#define MEASURE_PERFORMANCE
+#undef MEASURE_PERFORMANCE
 #ifdef MEASURE_PERFORMANCE
 uint16_t performanceMeasureTick = 0;
 uint16_t instructionCount = 0;
@@ -62,16 +62,10 @@ void manageTimers() {
     instructionCount = 0;
     performanceMeasureTick = currentTimerTick + 120;
   }
-
-  if (soundTimer == 0 && delayTimer == 0) {
-    return;
-  }
-#else
-  if (soundTimer == 0 && delayTimer == 0) {
-    return;
-  }
-
 #endif
+
+  if (soundTimer == 0 && delayTimer == 0)
+    return;
 
   const byte diff = (byte)(currentTimerTick - lastTimerTick);
 

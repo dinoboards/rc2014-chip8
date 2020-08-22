@@ -4,7 +4,16 @@
 #include "timers.h"
 #include "xstdio.h"
 
+static uint16_t lastCheckTime = 0;
+
 void checkForKeyPresses() {
+
+  xprintf("checkForKeyPress %d, %d\r\n", currentTimerTick, lastCheckTime);
+
+  if (currentTimerTick == lastCheckTime)
+    return;
+
+  lastCheckTime = currentTimerTick;
 
   if (!keyReady()) {
     if (!keyPressed)
