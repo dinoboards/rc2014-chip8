@@ -1,9 +1,10 @@
+#include "systimer.h"
 #include "hbios.h"
 #include "xstdio.h"
 
-unsigned long result;
+static unsigned long result;
 
-unsigned long getSysTimer() {
+uint16_t getSysTimer() {
   hbSysGetTimer(&result);
   return result;
 }

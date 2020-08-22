@@ -49,9 +49,9 @@ inline void simulateKey(const char k) {
   simulatedKeyValue = k;
 }
 
-long simulatedNextTimerTick = 0;
+uint16_t simulatedNextTimerTick = 0;
 
-long getSysTimer() { return simulatedNextTimerTick; }
+uint16_t getSysTimer() { return simulatedNextTimerTick; }
 
 inline void simulateTimerTick() {
   simulatedNextTimerTick++;

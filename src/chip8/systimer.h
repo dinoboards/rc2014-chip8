@@ -2,6 +2,6 @@
 #ifndef __SYSTIMER
 #define __SYSTIMER
 
-extern unsigned long getSysTimer();
+extern uint16_t getSysTimer();
 
 #endif

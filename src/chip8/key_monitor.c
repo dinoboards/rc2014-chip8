@@ -1,7 +1,7 @@
 #include "charconstants.h"
 #include "keys.h"
 #include "systemstate.h"
-#include "systimer.h"
+#include "timers.h"
 #include "xstdio.h"
 
 void checkForKeyPresses() {
@@ -10,8 +10,7 @@ void checkForKeyPresses() {
     if (!keyPressed)
       return;
 
-    const uint16_t t = (uint16_t)getSysTimer();
-    if (t < currentKeyTimeout)
+    if (currentTimerTick < currentKeyTimeout)
       return;
 
     currentPressedKey = '\0';
@@ -40,6 +39,6 @@ void checkForKeyPresses() {
   else if (currentPressedKey >= 'a' && currentPressedKey <= 'z')
     currentPressedKey += (-'a' + 10);
 
-  currentKeyTimeout = ((uint16_t)getSysTimer() + 2);
+  currentKeyTimeout = currentTimerTick + 2;
   keyPressed = true;
 }

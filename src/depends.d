@@ -14,7 +14,7 @@
  chip8/systemstate.h datatypes.h chip8/tms.h xstdio.h
 ./chip8/keys.asm: chip8/keys.c chip8/keys.h datatypes.h hbios.h
 ./chip8/key_monitor.asm: chip8/key_monitor.c charconstants.h chip8/keys.h \
- datatypes.h chip8/systemstate.h chip8/systimer.h xstdio.h
+ datatypes.h chip8/systemstate.h chip8/timers.h xstdio.h
 ./chip8/main.asm: chip8/main.c chip8/byte_code_executor.h datatypes.h cpm.h \
  hbios.h chip8/instr_output.h chip8/random.h chip8/systemstate.h \
  chip8/tms.h xstdio.h
@@ -22,14 +22,14 @@
 ./chip8/stack.asm: chip8/stack.c chip8/stack.h datatypes.h chip8/systemstate.h \
  xstdio.h
 ./chip8/systemstate.asm: chip8/systemstate.c chip8/systemstate.h datatypes.h
-./chip8/systimer.asm: chip8/systimer.c hbios.h xstdio.h
+./chip8/systimer.asm: chip8/systimer.c chip8/systimer.h hbios.h xstdio.h
 ./chip8/test_instruction.asm: chip8/test_instruction.c chip8/byte_code_executor.h \
  datatypes.h chip8/instr_serial_output.h chip8/stack.h \
  chip8/systemstate.h terminal_codes.h test_opcodes.h chip8/timers.h \
  xstdio.h chip8/test_helpers.h test_expectations.h terminal_codes.h \
  xstdio.h
-./chip8/timers.asm: chip8/timers.c chip8/timers.h chip8/tty.h hbios.h \
- chip8/systemstate.h datatypes.h chip8/systimer.h xstdio.h
+./chip8/timers.asm: chip8/timers.c chip8/timers.h datatypes.h chip8/tty.h hbios.h \
+ chip8/systemstate.h chip8/systimer.h xstdio.h
 ./chip8/tms.asm: chip8/tms.c chip8/tms.h datatypes.h hbios.h chip8/keys.h \
  xstdio.h
 ./chip8/tty.asm: chip8/tty.c chip8/tty.h hbios.h xstdio.h

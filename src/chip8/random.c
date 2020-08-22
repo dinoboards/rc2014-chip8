@@ -3,6 +3,6 @@
 #include "systimer.h"
 #include <stdlib.h>
 
-void seedRandom() { srand((int)getSysTimer()); }
+void seedRandom() { srand(getSysTimer()); }
 
 byte chip8Rand() { return rand(); }

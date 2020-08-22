@@ -88,8 +88,8 @@ bool executeSingleInstruction() {
   // for(int ddd = 0; ddd < 6000; ddd++)
   //   ;
 
-  checkForKeyPresses();
   manageTimers();
+  checkForKeyPresses();
 
   switch (currentInstruction) {
   case CH8_CLS:

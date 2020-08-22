@@ -5,24 +5,18 @@
 #include "systimer.h"
 #include "xstdio.h"
 
-unsigned long lastTimerTick;
-unsigned long currentTimerTick;
+static uint16_t lastTimerTick;
+uint16_t        currentTimerTick;
 
-#undef MEASURE_PERFORMANCE
+#define MEASURE_PERFORMANCE
 #ifdef MEASURE_PERFORMANCE
-unsigned long performanceMeasureTick = 0;
-unsigned long instructionCount = 0;
+uint16_t performanceMeasureTick = 0;
+uint16_t instructionCount = 0;
 #endif
 
 void initTimers() {
   manageTimers();
   lastTimerTick = getSysTimer();
-}
-
-inline byte getTimerTicks() {
-  currentTimerTick = getSysTimer();
-
-  return (byte)(currentTimerTick - lastTimerTick);
 }
 
 inline void tickSoundTimer(byte diff) {
@@ -58,12 +52,13 @@ inline void tickDelayTimer(byte diff) {
 }
 
 void manageTimers() {
+  currentTimerTick = getSysTimer();
+
 #ifdef MEASURE_PERFORMANCE
-  byte diff = getTimerTicks();
   instructionCount++;
 
   if (currentTimerTick > performanceMeasureTick) {
-    xprintf("Count: '%ld'\r\n", (instructionCount / 2));
+    xprintf("Count: '%d'\r\n", (instructionCount / 2));
     instructionCount = 0;
     performanceMeasureTick = currentTimerTick + 120;
   }
@@ -76,8 +71,9 @@ void manageTimers() {
     return;
   }
 
-  byte diff = getTimerTicks();
 #endif
+
+  const byte diff = (byte)(currentTimerTick - lastTimerTick);
 
   tickSoundTimer(diff);
   tickDelayTimer(diff);
