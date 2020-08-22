@@ -21,3 +21,5 @@
 #define ADD_I_V9      0xF91E
 #define LD_VB_I       0xFB65
 #define AND_VA_VB     0x8AB2
+#define SHR_VA_VB     0x8AB6
+#define SHR_VD        0x8DD6

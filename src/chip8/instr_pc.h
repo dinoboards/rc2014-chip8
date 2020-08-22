@@ -38,5 +38,3 @@
   if (!keyPressed || registers[secondNibble] != currentPressedKey) \
     chip8PC += 1;
 #endif
-
-#define andVxVy() registers[secondNibble] &= registers[thirdNibble];

@@ -32,4 +32,10 @@
 
 #define ldVxI() _ldVxI(__LINE__)
 
+#define andVxVy() registers[secondNibble] &= registers[thirdNibble];
+
+#define shrVxVy()                                \
+  registers[0xF] = registers[thirdNibble] & 0x1; \
+  registers[secondNibble] = registers[thirdNibble] >> 1;
+
 #endif

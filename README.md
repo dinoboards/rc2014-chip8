@@ -13,3 +13,4 @@
 - goal to run binary unit
 
 
+https://github.com/mattmikolay/chip-8/wiki/CHIP%E2%80%908-Instruction-Set

@@ -287,6 +287,32 @@ void setup_and_va_vb() {
 
 void verify_and_va_vb() { expectEqualBytes(registers[0xA], 0x80, "VA"); }
 
+void setup_shr_va_vb_bit_set() {
+  registers[0xA] = 0x00;
+  registers[0xB] = 0x81;
+  registers[0xF] = 0x00;
+  programStorage[0] = invertByteOrder(SHR_VA_VB);
+}
+
+void verify_shr_va_vb_bit_set() {
+  expectEqualBytes(registers[0xA], 0x40, "VA");
+  expectEqualBytes(registers[0xB], 0x81, "VB");
+  expectEqualBytes(registers[0xF], 0x1, "VF");
+}
+
+void setup_shr_va_vb_bit_unset() {
+  registers[0xA] = 0x10;
+  registers[0xB] = 0x40;
+  registers[0xF] = 0x00;
+  programStorage[0] = invertByteOrder(SHR_VA_VB);
+}
+
+void verify_shr_va_vb_bit_unset() {
+  expectEqualBytes(registers[0xA], 0x20, "VA");
+  expectEqualBytes(registers[0xB], 0x40, "VB");
+  expectEqualBytes(registers[0xF], 0x0, "VF");
+}
+
 void main() {
   assert(ld_v1_10);
   assert(ld_v3_va); // LD_V3_VA)
@@ -334,6 +360,9 @@ void main() {
   assert(rnd_ve_15);
 
   assert(and_va_vb);
+
+  assert(shr_va_vb_bit_set);
+  assert(shr_va_vb_bit_unset);
 
   xprintf(testFailure ? RED "Tests Failed\r\n" RESET : BRIGHT_WHITE "All Passed\r\n" RESET);
 }

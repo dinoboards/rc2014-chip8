@@ -23,5 +23,6 @@ extern void expectToBeDT();
 #define currentIsVRegister() (token.isVRegister)
 #define currentIsDT()        (token.type == RegisterDT)
 #define currentIsIndexedI()  (token.type == RegisterIndexedI)
+#define currentIsComma()     (token.type == TokenComma)
 
 #endif

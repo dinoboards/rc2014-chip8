@@ -85,9 +85,8 @@ void expectToBeDT() {
 }
 
 void expectToBeComma() {
-  if (strcmp(token.value, ",") != 0) {
+  if (!currentIsComma())
     expectedError(",");
-  }
 }
 
 byte expectToBeNibble() {
