@@ -77,12 +77,14 @@ void initSystemState() {
   chip8PC = (uint16_t *)programStorage;
 }
 
+static uint16_t currentInstruction;
+
 bool executeSingleInstruction() {
 #ifdef DIAGNOSTICS_ON
   updateMachineStateDisplay();
 #endif
 
-  uint16_t currentInstruction = readInstruction(); // high/low bytes in inverted order
+  currentInstruction = readInstruction(); // high/low bytes in inverted order
 
   // xprintf("\033[%d;%dH");
 

@@ -28,30 +28,47 @@
 inline void ldVxI() {
   // clang-format off
   __asm
+    ld	    hl, _registerI
+    ld	    a, (hl)
+    inc	    hl
+    ld	    h, (hl)
+    ld	    l, a
+    ld	    de, _registers
+    ld      a, (_secondNibble)
+    ld      c, a
+    inc     c
+    ld      b, 0
+    ldir
 
-    LD	HL, _registerI
-    LD	A, (HL)
-    INC	HL
-    LD	H, (HL)
-    LD	L, A
-    LD	DE, _registers
-    LD  A, (_secondNibble)
-    LD  C, A
-    INC C
-    LD  B, 0
-    LDIR
-
-  	EX	DE, HL
-    LD	HL, _registerI
-    LD	(HL), E
-    INC	HL
-    LD	(HL), D
+  	ex	    de, hl
+    ld	    hl, _registerI
+    ld	    (hl), e
+    inc	    hl
+    ld	    (hl), d
 
   __endasm;
   // clang-format on
 }
 
-#define andVxVy() registers[secondNibble] &= registers[thirdNibble];
+inline void andVxVy() {
+  // clang-format off
+  __asm
+    ld      a, (_secondNibble)
+    ld      hl, _registers
+    ld      c, a
+    ld      b, 0
+    add     hl, bc
+    ex      de, hl
+    ld      hl, _registers
+    ld      a, (_thirdNibble)
+    ld      c, a
+    add     hl, bc
+    ld      a, (de)
+    and     a, (hl)
+    ld      (de), a
+  __endasm;
+  // clang-format on
+}
 
 #define shrVxVy()                                 \
   registers[0xF] = registers[secondNibble] & 0x1; \
