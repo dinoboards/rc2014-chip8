@@ -50,6 +50,28 @@ inline void ldVxI() {
   // clang-format on
 }
 
+inline void ldIVx() {
+  // clang-format off
+  __asm
+    ld	    hl, _registerI
+    ld	    e, (hl)
+    inc	    hl
+    ld	    d, (hl)
+    ld	    hl, _registers
+    ld      a, (_secondNibble)
+    ld      c, a
+    inc     c
+    ld      b, 0
+    ldir
+
+    ld	    hl, _registerI
+    ld	    (hl), e
+    inc	    hl
+    ld	    (hl), d
+  __endasm;
+  // clang-format on
+}
+
 inline void andVxVy() {
   // clang-format off
   __asm

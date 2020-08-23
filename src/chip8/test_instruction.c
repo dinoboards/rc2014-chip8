@@ -54,6 +54,34 @@ void verify_ld_vb_i() {
   expectEqualInts(registerI, 0x600 + 12, "I");
 }
 
+void setup_ld_i_ve() {
+  registerI = 0x600;
+  memset((void *)registerI, 16, 0);
+  programStorage[0] = invertByteOrder(LD_I_VE);
+  for (int i = 0; i < 15; i++)
+    registers[i] = i + 10;
+}
+
+void verify_ld_i_ve() {
+  byte *pExpected = (byte *)0x600;
+  expectEqualBytes(pExpected[0x0], 10, "[i+0x0]");
+  expectEqualBytes(pExpected[0x1], 11, "[i+0x1]");
+  expectEqualBytes(pExpected[0x2], 12, "[i+0x2]");
+  expectEqualBytes(pExpected[0x3], 13, "[i+0x3]");
+  expectEqualBytes(pExpected[0x4], 14, "[i+0x4]");
+  expectEqualBytes(pExpected[0x5], 15, "[i+0x6]");
+  expectEqualBytes(pExpected[0x6], 16, "[i+0x7]");
+  expectEqualBytes(pExpected[0x7], 17, "[i+0x8]");
+  expectEqualBytes(pExpected[0x8], 18, "[i+0x9]");
+  expectEqualBytes(pExpected[0x9], 19, "[i+0x9]");
+  expectEqualBytes(pExpected[0xA], 20, "[i+0xA]");
+  expectEqualBytes(pExpected[0xB], 21, "[i+0xB]");
+  expectEqualBytes(pExpected[0xC], 22, "[i+0xC]");
+  expectEqualBytes(pExpected[0xD], 23, "[i+0xD]");
+  expectEqualBytes(pExpected[0xE], 24, "[i+0xE]");
+  expectEqualInts(registerI, 0x600 + 15, "I");
+}
+
 void setup_call_1025() { programStorage[0] = invertByteOrder(CALL_1025); }
 
 void verify_call_1025() {
@@ -380,6 +408,7 @@ void main() {
   assert(ld_v3_va); // LD_V3_VA)
   assert(ld_i_1234);
   assert(ld_vb_i);
+  assert(ld_i_ve);
 
   assert(call_1025);
 

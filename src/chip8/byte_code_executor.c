@@ -63,6 +63,7 @@ inline uint16_t readInstruction() {
 #define CH8_LD_VX_DT_LOW_BYTE 0x07
 #define CH8_ADD_I_VX_LOW_BYTE 0x1E
 #define CH8_LD_VX_I_LOW_BYTE  0x65
+#define CH8_LD_I_VX_LOW_BYTE  0x55
 
 #define CH8_LD_VX_VY_NIB  0x0
 #define CH8_AND_VX_VY_NIB 0x2
@@ -221,6 +222,11 @@ bool executeSingleInstruction() {
 
       case CH8_LD_VX_I_LOW_BYTE: {
         ldVxI();
+        break;
+      }
+
+      case CH8_LD_I_VX_LOW_BYTE: {
+        ldIVx();
         break;
       }
 

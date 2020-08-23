@@ -26,3 +26,4 @@
 #define ADD_V6_V1     0x8614
 #define SUB_V3_VE     0x83E5
 #define XOR_V3_VE     0x83E3
+#define LD_I_VE       0xFE55

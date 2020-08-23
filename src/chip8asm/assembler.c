@@ -69,6 +69,25 @@ inline static void assLdVx() {
 }
 
 /*
+Fx55 - LD [I], Vx
+Store registers V0 through Vx in memory starting at location I.
+
+The interpreter copies the values of registers V0 through Vx into memory, starting at the address in I.
+*/
+inline static void assLdIVx() {
+  expectToBeIndexedI();
+
+  getNext();
+  expectToBeComma();
+
+  getNext();
+  const byte x = expectToBeVRegister();
+
+  emit2Nibble(0xF, x);
+  emitByte(0x55);
+}
+
+/*
 Annn - LD I, addr
 Set I = nnn.
 
@@ -130,10 +149,11 @@ inline static void assLdDtVx() {
   LD Vx, DT
   Ld I, <addr>
   ld st, Vx
+  LD [i], Vx
 */
 inline static void assLd() {
   getNext();
-  expectToBeOneOfVxOrIOrStOrDt();
+  expectToBeOneOfVxOrIOrIndexedIOrStOrDt();
 
   if (currentIsIRegister())
     assLdI();
@@ -141,6 +161,8 @@ inline static void assLd() {
     assLdStVx();
   else if (currentIsDT())
     assLdDtVx();
+  else if (currentIsIndexedI())
+    assLdIVx();
   else
     assLdVx();
 }

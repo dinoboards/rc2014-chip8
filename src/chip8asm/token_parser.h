@@ -13,6 +13,7 @@ extern void     expectToBeComma();
 extern void     expectToBeIRegister();
 extern void     expectToBeIndexedI();
 extern void     expectToBeOneOfVxOrIOrStOrDt();
+extern void     expectToBeOneOfVxOrIOrIndexedIOrStOrDt();
 extern void     expectToBeVxOrIRegister();
 
 extern void expectToBeST();
