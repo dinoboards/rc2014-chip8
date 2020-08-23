@@ -11,6 +11,7 @@
 #include <stdarg.h>
 #include <stdio.h>
 #include <string.h>
+#include "fontsets.h"
 
 #include "test_helpers.h"
 
@@ -418,6 +419,15 @@ void verify_bcd_i_v3() {
   expectEqualBytes(i[2], 8, "[i+2]");
 }
 
+void setup_ldf_i_v4() {
+  registers[0x4] = 1;
+  programStorage[0] = invertByteOrder(LDF_I_V4);
+}
+
+void verify_ldf_i_v4() {
+  expectEqualInts(registerI, (uint16_t)&fonts[5], "I");
+}
+
 void main() {
   assert(ld_v1_10);
   assert(ld_v3_va); // LD_V3_VA)
@@ -478,6 +488,8 @@ void main() {
   assert(xor_v3_ve);
 
   assert(bcd_i_v3);
+
+  assert(ldf_i_v4);
 
   xprintf(testFailure ? RED "Tests Failed\r\n" RESET : BRIGHT_WHITE "All Passed\r\n" RESET);
 }

@@ -3,10 +3,11 @@
  chip8/diagnostics.h chip8/key_monitor.h chip8/stack.h \
  chip8/systemstate.h chip8/systimer.h chip8/timers.h chip8/tty.h xstdio.h \
  chip8/instr_output.h chip8/instr_pc.h chip8/instr_random.h \
- chip8/random.h chip8/instr_registers.h
+ chip8/random.h chip8/instr_registers.h chip8/fontsets.h
 ./chip8/diagnostics.asm: chip8/diagnostics.c chip8/diagnostics.h \
  chip8/byte_code_executor.h datatypes.h chip8/systemstate.h xstdio.h \
  chip8/keys.h
+./chip8/fontsets.asm: chip8/fontsets.c chip8/fontsets.h datatypes.h
 ./chip8/instr_serial_output.asm: chip8/instr_serial_output.c \
  chip8/instr_serial_output.h datatypes.h chip8/instr_output.h \
  chip8/systemstate.h chip8/tty.h
@@ -27,8 +28,8 @@
 ./chip8/test_instruction.asm: chip8/test_instruction.c chip8/byte_code_executor.h \
  datatypes.h chip8/instr_serial_output.h chip8/stack.h \
  chip8/systemstate.h terminal_codes.h test_opcodes.h chip8/timers.h \
- xstdio.h chip8/test_helpers.h test_expectations.h terminal_codes.h \
- xstdio.h
+ xstdio.h chip8/fontsets.h chip8/test_helpers.h test_expectations.h \
+ terminal_codes.h xstdio.h
 ./chip8/timers.asm: chip8/timers.c chip8/timers.h datatypes.h chip8/tty.h hbios.h \
  chip8/systemstate.h chip8/systimer.h xstdio.h
 ./chip8/tms.asm: chip8/tms.c chip8/tms.h datatypes.h hbios.h chip8/keys.h \

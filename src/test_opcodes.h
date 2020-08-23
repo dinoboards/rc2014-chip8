@@ -28,3 +28,4 @@
 #define XOR_V3_VE     0x83E3
 #define LD_I_VE       0xFE55
 #define BCD_I_V3      0xF333
+#define LDF_I_V4 0xF429

@@ -3,6 +3,7 @@
 #define __INSTR_REGISTERS
 
 #include "timers.h"
+#include "fontsets.h"
 
 #define ldVxByte()  (registers[secondNibble] = lowByte)
 #define ldIAddr()   (registerI = addr)
@@ -126,5 +127,11 @@ static void bcdIVx() {
   *p++ = hundreds;
   *p++ = tens;
   *p++ = units;
+}
+
+static void ldfIVx() {
+  const byte x = registers[secondNibble];
+
+  registerI = (uint16_t)&fonts[x*5];
 }
 #endif

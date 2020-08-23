@@ -43,3 +43,4 @@ tms.asm
 timers.asm
 exit.asm
 diagnostics.asm
+fontsets.asm
