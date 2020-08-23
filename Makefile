@@ -53,16 +53,6 @@ format: SHELL:=/bin/bash
 format:
 	@find \( -name "*.c" -o -name "*.h" \) -exec echo "formating {}" \; -exec clang-format -i {} \;
 
-.PHONY: cleanbin
-cleanbin:
-	@rm -f ./bin/*.cas
-	@rm -f ./bin/*.ch8
-
-.PHONY: spike
-spike:
-	@cd bin && cpm chip8asm spike.cas
-	@cd bin && cpm chip8s spike.ch8
-
 .PHONY: ret
 ret:
 	@cd bin && cpm chip8asm ret.cas
@@ -101,3 +91,8 @@ c8pic:
 invaders:
 	@cp ./test-samples/*.ch8 ./bin/
 	@cd bin && cpm chip8s invaders.ch8
+
+.PHONY: chip8s
+tictac: chip8s
+	@cp ./test-samples/TICTAC ./bin/
+	@cd bin && cpm chip8s TICTAC

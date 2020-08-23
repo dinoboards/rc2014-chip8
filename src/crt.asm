@@ -77,4 +77,27 @@ defc thrd_error = 0x01
 PUBLIC STDIO_SEEK_CUR
 defc STDIO_SEEK_CUR = 1
 
+; _Noreturn void _exit_fastcall(int status)
+
+SECTION code_clib
+SECTION code_fcntl
+
+PUBLIC __exit_fastcall
+
+EXTERN __Exit
+
+defc __exit_fastcall = __Exit
+
+
+; _Noreturn void exit_fastcall(int status)
+
+SECTION code_clib
+SECTION code_stdlib
+
+PUBLIC _exit_fastcall
+
+EXTERN asm_exit
+
+defc _exit_fastcall = asm_exit
+
 	SECTION IGNORE
