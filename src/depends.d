@@ -11,7 +11,7 @@
  chip8/instr_serial_output.h datatypes.h chip8/instr_output.h \
  chip8/systemstate.h chip8/tty.h
 ./chip8/instr_tms_output.asm: chip8/instr_tms_output.c chip8/instr_output.h \
- chip8/systemstate.h datatypes.h chip8/tms.h xstdio.h
+ chip8/systemstate.h datatypes.h chip8/tms.h
 ./chip8/keys.asm: chip8/keys.c chip8/keys.h datatypes.h hbios.h
 ./chip8/key_monitor.asm: chip8/key_monitor.c charconstants.h chip8/keys.h \
  datatypes.h chip8/systemstate.h chip8/timers.h xstdio.h
@@ -47,7 +47,7 @@
 ./chip8asm/exit.asm: chip8asm/exit.c
 ./chip8asm/expr.asm: chip8asm/expr.c chip8asm/expr.h chip8asm/chartesters.h \
  datatypes.h chip8asm/error.h chip8asm/error_reports.h chip8asm/exit.h \
- chip8asm/labels.h xstdio.h
+ chip8asm/labels.h
 ./chip8asm/filereader.asm: chip8asm/filereader.c chip8asm/filereader.h \
  charconstants.h cpm.h datatypes.h
 ./chip8asm/labels.asm: chip8asm/labels.c chip8asm/labels.h datatypes.h \

@@ -62,11 +62,18 @@ chip8_serial = $(filter-out %byte_code_executor_tms.o %instr_tms_output.o, $(chi
 	@mv tstinstr.bin ../bin/tstinstr.com
 	@echo "\nBuilt ./bin/tstinstr.com"
 
-chip8/byte_code_executor.asm:
-#--max-allocs-per-node500000 -Cs"--opt-code-speed" --allow-unsafe-read
+
+ZCCRELFLAGS=
+
+ifdef RELEASE
+ZCCRELFLAGS=" -SO3 --max-allocs-per-node200000 -Cs"--opt-code-speed" --allow-unsafe-read"
+endif
+
+ZCCFLAGS="${ZCCRELFLAGS}"
+
 #-DDIAGNOSTICS_ON
 %.asm: %.c
-	@zcc +embedded -subtype=none -lm -clib=sdcc_iy -vn -cleanup -m -S --list $< -o $@  -create-app  -Cs --Werror --c-code-in-asm -Cs"--opt-code-speed" --allow-unsafe-read
+	@zcc +embedded -subtype=none -lm -clib=sdcc_iy -vn -cleanup -m -S --list $< -o $@  -create-app  -Cs --Werror --c-code-in-asm $(ZCCFLAGS)
 	@echo "compiled $< to $@"
 
 deps: SHELL := bash

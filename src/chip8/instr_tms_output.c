@@ -74,9 +74,8 @@ inline void decrementXBy2() {
 
 inline void moveToNextRow() {
   drawCommand.y += 2;
-  drawCommand.tmsAddress += (32-4);
+  drawCommand.tmsAddress += (32 - 4);
   drawCommand.x -= 8;
-
 }
 
 inline void moveTo(byte xx, byte yy) {

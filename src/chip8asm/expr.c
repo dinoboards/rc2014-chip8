@@ -7,7 +7,6 @@
 #include "error_reports.h"
 #include "exit.h"
 #include "labels.h"
-#include "xstdio.h"
 #include <stdio.h>
 
 long xstrtol(const char *str, char **endptr, int base);
@@ -18,7 +17,7 @@ static int         tokenIndex = 0;
 static char        currentChar;
 static const char *expressionPtr;
 
-typedef enum { ADD_SUB_OP, MUL_DIV_REM_OP, OP_OR, AND_OP, LEFT_PAREN, RIGHT_PAREN, NUMBER, ALPHA, END_INPUT } LookAheadTokens;
+typedef enum { UNKNOWN, ADD_SUB_OP, MUL_DIV_REM_OP, OP_OR, AND_OP, LEFT_PAREN, RIGHT_PAREN, NUMBER, ALPHA, END_INPUT } LookAheadTokens;
 
 static LookAheadTokens lookAhead;
 
@@ -141,28 +140,12 @@ START:
   }
 
 IN_LEADING_DIGITS:
-  switch (currentChar) {
-  case '0':
-  case '1':
-  case '2':
-  case '3':
-  case '4':
-  case '5':
-  case '6':
-  case '7':
-  case '8':
-  case '9':
+  if (currentChar >= '0' && currentChar < '9') {
     read();
     goto IN_LEADING_DIGITS;
-
-  case '.':
-    read();
-    goto IN_TRAILING_DIGITS;
-
-  default:
-    lookAhead = NUMBER;
-    return;
   }
+  lookAhead = NUMBER;
+  return;
 
 IN_LEADING_ALPHA:
   if (isCharAlpha(currentChar)) {
@@ -170,26 +153,6 @@ IN_LEADING_ALPHA:
     goto IN_LEADING_ALPHA;
   } else {
     lookAhead = ALPHA;
-    return;
-  }
-
-IN_TRAILING_DIGITS:
-  switch (currentChar) {
-  case '0':
-  case '1':
-  case '2':
-  case '3':
-  case '4':
-  case '5':
-  case '6':
-  case '7':
-  case '8':
-  case '9':
-    read();
-    goto IN_TRAILING_DIGITS;
-
-  default:
-    lookAhead = NUMBER;
     return;
   }
 }
