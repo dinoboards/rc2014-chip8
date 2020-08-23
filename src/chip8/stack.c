@@ -11,7 +11,7 @@ byte     stackIndex = 0;
  * @return (void)
  */
 void pushPc() {
-  if (stackIndex >= 16) {
+  if (stackIndex >= MAX_STACK) {
     xprintf("Stack overflow\r\n");
     exit(1);
   }
