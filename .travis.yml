@@ -1,40 +1,33 @@
 os: linux
 dist: bionic
 language: c
-
 before_install:
-  - sudo apt-get update
-  - sudo apt-get -y install gcc-multilib build-essential gpp
-
+- sudo apt-get update
+- sudo apt-get -y install gcc-multilib build-essential gpp
 git:
   submodules: false
   depth: 3
-
 install:
-  - wget https://github.com/vipoo/z88dk/releases/download/v2.0.0-dino.3/z88dk-v2.0.0-dino.3.tar.gz
-  - mkdir -p z88dk
-  - tar -xzf z88dk-v2.0.0-dino.3.tar.gz -C ./z88dk/
-  - wget https://github.com/vipoo/cpm/releases/download/v0.0.7/cpm-v0.0.7.tar.gz
-  - mkdir -p cpm
-  - tar -xzf cpm-v0.0.7.tar.gz -C ./cpm
-
+- wget https://github.com/vipoo/z88dk/releases/download/v2.0.0-dino.3/z88dk-v2.0.0-dino.3.tar.gz
+- mkdir -p z88dk
+- tar -xzf z88dk-v2.0.0-dino.3.tar.gz -C ./z88dk/
+- wget https://github.com/vipoo/cpm/releases/download/v0.0.7/cpm-v0.0.7.tar.gz
+- mkdir -p cpm
+- tar -xzf cpm-v0.0.7.tar.gz -C ./cpm
 before_script:
-  - export PATH=`pwd`/cpm/bin:$PATH
-  - export PATH=`pwd`/z88dk/bin:$PATH
-  - export ZCCCFG=`pwd`/z88dk/lib/config
-
+- export PATH=`pwd`/cpm/bin:$PATH
+- export PATH=`pwd`/z88dk/bin:$PATH
+- export ZCCCFG=`pwd`/z88dk/lib/config
 script:
-  - make all VERSION=$TRAVIS_TAG
-  - make test VERSION=$TRAVIS_TAG
-
-# deploy:
-#   provider: releases
-#   api_key:
-#     secure: ""
-#   file: chip8.com
-#   skip_cleanup: true
-#   on:
-#     tags: true
-
-notifications:
-  email: false
+- make all VERSION=$TRAVIS_TAG
+- make test VERSION=$TRAVIS_TAG
+before_deploy:
+- tar -czvf chip-8-${TRAVIS_TAG}.tar.gz bin
+deploy:
+  provider: releases
+  api_key:
+    secure: oQNgG/DfdgzTRbiuJdRFpd4X7RKfOaEr2qr7wvRcbrIQTae0d77rGzEIqOv9ZkL8AdpE9RsVu+qrFWqb55Ax+uplcQ4L8fdh2ZnJue9i+p0n7raUvjL1aGWptHk1XPA6Kx8dYyNSZEqoJDj2jDImjthxnkUgLtss8UVDa+6yYNWP8RYJQGvR9m3UP13exG0QfuOANMgpICCjFpqmj8gKHX9gEcCLQKZP+ibSMRVJCqJZrs2Qe3n/yQkGXGF7IkQrrOlxK0wp0mYmBYcGA0yJ94tXNWlJlNEhbPyOcdG0m3tYYHl7BVI8n0j9KUPiZf8MxqINhLTxN+KmHVpdNiB5OH2LoM836p6+79bwLCTkAcYHrS8UpCNnnloX5ULs4hHV3eqYEp1tnSuGpzaz6spN5EO52HfidO4bs3yHCs1k4bQlfe++OU51Czny4iA9XKIN1Kf5zyiGXAFN0YfapWwTzHIAZrMFO5KUtx1k4WlzOuh4dQuBwHlg/b51xf1bz7QQ8pMaQeKHJqLKXl6ftpp4RJH3lbGQX62aKmrCflfrBgwjbUTH0n/9h0J5MFHkTIwGvMg6ifs2txo4STMx0TyMBiqTT03oKpw1DSn8q5tXEVracW8QvT3vL8RPYj/BmlSlkTN/xjwxq0e6zn8OsIQGB2WX8FyQUceJ0iBzssRFudc=
+  file: chip-8-${TRAVIS_TAG}.tar.gz
+  on:
+    tags: true
+  skip_cleanup: 'true'
