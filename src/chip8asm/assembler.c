@@ -491,6 +491,26 @@ inline static void assXor() {
   emitNibbles(0x8, x, y, 3);
 }
 
+/*
+
+Fx33 - BCD [I], Vx
+Store BCD representation of Vx in memory locations I, I+1, and I+2.
+
+The interpreter takes the decimal value of Vx, and places the hundreds digit in memory at location in I, the tens digit at location I+1, and the ones digit at location I+2.*/
+inline static void assBcd() {
+  getNext();
+  expectToBeIndexedI();
+
+  getNext();
+  expectToBeComma();
+
+  getNext();
+  const byte x = expectToBeVRegister();
+
+  emit2Nibble(0xf, x);
+  emitByte(0x33);
+}
+
 void assemble(byte pc) __z88dk_fastcall {
   parseCount = pc;
   currentAddress = 0x200;
@@ -572,6 +592,10 @@ void assemble(byte pc) __z88dk_fastcall {
 
     case InstructionXor:
       assXor();
+      break;
+
+    case InstructionBcd:
+      assBcd();
       break;
 
     default:

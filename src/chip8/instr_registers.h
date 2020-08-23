@@ -110,4 +110,21 @@ inline void andVxVy() {
 
 #define xorVxVy() registers[secondNibble] ^= registers[thirdNibble];
 
+static byte units;
+static byte hundreds;
+static byte tens;
+
+static void bcdIVx() {
+  const byte x = registers[secondNibble];
+
+  const byte im = x / 10;
+  units = x - im * 10;
+  hundreds = im / 10;
+  tens = im - hundreds * 10;
+
+  byte *p = (byte *)registerI;
+  *p++ = hundreds;
+  *p++ = tens;
+  *p++ = units;
+}
 #endif

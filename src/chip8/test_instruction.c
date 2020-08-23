@@ -56,7 +56,7 @@ void verify_ld_vb_i() {
 
 void setup_ld_i_ve() {
   registerI = 0x600;
-  memset((void *)registerI, 16, 0);
+  memset((void *)registerI, 0, 16);
   programStorage[0] = invertByteOrder(LD_I_VE);
   for (int i = 0; i < 15; i++)
     registers[i] = i + 10;
@@ -403,6 +403,21 @@ void verify_xor_v3_ve() {
   expectEqualBytes(registers[0xE], 0x40, "VE");
 }
 
+void setup_bcd_i_v3() {
+  registerI = 0x600;
+  memset((void *)registerI, 0, 3);
+  registers[0x3] = 128;
+  programStorage[0] = invertByteOrder(BCD_I_V3);
+}
+
+void verify_bcd_i_v3() {
+  byte *i = (byte *)0x600;
+
+  expectEqualBytes(i[0], 1, "[i+0]");
+  expectEqualBytes(i[1], 2, "[i+1]");
+  expectEqualBytes(i[2], 8, "[i+2]");
+}
+
 void main() {
   assert(ld_v1_10);
   assert(ld_v3_va); // LD_V3_VA)
@@ -461,6 +476,8 @@ void main() {
   assert(sub_v3_ve_with_borrow);
 
   assert(xor_v3_ve);
+
+  assert(bcd_i_v3);
 
   xprintf(testFailure ? RED "Tests Failed\r\n" RESET : BRIGHT_WHITE "All Passed\r\n" RESET);
 }

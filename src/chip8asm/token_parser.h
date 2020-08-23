@@ -25,5 +25,6 @@ extern void expectToBeDT();
 #define currentIsDT()        (token.type == RegisterDT)
 #define currentIsIndexedI()  (token.type == RegisterIndexedI)
 #define currentIsComma()     (token.type == TokenComma)
+#define currentIsBCD()       (token.type == TokenBCD)
 
 #endif

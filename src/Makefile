@@ -26,7 +26,7 @@ ZSDCPP_FLAGS=-iquote"." \
 ZCCRELFLAGS=
 
 ifdef RELEASE
-ZCCRELFLAGS=" -SO3 --max-allocs-per-node200000 -Cs"--opt-code-speed" --allow-unsafe-read"
+ZCCRELFLAGS=" -SO3 --max-allocs-per-node200000 -Cs\"--opt-code-speed\" --allow-unsafe-read"
 endif
 
 ZCCFLAGS="${ZCCRELFLAGS}"
