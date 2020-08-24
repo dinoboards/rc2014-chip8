@@ -56,14 +56,14 @@ chip8_serial = $(filter-out %byte_code_executor_tms.o %instr_tms_output.o, $(chi
 
 ../bin/chip8.com: $(filter-out %test_instruction.o, $(chip8_tms))
 	@mkdir -p ../bin
-	$(RELOCASSEMBLER) -ochip8.com -b $(ASS_FLAGS) memap.o $(filter-out memap.o,$^)
-	mv chip8.com ../bin/
+	$(RELOCASSEMBLER) -ochip8.bin -b $(ASS_FLAGS) memap.o $(filter-out memap.o,$^)
+	mv chip8.bin ../bin/chip8.com
 	@echo "\nBuilt ./bin/chip8.com"
 
 ../bin/chip8s.com: $(filter-out %test_instruction.o, $(chip8_serial))
 	@mkdir -p ../bin
-	$(RELOCASSEMBLER) -ochip8s.com -b $(ASS_FLAGS) memap.o $(filter-out memap.o,$^)
-	mv chip8s.com ../bin/
+	$(RELOCASSEMBLER) -ochip8s.bin -b $(ASS_FLAGS) memap.o $(filter-out memap.o,$^)
+	mv chip8s.bin ../bin/chip8s.com
 	@echo "\nBuilt ./bin/chip8s.com"
 
 ../bin/tstinstr.com: $(filter-out $(exclude_from_tests),$(chip8_serial))
