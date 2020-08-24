@@ -477,73 +477,52 @@ void setup_ldf_i_v4() {
 void verify_ldf_i_v4() { expectEqualInts(registerI, (uint16_t)&fonts[5], "I"); }
 
 void main() {
-  assert(ld_v1_10);
-  assert(ld_v3_va); // LD_V3_VA)
-  assert(ld_i_1234);
-  assert(ld_vb_i);
-  assert(ld_v0_i);
-  assert(ld_i_ve);
-
-  assert(call_1025);
-
-  assert(ret_from_subroutine);
-
-  assertTerminates(final_ret);
-
-  assert(add_ve_1);
   assert(add_i_v9);
   assert(add_v6_v1_no_carry);
   assert(add_v6_v1_with_carry);
-
-  assert(se_v4_15_skips);
-  assert(se_v4_15_no_skips);
-  assert(se_v4_v9_skips);
-  assert(se_v4_v9_no_skips);
-
-  assert(sne_v0_123_skips);
-  assert(sne_v0_123_no_skips);
-  assert(sne_v0_v2_skips);
-  assert(sne_v0_v2_no_skips);
-
-  assert(key_v5);
-
+  assert(add_ve_1);
+  assert(and_va_vb);
+  assert(bcd_i_v3);
+  assert(call_1025);
   assert(cls);
-
   assert(draw_top_right);
   assert(draw_xor);
-
   assert(jp_1026);
-
-  assert(skp_v3_skips);
-  assert(skp_v3_no_skips);
-  assert(skp_v3_wrong_key);
-
-  assert(sknp_vd_skips);
-  assert(sknp_vd_no_skips);
-  assert(sknp_vd_no_keys_pressed);
-
-  assert(ld_st_v2);
+  assert(key_v5);
   assert(ld_dt_v3);
+  assert(ld_i_1234);
+  assert(ld_i_ve);
+  assert(ld_st_v2);
+  assert(ld_v0_i);
+  assert(ld_v1_10);
+  assert(ld_v3_va); // LD_V3_VA)
   assert(ld_va_dt);
-
+  assert(ld_vb_i);
+  assert(ldf_i_v4);
+  assert(ret_from_subroutine);
   assert(rnd_ve_15);
-
-  assert(and_va_vb);
-
-  assert(shr_va_vb_bit_set);
-  assert(shr_va_vb_bit_unset);
-
+  assert(se_v4_15_no_skips);
+  assert(se_v4_15_skips);
+  assert(se_v4_v9_no_skips);
+  assert(se_v4_v9_skips);
   assert(shl_va_vb_bit_set);
   assert(shl_va_vb_bit_unset);
-
+  assert(shr_va_vb_bit_set);
+  assert(shr_va_vb_bit_unset);
+  assert(sknp_vd_no_keys_pressed);
+  assert(sknp_vd_no_skips);
+  assert(sknp_vd_skips);
+  assert(skp_v3_no_skips);
+  assert(skp_v3_skips);
+  assert(skp_v3_wrong_key);
+  assert(sne_v0_123_no_skips);
+  assert(sne_v0_123_skips);
+  assert(sne_v0_v2_no_skips);
+  assert(sne_v0_v2_skips);
   assert(sub_v3_ve_no_borrow);
   assert(sub_v3_ve_with_borrow);
-
   assert(xor_v3_ve);
-
-  assert(bcd_i_v3);
-
-  assert(ldf_i_v4);
+  assertTerminates(final_ret);
 
   xprintf(testFailure ? RED "Tests Failed\r\n" RESET : BRIGHT_WHITE "All Passed\r\n" RESET);
 }

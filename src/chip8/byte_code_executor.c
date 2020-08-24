@@ -39,43 +39,6 @@ inline uint16_t readInstruction() {
   return r;
 }
 
-#define CH8_JP_NIB          0x1
-#define CH8_CALL_NIB        0x2
-#define CH8_SE_VX_BYTE_NIB  0x3
-#define CH8_SNE_VX_BYTE_NIB 0x4
-#define CH8_SE_VX_VY_NIB    0x5
-#define CH8_LD_VX_BYTE_NIB  0x6
-#define CH8_ADDVX_NIB       0x7
-#define CH8_0X8_SERIES_NIB  0x8
-#define CH8_SNE_VX_VY_NIB   0x9
-#define CH8_LD_I_ADDR_NIB   0xA
-#define CH8_RND_VX_NIB      0xC
-#define CH8_DRW_NIB         0xD
-#define CH8_0XE_SERIES_NIB  0xE
-#define CH8_CLS             0xE000
-#define CH8_RET             0xEE00
-#define CH8_0XF_SERIES_NIB  0xF
-
-#define CH8_SKP_VX_LOW_BYTE   0x9E
-#define CH8_SKNP_VX_LOW_BYTE  0xA1
-#define CH8_LD_ST_VX_LOW_BYTE 0x18
-#define CH8_LD_DT_VX_LOW_BYTE 0x15
-#define CH8_LD_VX_DT_LOW_BYTE 0x07
-#define CH8_ADD_I_VX_LOW_BYTE 0x1E
-#define CH8_LD_VX_I_LOW_BYTE  0x65
-#define CH8_LD_I_VX_LOW_BYTE  0x55
-#define CH8_BCD_I_VX_LOW_BYTE 0x33
-#define CH8_LDF_I_VX_LOW_BYTE 0x29
-#define CH8_KEY_VX_LOW_BYTE   0x0A
-
-#define CH8_LD_VX_VY_NIB  0x0
-#define CH8_AND_VX_VY_NIB 0x2
-#define CH8_XOR_VX_VY_NIB 0x3
-#define CH8_ADD_VX_VY_NIB 0x4
-#define CH8_SUB_VX_VY_NIB 0x5
-#define CH8_SHR_VX_VY_NIB 0x6
-#define CH8_SHL_VX_VY_NIB 0xE
-
 void initSystemState() {
   memset(registers, 0, sizeof(registers));
   registerI = 0;
@@ -95,11 +58,11 @@ bool executeSingleInstruction() {
   checkForKeyPresses();
 
   switch (currentInstruction) {
-  case CH8_CLS:
+  case 0xE000:
     cls();
     break;
 
-  case CH8_RET:
+  case 0xEE00:
     if (ret())
       return false;
     break;
@@ -113,144 +76,73 @@ bool executeSingleInstruction() {
     addr = (currentInstruction >> 8) + (((int)secondNibble) << 8);
 
     switch (firstNibble) {
-    case CH8_0X8_SERIES_NIB: {
-      switch (fourthNibble) {
-      case CH8_LD_VX_VY_NIB: {
-        ldVxVy();
-        break;
-      }
-
-      case CH8_AND_VX_VY_NIB: {
-        andVxVy();
-        break;
-      }
-
-      case CH8_SHR_VX_VY_NIB: {
-        shrVxVy();
-        break;
-      }
-
-      case CH8_SHL_VX_VY_NIB: {
-        shlVxVy();
-        break;
-      }
-
-      case CH8_ADD_VX_VY_NIB: {
-        addVxVy();
-        break;
-      }
-      case CH8_SUB_VX_VY_NIB: {
-        subVxVy();
-        break;
-      }
-
-      case CH8_XOR_VX_VY_NIB: {
-        xorVxVy();
-        break;
-      }
-      default:
-        goto badInstruction;
-      }
-      break;
-    }
-
-    case CH8_LD_VX_BYTE_NIB:
-      ldVxByte();
-      break;
-
-    case CH8_LD_I_ADDR_NIB:
-      ldIAddr();
-      break;
-
-    case CH8_DRW_NIB: {
-      draw();
-      break;
-    }
-
-    case CH8_CALL_NIB: {
-      call();
-      break;
-    }
-
-    case CH8_ADDVX_NIB: {
-      addVxByte();
-      break;
-    }
-
-    case CH8_SE_VX_BYTE_NIB: {
-      seVxByte();
-      break;
-    }
-
-    case CH8_SE_VX_VY_NIB: {
-      seVxVy();
-      break;
-    }
-
-    case CH8_SNE_VX_BYTE_NIB: {
-      sneVxByte();
-      break;
-    }
-
-    case CH8_SNE_VX_VY_NIB: {
-      sneVxVy();
-      break;
-    }
-
-    case CH8_JP_NIB: {
+    case 0x1: {
       jp();
       break;
     }
 
-    case CH8_RND_VX_NIB: {
-      rnd();
+    case 0x2: {
+      call();
       break;
     }
 
-    case CH8_0XF_SERIES_NIB: {
-      switch (lowByte) {
-      case CH8_LD_ST_VX_LOW_BYTE: {
-        ldStVx();
+    case 0x3: {
+      seVxByte();
+      break;
+    }
+
+    case 0x4: {
+      sneVxByte();
+      break;
+    }
+
+    case 0x5: {
+      seVxVy();
+      break;
+    }
+
+    case 0x6:
+      ldVxByte();
+      break;
+
+    case 0x7: {
+      addVxByte();
+      break;
+    }
+
+    case 0x8: {
+      switch (fourthNibble) {
+      case 0x0: {
+        ldVxVy();
         break;
       }
 
-      case CH8_LD_DT_VX_LOW_BYTE: {
-        ldDtVx();
+      case 0x2: {
+        andVxVy();
         break;
       }
 
-      case CH8_LD_VX_DT_LOW_BYTE: {
-        ldVxDt();
+      case 0x3: {
+        xorVxVy();
         break;
       }
 
-      case CH8_ADD_I_VX_LOW_BYTE: {
-        addIVx();
+      case 0x4: {
+        addVxVy();
+        break;
+      }
+      case 0x5: {
+        subVxVy();
         break;
       }
 
-      case CH8_LD_VX_I_LOW_BYTE: {
-        ldVxI();
+      case 0x6: {
+        shrVxVy();
         break;
       }
 
-      case CH8_LD_I_VX_LOW_BYTE: {
-        ldIVx();
-        break;
-      }
-
-      case CH8_BCD_I_VX_LOW_BYTE: {
-        bcdIVx();
-        break;
-      }
-
-      case CH8_LDF_I_VX_LOW_BYTE: {
-        ldfIVx();
-        break;
-      }
-
-      case CH8_KEY_VX_LOW_BYTE: {
-        keyVx();
+      case 0xE: {
+        shlVxVy();
         break;
       }
 
@@ -260,14 +152,33 @@ bool executeSingleInstruction() {
       break;
     }
 
-    case CH8_0XE_SERIES_NIB: {
+    case 0x9: {
+      sneVxVy();
+      break;
+    }
+
+    case 0xA:
+      ldIAddr();
+      break;
+
+    case 0xC: {
+      rnd();
+      break;
+    }
+
+    case 0xD: {
+      draw();
+      break;
+    }
+
+    case 0xE: {
       switch (lowByte) {
-      case CH8_SKP_VX_LOW_BYTE: {
+      case 0x9E: {
         skpVx();
         break;
       }
 
-      case CH8_SKNP_VX_LOW_BYTE: {
+      case 0xA1: {
         sknpVx();
         break;
       }
@@ -276,6 +187,60 @@ bool executeSingleInstruction() {
         goto badInstruction;
       }
 
+      break;
+    }
+
+    case 0xF: {
+      switch (lowByte) {
+
+      case 0x07: {
+        ldVxDt();
+        break;
+      }
+
+      case 0x0A: {
+        keyVx();
+        break;
+      }
+
+      case 0x15: {
+        ldDtVx();
+        break;
+      }
+
+      case 0x18: {
+        ldStVx();
+        break;
+      }
+
+      case 0x1E: {
+        addIVx();
+        break;
+      }
+
+      case 0x29: {
+        ldfIVx();
+        break;
+      }
+
+      case 0x33: {
+        bcdIVx();
+        break;
+      }
+
+      case 0x55: {
+        ldIVx();
+        break;
+      }
+
+      case 0x65: {
+        ldVxI();
+        break;
+      }
+
+      default:
+        goto badInstruction;
+      }
       break;
     }
 
