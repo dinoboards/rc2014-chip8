@@ -453,6 +453,27 @@ inline void assShr() {
 }
 
 /*
+8xyE - SHL Vx {, Vy}
+Set Vx = Vx SHL 1.
+
+If the most-significant bit of Vx is 1, then VF is set to 1, otherwise to 0. Then Vx is multiplied by 2.
+*/
+inline void assShl() {
+  getNext();
+  const byte x = expectToBeVRegister();
+
+  getNext();
+  if (currentIsComma()) {
+    getNext();
+    const byte y = expectToBeVRegister();
+
+    emitNibbles(0x8, x, y, 0xE);
+  } else {
+    emitNibbles(0x8, x, x, 0xE);
+  }
+}
+
+/*
 8xy5 - SUB Vx, Vy
 Set Vx = Vx - Vy, set VF = NOT borrow.
 
@@ -544,6 +565,7 @@ inline void assKey() {
   emit2Nibble(0xf, x);
   emitByte(0x0A);
 }
+
 void assemble(byte pc) __z88dk_fastcall {
   parseCount = pc;
   currentAddress = 0x200;
@@ -617,6 +639,10 @@ void assemble(byte pc) __z88dk_fastcall {
 
     case InstructionShr:
       assShr();
+      break;
+
+    case InstructionShl:
+      assShl();
       break;
 
     case InstructionSub:

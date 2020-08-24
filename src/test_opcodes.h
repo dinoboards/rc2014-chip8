@@ -31,3 +31,5 @@
 #define BCD_I_V3      0xF333
 #define LDF_I_V4      0xF429
 #define KEY_V5        0xF50A
+#define SHL_VA_VB     0x8ABE
+#define SHL_VA        0x8AAE

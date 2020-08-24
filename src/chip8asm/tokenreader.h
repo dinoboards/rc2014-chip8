@@ -46,6 +46,7 @@ typedef enum {
   InstructionRnd,
   InstructionAnd,
   InstructionShr,
+  InstructionShl,
   InstructionSub,
   InstructionXor,
   InstructionBcd,

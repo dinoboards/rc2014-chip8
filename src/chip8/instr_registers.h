@@ -26,6 +26,7 @@
 
 #define ldVxVy() (registers[secondNibble] = registers[thirdNibble])
 
+// TODO Quicks - set I to end value
 inline void ldVxI() {
   // clang-format off
   __asm
@@ -41,11 +42,11 @@ inline void ldVxI() {
     ld      b, 0
     ldir
 
-  	ex	    de, hl
-    ld	    hl, _registerI
-    ld	    (hl), e
-    inc	    hl
-    ld	    (hl), d
+  	// ex	    de, hl
+    // ld	    hl, _registerI
+    // ld	    (hl), e
+    // inc	    hl
+    // ld	    (hl), d
 
   __endasm;
   // clang-format on
@@ -65,10 +66,10 @@ inline void ldIVx() {
     ld      b, 0
     ldir
 
-    ld	    hl, _registerI
-    ld	    (hl), e
-    inc	    hl
-    ld	    (hl), d
+    // ld	    hl, _registerI
+    // ld	    (hl), e
+    // inc	    hl
+    // ld	    (hl), d
   __endasm;
   // clang-format on
 }
@@ -93,9 +94,15 @@ inline void andVxVy() {
   // clang-format on
 }
 
-#define shrVxVy()                                 \
-  registers[0xF] = registers[secondNibble] & 0x1; \
+inline void shrVxVy() {
+  registers[0xF] = registers[secondNibble] & 0x1;
   registers[secondNibble] = registers[secondNibble] >> 1;
+}
+
+inline void shlVxVy() {
+  registers[0xF] = !!(registers[secondNibble] & 0x80);
+  registers[secondNibble] = registers[secondNibble] << 1;
+}
 
 #define _addVxVy(x)                                  \
   uint16_t i##x = registers[secondNibble];           \

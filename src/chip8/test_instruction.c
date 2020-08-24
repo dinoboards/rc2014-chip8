@@ -52,7 +52,7 @@ void verify_ld_vb_i() {
   expectEqualBytes(registers[0xA], 11, "VA");
   expectEqualBytes(registers[0xB], 12, "VB");
   expectEqualBytes(registers[0xC], 99, "VC");
-  expectEqualInts(registerI, 0x600 + 12, "I");
+  // expectEqualInts(registerI, 0x600 + 12, "I"); //QUICKS
 }
 
 void setup_ld_v0_i() {
@@ -65,7 +65,7 @@ void setup_ld_v0_i() {
 void verify_ld_v0_i() {
   expectEqualBytes(registers[0], 55, "V0");
   expectEqualBytes(registers[1], 99, "V1");
-  expectEqualInts(registerI, 0x600 + 1, "I");
+  // expectEqualInts(registerI, 0x600 + 1, "I"); //quirks
 }
 
 void setup_ld_i_ve() {
@@ -93,7 +93,7 @@ void verify_ld_i_ve() {
   expectEqualBytes(pExpected[0xC], 22, "[i+0xC]");
   expectEqualBytes(pExpected[0xD], 23, "[i+0xD]");
   expectEqualBytes(pExpected[0xE], 24, "[i+0xE]");
-  expectEqualInts(registerI, 0x600 + 15, "I");
+  // expectEqualInts(registerI, 0x600 + 15, "I"); //quirks
 }
 
 void setup_call_1025() { programStorage[0] = invertByteOrder(CALL_1025); }
@@ -391,6 +391,32 @@ void verify_shr_va_vb_bit_unset() {
   expectEqualBytes(registers[0xF], 0x0, "VF");
 }
 
+void setup_shl_va_vb_bit_set() {
+  registers[0xA] = 0x81;
+  // registers[0xB] = 0x81;
+  registers[0xF] = 0x00;
+  programStorage[0] = invertByteOrder(SHL_VA_VB);
+}
+
+void verify_shl_va_vb_bit_set() {
+  expectEqualBytes(registers[0xA], 0x02, "VA");
+  // expectEqualBytes(registers[0xB], 0x81, "VB");
+  expectEqualBytes(registers[0xF], 0x1, "VF");
+}
+
+void setup_shl_va_vb_bit_unset() {
+  registers[0xA] = 0x40;
+  // registers[0xB] = 0x40;
+  registers[0xF] = 0x00;
+  programStorage[0] = invertByteOrder(SHL_VA_VB);
+}
+
+void verify_shl_va_vb_bit_unset() {
+  expectEqualBytes(registers[0xA], 0x80, "VA");
+  // expectEqualBytes(registers[0xB], 0x40, "VB");
+  expectEqualBytes(registers[0xF], 0x0, "VF");
+}
+
 void setup_sub_v3_ve_no_borrow() {
   registers[0x3] = 0x20;
   registers[0xE] = 0x10;
@@ -506,6 +532,9 @@ void main() {
 
   assert(shr_va_vb_bit_set);
   assert(shr_va_vb_bit_unset);
+
+  assert(shl_va_vb_bit_set);
+  assert(shl_va_vb_bit_unset);
 
   assert(sub_v3_ve_no_borrow);
   assert(sub_v3_ve_with_borrow);

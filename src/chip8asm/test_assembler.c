@@ -71,6 +71,10 @@ void main() {
   shouldAssemble("LD VB, [i]", LD_VB_I);
   shouldAssemble("AND VA, VB", AND_VA_VB);
   shouldAssemble("SHR VA, VB", SHR_VA_VB);
+
+  shouldAssemble("SHL VA, VB", SHL_VA_VB);
+  shouldAssemble("SHL VA", SHL_VA);
+
   shouldAssemble("SHR VD", SHR_VD);
   shouldAssemble("ADD V6, V1", ADD_V6_V1);
   shouldAssemble("SUB V3, VE", SUB_V3_VE);
