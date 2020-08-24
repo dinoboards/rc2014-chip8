@@ -55,20 +55,16 @@ chip8_serial = $(filter-out %byte_code_executor_tms.o %instr_tms_output.o, $(chi
 	@echo "\nBuilt ./bin/tstasmbl.com"
 
 ../bin/chip8.com: $(filter-out %test_instruction.o, $(chip8_tms))
-	@until mkdir /tmp/make.lock 2>/dev/null ; do sleep 0.5 ; done
-	@$(RELOCASSEMBLER) -o$(basename $<).bin -b $(ASS_FLAGS) memap.o $(filter-out memap.o,$^)
 	@mkdir -p ../bin
-	@mv memap.bin ../bin/chip8.com
+	$(RELOCASSEMBLER) -ochip8.com -b $(ASS_FLAGS) memap.o $(filter-out memap.o,$^)
+	mv chip8.com ../bin/
 	@echo "\nBuilt ./bin/chip8.com"
-	@rmdir /tmp/make.lock
 
 ../bin/chip8s.com: $(filter-out %test_instruction.o, $(chip8_serial))
-	@until mkdir /tmp/make.lock 2>/dev/null ; do sleep 0.5 ; done
-	@$(RELOCASSEMBLER) -o$(basename $<).bin -b $(ASS_FLAGS) memap.o $(filter-out memap.o,$^)
 	@mkdir -p ../bin
-	@mv memap.bin ../bin/chip8s.com
+	$(RELOCASSEMBLER) -ochip8s.com -b $(ASS_FLAGS) memap.o $(filter-out memap.o,$^)
+	mv chip8s.com ../bin/
 	@echo "\nBuilt ./bin/chip8s.com"
-	@rmdir /tmp/make.lock
 
 ../bin/tstinstr.com: $(filter-out $(exclude_from_tests),$(chip8_serial))
 	@$(RELOCASSEMBLER) -otstinstr.bin -b $(ASS_FLAGS) memap.o $(filter-out memap.o,$^)
@@ -101,4 +97,3 @@ deps:
 
 clean:
 	@git clean -xf
-	@rmdir /tmp/make.lock
