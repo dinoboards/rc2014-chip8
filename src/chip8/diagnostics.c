@@ -28,8 +28,8 @@ void updateMachineStateDisplay() {
 
   if (startDebugging) {
     xprintf("\033[%d;%dH I", 3, 80);
-    for (i = 0; i < 16; i++)
-      xprintf("\033[%d;%dH%p: %02X", 4 + i, 80, registerI + i, ((byte *)programStorage)[registerI + i]);
+    for (i = -16; i < 16; i++)
+      xprintf("\033[%d;%dH%p: %02X", 18 + i, 80, registerI + i, ((byte *)registerI)[i]);
 
     xprintf("\033[%d;%dHCode", 3, 90);
 

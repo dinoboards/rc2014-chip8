@@ -78,6 +78,7 @@ void main() {
   shouldAssemble("LD [I], VE", LD_I_VE);
   shouldAssemble("BCD [I], V3", BCD_I_V3);
   shouldAssemble("LDF I, V4", LDF_I_V4);
+  shouldAssemble("KEY V5", KEY_V5);
 
   shouldError("BAD INSTRUCTION", "Expected Instruction but found BAD");
   shouldError("LD BADREG, 123", "Expected one of Vx, I, [I], ST or DT but found BADREG");

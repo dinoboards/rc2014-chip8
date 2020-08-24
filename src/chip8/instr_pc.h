@@ -38,3 +38,11 @@
   if (!keyPressed || registers[secondNibble] != currentPressedKey) \
     chip8PC += 1;
 #endif
+
+inline void keyVx() {
+  if (keyPressed) {
+    registers[secondNibble] = currentPressedKey;
+    return;
+  }
+  chip8PC -= 1;
+}

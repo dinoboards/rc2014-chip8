@@ -19,6 +19,7 @@
 #define SNE_V0_V2     0x9020
 #define SKNP_VD       0xEDA1
 #define ADD_I_V9      0xF91E
+#define LD_V0_I       0xF065
 #define LD_VB_I       0xFB65
 #define AND_VA_VB     0x8AB2
 #define SHR_VA_VB     0x8AB6
@@ -28,4 +29,5 @@
 #define XOR_V3_VE     0x83E3
 #define LD_I_VE       0xFE55
 #define BCD_I_V3      0xF333
-#define LDF_I_V4 0xF429
+#define LDF_I_V4      0xF429
+#define KEY_V5        0xF50A

@@ -531,6 +531,19 @@ inline void assLdf() {
   emitByte(0x29);
 }
 
+/*
+Fx0A - Key Vx
+Wait for a key press, store the value of the key in Vx.
+
+All execution stops until a key is pressed, then the value of that key is stored in Vx.
+*/
+inline void assKey() {
+  getNext();
+  const byte x = expectToBeVRegister();
+
+  emit2Nibble(0xf, x);
+  emitByte(0x0A);
+}
 void assemble(byte pc) __z88dk_fastcall {
   parseCount = pc;
   currentAddress = 0x200;
@@ -620,6 +633,10 @@ void assemble(byte pc) __z88dk_fastcall {
 
     case InstructionLdf:
       assLdf();
+      break;
+
+    case InstructionKey:
+      assKey();
       break;
 
     default:

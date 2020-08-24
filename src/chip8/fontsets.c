@@ -3,7 +3,7 @@
 #include "datatypes.h"
 
 byte fonts[] = {
-
+    // clang-format off
   /* FONT 0 */
   0b11110000,
   0b10010000,
@@ -115,4 +115,5 @@ byte fonts[] = {
   0b11110000,
   0b10000000,
   0b10000000
+    // clang-format on
 };

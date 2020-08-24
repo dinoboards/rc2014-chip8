@@ -2,7 +2,21 @@
 
 bool appRunning = false;
 
-#define assert(a)                            \
+#define assert(a)                                  \
+  {                                                \
+    xprintf(#a "\r\n");                            \
+    soundTimer = 0;                                \
+    resetCaptureCommands();                        \
+    resetKeySimulator();                           \
+    initSystemState();                             \
+    setup_##a();                                   \
+    appRunning = executeSingleInstruction();       \
+    expectEqualBytes(appRunning, 1, "appRunning"); \
+    verify_##a();                                  \
+    xprintf("\r\n");                               \
+  }
+
+#define assertTerminates(a)                  \
   {                                          \
     xprintf(#a "\r\n");                      \
     soundTimer = 0;                          \

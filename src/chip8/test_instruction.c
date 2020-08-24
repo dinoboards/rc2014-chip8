@@ -1,6 +1,7 @@
 
 #include "byte_code_executor.h"
 #include "datatypes.h"
+#include "fontsets.h"
 #include "instr_serial_output.h"
 #include "stack.h"
 #include "systemstate.h"
@@ -11,7 +12,6 @@
 #include <stdarg.h>
 #include <stdio.h>
 #include <string.h>
-#include "fontsets.h"
 
 #include "test_helpers.h"
 
@@ -53,6 +53,19 @@ void verify_ld_vb_i() {
   expectEqualBytes(registers[0xB], 12, "VB");
   expectEqualBytes(registers[0xC], 99, "VC");
   expectEqualInts(registerI, 0x600 + 12, "I");
+}
+
+void setup_ld_v0_i() {
+  registerI = 0x600;
+  ((byte *)registerI)[0] = 55;
+  programStorage[0] = invertByteOrder(LD_V0_I);
+  registers[0x1] = 99;
+}
+
+void verify_ld_v0_i() {
+  expectEqualBytes(registers[0], 55, "V0");
+  expectEqualBytes(registers[1], 99, "V1");
+  expectEqualInts(registerI, 0x600 + 1, "I");
 }
 
 void setup_ld_i_ve() {
@@ -295,6 +308,17 @@ void setup_sknp_vd_no_keys_pressed() {
 
 void verify_sknp_vd_no_keys_pressed() { expectEqualPtrs(chip8PC, (uint16_t *)0x204, "PC"); }
 
+void setup_key_v5() {
+  registers[5] = 2;
+  simulateKey('2');
+  programStorage[0] = invertByteOrder(KEY_V5);
+}
+
+void verify_key_v5() {
+  expectEqualBytes(registers[5], 2, "V5");
+  expectEqualPtrs(chip8PC, (uint16_t *)0x202, "PC");
+}
+
 void setup_ld_st_v2() {
   registers[2] = 16;
   programStorage[0] = invertByteOrder(LD_ST_V2);
@@ -424,22 +448,21 @@ void setup_ldf_i_v4() {
   programStorage[0] = invertByteOrder(LDF_I_V4);
 }
 
-void verify_ldf_i_v4() {
-  expectEqualInts(registerI, (uint16_t)&fonts[5], "I");
-}
+void verify_ldf_i_v4() { expectEqualInts(registerI, (uint16_t)&fonts[5], "I"); }
 
 void main() {
   assert(ld_v1_10);
   assert(ld_v3_va); // LD_V3_VA)
   assert(ld_i_1234);
   assert(ld_vb_i);
+  assert(ld_v0_i);
   assert(ld_i_ve);
 
   assert(call_1025);
 
   assert(ret_from_subroutine);
 
-  assert(final_ret);
+  assertTerminates(final_ret);
 
   assert(add_ve_1);
   assert(add_i_v9);
@@ -455,6 +478,8 @@ void main() {
   assert(sne_v0_123_no_skips);
   assert(sne_v0_v2_skips);
   assert(sne_v0_v2_no_skips);
+
+  assert(key_v5);
 
   assert(cls);
 
