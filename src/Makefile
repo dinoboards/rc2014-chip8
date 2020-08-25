@@ -1,5 +1,5 @@
 .PHONY: all
-all: ../bin/chip8.com ../bin/chip8s.com ../bin/chip8asm.com ../bin/tstasmbl.com ../bin/tstinstr.com
+all: ../bin/chip8.com ../bin/chip8asm.com ../bin/tstasmbl.com ../bin/tstinstr.com
 
 RELOCASSEMBLER=node ./apploader.js --page-align
 ASSEMBLER=z80asm
@@ -34,13 +34,11 @@ ZCCFLAGS="${ZCCRELFLAGS}"
 include ./depends.d
 
 chip8asm_sources = $(wildcard ./chip8asm/*.c) $(wildcard ./chip8asm/*.asm)
-chip8asm_objects = crt.o memap.o cpm.o hbios_cio.o hbios.o memap.o nonreloccrt.o xstdio.o $(patsubst %.asm,%.o,$(patsubst %.c,%.o,$(chip8asm_sources)))
+chip8asm_objects = crt.o memap.o cpm.o cpmasm.o hbios_cio.o hbios.o memap.o nonreloccrt.o xstdio.o $(patsubst %.asm,%.o,$(patsubst %.c,%.o,$(chip8asm_sources)))
 exclude_from_tests = %main.o %filereader.o %exit.o %error.o %tty.o %keys.o %systimer.o %random.o %diagnostics.o
 
 chip8_sources = $(wildcard ./chip8/*.c) $(wildcard ./chip8/*.asm)
-chip8_objects = memap.o relocmem.asm crt.o reloccrt.o hbios.o hbios_cio.o hbios_sys.o cpm.o xstdio.o $(patsubst %.asm,%.o,$(patsubst %.c,%.o,$(chip8_sources)))
-chip8_tms = $(filter-out %byte_code_executor_serial.o %diagnostics.o %instr_serial_output.o, $(chip8_objects))
-chip8_serial = $(filter-out %byte_code_executor_tms.o %instr_tms_output.o, $(chip8_objects))
+chip8_objects = memap.o relocmem.asm crt.o reloccrt.o hbios.o hbios_cio.o hbios_sys.o cpm.o cpmasm.o xstdio.o $(patsubst %.asm,%.o,$(patsubst %.c,%.o,$(chip8_sources)))
 
 ../bin/chip8asm.com: $(filter-out %test_assembler.o, $(chip8asm_objects))
 	@$(ASSEMBLER) -o$(basename $<).bin -b $(ASS_FLAGS) memap.o $(filter-out memap.o,$^)
@@ -54,19 +52,13 @@ chip8_serial = $(filter-out %byte_code_executor_tms.o %instr_tms_output.o, $(chi
 	@mv tstasmbl_code_crt_init.bin ../bin/tstasmbl.com
 	@echo "\nBuilt ./bin/tstasmbl.com"
 
-../bin/chip8.com: $(filter-out %test_instruction.o, $(chip8_tms))
+../bin/chip8.com: $(filter-out %test_instruction.o, $(chip8_objects))
 	@mkdir -p ../bin
 	$(RELOCASSEMBLER) -ochip8.bin -b $(ASS_FLAGS) memap.o $(filter-out memap.o,$^)
 	mv chip8.bin ../bin/chip8.com
 	@echo "\nBuilt ./bin/chip8.com"
 
-../bin/chip8s.com: $(filter-out %test_instruction.o, $(chip8_serial))
-	@mkdir -p ../bin
-	$(RELOCASSEMBLER) -ochip8s.bin -b $(ASS_FLAGS) memap.o $(filter-out memap.o,$^)
-	mv chip8s.bin ../bin/chip8s.com
-	@echo "\nBuilt ./bin/chip8s.com"
-
-../bin/tstinstr.com: $(filter-out $(exclude_from_tests),$(chip8_serial))
+../bin/tstinstr.com: $(filter-out $(exclude_from_tests),$(chip8_objects))
 	@$(RELOCASSEMBLER) -otstinstr.bin -b $(ASS_FLAGS) memap.o $(filter-out memap.o,$^)
 	@mkdir -p ../bin
 	@mv tstinstr.bin ../bin/tstinstr.com

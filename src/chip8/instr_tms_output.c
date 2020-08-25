@@ -1,5 +1,5 @@
 
-#include "instr_output.h"
+#include "instr_tms_output.h"
 #include "systemstate.h"
 #include "tms.h"
 
@@ -125,39 +125,70 @@ void drawBytesOdd() {
 
 void drawSpriteEvenEven() __z88dk_fastcall {
   byte *p = (byte *)registerI;
-  for (byte i = 0; i < drawCommand.length; i += 2) {
+
+  if (drawCommand.length & 1) {
+    for (byte i = 0; i < drawCommand.length - 1; i += 2) {
+      topPixelData = *p++;
+      bottomPixelData = *p++;
+      drawBytesEven();
+      moveToNextRow();
+    }
+
     topPixelData = *p++;
-    bottomPixelData = *p++;
+    bottomPixelData = 0;
     drawBytesEven();
-    moveToNextRow();
-  }
+  } else
+    for (byte i = 0; i < drawCommand.length; i += 2) {
+      topPixelData = *p++;
+      bottomPixelData = *p++;
+      drawBytesEven();
+      moveToNextRow();
+    }
 }
 
 void drawSpriteOddEven() __z88dk_fastcall {
   byte *p = (byte *)registerI;
 
-  for (byte i = 0; i < drawCommand.length; i += 2) {
+  if (drawCommand.length & 1) {
+    for (byte i = 0; i < drawCommand.length - 1; i += 2) {
+      topPixelData = *p++;
+      bottomPixelData = *p++;
+      drawBytesOdd();
+      moveToNextRow();
+    }
+
     topPixelData = *p++;
-    bottomPixelData = *p++;
+    bottomPixelData = 0;
     drawBytesOdd();
-    moveToNextRow();
-  }
+  } else
+    for (byte i = 0; i < drawCommand.length; i += 2) {
+      topPixelData = *p++;
+      bottomPixelData = *p++;
+      drawBytesOdd();
+      moveToNextRow();
+    }
 }
 
 void drawSpriteEvenOdd() __z88dk_fastcall {
   byte *p = (byte *)registerI;
-  drawCommand.length--;
   topPixelData = 0;
   bottomPixelData = *p++;
   drawBytesEven();
   moveToNextRow();
 
-  for (byte i = 1; i < drawCommand.length; i += 2) {
-    topPixelData = *p++;
-    bottomPixelData = *p++;
-    drawBytesEven();
-    moveToNextRow();
-  }
+  if (drawCommand.length == 1)
+    return;
+
+  if (drawCommand.length >= 3)
+    for (byte i = 0; i < ((drawCommand.length - 1) & 0xFE); i += 2) {
+      topPixelData = *p++;
+      bottomPixelData = *p++;
+      drawBytesEven();
+      moveToNextRow();
+    }
+
+  if (drawCommand.length & 1)
+    return;
 
   topPixelData = *p;
   bottomPixelData = 0;
@@ -165,19 +196,25 @@ void drawSpriteEvenOdd() __z88dk_fastcall {
 }
 
 void drawSpriteOddOdd() __z88dk_fastcall {
-  drawCommand.length--;
   byte *p = (byte *)registerI;
   topPixelData = 0;
   bottomPixelData = *p++;
   drawBytesOdd();
   moveToNextRow();
 
-  for (byte i = 1; i < drawCommand.length; i += 2) {
-    topPixelData = *p++;
-    bottomPixelData = *p++;
-    drawBytesOdd();
-    moveToNextRow();
-  }
+  if (drawCommand.length == 1)
+    return;
+
+  if (drawCommand.length >= 3)
+    for (byte i = 0; i < ((drawCommand.length - 1) & 0xFE); i += 2) {
+      topPixelData = *p++;
+      bottomPixelData = *p++;
+      drawBytesOdd();
+      moveToNextRow();
+    }
+
+  if (drawCommand.length & 1)
+    return;
 
   topPixelData = *p;
   bottomPixelData = 0;
@@ -186,7 +223,7 @@ void drawSpriteOddOdd() __z88dk_fastcall {
 
 static tmsClearParams clsParams = {TMS_MD1_NAME_TABLE, 0x400, 0};
 
-void cls() { tmsClearData(&clsParams); }
+void tmsCls() { tmsClearData(&clsParams); }
 
 static void buildPatternData(byte *pData) {
   for (byte i = 0; i < 16; i++) {
@@ -228,7 +265,7 @@ void tmsInitPatterns() {
 static byte xx;
 static byte yy;
 
-void draw() {
+void tmsDraw() {
   drawCommand.length = fourthNibble;
   xx = registers[secondNibble];
   yy = registers[thirdNibble];
@@ -254,7 +291,7 @@ void draw() {
 
 static tmsClearParams colourParams = {TMS_MD1_COLOUR_TABLE, 32, (COL_DRKGREEN << 4) + COL_BLACK};
 
-void videoInit() {
+void tmsVideoInit() {
   tmsInit();
   tmsSetMode1();
   tmsClearData(&colourParams);

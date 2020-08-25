@@ -21,6 +21,14 @@ extern bool     keyPressed;
 extern byte soundTimer;
 extern byte delayTimer;
 
+typedef struct {
+  bool isSerial : 1;
+  bool isTms : 1;
+  bool isHelp : 1;
+} CliSwitches;
+
+extern CliSwitches CommandSwitches;
+
 #ifdef DIAGNOSTICS_ON
 extern bool startCounting;
 extern int  drawCount;

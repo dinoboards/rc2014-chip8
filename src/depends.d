@@ -8,11 +8,13 @@
  chip8/byte_code_executor.h datatypes.h chip8/systemstate.h xstdio.h \
  chip8/keys.h
 ./chip8/fontsets.asm: chip8/fontsets.c chip8/fontsets.h datatypes.h
+./chip8/instr_output.asm: chip8/instr_output.c chip8/instr_output.h \
+ chip8/instr_serial_output.h datatypes.h chip8/instr_tms_output.h \
+ chip8/systemstate.h
 ./chip8/instr_serial_output.asm: chip8/instr_serial_output.c \
- chip8/instr_serial_output.h datatypes.h chip8/instr_output.h \
- chip8/systemstate.h chip8/tty.h
-./chip8/instr_tms_output.asm: chip8/instr_tms_output.c chip8/instr_output.h \
- chip8/systemstate.h datatypes.h chip8/tms.h
+ chip8/instr_serial_output.h datatypes.h chip8/systemstate.h chip8/tty.h
+./chip8/instr_tms_output.asm: chip8/instr_tms_output.c chip8/instr_tms_output.h \
+ datatypes.h chip8/systemstate.h chip8/tms.h
 ./chip8/keys.asm: chip8/keys.c chip8/keys.h datatypes.h hbios.h
 ./chip8/key_monitor.asm: chip8/key_monitor.c charconstants.h chip8/keys.h \
  datatypes.h chip8/systemstate.h chip8/timers.h xstdio.h
@@ -68,5 +70,6 @@
 ./chip8asm/token_parser.asm: chip8asm/token_parser.c chip8asm/token_parser.h \
  datatypes.h chip8asm/error_reports.h chip8asm/expr.h hbios.h \
  chip8asm/tokenreader.h xstdio.h
+./cpm.asm: cpm.c cpm.h
 ./hbios.asm: hbios.c hbios.h
 ./xstdio.asm: xstdio.c xstdio.h datatypes.h hbios.h

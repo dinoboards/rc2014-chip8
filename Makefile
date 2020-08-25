@@ -39,11 +39,6 @@ chip8:
 	@mkdir -p ./bin
 	@$(MAKE) -C ./src ../bin/chip8.com -s -j 4
 
-.PHONY: chip8s
-chip8s:
-	@mkdir -p ./bin
-	@$(MAKE) -C ./src ../bin/chip8s.com -s -j 4
-
 .PHONY: clean
 clean:
 	@$(MAKE) -C ./src clean
@@ -67,32 +62,32 @@ regs:
 	@cp ./test-samples/regs.cas ./bin/
 	@rm -f ./test-samples/regs.ch8
 	@cd bin && cpm chip8asm regs.cas
-	@cd bin && cpm chip8s regs.ch8
+	@cd bin && cpm chip8 regs.ch8
 
 .PHONY: symbols
 symbols:
 	@cp ./test-samples/*.ch8 ./bin/
 	@cd bin && cpm chip8asm symbols.cas
-	@cd bin && cpm chip8s symbols.ch8
+	@cd bin && cpm "chip8 symbols.ch8"
 
 .PHONY: draw
 draw:
 	@cp ./test-samples/draw.cas ./bin/
 	@rm -f ./test-samples/draw.ch8
 	@cd bin && cpm chip8asm draw.cas
-	@cd bin && cpm chip8s draw.ch8
+	@cd bin && cpm "chip8 draw.ch8"
 
 .PHONY: c8pic
 c8pic:
 	@cp ./test-samples/*.ch8 ./bin/
-	@cd bin && cpm chip8s C8PIC.ch8
+	@cd bin && cpm "chip8 C8PIC.ch8"
 
 .PHONY: invaders
 invaders:
 	@cp ./test-samples/*.ch8 ./bin/
-	@cd bin && cpm chip8s invaders.ch8
+	@cd bin && cpm "chip8 invaders.ch8"
 
 .PHONY: chip8s
-tictac: chip8s
+tictac: chip8
 	@cp ./test-samples/TICTAC ./bin/
-	@cd bin && cpm chip8s TICTAC
+	@cd bin && cpm "chip8 TICTAC"

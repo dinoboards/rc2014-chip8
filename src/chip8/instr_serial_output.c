@@ -1,8 +1,8 @@
-#include "chip8/instr_serial_output.h"
-#include "chip8/instr_output.h"
-#include "chip8/systemstate.h"
-#include "chip8/tty.h"
+#include "instr_serial_output.h"
 #include "datatypes.h"
+#include "instr_serial_output.h"
+#include "systemstate.h"
+#include "tty.h"
 #include <string.h>
 
 byte videoMemory[64 * 32 / 8];
@@ -18,7 +18,7 @@ byte  current;
 byte  bitCounter;
 byte  startingY;
 
-void draw() {
+void serialDraw() {
   registers[0x0F] = 0;
   x = registers[secondNibble] & 63;
   startingY = registers[thirdNibble] & 31;
@@ -51,9 +51,9 @@ void draw() {
   }
 }
 
-void cls() {
+void serialCls() {
   memset(videoMemory, 0, sizeof(videoMemory));
   sendDrawCommands("\033[?25l\033[2J\033[0;0H");
 }
 
-void videoInit() { cls(); }
+void serialVideoInit() { serialCls(); }

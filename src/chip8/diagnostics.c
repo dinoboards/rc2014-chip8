@@ -10,7 +10,7 @@
 
 void updateMachineStateDisplay() {
 
-  byte i;
+  int i;
 
   xprintf("\033[%d;%dHPC: %p", 3, 70, chip8PC);
 

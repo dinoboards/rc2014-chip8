@@ -477,6 +477,8 @@ void setup_ldf_i_v4() {
 void verify_ldf_i_v4() { expectEqualInts(registerI, (uint16_t)&fonts[5], "I"); }
 
 void main() {
+  CommandSwitches.isSerial = true;
+
   assert(add_i_v9);
   assert(add_v6_v1_no_carry);
   assert(add_v6_v1_with_carry);

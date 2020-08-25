@@ -20,9 +20,11 @@ bool     keyPressed;
 byte soundTimer;
 byte delayTimer;
 
+CliSwitches CommandSwitches;
+
 #ifdef DIAGNOSTICS_ON
 /* diagnostic state */
 bool startCounting = false;
 int  drawCount = 0;
-bool startDebugging = false;
+bool startDebugging = true;
 #endif

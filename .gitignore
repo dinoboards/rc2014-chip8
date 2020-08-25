@@ -44,3 +44,5 @@ timers.asm
 exit.asm
 diagnostics.asm
 fontsets.asm
+cpm.asm
+instr_output.asm
