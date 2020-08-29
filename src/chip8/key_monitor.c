@@ -46,6 +46,6 @@ void checkForKeyPresses() {
   else if (currentPressedKey >= 'a' && currentPressedKey <= 'z')
     currentPressedKey += (-'a' + 10);
 
-  currentKeyTimeout = currentTimerTick + 2;
+  currentKeyTimeout = currentTimerTick + 10;
   keyPressed = true;
 }
