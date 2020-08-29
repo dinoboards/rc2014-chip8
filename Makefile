@@ -18,10 +18,7 @@ chip8asm:
 	@cp ./test-samples/*.cas ./bin/
 	@cp ./test-samples/*.ch8 ./bin/
 
-test:
-	@mkdir -p ./bin
-	@$(MAKE) -C ./src ../bin/tstinstr.com ../bin/tstasmbl.com -s -j 4
-	@(cd bin && cpm tstasmbl && cpm tstinstr)
+test: tstinstr tstasmbl
 
 tstinstr:
 	@mkdir -p ./bin
@@ -32,6 +29,7 @@ tstasmbl:
 	@mkdir -p ./bin
 	@$(MAKE) -C ./src ../bin/tstasmbl.com -s -j 4
 	@(cd bin && cpm tstasmbl)
+	@./assembler.tests.js
 
 
 .PHONY: chip8
@@ -73,7 +71,6 @@ symbols:
 .PHONY: draw
 draw:
 	@cp ./test-samples/draw.cas ./bin/
-	@rm -f ./test-samples/draw.ch8
 	@cd bin && cpm chip8asm draw.cas
 	@cd bin && cpm "chip8 draw.ch8"
 

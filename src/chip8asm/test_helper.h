@@ -121,3 +121,5 @@ void shouldEvaluateError(const char *expression, const char *expectedErrorMessag
 
   xprintf(RED "  Failed.  no error message reported.\r\n" RESET);
 }
+
+void setFileStream() {}
