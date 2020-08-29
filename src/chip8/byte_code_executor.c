@@ -54,10 +54,11 @@ bool executeSingleInstruction() {
 
   currentInstruction = readInstruction(); // high/low bytes in inverted order
 
-  for (uint16_t d = 0; d <= CommandSwitches.delayFactor; d++) {
-    manageTimers();
-    checkForKeyPresses();
-  }
+  for (uint16_t d = 0; d <= CommandSwitches.delayFactor; d++)
+    ;
+
+  manageTimers();
+  checkForKeyPresses();
 
   switch (currentInstruction) {
   case 0xE000:

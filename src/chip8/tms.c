@@ -42,7 +42,6 @@ void tmsInit() {
   // TODO : Check result for error
   hbSysBankCopy(&copyData);
 
-  tmsInitCode();
   tmsClearData(&clearParams);
 }
 

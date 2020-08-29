@@ -17,16 +17,6 @@ typedef struct {
 
 static bitsDrawCommand drawCommand;
 
-// clang-format off
-#define TMS_DELAY \
-__asm             \
-  PUSH  AF        \
-  POP   AF        \
-  NOP             \
-  NOP             \
-__endasm;
-// clang-format on
-
 void drawBits() {
   drawCommand.data = tmsReadByte();
 
@@ -42,7 +32,6 @@ void drawBits() {
       registers[0xF] = 1;
   }
 
-  TMS_DELAY
   tmsSetWriteAddr(drawCommand.tmsAddress);
 
   drawCommand.top = false;
@@ -57,8 +46,6 @@ void drawBits() {
     if ((drawCommand.data & 8) == 0)
       registers[0xF] = 1;
   }
-
-  TMS_DELAY
   tmsWriteByte(drawCommand.data);
 }
 

@@ -1,37 +1,12 @@
-	PUBLIC  _tmsSetMode1, _tmsInitCode, _tmsWriteData, _tmsReadData, _tmsClearData, _tmsReadByte, _tmsWriteByte, _tmsSetReadAddr, _tmsSetWriteAddr
+	PUBLIC  _tmsSetMode1, _tmsWriteData, _tmsReadData, _tmsClearData, _tmsReadByte, _tmsWriteByte, _tmsSetReadAddr, _tmsSetWriteAddr
 	EXTERN	_tmsRegisters, _tmsColour, _tmsIoPorts
 
 	SECTION CODE
 
-; void tmsInitCode()
-
-_tmsInitCode:	; self modify code to point to correct io ports for TMS chip
-	ld	a, (_tmsIoPorts)
-	ld	(DATREG1), a
-	ld	(DATREG2), a
-	ld	(DATREG3), a
-	ld	(DATREG4), a
-	ld	(DATREG5), a
-
-	ld	a, (_tmsIoPorts + 1)
-	ld	(CMDREG1), a
-	ld	(CMDREG2), a
-    	LD	(CMDREG3), A
-	LD	(CMDREG4), A
-	LD	(CMDREG5), A
-	LD	(CMDREG6), A
-	LD	(CMDREG7), A
-	LD	(CMDREG8), A
-	LD	(CMDREG9), A
-	LD	(CMDREG10), A
-	LD	(CMDREG11), A
-	LD	(CMDREG12), A
-    	RET
-
 ; void initMode1()
 tmsIoDelay:
-	push af
-	pop	af
+	PUSH 	AF
+	POP	AF
 	RET
 
 ; 27 TSTATES
@@ -40,170 +15,189 @@ tmsIoDelay:
 _tmsSetMode1:
 	LD	HL, _tmsRegisters
 	LD	B, 8
-	LD	C, 0x7F			;$80 - 1
+	LD	D, 0x7F			;$80 - 1
 
 INITMODE1:
+	LD	A, (_tmsIoPorts + 1)
+	LD	C, A
 	LD	A, (HL)
-	OUT	(0), A
-CMDREG1:	EQU	$-1
+
+	DI
+	OUT	(C), A
 	TMS_IODELAY
 	INC	HL
-	INC	C
-	LD	A, C
-	OUT	(0), A
-CMDREG2:	EQU	$-1
+	INC	D
+	LD	A, D
+	OUT	(C), A
 	TMS_IODELAY
+
 	DJNZ	INITMODE1
+	EI
 	RET
 
 ;extern void tmsWriteData(tmsDataParams* p) __z88dk_fastcall;
 _tmsWriteData:
-	LD	A, (hl)
-	inc	hl
-	OUT	(0), A
-CMDREG3:	EQU	$-1
-	LD	A, (hl)
-	inc	hl
+	LD	A, (_tmsIoPorts + 1)
+	LD	C, A
+	LD	A, (HL)
+	INC	HL
+	DI
+	OUT	(C), A
+	TMS_IODELAY
+
+	LD	A, (HL)
+	INC	HL
 	OR	$40
-	OUT	(0), A
-CMDREG4:	EQU	$-1
+	OUT	(C), A
+	TMS_IODELAY
 
-	ld	E, (hl)
-	inc	hl
-	ld	d, (hl)
-	inc	hl
-	ld	a, (hl)
-	inc	hl
-	ld	h, (hl)		; de is length
-	ld	l, a		; hl is source addres
+	LD	E, (HL)
+	INC	HL
+	LD	D, (HL)
+	INC	HL
+	LD	A, (HL)
+	INC	HL
+	LD	H, (HL)		; DE IS LENGTH
+	LD	L, A		; HL IS SOURCE ADDRES
 
-	LD	C, 0
-DATREG1:	EQU	$-1
+	LD	A, (_tmsIoPorts)
+	LD	C, A
 
 _tmsWriteData1:
 	LD	B, (hl)
-	inc	hl
+	INC	HL
 	OUT	(C), B
 	TMS_IODELAY
 	DEC	DE
 	LD	A, E
 	OR	D
 	JR	NZ, _tmsWriteData1
+	EI
 	RET
 
 
 ;extern void tmsReadData(tmsDataParams* p) __z88dk_fastcall;
 _tmsReadData:
-	LD	A, (hl)
-	inc	hl
-	OUT	(0), A
-CMDREG5:	EQU	$-1
-	LD	A, (hl)
-	inc	hl
+	LD	A, (_tmsIoPorts + 1)
+	LD	C, A
+	LD	A, (HL)
+	INC	HL
+	DI
+	OUT	(C), A
+	TMS_IODELAY
+
+	LD	A, (HL)
+	INC	HL
 	AND	$3F
-	OUT	(0), A
-CMDREG6:	EQU	$-1
+	OUT	(C), A
+	TMS_IODELAY
 
-	ld	E, (hl)
-	inc	hl
-	ld	d, (hl)
-	inc	hl
-	ld	a, (hl)
-	inc	hl
-	ld	h, (hl)		; de is length
-	ld	l, a		; hl is source addres
+	LD	E, (HL)
+	INC	HL
+	LD	D, (HL)
+	INC	HL
+	LD	A, (HL)
+	INC	HL
+	LD	H, (HL)		; DE IS LENGTH
+	LD	L, A		; HL IS SOURCE ADDRES
 
-	LD	C, 0
-DATREG2:	EQU	$-1
+	LD	A, (_tmsIoPorts)
+	LD	C, A
 
 _tmsReadData1:
-	IN	a, (C)
+	IN	A, (C)
 	TMS_IODELAY
-	LD	(hl), a
-	inc	hl
+	LD	(HL), A
+	INC	HL
 	DEC	DE
 	LD	A, E
 	OR	D
 	JR	NZ, _tmsReadData1
+	EI
 	RET
 
 
 ;extern void tmsClearData(tmsClearParams* p) __z88dk_fastcall;
 _tmsClearData:
-	LD	A, (hl)
-	inc	hl
-	OUT	(0), A
-CMDREG7:	EQU	$-1
-	LD	A, (hl)
-	inc	hl
+	LD	A, (_tmsIoPorts + 1)
+	LD	C, A
+	LD	A, (HL)
+	INC	HL
+	DI
+	OUT	(C), A
+	TMS_IODELAY
+
+	LD	A, (HL)
+	INC	HL
 	OR	$40
-	OUT	(0), A
-CMDREG8:	EQU	$-1
+	OUT	(C), A
+	TMS_IODELAY
 
-	ld	E, (hl)
-	inc	hl
-	ld	d, (hl)
-	inc	hl
-	ld	b, (hl)
+	LD	E, (HL)
+	INC	HL
+	LD	D, (HL)
+	INC	HL
+	LD	B, (HL)
 
-	LD	C, 0
-DATREG3:	EQU	$-1
+	LD	A, (_tmsIoPorts)
+	LD	C, A
 
 _tmsClearData1:
-	inc	hl
+	INC	HL
 	OUT	(C), B
 	TMS_IODELAY
 	DEC	DE
 	LD	A, E
 	OR	D
 	JR	NZ, _tmsClearData1
-	RET
 
+	EI
+	RET
 
 
 
 ;extern void tmsSetWriteAddr(void*) __z88dk_fastcall;
 
 _tmsSetWriteAddr:
-	di
+	LD	A, (_tmsIoPorts + 1)
+	LD	C, A
 	LD	A, l
-	OUT	(0), A
-CMDREG9:	EQU	$-1
-	TMS_IODELAY
-	LD	A, h
+	DI
+	OUT	(C), A
+	LD	A, H
 	OR	$40
-	OUT	(0), A
-CMDREG10:	EQU	$-1
+	OUT	(C), A
+	EI
 	RET
 
 
 ;extern void tmsSetReadAddr(void*) __z88dk_fastcall;
 _tmsSetReadAddr:
-	LD	A, l
-	OUT	(0), A
-CMDREG11:	EQU	$-1
-	TMS_IODELAY
-	LD	A, h
+	LD	A, (_tmsIoPorts + 1)
+	LD	C, A
+	LD	A, L
+	DI
+	OUT	(C), A
+	LD	A, H
 	AND	$3F
-	OUT	(0), A
-CMDREG12:	EQU	$-1
+	OUT	(C), A
+	EI
 	RET
 
 
 ; extern void tmsWriteByte(byte) __z88dk_fastcall;
-
 _tmsWriteByte:
-	ld	a, l
-	OUT	(0), a
-DATREG4:	EQU	$-1
+	LD	A, (_tmsIoPorts)
+	LD	C, A
+	LD	A, L
+	OUT	(C), A
 	RET
 
 ; extern byte tmsReadByte() __z88dk_fastcall;
-
 _tmsReadByte:
-	IN	a, (0)
-DATREG5:	EQU	$-1
-	ld	l, a
+	LD	A, (_tmsIoPorts)
+	LD	C, A
+	IN	L, (C)
 	RET
 
 	SECTION IGNORE
