@@ -33,9 +33,6 @@ void parseCommandLine() {
     xprintf("Error: Must dual output not supported.  Only one of --SERIAL (-S) or --TMS (-T) supported\r\n");
     exit(0);
   }
-
-  if (!CommandSwitches.isSerial && !CommandSwitches.isTms && !CommandSwitches.isHelp)
-    CommandSwitches.isSerial = true;
 }
 
 void main(MainArguments *pargs) __z88dk_fastcall {

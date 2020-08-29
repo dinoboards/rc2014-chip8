@@ -6,5 +6,6 @@ extern void expectedEqualSign();
 extern void unexpectedToken();
 extern void unexpectedEntry();
 extern void expectedColour();
+extern void tmsDriverNotFound();
 
 #endif

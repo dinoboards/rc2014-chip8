@@ -81,3 +81,5 @@ byte chip8Rand() { return nextRandomNumber; }
 inline void simulateRandomNumber(byte b) { nextRandomNumber = b; }
 
 void updateMachineStateDisplay() {}
+
+void tmsDriverNotFound() {}

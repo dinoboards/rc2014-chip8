@@ -1,7 +1,9 @@
 #include "instr_output.h"
+#include "error_reports.h"
 #include "instr_serial_output.h"
 #include "instr_tms_output.h"
 #include "systemstate.h"
+#include "tms.h"
 
 void draw() {
   if (CommandSwitches.isSerial)
@@ -18,8 +20,21 @@ void cls() {
 }
 
 void videoInit() {
-  if (CommandSwitches.isSerial)
+  if (CommandSwitches.isSerial) {
     serialVideoInit();
-  else
+    return;
+  }
+
+  if (tmsSearchDriver()) {
+    CommandSwitches.isTms = true;
     tmsVideoInit();
+    return;
+  }
+
+  if (CommandSwitches.isTms)
+    tmsDriverNotFound();
+
+  CommandSwitches.isSerial = true;
+
+  serialVideoInit();
 }

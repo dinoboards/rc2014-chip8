@@ -26,3 +26,8 @@ void expectedColour() {
   xprintf("\r\n%s\r\nExpected a colour reference but found '%s'\r\n at line number %d\r\n", token.currentLine, token.value, lineNumber);
   exit(1);
 }
+
+void tmsDriverNotFound() {
+  xprintf("TMS driver not found\r\n");
+  exit(1);
+}

@@ -22,10 +22,12 @@ static tmsClearParams clearParams = {0x0000, 16 * 1024, 0};
 
 void tmsRegisterColours(uint8_t bkColour, uint8_t fgColour) { tmsRegisters[7] = fgColour * (byte)16 + bkColour; }
 
+static uint8_t tmsDriverIndex = 0;
+
 void tmsInit() {
   hbiosDriverEntry data;
   data.func = 0;
-  data.unit = 0;
+  data.unit = tmsDriverIndex;
 
   // TODO : Check result for error
   hbSysGetVda(&data);
@@ -42,4 +44,19 @@ void tmsInit() {
 
   tmsInitCode();
   tmsClearData(&clearParams);
+}
+
+bool tmsSearchDriver() {
+  hbiosVdaDev result;
+  result.unitId = 0;
+  uint8_t status = hbVdaDev(&result);
+  while (status == 0 && result.devType != VDADEV_TMS) {
+    result.unitId++;
+    status = hbVdaDev(&result);
+  }
+
+  if (status == 0)
+    tmsDriverIndex = result.devNumber;
+
+  return (status == 0);
 }
