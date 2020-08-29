@@ -1,4 +1,5 @@
 #include "byte_code_executor.h"
+#include "configuration_loader.h"
 #include "cpm.h"
 #include "datatypes.h"
 #include "hbios.h"
@@ -12,13 +13,6 @@
 #include <string.h>
 
 MainArguments *mainArguments;
-
-void chkMsg(uint16_t result, const char *msg) {
-  if (result == 0xFF) {
-    xprintf("%s\r\n", msg);
-    exit(1);
-  }
-}
 
 bool strFind(const char *searchString) __z88dk_fastcall {
   char **p = mainArguments->argv;
@@ -47,6 +41,8 @@ void parseCommandLine() {
 void main(MainArguments *pargs) __z88dk_fastcall {
   mainArguments = pargs;
   parseCommandLine();
+
+  applyConfiguration(pargs->argv[0]);
 
   videoInit();
 

@@ -46,9 +46,20 @@ To run the test suites
 
 ## chip8 - interpreter
 
-`chip8.com mygame.ch8`
+This is the main interpreter for running a CHIP-8 game rom.
 
-- goal to run binary unit
+
+Command Line Options:
+```
+chip8 <gamefile> [-T|--TMS] [-S|--SERIAL]
+
+  -T, --TMS     Run game on a TMS (requires TMS card and HBIOS support)
+  -S, --SERIAL  (default) Run game on serial.
+```
+
+Example:
+
+`chip8 mygame.ch8`
 
 ### See Also
 

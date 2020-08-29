@@ -46,7 +46,6 @@ _fOpen:
 	LD	C, F_OPEN		; CPM Open File function
 	CALL	BDOS
 	LD	L, A
-	LD	H, 0
 	POP	IX
 	RET
 

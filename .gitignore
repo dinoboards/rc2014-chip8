@@ -34,7 +34,6 @@ tty.asm
 node_modules
 package-log.json
 package.json
-spike*
 key_monitor.asm
 keys.asm
 systimer.asm
@@ -46,3 +45,5 @@ diagnostics.asm
 fontsets.asm
 cpm.asm
 instr_output.asm
+configreader.asm
+configuration_loader.asm

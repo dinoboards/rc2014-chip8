@@ -29,6 +29,8 @@ typedef struct {
 
 extern CliSwitches CommandSwitches;
 
+extern byte gameColours[2];
+
 #ifdef DIAGNOSTICS_ON
 extern bool startCounting;
 extern int  drawCount;

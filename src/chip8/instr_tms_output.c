@@ -293,6 +293,8 @@ static tmsClearParams colourParams = {TMS_MD1_COLOUR_TABLE, 32, (COL_DRKGREEN <<
 
 void tmsVideoInit() {
   tmsInit();
+  tmsRegisterColours(gameColours[0], gameColours[1]);
+  colourParams.data = (gameColours[1] << 4) + gameColours[0];
   tmsSetMode1();
   tmsClearData(&colourParams);
   tmsInitPatterns();

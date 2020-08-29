@@ -34,11 +34,12 @@ ZCCFLAGS="${ZCCRELFLAGS}"
 include ./depends.d
 
 chip8asm_sources = $(wildcard ./chip8asm/*.c) $(wildcard ./chip8asm/*.asm)
-chip8asm_objects = crt.o memap.o cpm.o cpmasm.o hbios_cio.o hbios.o memap.o nonreloccrt.o xstdio.o $(patsubst %.asm,%.o,$(patsubst %.c,%.o,$(chip8asm_sources)))
+chip8asm_objects = crt.o memap.o cpm.o cpmasm.o hbios_cio.o hbios.o memap.o nonreloccrt.o xstdio.o chartesters.o $(patsubst %.asm,%.o,$(patsubst %.c,%.o,$(chip8asm_sources)))
 exclude_from_tests = %main.o %filereader.o %exit.o %error.o %tty.o %keys.o %systimer.o %random.o %diagnostics.o
+exclude_from_tstinstr = $(exclude_from_tests) %configreader.o %configuration_loader.o %error_reports.o
 
 chip8_sources = $(wildcard ./chip8/*.c) $(wildcard ./chip8/*.asm)
-chip8_objects = memap.o relocmem.asm crt.o reloccrt.o hbios.o hbios_cio.o hbios_sys.o cpm.o cpmasm.o xstdio.o $(patsubst %.asm,%.o,$(patsubst %.c,%.o,$(chip8_sources)))
+chip8_objects = memap.o relocmem.asm crt.o reloccrt.o hbios.o hbios_cio.o hbios_sys.o cpm.o cpmasm.o xstdio.o chartesters.o $(patsubst %.asm,%.o,$(patsubst %.c,%.o,$(chip8_sources)))
 
 ../bin/chip8asm.com: $(filter-out %test_assembler.o, $(chip8asm_objects))
 	@$(ASSEMBLER) -o$(basename $<).bin -b $(ASS_FLAGS) memap.o $(filter-out memap.o,$^)
@@ -58,7 +59,7 @@ chip8_objects = memap.o relocmem.asm crt.o reloccrt.o hbios.o hbios_cio.o hbios_
 	mv chip8.bin ../bin/chip8.com
 	@echo "\nBuilt ./bin/chip8.com"
 
-../bin/tstinstr.com: $(filter-out $(exclude_from_tests),$(chip8_objects))
+../bin/tstinstr.com: $(filter-out $(exclude_from_tstinstr),$(chip8_objects))
 	@$(RELOCASSEMBLER) -otstinstr.bin -b $(ASS_FLAGS) memap.o $(filter-out memap.o,$^)
 	@mkdir -p ../bin
 	@mv tstinstr.bin ../bin/tstinstr.com

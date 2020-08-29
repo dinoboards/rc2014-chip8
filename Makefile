@@ -89,5 +89,5 @@ invaders:
 
 .PHONY: chip8s
 tictac: chip8
-	@cp ./test-samples/TICTAC ./bin/
+	@cp ./test-samples/TICTAC* ./bin/
 	@cd bin && cpm "chip8 TICTAC"

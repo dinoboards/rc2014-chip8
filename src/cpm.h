@@ -1,4 +1,8 @@
+#ifndef __CPM
+#define __CPM
+
 #include <stdint.h>
+#include <stdlib.h>
 
 typedef struct FCBStruct {
   uint8_t       dr;
@@ -21,14 +25,16 @@ typedef struct CommandLineTailStruct {
 
 extern void chk(int f) __z88dk_fastcall;
 
-extern int  fMake(const FCB *fcb) __z88dk_fastcall;
-extern int  fRead(const FCB *fcb) __z88dk_fastcall;
-extern int  fDmaOff(void *dest) __z88dk_fastcall;
-extern int  fOpen(const FCB *fcb) __z88dk_fastcall;
-extern int  fSize(const FCB *fcb) __z88dk_fastcall;
-extern int  fWrite(const FCB *fcb) __z88dk_fastcall;
-extern int  fClose(const FCB *fcb) __z88dk_fastcall;
-extern void captureCommandLine(char *pBuffer) __z88dk_fastcall;
+extern int     fMake(const FCB *fcb) __z88dk_fastcall;
+extern int     fRead(const FCB *fcb) __z88dk_fastcall;
+extern int     fDmaOff(void *dest) __z88dk_fastcall;
+extern uint8_t fOpen(const FCB *fcb) __z88dk_fastcall;
+extern int     fSize(const FCB *fcb) __z88dk_fastcall;
+extern int     fWrite(const FCB *fcb) __z88dk_fastcall;
+extern int     fClose(const FCB *fcb) __z88dk_fastcall;
+extern void    captureCommandLine(char *pBuffer) __z88dk_fastcall;
+extern void    resetFCB(const char *filename, const char *type, FCB *fcb);
+extern void    chkMsg(uint16_t result, const char *msg);
 
 #define defaultFCB      ((FCB *)0x5C)
 #define commandLineTail ((const CommandLineTail *)0x80)
@@ -37,3 +43,5 @@ typedef struct {
   uint16_t argc;
   char *   argv[];
 } MainArguments;
+
+#endif

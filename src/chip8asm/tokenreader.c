@@ -38,11 +38,11 @@ static inline char getNext() {
     lineNumber++;
     token.currentLine[0] = '\0';
     currentLineIndex = 0;
-  } else {
-    if (result != '\r' && result != '\n') {
-      token.currentLine[currentLineIndex++] = result;
-      token.currentLine[currentLineIndex] = '\0';
-    }
+  }
+
+  if (result != '\r' && result != '\n') {
+    token.currentLine[currentLineIndex++] = result;
+    token.currentLine[currentLineIndex] = '\0';
   }
 
   newLineStarted = result == '\n';

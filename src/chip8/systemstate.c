@@ -1,5 +1,6 @@
 #include "systemstate.h"
 #include "datatypes.h"
+#include "tms.h"
 #include <stdbool.h>
 
 uint16_t *chip8PC;
@@ -21,6 +22,8 @@ byte soundTimer;
 byte delayTimer;
 
 CliSwitches CommandSwitches;
+
+byte gameColours[2] = {COL_BLACK, COL_DRKGREEN};
 
 #ifdef DIAGNOSTICS_ON
 /* diagnostic state */

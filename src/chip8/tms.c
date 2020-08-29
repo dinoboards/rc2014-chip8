@@ -20,6 +20,8 @@ byte tmsRegisters[8] = {
 
 static tmsClearParams clearParams = {0x0000, 16 * 1024, 0};
 
+void tmsRegisterColours(uint8_t bkColour, uint8_t fgColour) { tmsRegisters[7] = fgColour * (byte)16 + bkColour; }
+
 void tmsInit() {
   hbiosDriverEntry data;
   data.func = 0;

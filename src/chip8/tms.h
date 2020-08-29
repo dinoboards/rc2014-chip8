@@ -35,6 +35,7 @@ extern tms9918IoPorts tmsIoPorts;
 extern void tmsInit();
 extern void tmsInitCode();
 extern void tmsSetMode1();
+extern void tmsRegisterColours(uint8_t bkColour, uint8_t fgColour);
 
 typedef struct {
   uint16_t tmsAddress;
