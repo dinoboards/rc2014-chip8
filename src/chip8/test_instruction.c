@@ -363,6 +363,14 @@ void setup_and_va_vb() {
 
 void verify_and_va_vb() { expectEqualBytes(registers[0xA], 0x80, "VA"); }
 
+void setup_or_v7_v2() {
+  registers[0x7] = 0x10;
+  registers[0x2] = 0x01;
+  programStorage[0] = invertByteOrder(OR_V7_V2);
+}
+
+void verify_or_v7_v2() { expectEqualBytes(registers[0x7], 0x11, "V7"); }
+
 // SHR Quicks issues - see https://www.reddit.com/r/EmuDev/comments/72dunw/chip8_8xy6_help/dno06ix/?utm_source=reddit&utm_medium=web2x&context=3
 
 void setup_shr_va_vb_bit_set() {
@@ -484,6 +492,7 @@ void main() {
   assert(add_v6_v1_with_carry);
   assert(add_ve_1);
   assert(and_va_vb);
+  assert(or_v7_v2);
   assert(bcd_i_v3);
   assert(call_1025);
   assert(cls);

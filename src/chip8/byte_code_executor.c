@@ -117,6 +117,11 @@ bool executeSingleInstruction() {
         break;
       }
 
+      case 0x1: {
+        orVxVy();
+        break;
+      }
+
       case 0x2: {
         andVxVy();
         break;

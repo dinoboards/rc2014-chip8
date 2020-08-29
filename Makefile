@@ -84,7 +84,13 @@ invaders:
 	@cp ./test-samples/*.ch8 ./bin/
 	@cd bin && cpm "chip8 invaders.ch8"
 
-.PHONY: chip8s
+.PHONY: tictac
 tictac: chip8
 	@cp ./test-samples/TICTAC* ./bin/
 	@cd bin && cpm "chip8 TICTAC"
+
+
+.PHONY: blinky
+blinky: chip8
+	@cp ./test-samples/BLINKY* ./bin/
+	@cd bin && cpm "chip8 BLINKY"

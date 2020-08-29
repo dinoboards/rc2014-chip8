@@ -51,6 +51,7 @@ static void testForInstructions() {
   tokenMap("sknp", InstructionSknp);
   tokenMap("rnd", InstructionRnd);
   tokenMap("and", InstructionAnd);
+  tokenMap("or", InstructionOr);
   tokenMap("shr", InstructionShr);
   tokenMap("shl", InstructionShl);
   tokenMap("sub", InstructionSub);

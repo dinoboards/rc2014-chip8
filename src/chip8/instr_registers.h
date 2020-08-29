@@ -94,6 +94,26 @@ inline void andVxVy() {
   // clang-format on
 }
 
+inline void orVxVy() {
+  // clang-format off
+  __asm
+    ld      a, (_secondNibble)
+    ld      hl, _registers
+    ld      c, a
+    ld      b, 0
+    add     hl, bc
+    ex      de, hl
+    ld      hl, _registers
+    ld      a, (_thirdNibble)
+    ld      c, a
+    add     hl, bc
+    ld      a, (de)
+    or     a, (hl)
+    ld      (de), a
+  __endasm;
+  // clang-format on
+}
+
 inline void shrVxVy() {
   registers[0xF] = registers[secondNibble] & 0x1;
   registers[secondNibble] = registers[secondNibble] >> 1;
