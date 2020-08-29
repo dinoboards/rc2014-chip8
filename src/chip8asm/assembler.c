@@ -362,6 +362,22 @@ The interpreter sets the program counter to nnn.
 */
 inline void assJp() {
   getNext();
+
+  if (currentIsVRegister()) {
+    const byte x = expectToBeVRegister();
+    if (x != 0)
+      expectedError("V0");
+
+    getNext();
+    expectToBeComma();
+
+    getNext();
+    const uint16_t addr = expectToBeInt();
+
+    emit(0xB000 | addr);
+    return;
+  }
+
   const uint16_t addr = expectToBeInt();
 
   emit(0x1000 | addr);

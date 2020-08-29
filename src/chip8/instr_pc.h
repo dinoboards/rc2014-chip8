@@ -22,6 +22,8 @@
 
 #define jp() chip8PC = (uint16_t *)addr;
 
+inline void jpV0Addr() { chip8PC = (uint16_t *)(addr + registers[0]); }
+
 #define skpVx()                                                   \
   if (keyPressed && registers[secondNibble] == currentPressedKey) \
     chip8PC += 1;

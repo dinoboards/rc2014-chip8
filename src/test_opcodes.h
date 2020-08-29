@@ -18,6 +18,7 @@
 #define SHR_VA_VB     0x8AB6
 #define SHR_VD        0x8DD6
 #define LD_I_1234     0xA4D2
+#define JP_V0_1024    0xB400
 #define RND_VE_15     0xCE0F
 #define DRAW_V2_V3_1  0xD231
 #define DRAW_V2_V3_11 0xD23B

@@ -260,6 +260,13 @@ void setup_jp_1026() { programStorage[0] = invertByteOrder(JP_1026); }
 
 void verify_jp_1026() { expectEqualPtrs(chip8PC, (uint16_t *)0x402, "PC"); }
 
+void setup_jp_v0_1024() {
+  registers[0] = 3;
+  programStorage[0] = invertByteOrder(JP_V0_1024);
+}
+
+void verify_jp_v0_1024() { expectEqualPtrs(chip8PC, (uint16_t *)0x403, "PC"); }
+
 void setup_skp_v3_skips() {
   registers[3] = 0xA;
   simulateKey('A');
@@ -562,6 +569,8 @@ void main() {
   assert(xor_v3_ve);
   assert(subn_v2_ve_no_borrow);
   assert(subn_v2_ve_with_borrow);
+  assert(jp_v0_1024);
+
   assertTerminates(final_ret);
 
   xprintf(testFailure ? RED "Tests Failed\r\n" RESET : BRIGHT_WHITE "All Passed\r\n" RESET);

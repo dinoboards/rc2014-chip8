@@ -174,7 +174,9 @@ bool executeSingleInstruction() {
       ldIAddr();
       break;
 
-      // case 0xB:
+    case 0xB:
+      jpV0Addr();
+      break;
 
     case 0xC: {
       rnd();
