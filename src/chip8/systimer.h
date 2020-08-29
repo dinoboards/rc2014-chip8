@@ -5,5 +5,6 @@
 #include "datatypes.h"
 
 extern uint16_t getSysTimer();
+extern bool     sysTimerSearchDriver();
 
 #endif

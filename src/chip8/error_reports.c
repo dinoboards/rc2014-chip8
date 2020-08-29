@@ -31,3 +31,5 @@ void tmsDriverNotFound() {
   xprintf("TMS driver not found\r\n");
   exit(1);
 }
+
+void warnNoTimerFound() { xprintf("Warning: No timer found.\r\n"); }

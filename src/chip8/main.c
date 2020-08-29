@@ -2,10 +2,12 @@
 #include "configuration_loader.h"
 #include "cpm.h"
 #include "datatypes.h"
+#include "error_reports.h"
 #include "hbios.h"
 #include "instr_output.h"
 #include "random.h"
 #include "systemstate.h"
+#include "systimer.h"
 #include "tms.h"
 #include "xstdio.h"
 #include <stdarg.h>
@@ -36,6 +38,9 @@ void parseCommandLine() {
 }
 
 void main(MainArguments *pargs) __z88dk_fastcall {
+  if (!sysTimerSearchDriver())
+    warnNoTimerFound();
+
   mainArguments = pargs;
   parseCommandLine();
 
