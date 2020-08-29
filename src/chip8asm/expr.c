@@ -7,9 +7,8 @@
 #include "error_reports.h"
 #include "exit.h"
 #include "labels.h"
+#include "xstdlib.h"
 #include <stdio.h>
-
-long xstrtol(const char *str, char **endptr, int base);
 
 #define MAX_WORKING_BUFFER 64
 static char        token[MAX_WORKING_BUFFER];

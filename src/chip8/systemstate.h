@@ -22,14 +22,17 @@ extern byte soundTimer;
 extern byte delayTimer;
 
 typedef struct {
-  bool isSerial : 1;
-  bool isTms : 1;
-  bool isHelp : 1;
+  bool     isSerial : 1;
+  bool     isTms : 1;
+  bool     isHelp : 1;
+  uint16_t delayFactor;
 } CliSwitches;
 
 extern CliSwitches CommandSwitches;
 
 extern byte gameColours[2];
+
+extern uint16_t delayFactor;
 
 #ifdef DIAGNOSTICS_ON
 extern bool startCounting;

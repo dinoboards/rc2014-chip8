@@ -51,10 +51,12 @@ This is the main interpreter for running a CHIP-8 game rom.
 
 Command Line Options:
 ```
-chip8 <gamefile> [-T|--TMS] [-S|--SERIAL]
+chip8 <gamefile> [-T|--TMS] [-S|--SERIAL] [-X <number>]
 
   -T, --TMS     Run game on a TMS (requires TMS card and HBIOS support)
   -S, --SERIAL  (default) Run game on serial.
+  -X <number>   Same speed adjuster - larger numbers slower game
+
 ```
 
 Example:

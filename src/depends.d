@@ -30,7 +30,7 @@
 ./chip8/main.asm: chip8/main.c chip8/byte_code_executor.h datatypes.h \
  chip8/configuration_loader.h cpm.h chip8/error_reports.h hbios.h \
  chip8/instr_output.h chip8/random.h chip8/systemstate.h chip8/systimer.h \
- chip8/tms.h
+ chip8/tms.h xstdlib.h
 ./chip8/random.asm: chip8/random.c chip8/random.h datatypes.h chip8/systimer.h
 ./chip8/stack.asm: chip8/stack.c chip8/stack.h datatypes.h chip8/systemstate.h \
  xstdio.h
@@ -60,7 +60,7 @@
 ./chip8asm/exit.asm: chip8asm/exit.c
 ./chip8asm/expr.asm: chip8asm/expr.c chip8asm/expr.h chartesters.h datatypes.h \
  chip8asm/error.h chip8asm/error_reports.h chip8asm/exit.h \
- chip8asm/labels.h
+ chip8asm/labels.h xstdlib.h
 ./chip8asm/labels.asm: chip8asm/labels.c chip8asm/labels.h datatypes.h \
  chip8asm/error_reports.h chip8asm/systemstate.h xstdio.h
 ./chip8asm/main.asm: chip8asm/main.c chip8asm/assembler.h datatypes.h \

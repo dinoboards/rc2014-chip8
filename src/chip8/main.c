@@ -9,6 +9,7 @@
 #include "systemstate.h"
 #include "systimer.h"
 #include "tms.h"
+#include "xstdlib.h"
 #include <stdarg.h>
 #include <stdio.h>
 #include <string.h>
@@ -19,15 +20,22 @@ bool strFind(const char *searchString) __z88dk_fastcall {
   char **p = mainArguments->argv;
   for (uint8_t i = 0; i < mainArguments->argc; i++) {
     if (strstr(*p++, searchString))
-      return true;
+      return i;
   }
-  return false;
+  return 0;
 }
 
 void parseCommandLine() {
   CommandSwitches.isHelp = strFind("-?") || strFind("-H") || strFind("--HELP");
   CommandSwitches.isSerial = !CommandSwitches.isHelp && (strFind("-S") || strFind("--SERIAL"));
   CommandSwitches.isTms = !CommandSwitches.isHelp && (strFind("-T") || strFind("--TMS"));
+
+  uint8_t i = strFind("-X");
+  if (i) {
+    char *endptr;
+    CommandSwitches.delayFactor = xstrtol(mainArguments->argv[i + 1], &endptr, 10);
+  } else
+    CommandSwitches.delayFactor = 0;
 
   if (CommandSwitches.isSerial && CommandSwitches.isTms)
     abortConflictTmsAndSerial();
