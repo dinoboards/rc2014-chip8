@@ -8,5 +8,6 @@ extern void unexpectedEntry();
 extern void expectedColour();
 extern void tmsDriverNotFound();
 extern void warnNoTimerFound();
+extern void abortConflictTmsAndSerial();
 
 #endif

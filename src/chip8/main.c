@@ -9,7 +9,6 @@
 #include "systemstate.h"
 #include "systimer.h"
 #include "tms.h"
-#include "xstdio.h"
 #include <stdarg.h>
 #include <stdio.h>
 #include <string.h>
@@ -26,15 +25,12 @@ bool strFind(const char *searchString) __z88dk_fastcall {
 }
 
 void parseCommandLine() {
-
   CommandSwitches.isHelp = strFind("-?") || strFind("-H") || strFind("--HELP");
   CommandSwitches.isSerial = !CommandSwitches.isHelp && (strFind("-S") || strFind("--SERIAL"));
   CommandSwitches.isTms = !CommandSwitches.isHelp && (strFind("-T") || strFind("--TMS"));
 
-  if (CommandSwitches.isSerial && CommandSwitches.isTms) {
-    xprintf("Error: Must dual output not supported.  Only one of --SERIAL (-S) or --TMS (-T) supported\r\n");
-    exit(0);
-  }
+  if (CommandSwitches.isSerial && CommandSwitches.isTms)
+    abortConflictTmsAndSerial();
 }
 
 void main(MainArguments *pargs) __z88dk_fastcall {
@@ -57,7 +53,7 @@ void main(MainArguments *pargs) __z88dk_fastcall {
   chkMsg(fOpen(defaultFCB), "Unable to open file");
 
   while (!noMoreData) {
-    chkMsg(fDmaOff(ptr), "dma");
+    fDmaOff(ptr);
     ptr += 64;
     noMoreData = fRead(defaultFCB);
   }

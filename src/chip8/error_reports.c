@@ -33,3 +33,8 @@ void tmsDriverNotFound() {
 }
 
 void warnNoTimerFound() { xprintf("Warning: No timer found.\r\n"); }
+
+void abortConflictTmsAndSerial() {
+  xprintf("Error: Dual output not supported.  Only one of --SERIAL (-S) or --TMS (-T) supported\r\n");
+  exit(1);
+}
