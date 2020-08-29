@@ -1,4 +1,4 @@
-1. load an optional config file (eg: invaders.cfg) to control colour mapping
+1. ./ load an optional config file (eg: invaders.cfg) to control colour mapping
 2. update config file to control quirks behaviour
 3. update config file to control serial keyboard mapping
 4. update config file to also read a global cfg (eg chip8.com)
@@ -13,8 +13,8 @@
 Issues:
   ./ Config loading may not work for game with extension in filename
   ./ Make -t default, if TMS is detected
-  * remove use of getLineNumber()
-  * de-dup the filereader.* code
-  * look for other potential deduping re the tokening processing
+  ./ remove use of getLineNumber()
+  ./ de-dup the filereader.* code
+  ./ look for other potential deduping re the tokening processing
   * review use of chk and chkMsg
   * fix chip8asm/filereader's use of chk
