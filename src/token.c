@@ -3,7 +3,7 @@
 #include "chartesters.h"
 #include "filereader.h"
 
-int  lineNumber;
+int  currentLineNumber;
 char tokenCurrentChar;
 char tokenTerminatorChar;
 bool isOnlyAlphaNumeric;
@@ -29,7 +29,7 @@ char _getNext(char *currentLine) __z88dk_fastcall {
     return '\0';
 
   if (newLineStarted) {
-    lineNumber++;
+    currentLineNumber++;
     currentLine[0] = '\0';
     currentLineIndex = 0;
     newLineStarted = false;

@@ -6,13 +6,11 @@
 
 extern char       tokenCurrentChar;
 extern char       tokenTerminatorChar;
-extern int        lineNumber;
+extern int        currentLineNumber;
 extern bool       isOnlyAlphaNumeric;
 extern bool       isOnlyLetters;
 extern byte       currentLineIndex;
 extern const char commentChar;
-
-#define getCurrentLineNumber() lineNumber
 
 extern void getNextToken();
 extern void openTokenStream();

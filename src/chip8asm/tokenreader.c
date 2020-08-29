@@ -182,7 +182,7 @@ void getNextToken() {
 
 void openTokenStream() {
   openFileStream();
-  lineNumber = 1;
+  currentLineNumber = 1;
 
   char nextChar = getNext();
   tokenCurrentChar = nextChar;
