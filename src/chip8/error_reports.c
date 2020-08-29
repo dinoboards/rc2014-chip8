@@ -11,7 +11,7 @@ void expectedEqualSign() {
 
 void unexpectedToken() {
   getToLineEnd();
-  xprintf("\r\n%s\r\nUnexpected token '%c' found\r\n at line number %d\r\n", token.currentLine, token.currentChar, getCurrentLineNumber());
+  xprintf("\r\n%s\r\nUnexpected token '%c' found\r\n at line number %d\r\n", token.currentLine, tokenCurrentChar, getCurrentLineNumber());
   exit(1);
 }
 

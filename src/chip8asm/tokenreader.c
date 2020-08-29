@@ -1,11 +1,11 @@
 #include "chip8asm/tokenreader.h"
 #include "charconstants.h"
 #include "chartesters.h"
-#include "chip8asm/filereader.h"
 #include "cpm.h"
 #include "datatypes.h"
 #include "error.h"
 #include "exit.h"
+#include "filereader.h"
 #include "hbios.h"
 #include <string.h>
 
@@ -15,16 +15,7 @@ static bool  isOnlyAlphaNumeric;
 static bool  isOnlyLetters;
 static byte  currentLineIndex;
 
-int lineNumber;
-
-bool newLineStarted = true;
-
-static char getNextChar() {
-  char c = CR;
-  while (c == CR)
-    c = getNextCharRaw();
-  return c;
-}
+static bool newLineStarted = true;
 
 static inline char getNext() {
   const char result = getNextChar();
@@ -76,7 +67,7 @@ static char skipComment(char nextChar) {
 }
 
 static bool isDecimalNumber() {
-  char nextChar = token.currentChar;
+  char nextChar = tokenCurrentChar;
 
   if (!isDigit(nextChar))
     return false;
@@ -89,8 +80,8 @@ static bool isDecimalNumber() {
   }
 
   *pTokenValue = '\0';
-  token.terminatorChar = nextChar;
-  token.currentChar = nextChar;
+  tokenTerminatorChar = nextChar;
+  tokenCurrentChar = nextChar;
   token.type = TokenExpression;
 
   return true;
@@ -134,9 +125,9 @@ static void testForInstructions() {
 }
 
 static void tokeniseAlphaNumericString() {
-  if (token.currentChar == ':' && isOnlyAlphaNumeric) {
+  if (tokenCurrentChar == ':' && isOnlyAlphaNumeric) {
     token.type = TokenLabel;
-    token.currentChar = getNext();
+    tokenCurrentChar = getNext();
     return;
   }
 
@@ -179,34 +170,34 @@ static void tokeniseAlphaNumericString() {
 }
 
 static bool isIndexedI() {
-  if (token.currentChar != '[')
+  if (tokenCurrentChar != '[')
     return false;
 
-  token.currentChar = getNextChar();
-  token.currentChar = skipWhiteSpace(token.currentChar);
+  tokenCurrentChar = getNextChar();
+  tokenCurrentChar = skipWhiteSpace(tokenCurrentChar);
 
-  if (token.currentChar != 'I' && token.currentChar != 'i')
+  if (tokenCurrentChar != 'I' && tokenCurrentChar != 'i')
     return false;
 
-  token.currentChar = getNextChar();
-  token.currentChar = skipWhiteSpace(token.currentChar);
+  tokenCurrentChar = getNextChar();
+  tokenCurrentChar = skipWhiteSpace(tokenCurrentChar);
 
-  const bool b = token.currentChar == ']';
+  const bool b = tokenCurrentChar == ']';
 
-  token.currentChar = getNextChar();
+  tokenCurrentChar = getNextChar();
 
   token.value[0] = '[';
   token.value[1] = 'I';
   token.value[2] = ']';
   token.value[3] = '\0';
-  token.terminatorChar = token.currentChar;
+  tokenTerminatorChar = tokenCurrentChar;
   token.type = RegisterIndexedI;
 
   return b;
 }
 
 static bool isAlphaNumeric() {
-  if (!isCharAlpha(token.currentChar))
+  if (!isCharAlpha(tokenCurrentChar))
     return false;
 
   pTokenValue = token.value;
@@ -214,50 +205,50 @@ static bool isAlphaNumeric() {
   isOnlyAlphaNumeric = true;
   isOnlyLetters = true;
 
-  while (isCharExpression(token.currentChar)) {
-    if (!isCharAlpha(token.currentChar))
+  while (isCharExpression(tokenCurrentChar)) {
+    if (!isCharAlpha(tokenCurrentChar))
       isOnlyAlphaNumeric = false;
 
-    if (!isCharLetter(token.currentChar))
+    if (!isCharLetter(tokenCurrentChar))
       isOnlyLetters = false;
 
-    *pTokenValue++ = token.currentChar;
-    token.currentChar = getNext();
+    *pTokenValue++ = tokenCurrentChar;
+    tokenCurrentChar = getNext();
   }
 
   *pTokenValue = '\0';
-  token.terminatorChar = token.currentChar;
+  tokenTerminatorChar = tokenCurrentChar;
   tokeniseAlphaNumericString();
 
   return true;
 }
 
 static bool isComma() {
-  if (token.currentChar != ',')
+  if (tokenCurrentChar != ',')
     return false;
 
-  token.currentChar = getNext();
+  tokenCurrentChar = getNext();
 
   token.value[0] = ',';
   token.value[1] = '\0';
-  token.terminatorChar = token.currentChar;
+  tokenTerminatorChar = tokenCurrentChar;
   token.type = TokenComma;
 
   return true;
 }
 
 void getNextToken() {
-  token.currentChar = skipWhiteSpace(token.currentChar);
-  token.currentChar = skipComment(token.currentChar);
+  tokenCurrentChar = skipWhiteSpace(tokenCurrentChar);
+  tokenCurrentChar = skipComment(tokenCurrentChar);
 
   token.value[0] = '\0';
-  token.terminatorChar = '\0';
+  tokenTerminatorChar = '\0';
   token.type = TokenEnd;
   token.isInstruction = false;
   token.isVRegister = false;
 
-  if (!token.currentChar) {
-    token.terminatorChar = token.currentChar;
+  if (!tokenCurrentChar) {
+    tokenTerminatorChar = tokenCurrentChar;
     return;
   }
 
@@ -273,12 +264,12 @@ void getNextToken() {
   if (isComma())
     return;
 
-  logError("Unexpected token '%c'\r\n", token.currentChar);
+  logError("Unexpected token '%c'\r\n", tokenCurrentChar);
   errorExit();
 }
 
 void getToLineEnd() {
-  char c = token.currentChar;
+  char c = tokenCurrentChar;
   while (c && c != '\n') {
     c = getNext();
   }
@@ -289,7 +280,7 @@ void openTokenStream() {
   lineNumber = 1;
 
   char nextChar = getNext();
-  token.currentChar = nextChar;
+  tokenCurrentChar = nextChar;
   token.currentLine[0] = nextChar;
   token.currentLine[1] = '\0';
   currentLineIndex = 1;

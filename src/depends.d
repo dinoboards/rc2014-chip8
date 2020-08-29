@@ -5,19 +5,17 @@
  chip8/systemstate.h chip8/systimer.h chip8/timers.h chip8/tty.h xstdio.h \
  chip8/instr_output.h chip8/instr_pc.h chip8/instr_random.h \
  chip8/random.h chip8/instr_registers.h chip8/fontsets.h
-./chip8/configreader.asm: chip8/configreader.c chip8/configreader.h \
+./chip8/configreader.asm: chip8/configreader.c chip8/configreader.h token.h \
  charconstants.h chartesters.h cpm.h datatypes.h chip8/error_reports.h \
- chip8/filereader.h hbios.h chip8/tms.h
+ filereader.h cpm.h hbios.h chip8/tms.h
 ./chip8/configuration_loader.asm: chip8/configuration_loader.c \
- chip8/configreader.h cpm.h chip8/error_reports.h chip8/filereader.h \
- chip8/systemstate.h datatypes.h
+ chip8/configreader.h token.h cpm.h chip8/error_reports.h filereader.h \
+ cpm.h chip8/systemstate.h datatypes.h
 ./chip8/diagnostics.asm: chip8/diagnostics.c chip8/diagnostics.h \
  chip8/byte_code_executor.h datatypes.h chip8/systemstate.h xstdio.h \
  chip8/keys.h
 ./chip8/error_reports.asm: chip8/error_reports.c chip8/error_reports.h \
- chip8/configreader.h xstdio.h
-./chip8/filereader.asm: chip8/filereader.c chip8/filereader.h cpm.h \
- charconstants.h datatypes.h
+ chip8/configreader.h token.h xstdio.h
 ./chip8/fontsets.asm: chip8/fontsets.c chip8/fontsets.h datatypes.h
 ./chip8/instr_output.asm: chip8/instr_output.c chip8/instr_output.h \
  chip8/error_reports.h chip8/instr_serial_output.h datatypes.h \
@@ -50,20 +48,18 @@
  xstdio.h
 ./chip8/tty.asm: chip8/tty.c chip8/tty.h hbios.h xstdio.h
 ./chip8asm/assembler.asm: chip8asm/assembler.c chip8asm/assembler.h datatypes.h \
- chip8asm/emitters.h chip8asm/error_reports.h chip8asm/labels.h \
- chip8asm/systemstate.h chip8asm/token_parser.h chip8asm/tokenreader.h \
- xstdio.h
+ cpm.h chip8asm/emitters.h chip8asm/error_reports.h filereader.h cpm.h \
+ chip8asm/labels.h chip8asm/systemstate.h chip8asm/token_parser.h \
+ chip8asm/tokenreader.h token.h xstdio.h
 ./chip8asm/emitters.asm: chip8asm/emitters.c chip8asm/emitters.h datatypes.h \
  chip8asm/systemstate.h
 ./chip8asm/error.asm: chip8asm/error.c chip8asm/error.h hbios.h xstdio.h
 ./chip8asm/error_reports.asm: chip8asm/error_reports.c chip8asm/error_reports.h \
- chip8asm/error.h chip8asm/exit.h chip8asm/tokenreader.h
+ chip8asm/error.h chip8asm/exit.h chip8asm/tokenreader.h token.h
 ./chip8asm/exit.asm: chip8asm/exit.c
 ./chip8asm/expr.asm: chip8asm/expr.c chip8asm/expr.h chartesters.h datatypes.h \
  chip8asm/error.h chip8asm/error_reports.h chip8asm/exit.h \
  chip8asm/labels.h
-./chip8asm/filereader.asm: chip8asm/filereader.c chip8asm/filereader.h \
- charconstants.h cpm.h datatypes.h
 ./chip8asm/labels.asm: chip8asm/labels.c chip8asm/labels.h datatypes.h \
  chip8asm/error_reports.h chip8asm/systemstate.h xstdio.h
 ./chip8asm/main.asm: chip8asm/main.c chip8asm/assembler.h datatypes.h \
@@ -74,13 +70,16 @@
  datatypes.h chip8asm/labels.h chip8asm/systemstate.h cpm.h \
  chip8asm/expr.h test_opcodes.h xstdio.h test_expectations.h \
  terminal_codes.h xstdio.h chip8asm/test_helper.h terminal_codes.h \
- chip8asm/tokenreader.h
-./chip8asm/tokenreader.asm: chip8asm/tokenreader.c chip8asm/tokenreader.h \
- charconstants.h chartesters.h chip8asm/filereader.h cpm.h datatypes.h \
- chip8asm/error.h chip8asm/exit.h hbios.h
+ chip8asm/tokenreader.h token.h
+./chip8asm/tokenreader.asm: chip8asm/tokenreader.c chip8asm/tokenreader.h token.h \
+ charconstants.h chartesters.h cpm.h datatypes.h chip8asm/error.h \
+ chip8asm/exit.h filereader.h cpm.h hbios.h
 ./chip8asm/token_parser.asm: chip8asm/token_parser.c chip8asm/token_parser.h \
  datatypes.h chip8asm/error_reports.h chip8asm/expr.h hbios.h \
- chip8asm/tokenreader.h xstdio.h
+ chip8asm/tokenreader.h token.h xstdio.h
 ./cpm.asm: cpm.c cpm.h hbios.h
+./filereader.asm: filereader.c filereader.h cpm.h charconstants.h \
+ datatypes.h
 ./hbios.asm: hbios.c hbios.h
+./token.asm: token.c token.h charconstants.h filereader.h cpm.h
 ./xstdio.asm: xstdio.c xstdio.h datatypes.h hbios.h

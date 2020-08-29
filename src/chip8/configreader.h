@@ -1,6 +1,7 @@
 #ifndef __CONFIGREADER
 #define __CONFIGREADER
 
+#include "token.h"
 #include <stdbool.h>
 
 typedef enum {
@@ -16,22 +17,12 @@ typedef enum {
 #define MAX_TOKEN_LENGTH 32
 
 typedef struct TokenStruct {
-  char      currentChar;
   char      currentLine[MAX_TOKEN_LENGTH];
   char      value[MAX_TOKEN_LENGTH];
-  char      terminatorChar;
   TokenType type;
   bool      isColour : 1;
 } Token;
 
-extern void getNextToken();
-extern void openTokenStream();
-extern void closeTokenStream();
-extern void getToLineEnd();
-
 extern Token token;
-extern int   lineNumber;
-
-#define getCurrentLineNumber() lineNumber
 
 #endif

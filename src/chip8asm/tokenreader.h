@@ -1,6 +1,7 @@
 #ifndef __TOKENREADER
 #define __TOKENREADER
 
+#include "token.h"
 #include <stdbool.h>
 
 typedef enum {
@@ -57,23 +58,14 @@ typedef enum {
 #define MAX_TOKEN_LENGTH 256
 
 typedef struct TokenStruct {
-  char      currentChar;
+  // char      currentChar;
   char      currentLine[MAX_TOKEN_LENGTH];
   char      value[MAX_TOKEN_LENGTH];
-  char      terminatorChar;
   TokenType type;
   bool      isInstruction;
   bool      isVRegister;
 } Token;
 
-extern void getNextToken();
-extern void openTokenStream();
-extern void closeTokenStream();
-extern void getToLineEnd();
-
 extern Token token;
-extern int   lineNumber;
-
-#define getCurrentLineNumber() lineNumber
 
 #endif

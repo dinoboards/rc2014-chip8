@@ -1,8 +1,10 @@
 // #include "charconstants.h"
 #include "assembler.h"
+#include "cpm.h"
 #include "datatypes.h"
 #include "emitters.h"
 #include "error_reports.h"
+#include "filereader.h"
 #include "labels.h"
 #include "systemstate.h"
 #include "token_parser.h"
@@ -175,7 +177,7 @@ inline void assDb() {
   do {
     emitByte(x);
 
-    isMore = token.terminatorChar == ',';
+    isMore = tokenTerminatorChar == ',';
     if (isMore) {
       getNext();
       expectToBeComma();
@@ -571,6 +573,7 @@ void assemble(byte pc) __z88dk_fastcall {
   currentAddress = 0x200;
   programPtr = programStorage;
 
+  setFileStream(defaultFCB);
   openTokenStream();
 
   getNextToken();
@@ -669,7 +672,7 @@ void assemble(byte pc) __z88dk_fastcall {
       return expectedError("Instruction");
     }
 
-    // xtracef("%02X: %d : '%s'\r\n", (int)token.terminatorChar, (int)token.type, token.value);
+    // xtracef("%02X: %d : '%s'\r\n", (int)tokenTerminatorChar, (int)token.type, token.value);
     getNextToken();
   }
 

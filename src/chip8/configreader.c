@@ -15,16 +15,7 @@ static bool  isOnlyAlphaNumeric;
 static bool  isOnlyLetters;
 static byte  currentLineIndex;
 
-int lineNumber;
-
-bool newLineStarted = true;
-
-static char getNextChar() {
-  char c = CR;
-  while (c == CR)
-    c = getNextCharRaw();
-  return c;
-}
+static bool newLineStarted = true;
 
 static inline char getNext() {
   const char result = getNextChar();
@@ -97,7 +88,7 @@ static void tokeniseAlphaNumericString() {
 }
 
 static bool isAlphaNumeric() {
-  if (!isCharAlpha(token.currentChar))
+  if (!isCharAlpha(tokenCurrentChar))
     return false;
 
   pTokenValue = token.value;
@@ -105,49 +96,49 @@ static bool isAlphaNumeric() {
   isOnlyAlphaNumeric = true;
   isOnlyLetters = true;
 
-  while (isCharExpression(token.currentChar)) {
-    if (!isCharAlpha(token.currentChar))
+  while (isCharExpression(tokenCurrentChar)) {
+    if (!isCharAlpha(tokenCurrentChar))
       isOnlyAlphaNumeric = false;
 
-    if (!isCharLetter(token.currentChar))
+    if (!isCharLetter(tokenCurrentChar))
       isOnlyLetters = false;
 
-    *pTokenValue++ = token.currentChar;
-    token.currentChar = getNext();
+    *pTokenValue++ = tokenCurrentChar;
+    tokenCurrentChar = getNext();
   }
 
   *pTokenValue = '\0';
-  token.terminatorChar = token.currentChar;
+  tokenTerminatorChar = tokenCurrentChar;
   tokeniseAlphaNumericString();
 
   return true;
 }
 
 static bool isEqual() {
-  if (token.currentChar != '=')
+  if (tokenCurrentChar != '=')
     return false;
 
-  token.currentChar = getNext();
+  tokenCurrentChar = getNext();
 
   token.value[0] = ',';
   token.value[1] = '\0';
-  token.terminatorChar = token.currentChar;
+  tokenTerminatorChar = tokenCurrentChar;
   token.type = TokenEquals;
 
   return true;
 }
 
 void getNextToken() {
-  token.currentChar = skipWhiteSpace(token.currentChar);
-  token.currentChar = skipComment(token.currentChar);
+  tokenCurrentChar = skipWhiteSpace(tokenCurrentChar);
+  tokenCurrentChar = skipComment(tokenCurrentChar);
 
   token.value[0] = '\0';
-  token.terminatorChar = '\0';
+  tokenTerminatorChar = '\0';
   token.type = TokenEnd;
   token.isColour = false;
 
-  if (!token.currentChar) {
-    token.terminatorChar = token.currentChar;
+  if (!tokenCurrentChar) {
+    tokenTerminatorChar = tokenCurrentChar;
     return;
   }
 
@@ -161,7 +152,7 @@ void getNextToken() {
 }
 
 void getToLineEnd() {
-  char c = token.currentChar;
+  char c = tokenCurrentChar;
   while (c && c != '\n') {
     c = getNext();
   }
@@ -173,7 +164,7 @@ void openTokenStream() {
   lineNumber = 1;
 
   char nextChar = getNext();
-  token.currentChar = nextChar;
+  tokenCurrentChar = nextChar;
   token.currentLine[0] = nextChar;
   token.currentLine[1] = '\0';
   currentLineIndex = 1;
