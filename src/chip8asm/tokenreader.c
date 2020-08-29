@@ -9,7 +9,7 @@
 Token      token;
 const char commentChar = ';';
 
-inline char getNext() { return _getNext(token.currentLine); }
+char getNext() { return _getNext(token.currentLine); }
 
 static bool isDecimalNumber() {
   char nextChar = tokenCurrentChar;

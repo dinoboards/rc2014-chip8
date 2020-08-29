@@ -7,7 +7,7 @@
 Token      token;
 const char commentChar = '#';
 
-inline char getNext() { return _getNext(token.currentLine); }
+char getNext() { return _getNext(token.currentLine); }
 
 DEF_TOKEN_EQUALS(token.value)
 
