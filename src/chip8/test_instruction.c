@@ -451,6 +451,32 @@ void verify_sub_v3_ve_with_borrow() {
   expectEqualBytes(registers[0xF], 0x0, "VF");
 }
 
+void setup_subn_v2_ve_no_borrow() {
+  registers[0x2] = 0x10;
+  registers[0xE] = 0x20;
+  registers[0xF] = 0x00;
+  programStorage[0] = invertByteOrder(SUBN_V2_VE);
+}
+
+void verify_subn_v2_ve_no_borrow() {
+  expectEqualBytes(registers[0x2], 0x10, "V3");
+  expectEqualBytes(registers[0xE], 0x20, "VE");
+  expectEqualBytes(registers[0xF], 0x1, "VF");
+}
+
+void setup_subn_v2_ve_with_borrow() {
+  registers[0x2] = 0x20;
+  registers[0xE] = 0x10;
+  registers[0xF] = 0x00;
+  programStorage[0] = invertByteOrder(SUBN_V2_VE);
+}
+
+void verify_subn_v2_ve_with_borrow() {
+  expectEqualBytes(registers[0x2], (uint8_t)(0x10 - 0x20), "V3");
+  expectEqualBytes(registers[0xE], 0x10, "VE");
+  expectEqualBytes(registers[0xF], 0x0, "VF");
+}
+
 void setup_xor_v3_ve() {
   registers[0x3] = 0x41;
   registers[0xE] = 0x40;
@@ -534,6 +560,8 @@ void main() {
   assert(sub_v3_ve_no_borrow);
   assert(sub_v3_ve_with_borrow);
   assert(xor_v3_ve);
+  assert(subn_v2_ve_no_borrow);
+  assert(subn_v2_ve_with_borrow);
   assertTerminates(final_ret);
 
   xprintf(testFailure ? RED "Tests Failed\r\n" RESET : BRIGHT_WHITE "All Passed\r\n" RESET);

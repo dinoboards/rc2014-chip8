@@ -150,7 +150,9 @@ bool executeSingleInstruction() {
         break;
       }
 
-      // case 0x7:
+      case 0x7:
+        subnVxVy();
+        break;
 
       case 0xE: {
         shlVxVy();
@@ -172,7 +174,7 @@ bool executeSingleInstruction() {
       ldIAddr();
       break;
 
-    // case 0xB:
+      // case 0xB:
 
     case 0xC: {
       rnd();

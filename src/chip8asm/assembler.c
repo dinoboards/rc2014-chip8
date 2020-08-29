@@ -512,6 +512,25 @@ inline void assSub() {
 }
 
 /*
+8xy7 - SUBN Vx, Vy
+Set Vx = Vy - Vx, set VF = NOT borrow.
+
+If Vy > Vx, then VF is set to 1, otherwise 0. Then Vx is subtracted from Vy, and the results stored in Vx.
+*/
+inline void assSubn() {
+  getNext();
+  const byte x = expectToBeVRegister();
+
+  getNext();
+  expectToBeComma();
+
+  getNext();
+  const byte y = expectToBeVRegister();
+
+  emitNibbles(0x8, x, y, 7);
+}
+
+/*
 8xy3 - XOR Vx, Vy
 Set Vx = Vx XOR Vy.
 
@@ -688,6 +707,10 @@ void assemble(byte pc) __z88dk_fastcall {
 
     case InstructionKey:
       assKey();
+      break;
+
+    case InstructionSubn:
+      assSubn();
       break;
 
     default:

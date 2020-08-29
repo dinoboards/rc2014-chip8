@@ -6,6 +6,7 @@
 #define SNE_V0_123    0x407B
 #define SE_V4_V9      0x5490
 #define LD_V1_10      0x610A
+#define SUBN_V2_VE    0x82E7
 #define LD_V3_VA      0x83A0
 #define XOR_V3_VE     0x83E3
 #define SUB_V3_VE     0x83E5

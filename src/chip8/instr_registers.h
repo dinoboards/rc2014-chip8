@@ -136,6 +136,11 @@ inline void shlVxVy() {
   registers[0xF] = registers[secondNibble] > registers[thirdNibble]; \
   registers[secondNibble] -= registers[thirdNibble];
 
+inline void subnVxVy() {
+  registers[0xF] = registers[secondNibble] < registers[thirdNibble];
+  registers[secondNibble] = registers[thirdNibble] - registers[secondNibble];
+}
+
 #define xorVxVy() registers[secondNibble] ^= registers[thirdNibble];
 
 static byte units;
