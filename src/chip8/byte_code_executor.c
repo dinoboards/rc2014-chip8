@@ -139,6 +139,7 @@ bool executeSingleInstruction() {
         addVxVy();
         break;
       }
+
       case 0x5: {
         subVxVy();
         break;
@@ -148,6 +149,8 @@ bool executeSingleInstruction() {
         shrVxVy();
         break;
       }
+
+      // case 0x7:
 
       case 0xE: {
         shlVxVy();
@@ -168,6 +171,8 @@ bool executeSingleInstruction() {
     case 0xA:
       ldIAddr();
       break;
+
+    // case 0xB:
 
     case 0xC: {
       rnd();
