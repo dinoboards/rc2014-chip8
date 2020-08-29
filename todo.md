@@ -11,8 +11,8 @@
 
 
 Issues:
-  * Config loading may not work for game with extension in filename
-  * Make -t default, if TMS is detected
+  ./ Config loading may not work for game with extension in filename
+  ./ Make -t default, if TMS is detected
   * remove use of getLineNumber()
   * de-dup the filereader.* code
   * look for other potential deduping re the tokening processing

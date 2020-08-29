@@ -18,7 +18,7 @@ static void copySpaceTermString(char *spaceTerminatedString, const char *nullTer
   do {
     *spaceTerminatedString++ = *s++;
     i++;
-  } while (*s && i < maxLength);
+  } while (*s && *s != '.' && i < maxLength);
 
   for (; i < maxLength; i++)
     *spaceTerminatedString++ = ' ';
