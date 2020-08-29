@@ -1,70 +1,15 @@
-#include "chip8asm/tokenreader.h"
-#include "charconstants.h"
+#include "tokenreader.h"
 #include "chartesters.h"
 #include "cpm.h"
 #include "datatypes.h"
 #include "error.h"
 #include "exit.h"
 #include "filereader.h"
-#include "hbios.h"
-#include <string.h>
 
-Token        token;
-static char *pTokenValue;
-static bool  isOnlyAlphaNumeric;
-static bool  isOnlyLetters;
-static byte  currentLineIndex;
+Token      token;
+const char commentChar = ';';
 
-static bool newLineStarted = true;
-
-static inline char getNext() {
-  const char result = getNextChar();
-
-  token.currentLine[currentLineIndex] = '\0';
-
-  if (!result)
-    return '\0';
-
-  if (newLineStarted) {
-    lineNumber++;
-    token.currentLine[0] = '\0';
-    currentLineIndex = 0;
-  }
-
-  if (result != '\r' && result != '\n') {
-    token.currentLine[currentLineIndex++] = result;
-    token.currentLine[currentLineIndex] = '\0';
-  }
-
-  newLineStarted = result == '\n';
-  return result;
-}
-
-static char skipWhiteSpace(char nextChar) {
-  if (!nextChar && nextChar != SPACE && nextChar != NEWLINE)
-    return nextChar;
-
-  while (nextChar && (nextChar == SPACE || nextChar == NEWLINE)) {
-    nextChar = getNext();
-  }
-
-  return nextChar;
-}
-
-static char skipComment(char nextChar) {
-  if (nextChar != ';')
-    return nextChar;
-
-  do {
-    while (nextChar && nextChar != NEWLINE) {
-      nextChar = getNext();
-    }
-
-    nextChar = skipWhiteSpace(nextChar);
-  } while (nextChar == ';');
-
-  return nextChar;
-}
+inline char getNext() { return _getNext(token.currentLine); }
 
 static bool isDecimalNumber() {
   char nextChar = tokenCurrentChar;
@@ -87,13 +32,7 @@ static bool isDecimalNumber() {
   return true;
 }
 
-static bool tokenEquals(const char *pTest) __z88dk_fastcall { return strcasecmp(token.value, pTest) == 0; }
-
-#define tokenMap(a, b)  \
-  if (tokenEquals(a)) { \
-    token.type = b;     \
-    return;             \
-  }
+DEF_TOKEN_EQUALS(token.value)
 
 static void testForInstructions() {
   token.isInstruction = true;
@@ -124,7 +63,7 @@ static void testForInstructions() {
   token.type = TokenAlphanumeric;
 }
 
-static void tokeniseAlphaNumericString() {
+void tokeniseAlphaNumericString() {
   if (tokenCurrentChar == ':' && isOnlyAlphaNumeric) {
     token.type = TokenLabel;
     tokenCurrentChar = getNext();
@@ -196,33 +135,6 @@ static bool isIndexedI() {
   return b;
 }
 
-static bool isAlphaNumeric() {
-  if (!isCharAlpha(tokenCurrentChar))
-    return false;
-
-  pTokenValue = token.value;
-
-  isOnlyAlphaNumeric = true;
-  isOnlyLetters = true;
-
-  while (isCharExpression(tokenCurrentChar)) {
-    if (!isCharAlpha(tokenCurrentChar))
-      isOnlyAlphaNumeric = false;
-
-    if (!isCharLetter(tokenCurrentChar))
-      isOnlyLetters = false;
-
-    *pTokenValue++ = tokenCurrentChar;
-    tokenCurrentChar = getNext();
-  }
-
-  *pTokenValue = '\0';
-  tokenTerminatorChar = tokenCurrentChar;
-  tokeniseAlphaNumericString();
-
-  return true;
-}
-
 static bool isComma() {
   if (tokenCurrentChar != ',')
     return false;
@@ -258,7 +170,7 @@ void getNextToken() {
   if (isIndexedI())
     return;
 
-  if (isAlphaNumeric())
+  if (isAlphaNumeric(token.value))
     return;
 
   if (isComma())
@@ -266,13 +178,6 @@ void getNextToken() {
 
   logError("Unexpected token '%c'\r\n", tokenCurrentChar);
   errorExit();
-}
-
-void getToLineEnd() {
-  char c = tokenCurrentChar;
-  while (c && c != '\n') {
-    c = getNext();
-  }
 }
 
 void openTokenStream() {

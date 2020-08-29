@@ -58,7 +58,6 @@ typedef enum {
 #define MAX_TOKEN_LENGTH 256
 
 typedef struct TokenStruct {
-  // char      currentChar;
   char      currentLine[MAX_TOKEN_LENGTH];
   char      value[MAX_TOKEN_LENGTH];
   TokenType type;

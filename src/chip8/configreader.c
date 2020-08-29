@@ -1,81 +1,17 @@
 #include "configreader.h"
-#include "charconstants.h"
-#include "chartesters.h"
-#include "cpm.h"
 #include "datatypes.h"
 #include "error_reports.h"
 #include "filereader.h"
-#include "hbios.h"
 #include "tms.h"
-#include <string.h>
 
-Token        token;
-static char *pTokenValue;
-static bool  isOnlyAlphaNumeric;
-static bool  isOnlyLetters;
-static byte  currentLineIndex;
+Token      token;
+const char commentChar = '#';
 
-static bool newLineStarted = true;
+inline char getNext() { return _getNext(token.currentLine); }
 
-static inline char getNext() {
-  const char result = getNextChar();
+DEF_TOKEN_EQUALS(token.value)
 
-  token.currentLine[currentLineIndex] = '\0';
-
-  if (!result)
-    return '\0';
-
-  if (newLineStarted) {
-    lineNumber++;
-    token.currentLine[0] = '\0';
-    currentLineIndex = 0;
-    newLineStarted = false;
-  }
-
-  if (result != '\r' && result != '\n') {
-    token.currentLine[currentLineIndex++] = result;
-    token.currentLine[currentLineIndex] = '\0';
-  }
-
-  newLineStarted = result == '\n';
-  return result;
-}
-
-static char skipWhiteSpace(char nextChar) {
-  if (!nextChar && nextChar != SPACE && nextChar != NEWLINE)
-    return nextChar;
-
-  while (nextChar && (nextChar == SPACE || nextChar == NEWLINE)) {
-    nextChar = getNext();
-  }
-
-  return nextChar;
-}
-
-static char skipComment(char nextChar) {
-  if (nextChar != '#')
-    return nextChar;
-
-  do {
-    while (nextChar && nextChar != NEWLINE) {
-      nextChar = getNext();
-    }
-
-    nextChar = skipWhiteSpace(nextChar);
-  } while (nextChar == '#');
-
-  return nextChar;
-}
-
-static bool tokenEquals(const char *pTest) __z88dk_fastcall { return strcasecmp(token.value, pTest) == 0; }
-
-#define tokenMap(a, b)  \
-  if (tokenEquals(a)) { \
-    token.type = b;     \
-    return;             \
-  }
-
-static void tokeniseAlphaNumericString() {
+void tokeniseAlphaNumericString() {
   tokenMap("color0", TokenColour0);
   tokenMap("color1", TokenColour1);
 
@@ -85,33 +21,6 @@ static void tokeniseAlphaNumericString() {
   token.isColour = false;
 
   token.type = TokenUnknown;
-}
-
-static bool isAlphaNumeric() {
-  if (!isCharAlpha(tokenCurrentChar))
-    return false;
-
-  pTokenValue = token.value;
-
-  isOnlyAlphaNumeric = true;
-  isOnlyLetters = true;
-
-  while (isCharExpression(tokenCurrentChar)) {
-    if (!isCharAlpha(tokenCurrentChar))
-      isOnlyAlphaNumeric = false;
-
-    if (!isCharLetter(tokenCurrentChar))
-      isOnlyLetters = false;
-
-    *pTokenValue++ = tokenCurrentChar;
-    tokenCurrentChar = getNext();
-  }
-
-  *pTokenValue = '\0';
-  tokenTerminatorChar = tokenCurrentChar;
-  tokeniseAlphaNumericString();
-
-  return true;
 }
 
 static bool isEqual() {
@@ -145,17 +54,10 @@ void getNextToken() {
   if (isEqual())
     return;
 
-  if (isAlphaNumeric())
+  if (isAlphaNumeric(token.value))
     return;
 
   unexpectedToken();
-}
-
-void getToLineEnd() {
-  char c = tokenCurrentChar;
-  while (c && c != '\n') {
-    c = getNext();
-  }
 }
 
 void openTokenStream() {
