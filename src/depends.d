@@ -14,7 +14,7 @@
 ./chip8/diagnostics.asm: chip8/diagnostics.c chip8/diagnostics.h \
  chip8/byte_code_executor.h datatypes.h chip8/systemstate.h xstdio.h \
  chip8/keys.h
-./chip8/dinotron.asm: chip8/dinotron.c chip8/dinotron.h hbios.h
+./chip8/dinotron.asm: chip8/dinotron.c chip8/dinotron.h hbios.h chip8/pigfx.h
 ./chip8/error_reports.asm: chip8/error_reports.c chip8/error_reports.h \
  chip8/configreader.h token.h datatypes.h xstdio.h
 ./chip8/fontsets.asm: chip8/fontsets.c chip8/fontsets.h datatypes.h
@@ -22,7 +22,8 @@
  chip8/dinotron.h chip8/error_reports.h chip8/instr_serial_output.h \
  datatypes.h chip8/instr_tms_output.h chip8/systemstate.h chip8/tms.h
 ./chip8/instr_serial_output.asm: chip8/instr_serial_output.c \
- chip8/instr_serial_output.h datatypes.h chip8/systemstate.h chip8/tty.h
+ chip8/instr_serial_output.h datatypes.h chip8/pigfx.h \
+ chip8/systemstate.h chip8/tty.h
 ./chip8/instr_tms_output.asm: chip8/instr_tms_output.c chip8/instr_tms_output.h \
  datatypes.h chip8/systemstate.h chip8/tms.h
 ./chip8/keys.asm: chip8/keys.c chip8/keys.h datatypes.h hbios.h

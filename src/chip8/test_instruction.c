@@ -221,7 +221,7 @@ void verify_sne_v0_v2_no_skips() { expectEqualPtrs(chip8PC, (uint16_t *)0x202, "
 
 void setup_cls() { programStorage[0] = invertByteOrder(CLS); }
 
-void verify_cls() { expectEqualEscapedString(buffer, "\033[?25l\033[2J\033[0;0H"); }
+void verify_cls() { expectEqualEscapedString(buffer, "\033[=2h\033[=00f\033[?25l\033[2J\033[m\033[48;5;0m"); }
 
 void setup_draw_top_right() {
   memset(videoMemory, 0, sizeof(videoMemory));
@@ -234,7 +234,7 @@ void setup_draw_top_right() {
 }
 
 void verify_draw_top_right() {
-  expectEqualEscapedString(buffer, "\033[1;1H\033[47;1m \033[40m");
+  expectEqualEscapedString(buffer, "\033[1;1H\033[48;5;2m \033[m\033[48;5;0m");
   expectEqualBytes(registers[0x0F], 0, "VF");
 }
 
@@ -252,7 +252,7 @@ void verify_draw_xor() {
   chip8PC = (uint16_t *)0x200; /* re-execute the instruction to erase sprite */
   executeSingleInstruction();
 
-  expectEqualEscapedString(buffer, "\033[1;1H\033[47;1m \033[40m\033[1;1H ");
+  expectEqualEscapedString(buffer, "\033[1;1H\033[48;5;2m \033[m\033[48;5;0m\033[1;1H ");
   expectEqualBytes(registers[0x0F], 1, "VF");
 }
 

@@ -1,6 +1,7 @@
 #include "instr_serial_output.h"
 #include "datatypes.h"
 #include "instr_serial_output.h"
+#include "pigfx.h"
 #include "systemstate.h"
 #include "tty.h"
 #include <string.h>
@@ -37,7 +38,7 @@ void serialDraw() {
         current = (videoMemory[vIndex] ^= bit) & bit;
 
         if (current)
-          sendDrawCommands("\033[%d;%dHX", (y & 31) + 1, (x & 63) + 1);
+          sendDrawCommands("\033[%d;%dH\033[48;5;2m " TERM_RESET, (y & 31) + 1, (x & 63) + 1);
         else {
           registers[0x0F] = 1;
           sendDrawCommands("\033[%d;%dH ", (y & 31) + 1, (x & 63) + 1);
@@ -53,7 +54,7 @@ void serialDraw() {
 
 void serialCls() {
   memset(videoMemory, 0, sizeof(videoMemory));
-  sendDrawCommands("\033[?25l\033[2J\033[0;0H");
+  sendDrawCommands(TERM_MODE_2 TERM_FONT_8X8 TERM_CURSOR_INVISIBLE TERM_CLS TERM_RESET);
 }
 
 void serialVideoInit() { serialCls(); }
