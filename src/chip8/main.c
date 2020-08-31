@@ -69,4 +69,6 @@ void main(MainArguments *pargs) __z88dk_fastcall {
 
   while (executeSingleInstruction())
     ;
+
+  videoClose();
 }

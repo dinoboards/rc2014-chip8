@@ -37,7 +37,7 @@ void serialDraw() {
         current = (videoMemory[vIndex] ^= bit) & bit;
 
         if (current)
-          sendDrawCommands("\033[%d;%dH\x1b[47;1m \x1b[40m", (y & 31) + 1, (x & 63) + 1);
+          sendDrawCommands("\033[%d;%dHX", (y & 31) + 1, (x & 63) + 1);
         else {
           registers[0x0F] = 1;
           sendDrawCommands("\033[%d;%dH ", (y & 31) + 1, (x & 63) + 1);

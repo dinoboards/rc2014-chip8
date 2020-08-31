@@ -58,7 +58,8 @@ bool executeSingleInstruction() {
     ;
 
   manageTimers();
-  checkForKeyPresses();
+  if (!checkForKeyPresses())
+    return false;
 
   switch (currentInstruction) {
   case 0xE000:

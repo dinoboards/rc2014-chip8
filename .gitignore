@@ -48,4 +48,5 @@ instr_output.asm
 configreader.asm
 configuration_loader.asm
 token.asm
+dinotron.asm
 

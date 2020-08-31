@@ -1,4 +1,5 @@
 #include "instr_output.h"
+#include "dinotron.h"
 #include "error_reports.h"
 #include "instr_serial_output.h"
 #include "instr_tms_output.h"
@@ -21,6 +22,7 @@ void cls() {
 
 void videoInit() {
   if (CommandSwitches.isSerial) {
+    dinotronSwitchSerial();
     serialVideoInit();
     return;
   }
@@ -28,6 +30,7 @@ void videoInit() {
   if (tmsSearchDriver()) {
     CommandSwitches.isTms = true;
     tmsVideoInit();
+    dinotronSwitchTms();
     return;
   }
 
@@ -36,5 +39,8 @@ void videoInit() {
 
   CommandSwitches.isSerial = true;
 
+  dinotronSwitchSerial();
   serialVideoInit();
 }
+
+void videoClose() { dinotronSwitchSerial(); }

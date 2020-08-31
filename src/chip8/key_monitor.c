@@ -6,23 +6,23 @@
 
 static uint16_t lastCheckTime = 0;
 
-void checkForKeyPresses() {
+bool checkForKeyPresses() {
 
   if (currentTimerTick == lastCheckTime)
-    return;
+    return true;
 
   lastCheckTime = currentTimerTick;
 
   if (!keyReady()) {
     if (!keyPressed)
-      return;
+      return true;
 
     if (currentTimerTick < currentKeyTimeout)
-      return;
+      return true;
 
     currentPressedKey = '\0';
     keyPressed = false;
-    return;
+    return true;
   }
 
   getKey(&currentPressedKey);
@@ -30,12 +30,13 @@ void checkForKeyPresses() {
 #ifdef DIAGNOSTICS_ON
   if (currentPressedKey == 'x' || currentPressedKey == 'X') {
     startDebugging = true;
-    return;
+    return true;
   }
 #endif
 
-  if (currentPressedKey == CTRL_Z)
-    exit(0);
+  if (currentPressedKey == CTRL_Z) {
+    return false;
+  }
 
   if (currentPressedKey >= '0' && currentPressedKey <= '9')
     currentPressedKey -= '0';
@@ -48,4 +49,6 @@ void checkForKeyPresses() {
 
   currentKeyTimeout = currentTimerTick + 10;
   keyPressed = true;
+
+  return true;
 }
