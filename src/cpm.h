@@ -25,6 +25,10 @@ typedef struct CommandLineTailStruct {
 
 extern void chk(int f) __z88dk_fastcall;
 
+extern uint8_t drvAllReset();
+extern uint8_t drvReset(uint16_t bitmapOfDrives) __z88dk_fastcall;
+extern uint8_t drvFree(uint16_t bitmapOfDrives) __z88dk_fastcall;
+
 extern int     fMake(const FCB *fcb) __z88dk_fastcall;
 extern int     fRead(const FCB *fcb) __z88dk_fastcall;
 extern int     fDmaOff(void *dest) __z88dk_fastcall;

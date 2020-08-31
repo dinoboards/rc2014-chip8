@@ -5,12 +5,16 @@
 	SECTION CODE
 
 	PUBLIC	_fOpen, _fDmaOff, _fRead, _fSize, _fClose, _fRead, _chk, _fMake, _fWrite
+	; PUBLIC _drvAllReset, _drvReset, _drvFree
 	EXTERN	__Exit
 
 RESTART	EQU	$0000		; CP/M RESTART VECTOR
 BDOS	EQU	$0005		; BDOS INVOCATION VECTOR
 
 FCB		EQU	$5C		; Location of default FCB
+DRV_ALLRESET	EQU	13
+DRV_RESET	EQU	25
+DRV_FREE	EQU	39
 F_OPEN		EQU	15
 F_CLOSE		EQU	16
 F_READ		EQU	20
@@ -103,5 +107,33 @@ _fClose:
 	POP	IX
 	RET
 
+; _drvAllReset:
+; 	PUSH	IX
+; 	LD	C, DRV_ALLRESET
+; 	CALL	BDOS
+; 	LD 	L, A
+; 	LD	H, 0
+; 	POP	IX
+; 	RET
+
+; _drvReset:
+; 	PUSH	IX
+; 	LD	C, DRV_RESET
+; 	EX	DE, HL
+; 	CALL	BDOS
+; 	LD	L, A
+; 	LD	H, 0
+; 	POP	IX
+; 	RET
+
+; _drvFree:
+; 	PUSH	IX
+; 	LD	C, DRV_FREE
+; 	EX	DE, HL
+; 	CALL	BDOS
+; 	LD	L, A
+; 	LD	H, 0
+; 	POP	IX
+; 	RET
 
 	SECTION IGNORE
