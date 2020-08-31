@@ -2,23 +2,38 @@
 #include "instr_tms_output.h"
 #include "systemstate.h"
 #include "tms.h"
+#include <string.h>
 
 typedef struct {
-  byte     x;
-  byte     y;
-  uint16_t tmsAddress;
-  byte     data;
-  byte     topBits;
-  byte     bottomBits;
-  bool     top;
-  bool     left;
-  byte     length;
+  byte x;
+  byte y;
+  byte data;
+  byte topBits;
+  byte bottomBits;
+  bool top;
+  bool left;
+  byte length;
 } bitsDrawCommand;
 
 static bitsDrawCommand drawCommand;
 
+#define CHAR_FRAME_SIZE (32 * 16)
+#define CHAR_FRAME_MASK (CHAR_FRAME_SIZE - 1)
+
+static uint8_t  charFrameBuffer[CHAR_FRAME_SIZE];
+static uint16_t currentFrameBufferIndex = 0;
+
 void drawBits() {
-  drawCommand.data = tmsReadByte();
+  // clang-format off
+  __asm
+	ld	a, (_currentFrameBufferIndex + 1)
+  and a, 0x01
+	ld	(_currentFrameBufferIndex + 1), a
+  __endasm;
+  // clang-format on
+
+  tmsSetWriteAddr(TMS_MD1_NAME_TABLE + currentFrameBufferIndex);
+  drawCommand.data = charFrameBuffer[currentFrameBufferIndex]; // tmsReadByte();
 
   if (drawCommand.topBits & 0x2) {
     drawCommand.data ^= 1; // top left
@@ -32,8 +47,6 @@ void drawBits() {
       registers[0xF] = 1;
   }
 
-  tmsSetWriteAddr(drawCommand.tmsAddress);
-
   drawCommand.top = false;
   if (drawCommand.bottomBits & 2) {
     drawCommand.data ^= 4; // bottom left
@@ -46,29 +59,31 @@ void drawBits() {
     if ((drawCommand.data & 8) == 0)
       registers[0xF] = 1;
   }
+
+  charFrameBuffer[currentFrameBufferIndex] = drawCommand.data;
   tmsWriteByte(drawCommand.data);
 }
 
 inline void incrementXBy2() {
   drawCommand.x += 2;
-  drawCommand.tmsAddress += 1;
+  currentFrameBufferIndex += 1;
 }
 
 inline void decrementXBy2() {
   drawCommand.x -= 2;
-  drawCommand.tmsAddress -= 1;
+  currentFrameBufferIndex -= 1;
 }
 
 inline void moveToNextRow() {
   drawCommand.y += 2;
-  drawCommand.tmsAddress += (32 - 4);
+  currentFrameBufferIndex += (32 - 4);
   drawCommand.x -= 8;
 }
 
 inline void moveTo(byte xx, byte yy) {
-  drawCommand.y = yy;
-  drawCommand.x = xx;
-  drawCommand.tmsAddress = TMS_MD1_NAME_TABLE + (drawCommand.y << 4) + (drawCommand.x >> 1);
+  drawCommand.y = yy & 31;
+  drawCommand.x = xx & 63;
+  currentFrameBufferIndex = (drawCommand.y << 4) + (drawCommand.x >> 1);
 }
 
 static byte topPixelData;
@@ -77,7 +92,6 @@ static byte bottomPixelData;
 void drawBytesEven() {
   byte end = drawCommand.x + 8;
   for (; drawCommand.x < end; incrementXBy2()) {
-    tmsSetReadAddr(drawCommand.tmsAddress);
     drawCommand.topBits = (topPixelData & 0xC0) >> 6;
     drawCommand.bottomBits = (bottomPixelData & 0xC0) >> 6;
     bottomPixelData <<= 2;
@@ -87,7 +101,6 @@ void drawBytesEven() {
 }
 
 void drawBytesOdd() {
-  tmsSetReadAddr(drawCommand.tmsAddress);
   drawCommand.topBits = (topPixelData & 0x80) >> 7;
   drawCommand.bottomBits = (bottomPixelData & 0x80) >> 7;
   bottomPixelData <<= 1;
@@ -99,7 +112,6 @@ void drawBytesOdd() {
   byte end = drawCommand.x + 7;
 
   for (; drawCommand.x < end; incrementXBy2()) {
-    tmsSetReadAddr(drawCommand.tmsAddress);
     drawCommand.topBits = (topPixelData & 0xC0) >> 6;
     drawCommand.bottomBits = (bottomPixelData & 0xC0) >> 6;
     bottomPixelData <<= 2;
@@ -210,7 +222,10 @@ void drawSpriteOddOdd() __z88dk_fastcall {
 
 static tmsClearParams clsParams = {TMS_MD1_NAME_TABLE, 0x400, 0};
 
-void tmsCls() { tmsClearData(&clsParams); }
+void tmsCls() {
+  tmsClearData(&clsParams);
+  memset(charFrameBuffer, 0, sizeof(charFrameBuffer));
+}
 
 static void buildPatternData(byte *pData) {
   for (byte i = 0; i < 16; i++) {
@@ -285,4 +300,5 @@ void tmsVideoInit() {
   tmsSetMode1();
   tmsClearData(&colourParams);
   tmsInitPatterns();
+  tmsCls();
 }
