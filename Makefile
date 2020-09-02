@@ -72,7 +72,7 @@ symbols:
 draw:
 	@cp ./test-samples/draw.cas ./bin/
 	@cd bin && cpm chip8asm draw.cas
-	@cd bin && cpm "chip8 draw.ch8"
+	@cd bin && cpm "chip8 draw.ch8 -x 100000"
 
 .PHONY: c8pic
 c8pic:

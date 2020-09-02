@@ -570,6 +570,7 @@ void main() {
   assert(subn_v2_ve_no_borrow);
   assert(subn_v2_ve_with_borrow);
   assert(jp_v0_1024);
+  // assert(high);
 
   assertTerminates(final_ret);
 

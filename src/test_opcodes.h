@@ -36,3 +36,4 @@
 #define LD_I_VE       0xFE55
 #define LD_V0_I       0xF065
 #define LD_VB_I       0xFB65
+#define HIGHRES 0x00FF

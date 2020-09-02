@@ -5,7 +5,7 @@
 #include "datatypes.h"
 
 // required for testing
-extern byte videoMemory[64 * 32 / 8];
+extern byte videoMemory[128 * 64 / 8];
 extern void serialDraw();
 extern void serialCls();
 extern void serialVideoInit();

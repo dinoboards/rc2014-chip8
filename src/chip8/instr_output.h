@@ -6,5 +6,6 @@ extern void draw();
 extern void cls();
 extern void videoInit();
 extern void videoClose();
+extern void videoHigh();
 
 #endif

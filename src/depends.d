@@ -20,10 +20,13 @@
 ./chip8/fontsets.asm: chip8/fontsets.c chip8/fontsets.h datatypes.h
 ./chip8/instr_output.asm: chip8/instr_output.c chip8/instr_output.h \
  chip8/dinotron.h chip8/error_reports.h chip8/instr_serial_output.h \
- datatypes.h chip8/instr_tms_output.h chip8/systemstate.h chip8/tms.h
+ datatypes.h chip8/instr_tms_output.h chip8/instr_tms_high_output.h \
+ chip8/systemstate.h chip8/tms.h
 ./chip8/instr_serial_output.asm: chip8/instr_serial_output.c \
  chip8/instr_serial_output.h datatypes.h chip8/pigfx.h \
  chip8/systemstate.h chip8/tty.h
+./chip8/instr_tms_high_output.asm: chip8/instr_tms_high_output.c \
+ chip8/instr_tms_high_output.h
 ./chip8/instr_tms_output.asm: chip8/instr_tms_output.c chip8/instr_tms_output.h \
  datatypes.h chip8/systemstate.h chip8/tms.h
 ./chip8/keys.asm: chip8/keys.c chip8/keys.h datatypes.h hbios.h

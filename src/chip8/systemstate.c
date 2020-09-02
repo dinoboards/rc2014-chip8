@@ -25,6 +25,12 @@ CliSwitches CommandSwitches;
 
 byte gameColours[2] = {COL_BLACK, COL_DRKGREEN};
 
+byte videoResMode = VideoResModeLow;
+byte videoPixelWidth;
+byte videoPixelHeight;
+byte videoPixelWidthMask;
+byte videoPixelHeightMask;
+
 #ifdef DIAGNOSTICS_ON
 /* diagnostic state */
 bool startCounting = false;

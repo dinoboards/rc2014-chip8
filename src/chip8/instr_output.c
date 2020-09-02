@@ -3,6 +3,7 @@
 #include "error_reports.h"
 #include "instr_serial_output.h"
 #include "instr_tms_output.h"
+#include "instr_tms_high_output.h"
 #include "systemstate.h"
 #include "tms.h"
 
@@ -10,17 +11,29 @@ void draw() {
   if (CommandSwitches.isSerial)
     serialDraw();
   else
-    tmsDraw();
+    if (videoResMode == VideoResModeLow)
+      tmsDraw();
+    else
+      tmsHighDraw();
 }
 
 void cls() {
   if (CommandSwitches.isSerial)
     serialCls();
   else
-    tmsCls();
+    if (videoResMode == VideoResModeLow)
+      tmsCls();
+    else
+      tmsHighCls();
 }
 
 void videoInit() {
+  videoResMode = VideoResModeLow;
+  videoPixelWidth = 64;
+  videoPixelHeight = 32;
+  videoPixelWidthMask = 63;
+  videoPixelHeightMask = 31;
+
   if (CommandSwitches.isSerial) {
     dinotronSwitchSerial();
     serialVideoInit();
@@ -44,3 +57,12 @@ void videoInit() {
 }
 
 void videoClose() { dinotronSwitchSerial(); }
+
+void videoHigh() {
+  videoResMode = VideoResModeHigh;
+  videoPixelWidth = 128;
+  videoPixelHeight = 64;
+  videoPixelWidthMask = 127;
+  videoPixelHeightMask = 63;
+  tmsHighVideoInit();
+}

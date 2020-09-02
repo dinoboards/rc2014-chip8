@@ -62,6 +62,10 @@ bool executeSingleInstruction() {
     return false;
 
   switch (currentInstruction) {
+    case 0xFF00:
+    videoHigh();
+    break;
+
   case 0xE000:
     cls();
     break;

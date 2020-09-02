@@ -1,10 +1,14 @@
 
   CLS
+  HIGH
+
   LD I, MYSPRITE
-  LD V0, 28
-  LD V1, 28
+  LD V0, 0
+  LD V1, 0
 LOOP:
   DRW v0, v1, 9
+  RET
+
   DRW v0, v1, 9
   ADD V0, 1
   ADD V1, 1
