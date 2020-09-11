@@ -57,12 +57,15 @@ bool executeSingleInstruction() {
   for (uint16_t d = 0; d <= CommandSwitches.delayFactor; d++)
     ;
 
+  if (useSimulatedTimer)
+    instructionCostCounter += 1 + (1 * (CommandSwitches.delayFactor / 64));
+
   manageTimers();
   if (!checkForKeyPresses())
     return false;
 
   switch (currentInstruction) {
-    case 0xFF00:
+  case 0xFF00:
     videoHigh();
     break;
 

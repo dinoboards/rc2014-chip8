@@ -1,9 +1,13 @@
 #include "systimer.h"
 #include "hbios.h"
+#include "systemstate.h"
 
 static unsigned long result;
 
 uint16_t getSysTimer() {
+  if (useSimulatedTimer)
+    return instructionCostCounter / 48;
+
   hbSysGetTimer(&result);
   return result;
 }
@@ -14,5 +18,7 @@ bool sysTimerSearchDriver() {
     ;
   uint16_t t2 = getSysTimer();
 
-  return (t1 != t2);
+  useSimulatedTimer = t1 == t2;
+
+  return !useSimulatedTimer;
 }

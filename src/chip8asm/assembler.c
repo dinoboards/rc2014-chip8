@@ -621,10 +621,7 @@ inline void assKey() {
   emitByte(0x0A);
 }
 
-
-inline void assHigh() {
-  emit(0x00FF);
-}
+inline void assHigh() { emit(0x00FF); }
 
 void assemble(byte pc) __z88dk_fastcall {
   parseCount = pc;

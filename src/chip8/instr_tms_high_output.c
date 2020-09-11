@@ -1,13 +1,9 @@
-#include "datatypes.h"
 #include "instr_tms_high_output.h"
+#include "datatypes.h"
 
-void tmsHighDraw() {
+void tmsHighDraw() {}
 
-}
-
-void tmsHighCls() {
-
-}
+void tmsHighCls() {}
 /*
 static void buildPatternData(byte *pData) {
   for (byte i = 0; i < 16; i++) {

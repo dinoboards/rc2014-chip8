@@ -27,12 +27,6 @@ inline void tickSoundTimer(byte diff) {
     soundTimer = 0;
   else
     soundTimer -= diff;
-
-  // if (soundTimer & 1) {
-  //   sendDrawCommands("\033[%d;%dHS\007", 1, 70);
-  // } else {
-  //   sendDrawCommands("\033[%d;%dH ", 1, 70);
-  // }
 }
 
 inline void tickDelayTimer(byte diff) {
@@ -43,12 +37,6 @@ inline void tickDelayTimer(byte diff) {
     delayTimer = 0;
   else
     delayTimer -= diff;
-
-  // if (delayTimer & 1) {
-  //   sendDrawCommands("\033[%d;%dHD\007", 1, 71);
-  // } else {
-  //   sendDrawCommands("\033[%d;%dH ", 1, 71);
-  // }
 }
 
 void manageTimers() {
@@ -57,7 +45,7 @@ void manageTimers() {
 #ifdef MEASURE_PERFORMANCE
   instructionCount++;
 
-  if (currentTimerTick > performanceMeasureTick) {
+  if (currentTimerTick >= performanceMeasureTick) {
     xprintf("Count: '%d'\r\n", (instructionCount / 2));
     instructionCount = 0;
     performanceMeasureTick = currentTimerTick + 120;

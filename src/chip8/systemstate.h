@@ -34,7 +34,7 @@ extern byte gameColours[2];
 
 extern uint16_t delayFactor;
 
-#define VideoResModeLow 0
+#define VideoResModeLow  0
 #define VideoResModeHigh 1
 
 extern byte videoResMode;
@@ -43,6 +43,8 @@ extern byte videoPixelHeight;
 extern byte videoPixelWidthMask;
 extern byte videoPixelHeightMask;
 
+extern uint16_t instructionCostCounter;
+extern bool     useSimulatedTimer;
 
 #ifdef DIAGNOSTICS_ON
 extern bool startCounting;

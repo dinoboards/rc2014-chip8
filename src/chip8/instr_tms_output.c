@@ -17,9 +17,8 @@ typedef struct {
 
 static bitsDrawCommand drawCommand;
 
-#define PIXEL_WIDTH 64
+#define PIXEL_WIDTH  64
 #define PIXEL_HEIGHT 32
-
 
 #define CHAR_FRAME_SIZE (PIXEL_WIDTH / 2 * PIXEL_HEIGHT / 2)
 #define CHAR_FRAME_MASK (CHAR_FRAME_SIZE - 1)

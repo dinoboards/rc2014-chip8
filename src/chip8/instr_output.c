@@ -2,29 +2,27 @@
 #include "dinotron.h"
 #include "error_reports.h"
 #include "instr_serial_output.h"
-#include "instr_tms_output.h"
 #include "instr_tms_high_output.h"
+#include "instr_tms_output.h"
 #include "systemstate.h"
 #include "tms.h"
 
 void draw() {
   if (CommandSwitches.isSerial)
     serialDraw();
+  else if (videoResMode == VideoResModeLow)
+    tmsDraw();
   else
-    if (videoResMode == VideoResModeLow)
-      tmsDraw();
-    else
-      tmsHighDraw();
+    tmsHighDraw();
 }
 
 void cls() {
   if (CommandSwitches.isSerial)
     serialCls();
+  else if (videoResMode == VideoResModeLow)
+    tmsCls();
   else
-    if (videoResMode == VideoResModeLow)
-      tmsCls();
-    else
-      tmsHighCls();
+    tmsHighCls();
 }
 
 void videoInit() {

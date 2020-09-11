@@ -31,6 +31,9 @@ byte videoPixelHeight;
 byte videoPixelWidthMask;
 byte videoPixelHeightMask;
 
+bool     useSimulatedTimer = false;
+uint16_t instructionCostCounter;
+
 #ifdef DIAGNOSTICS_ON
 /* diagnostic state */
 bool startCounting = false;
