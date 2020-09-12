@@ -48,4 +48,18 @@ typedef struct {
 
 extern uint8_t hbSysBankCopy(hbiosBankCopy *pData) __z88dk_fastcall;
 
+extern uint8_t hbSndReset(uint8_t driver) __z88dk_fastcall;
+
+typedef struct {
+  uint8_t driver;
+  union {
+    uint8_t  volume;
+    uint16_t note;
+    uint8_t  channel;
+  };
+} hbSndParams;
+extern uint8_t hbSndVolume(hbSndParams *pParams) __z88dk_fastcall;
+extern uint8_t hbSndNote(hbSndParams *pParams) __z88dk_fastcall;
+extern uint8_t hbSndPlay(hbSndParams *pParams) __z88dk_fastcall;
+
 #endif

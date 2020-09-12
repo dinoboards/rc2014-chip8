@@ -50,4 +50,5 @@ configuration_loader.asm
 token.asm
 dinotron.asm
 instr_tms_high_output.asm
+instr_sound.asm
 

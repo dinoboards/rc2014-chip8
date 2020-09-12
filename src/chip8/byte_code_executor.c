@@ -15,6 +15,7 @@
 #include "instr_pc.h"
 #include "instr_random.h"
 #include "instr_registers.h"
+#include "instr_sound.h"
 
 const uint16_t *programStorage = (uint16_t *)0x200;
 

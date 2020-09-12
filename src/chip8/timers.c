@@ -1,9 +1,13 @@
 #include "timers.h"
 #include "chip8/tty.h"
 #include "hbios.h"
+#include "instr_sound.h"
 #include "systemstate.h"
 #include "systimer.h"
+
+#ifdef MEASURE_PERFORMANCE
 #include "xstdio.h"
+#endif
 
 static uint16_t lastTimerTick;
 uint16_t        currentTimerTick;
@@ -23,9 +27,10 @@ inline void tickSoundTimer(byte diff) {
   if (soundTimer == 0)
     return;
 
-  if (diff > soundTimer)
+  if (diff >= soundTimer) {
     soundTimer = 0;
-  else
+    soundOff();
+  } else
     soundTimer -= diff;
 }
 
@@ -33,7 +38,7 @@ inline void tickDelayTimer(byte diff) {
   if (delayTimer == 0)
     return;
 
-  if (diff > delayTimer)
+  if (diff >= delayTimer)
     delayTimer = 0;
   else
     delayTimer -= diff;

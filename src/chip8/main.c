@@ -54,6 +54,7 @@ void main(MainArguments *pargs) __z88dk_fastcall {
 
   initSystemState();
   seedRandom();
+  hbSndReset(0);
 
   uint16_t *ptr = programStorage;
   int       noMoreData = 0;

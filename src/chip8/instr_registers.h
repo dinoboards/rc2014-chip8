@@ -8,11 +8,6 @@
 #define ldVxByte()  (registers[secondNibble] = lowByte)
 #define ldIAddr()   (registerI = addr)
 #define addVxByte() (registers[secondNibble] += lowByte)
-#define ldStVx()                            \
-  {                                         \
-    initTimers();                           \
-    (soundTimer = registers[secondNibble]); \
-  }
 
 #define ldDtVx()                            \
   {                                         \
