@@ -119,24 +119,24 @@ inline void shlVxVy() {
   registers[secondNibble] = registers[secondNibble] << 1;
 }
 
-#define _addVxVy(x)                                  \
-  uint16_t i##x = registers[secondNibble];           \
-  i##x += registers[thirdNibble];                    \
-  registers[secondNibble] += registers[thirdNibble]; \
-  registers[0xF] = i##x > 255;
+static void addVxVy() {
+  uint16_t i = registers[secondNibble];
+  i += registers[thirdNibble];
+  registers[secondNibble] += registers[thirdNibble];
+  registers[0xF] = i > 255;
+}
 
-#define addVxVy() _addVxVy(__LINE__)
-
-#define subVxVy()                                                    \
-  registers[0xF] = registers[secondNibble] > registers[thirdNibble]; \
+static void subVxVy() {
+  registers[0xF] = registers[secondNibble] > registers[thirdNibble];
   registers[secondNibble] -= registers[thirdNibble];
+}
 
-inline void subnVxVy() {
+static void subnVxVy() {
   registers[0xF] = registers[secondNibble] < registers[thirdNibble];
   registers[secondNibble] = registers[thirdNibble] - registers[secondNibble];
 }
 
-#define xorVxVy() registers[secondNibble] ^= registers[thirdNibble];
+static void xorVxVy() { registers[secondNibble] ^= registers[thirdNibble]; }
 
 static byte units;
 static byte hundreds;
