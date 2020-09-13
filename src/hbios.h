@@ -9,18 +9,22 @@
 void print(const char *str) __z88dk_fastcall;
 
 typedef struct {
+  uint8_t driver;
+  char    chr;
+} hbCioParams;
+
+extern uint8_t hbCioIn(hbCioParams *) __z88dk_fastcall;
+extern uint8_t hbCioIst(uint8_t) __z88dk_fastcall;
+extern uint8_t hbCioOut(hbCioParams *) __z88dk_fastcall;
+
+extern uint16_t hbSysGetTimer16();
+
+typedef struct {
   uint8_t func;
   uint8_t unit;
   void *  driverFnAddr;
   void *  driverDataAddr;
 } hbiosDriverEntry;
-
-extern uint8_t hbCioIn(uint8_t driver, char *result);
-extern uint8_t hbCioIst(uint8_t) __z88dk_fastcall;
-extern uint8_t hbCioOut(uint8_t, char);
-
-extern uint16_t hbSysGetTimer16();
-
 extern uint8_t hbSysGetVda(hbiosDriverEntry *pData) __z88dk_fastcall;
 
 #define VDADEV_VDU  ((uint8_t)0x00) /* ECB VDU - MOTOROLA 6545 */
@@ -45,7 +49,6 @@ typedef struct {
   void *   destAddr;
   void *   sourceAddr;
 } hbiosBankCopy;
-
 extern uint8_t hbSysBankCopy(hbiosBankCopy *pData) __z88dk_fastcall;
 
 extern uint8_t hbSndReset(uint8_t driver) __z88dk_fastcall;

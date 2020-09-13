@@ -5,7 +5,7 @@
 #include "systemstate.h"
 #include "systimer.h"
 
-#undef MEASURE_PERFORMANCE
+#define MEASURE_PERFORMANCE
 
 #ifdef MEASURE_PERFORMANCE
 #include "xstdio.h"

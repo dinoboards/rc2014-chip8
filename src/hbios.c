@@ -1,6 +1,11 @@
 #include "hbios.h"
 
+static hbCioParams cioParams;
+
 void print(const char *str) __z88dk_fastcall {
-  while (*str)
-    hbCioOut(0, *str++);
+  cioParams.driver = 0;
+  while (*str) {
+    cioParams.chr = *str++;
+    hbCioOut(&cioParams);
+  }
 }

@@ -25,7 +25,7 @@ bool checkForKeyPresses() {
     return true;
   }
 
-  getKey(&currentPressedKey);
+  currentPressedKey = getKey();
 
 #ifdef DIAGNOSTICS_ON
   if (currentPressedKey == 'x' || currentPressedKey == 'X') {

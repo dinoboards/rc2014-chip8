@@ -12,19 +12,22 @@ BF_CIOINIT	EQU	BF_CIO + 4	; INIT/RESET DEVICE/LINE CONFIG
 BF_CIOQUERY	EQU	BF_CIO + 5	; REPORT DEVICE/LINE CONFIG
 BF_CIODEVICE	EQU	BF_CIO + 6	; REPORT DEVICE INFO
 
-	;extern byte hbCioIn(byte driver, char* result);
+	;extern byte hbCioIn(hbCioParams* ) __z88dk_fastcall;
 _hbCioIn:
 	PUSH	IX
-	LD	IX, 4			; REFERENCE C ARGS ON STACK
-	ADD	IX, SP
+
+	LD	C, (HL)
+	INC	HL
+	PUSH	HL
+
 	LD	B, BF_CIOIN
-  	LD 	C, (IX + 0)		; DRIVER INDEX
 	RST	08
 	LD	L, A			; RETURN SUCCESS/FAIL
-	LD	C, (IX + 1)		; WRITE CHAR TO *result
-	LD	B, (IX + 2)
+
+	POP	BC
 	LD	A, E
 	LD	(BC), A
+
 	POP	IX
 	RET
 
@@ -38,19 +41,16 @@ _hbCioIst:
 	POP	IX
 	RET
 
-	; extern byte hbCioOut(byte, char);
+	; extern byte hbCioOut(hbCioParams*) __z88dk_fastcall;
 _hbCioOut:
-	push	ix
-	LD	HL, 4			; REFERENCE C ARGS ON STACK
-	ADD	HL, SP
-	LD	B, BF_CIOOUT
-  	LD 	C, (HL)			; DRIVER INDEX
+	PUSH	IX
+	LD	C, (HL)
 	INC	HL
-	LD	E, (HL)			; CHAR TO WRITE
+	LD	E, (HL)
+	LD	B, BF_CIOOUT
 	RST	08
 	LD	L, A			; RETURN SUCCESS/FAIL
-	pop	ix
+	POP	IX
 	RET
-
 
 	SECTION IGNORE

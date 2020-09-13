@@ -1,3 +1,4 @@
+#include "keys.h"
 #include "test_expectations.h"
 
 bool appRunning = false;
@@ -54,16 +55,15 @@ inline void resetKeySimulator() {
   currentKeyTimeout = 0;
 }
 
-bool keyReady() { return simulateKeyReady; }
+byte keyReady() { return simulateKeyReady; }
 
-void getKey(char *r) { *r = simulatedKeyValue; }
+char getKey() { return simulatedKeyValue; }
 
 uint16_t simulatedNextTimerTick = 0;
 
 inline void simulateKey(const char k) {
   simulateKeyReady = true;
   simulatedKeyValue = k;
-  xprintf("Inc....\r\n");
   simulatedNextTimerTick += 4;
 }
 

@@ -4,7 +4,7 @@
 
 #include "datatypes.h"
 
-extern bool keyReady();
-extern void getKey(char *);
+extern byte keyReady();
+extern char getKey();
 
 #endif

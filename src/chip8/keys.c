@@ -2,6 +2,12 @@
 #include "datatypes.h"
 #include "hbios.h"
 
-bool keyReady() { return hbCioIst(0) != 0; }
+static hbCioParams cioParams;
 
-void getKey(char *r) { hbCioIn(0, r); }
+byte keyReady() { return hbCioIst(0); }
+
+char getKey() {
+  cioParams.driver = 0;
+  hbCioIn(&cioParams);
+  return cioParams.chr;
+}
