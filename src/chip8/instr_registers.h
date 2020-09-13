@@ -36,13 +36,6 @@ inline void ldVxI() {
     inc     c
     ld      b, 0
     ldir
-
-  	// ex	    de, hl
-    // ld	    hl, _registerI
-    // ld	    (hl), e
-    // inc	    hl
-    // ld	    (hl), d
-
   __endasm;
   // clang-format on
 }
@@ -60,11 +53,6 @@ inline void ldIVx() {
     inc     c
     ld      b, 0
     ldir
-
-    // ld	    hl, _registerI
-    // ld	    (hl), e
-    // inc	    hl
-    // ld	    (hl), d
   __endasm;
   // clang-format on
 }
@@ -103,7 +91,7 @@ inline void orVxVy() {
     ld      c, a
     add     hl, bc
     ld      a, (de)
-    or     a, (hl)
+    or      a, (hl)
     ld      (de), a
   __endasm;
   // clang-format on
@@ -119,11 +107,33 @@ inline void shlVxVy() {
   registers[secondNibble] = registers[secondNibble] << 1;
 }
 
-static void addVxVy() {
-  uint16_t i = registers[secondNibble];
-  i += registers[thirdNibble];
-  registers[secondNibble] += registers[thirdNibble];
-  registers[0xF] = i > 255;
+static void addVxVy() __naked {
+  __asm
+    ld      a, 0
+    ld	    ((_registers + 0x0F)), a
+    ld	    de, _registers
+
+    ld	    hl, (_thirdNibble)
+    ld	    h, 0x00
+    add	    hl, de
+    ld	    b, (hl)
+
+    ld	    hl, (_secondNibble)
+    ld	    h, 0x00
+    add	    hl, de
+    ld	    a, (hl)
+
+    add     a, b
+    ld      (hl), a
+    ret     nc
+
+    ld      a, 1
+    ld	    (_registers + 0x0f), a
+    ret
+  __endasm;
+  // const uint16_t i = registers[secondNibble] + registers[thirdNibble];
+  // registers[secondNibble] = i;
+  // registers[0xF] = i > 255;
 }
 
 static void subVxVy() {
