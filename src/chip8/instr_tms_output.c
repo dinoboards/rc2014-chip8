@@ -10,8 +10,6 @@ typedef struct {
   byte data;
   byte topBits;
   byte bottomBits;
-  bool top;
-  bool left;
   byte length;
 } bitsDrawCommand;
 
@@ -50,7 +48,6 @@ void drawBits() {
       registers[0xF] = 1;
   }
 
-  drawCommand.top = false;
   if (drawCommand.bottomBits & 2) {
     drawCommand.data ^= 4; // bottom left
     if ((drawCommand.data & 4) == 0)
