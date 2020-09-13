@@ -34,6 +34,9 @@ byte videoPixelHeightMask;
 bool     useSimulatedTimer = false;
 uint16_t instructionCostCounter;
 
+bool     audioActive = false;
+uint16_t audioPeriod;
+
 #ifdef DIAGNOSTICS_ON
 /* diagnostic state */
 bool startCounting = false;

@@ -56,10 +56,12 @@ typedef struct {
     uint8_t  volume;
     uint16_t note;
     uint8_t  channel;
+    uint16_t period;
   };
 } hbSndParams;
 extern uint8_t hbSndVolume(hbSndParams *pParams) __z88dk_fastcall;
 extern uint8_t hbSndNote(hbSndParams *pParams) __z88dk_fastcall;
 extern uint8_t hbSndPlay(hbSndParams *pParams) __z88dk_fastcall;
+extern uint8_t hbSndPeriod(hbSndParams *pParams) __z88dk_fastcall;
 
 #endif

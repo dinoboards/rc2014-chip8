@@ -26,6 +26,7 @@
 #define SNE_V0_V2     0x9020
 #define SKP_V3        0xE39E
 #define SKNP_VD       0xEDA1
+#define AUDIO         0xF002
 #define LD_VA_DT      0xFA07
 #define KEY_V5        0xF50A
 #define LD_DT_V3      0xF315

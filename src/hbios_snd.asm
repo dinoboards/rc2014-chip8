@@ -1,5 +1,5 @@
 
-	PUBLIC _hbSndReset, _hbSndVolume, _hbSndNote, _hbSndPlay
+	PUBLIC _hbSndReset, _hbSndVolume, _hbSndNote, _hbSndPlay, _hbSndPeriod
 
 	SECTION CODE
 
@@ -30,12 +30,7 @@ _hbSndReset:
 	POP	IX
 	RET
 
-
-; struct hbSndVolumeParams {
-; byte driver;
-; byte volume;
-;}
-;extern byte hbSndVolume(hbSndVolumeParams* pParams) __z88dk_fastcall;
+;extern byte hbSndVolume(hbSndParams* pParams) __z88dk_fastcall;
 _hbSndVolume:
 	PUSH	IX
 	LD	C, (HL)
@@ -47,12 +42,7 @@ _hbSndVolume:
 	POP	IX
 	RET
 
-
-; struct hbSndNoteParams {
-	; byte driver;
-	; uint16_t note;
-; }
-;extern byte hbSndNote(hbSndNoteParams* pParams) __z88dk_fastcall;
+;extern byte hbSndNote(hbSndParams* pParams) __z88dk_fastcall;
 _hbSndNote:
 	PUSH	IX
 	LD	C, (HL)
@@ -67,11 +57,22 @@ _hbSndNote:
 	POP	IX
 	RET
 
-; struct hbSndPlayParams {
-; byte driver;
-; byte channel;
-;}
-;extern byte hbSndPlay(hbSndPlayParams* pParams) __z88dk_fastcall;
+;extern byte hbSndPeriod(hbSndParams* pParams) __z88dk_fastcall;
+_hbSndPeriod:
+	PUSH	IX
+	LD	C, (HL)
+	INC	HL
+	LD	A, (HL)
+	INC	HL
+	LD	H, (HL)
+	LD	L, A
+	LD	B, BF_SNDPRD
+	RST	08
+	LD	L, A			; RETURN SUCCESS/FAIL
+	POP	IX
+	RET
+
+;extern byte hbSndPlay(hbSndParams* pParams) __z88dk_fastcall;
 _hbSndPlay:
 	PUSH	IX
 	LD	C, (HL)

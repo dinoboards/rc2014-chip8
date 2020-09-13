@@ -46,6 +46,9 @@ extern byte videoPixelHeightMask;
 extern uint16_t instructionCostCounter;
 extern bool     useSimulatedTimer;
 
+extern bool     audioActive;
+extern uint16_t audioPeriod;
+
 #ifdef DIAGNOSTICS_ON
 extern bool startCounting;
 extern int  drawCount;

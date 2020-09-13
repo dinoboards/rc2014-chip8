@@ -623,6 +623,8 @@ inline void assKey() {
 
 inline void assHigh() { emit(0x00FF); }
 
+inline void assAudio() { emit(0xF002); }
+
 void assemble(byte pc) __z88dk_fastcall {
   parseCount = pc;
   currentAddress = 0x200;
@@ -733,6 +735,10 @@ void assemble(byte pc) __z88dk_fastcall {
 
     case InstructionHigh:
       assHigh();
+      break;
+
+    case InstructionAudio:
+      assAudio();
       break;
 
     default:

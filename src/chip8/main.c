@@ -5,6 +5,7 @@
 #include "error_reports.h"
 #include "hbios.h"
 #include "instr_output.h"
+#include "instr_sound.h"
 #include "random.h"
 #include "systemstate.h"
 #include "systimer.h"
@@ -13,6 +14,8 @@
 #include <stdarg.h>
 #include <stdio.h>
 #include <string.h>
+
+#include "xstdio.h"
 
 MainArguments *mainArguments;
 

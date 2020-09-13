@@ -517,6 +517,21 @@ void setup_ldf_i_v4() {
 
 void verify_ldf_i_v4() { expectEqualInts(registerI, (uint16_t)&fonts[5], "I"); }
 
+const byte audioPattern[16] = {0x81, 0x81, 0x81, 0x81, 0x81, 0x81, 0x81, 0x81, 0x81, 0x81, 0x81, 0x81, 0x81, 0x81, 0x81, 0x81};
+
+void setup_audio() {
+  registerI = (uint16_t)audioPattern;
+  audioActive = false;
+  audioPeriod = 0;
+
+  programStorage[0] = invertByteOrder(AUDIO);
+}
+
+void verify_audio() {
+  expectEqualInts(audioPeriod, 254, "audioPeriod");
+  expectEqualInts(audioActive, 1, "audioActive");
+}
+
 void main() {
   CommandSwitches.isSerial = true;
   CommandSwitches.delayFactor = 0;
@@ -571,6 +586,7 @@ void main() {
   assert(subn_v2_ve_with_borrow);
   assert(jp_v0_1024);
   // assert(high);
+  assert(audio);
 
   assertTerminates(final_ret);
 

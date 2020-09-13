@@ -94,3 +94,8 @@ tictac: chip8
 blinky: chip8
 	@cp ./test-samples/BLINKY* ./bin/
 	@cd bin && cpm "chip8 BLINKY -x 2000"
+
+.PHONY: music
+music: chip8
+	@cp ./test-samples/music* ./bin/
+	@cd bin && cpm "chip8 music.ch8"

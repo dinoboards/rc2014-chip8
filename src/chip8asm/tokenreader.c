@@ -61,6 +61,7 @@ static void testForInstructions() {
   tokenMap("key", InstructionKey);
   tokenMap("subn", InstructionSubn);
   tokenMap("high", InstructionHigh);
+  tokenMap("audio", InstructionAudio);
 
   token.isInstruction = false;
   token.type = TokenAlphanumeric;

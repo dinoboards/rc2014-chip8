@@ -70,6 +70,10 @@ bool executeSingleInstruction() {
     videoHigh();
     break;
 
+  case 0x02F0:
+    audio();
+    break;
+
   case 0xE000:
     cls();
     break;

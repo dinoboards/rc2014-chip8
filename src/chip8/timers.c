@@ -5,6 +5,8 @@
 #include "systemstate.h"
 #include "systimer.h"
 
+#undef MEASURE_PERFORMANCE
+
 #ifdef MEASURE_PERFORMANCE
 #include "xstdio.h"
 #endif
@@ -12,7 +14,6 @@
 static uint16_t lastTimerTick;
 uint16_t        currentTimerTick;
 
-#undef MEASURE_PERFORMANCE
 #ifdef MEASURE_PERFORMANCE
 uint16_t performanceMeasureTick = 0;
 uint16_t instructionCount = 0;
