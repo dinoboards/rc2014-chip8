@@ -1,5 +1,5 @@
 
-	PUBLIC	_hbSysGetTimer, _hbSysGetVda, _hbSysBankCopy
+	PUBLIC	_hbSysGetTimer16, _hbSysGetVda, _hbSysBankCopy
 
 	SECTION CODE
 
@@ -48,30 +48,12 @@ BF_SYSINT_SET		EQU	$20	; SET INT VECTOR ADDRESS
 
 SYSGET_VDAFN		EQU	(BF_SYSGET << 8) + BF_SYSGET_VDAFN
 
-	;extern byte hbSysGetTimer(long* result) __z88dk_fastcall;
-_hbSysGetTimer:
+	;extern uint16_t hbSysGetTimer() __z88dk_fastcall;
+_hbSysGetTimer16:
 	PUSH	IX
-	PUSH	HL
 	LD	BC, 0xF8D0
 	RST	08
 
-	POP	BC
-
-	PUSH	AF
-	LD	A, L
-	LD	(BC), A
-	INC	BC
-	LD	A, H
-	LD	(BC), A
-	INC	BC
-	LD	A, E
-	LD	(BC), A
-	INC	BC
-	LD	A, D
-	LD	(BC), A
-	POP	AF
-
-	LD	L, A
 	POP	IX
 	RET
 

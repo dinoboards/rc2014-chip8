@@ -75,4 +75,5 @@ void main(MainArguments *pargs) __z88dk_fastcall {
     ;
 
   videoClose();
+  hbSndReset(0);
 }
