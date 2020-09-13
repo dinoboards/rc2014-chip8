@@ -180,18 +180,21 @@ static void addVxVy() __naked {
   // registers[0xF] = i > 255;
 }
 
-static void subVxVy() {
-  uint8_t *register2ndNibble = &registers[nibble2nd];
+static uint8_t *register2ndNibble;
 
-  registers[0xF] = *register2ndNibble > registers[nibble3rd];
-  *register2ndNibble -= registers[nibble3rd];
+static void subVxVy() {
+  register2ndNibble = &registers[nibble2nd];
+  const uint8_t *register3rdNibble = &registers[nibble3rd];
+  registers[0xF] = *register2ndNibble > *register3rdNibble;
+  *register2ndNibble -= *register3rdNibble;
 }
 
 static void subnVxVy() {
-  uint8_t *register2ndNibble = &registers[nibble2nd];
+  register2ndNibble = &registers[nibble2nd];
+  const uint8_t *register3rdNibble = &registers[nibble3rd];
 
-  registers[0xF] = *register2ndNibble < registers[nibble3rd];
-  *register2ndNibble = registers[nibble3rd] - *register2ndNibble;
+  registers[0xF] = *register2ndNibble < *register3rdNibble;
+  *register2ndNibble = *register3rdNibble - *register2ndNibble;
 }
 
 static void xorVxVy() { registers[nibble2nd] ^= registers[nibble3rd]; }

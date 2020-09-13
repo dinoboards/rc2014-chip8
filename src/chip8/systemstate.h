@@ -48,6 +48,8 @@ extern uint16_t audioPeriod;
 
 extern uint16_t currentInstruction;
 
+extern uint8_t timerSkipFlag;
+
 #ifdef DIAGNOSTICS_ON
 extern bool startCounting;
 extern int  drawCount;

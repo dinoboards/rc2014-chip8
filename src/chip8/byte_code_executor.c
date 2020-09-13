@@ -53,8 +53,10 @@ bool executeSingleInstruction() {
 
   currentInstruction = readInstruction(); // high/low bytes in inverted order
 
-  for (uint16_t d = 0; d <= CommandSwitches.delayFactor; d++)
-    ;
+  uint16_t d = CommandSwitches.delayFactor + 1;
+  do {
+    d--;
+  } while (d > 0);
 
   if (useSimulatedTimer)
     instructionCostCounter += 1 + (1 * (CommandSwitches.delayFactor / 64));

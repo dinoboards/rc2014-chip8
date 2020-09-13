@@ -47,7 +47,7 @@ bool checkForKeyPresses() {
   else if (currentPressedKey >= 'a' && currentPressedKey <= 'z')
     currentPressedKey += (-'a' + 10);
 
-  currentKeyTimeout = currentTimerTick + 10;
+  currentKeyTimeout = currentTimerTick + 5;
   keyPressed = true;
 
   return true;

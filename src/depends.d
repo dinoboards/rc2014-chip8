@@ -52,7 +52,7 @@
  xstdio.h chip8/test_helpers.h chip8/keys.h test_expectations.h \
  terminal_codes.h xstdio.h
 ./chip8/timers.asm: chip8/timers.c chip8/timers.h datatypes.h chip8/tty.h hbios.h \
- chip8/instr_sound.h chip8/systemstate.h chip8/systimer.h xstdio.h
+ chip8/instr_sound.h chip8/systemstate.h chip8/systimer.h
 ./chip8/tms.asm: chip8/tms.c chip8/tms.h datatypes.h hbios.h chip8/keys.h \
  xstdio.h
 ./chip8/tty.asm: chip8/tty.c chip8/tty.h hbios.h xstdio.h

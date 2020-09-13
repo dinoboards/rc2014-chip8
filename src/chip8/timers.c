@@ -5,7 +5,7 @@
 #include "systemstate.h"
 #include "systimer.h"
 
-#define MEASURE_PERFORMANCE
+#undef MEASURE_PERFORMANCE
 
 #ifdef MEASURE_PERFORMANCE
 #include "xstdio.h"
@@ -46,11 +46,17 @@ inline void tickDelayTimer(byte diff) {
 }
 
 void manageTimers() {
+#ifdef MEASURE_PERFORMANCE
+  instructionCount++;
+#endif
+
+  timerSkipFlag++;
+  if (timerSkipFlag % 16)
+    return;
+
   currentTimerTick = getSysTimer();
 
 #ifdef MEASURE_PERFORMANCE
-  instructionCount++;
-
   if (currentTimerTick >= performanceMeasureTick) {
     xprintf("Count: '%d'\r\n", (instructionCount / 2));
     instructionCount = 0;

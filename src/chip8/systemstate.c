@@ -36,6 +36,8 @@ uint16_t audioPeriod;
 
 uint16_t currentInstruction;
 
+uint8_t timerSkipFlag = 0;
+
 #ifdef DIAGNOSTICS_ON
 /* diagnostic state */
 bool startCounting = false;
