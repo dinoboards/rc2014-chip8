@@ -7,6 +7,6 @@ extern void seedRandom();
 
 #include "random.h"
 
-#define rnd() (registers[secondNibble] = ((byte)chip8Rand() & lowByte))
+#define rnd() (registers[nibble2nd] = ((byte)chip8Rand() & lowByte))
 
 #endif

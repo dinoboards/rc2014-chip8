@@ -4,46 +4,46 @@
 
 #define ret() popPc()
 
-#define seVxByte()                        \
-  if (registers[secondNibble] == lowByte) \
+#define seVxByte()                     \
+  if (registers[nibble2nd] == lowByte) \
   chip8PC += 1
 
-#define seVxVy()                                         \
-  if (registers[secondNibble] == registers[thirdNibble]) \
+#define seVxVy()                                      \
+  if (registers[nibble2nd] == registers[thirdNibble]) \
   chip8PC += 1
 
-#define sneVxByte()                       \
-  if (registers[secondNibble] != lowByte) \
+#define sneVxByte()                    \
+  if (registers[nibble2nd] != lowByte) \
   chip8PC += 1
 
-#define sneVxVy()                                        \
-  if (registers[secondNibble] != registers[thirdNibble]) \
+#define sneVxVy()                                     \
+  if (registers[nibble2nd] != registers[thirdNibble]) \
   chip8PC += 1
 
 #define jp() chip8PC = (uint16_t *)addr;
 
 inline void jpV0Addr() { chip8PC = (uint16_t *)(addr + registers[0]); }
 
-#define skpVx()                                                   \
-  if (keyPressed && registers[secondNibble] == currentPressedKey) \
+#define skpVx()                                                \
+  if (keyPressed && registers[nibble2nd] == currentPressedKey) \
     chip8PC += 1;
 
 #ifdef DIAGNOSTICS_ON
-#define sknpVx()                                                   \
-  if (!keyPressed || registers[secondNibble] != currentPressedKey) \
-    chip8PC += 1;                                                  \
-  else                                                             \
+#define sknpVx()                                                \
+  if (!keyPressed || registers[nibble2nd] != currentPressedKey) \
+    chip8PC += 1;                                               \
+  else                                                          \
     startCounting = true
 
 #else
-#define sknpVx()                                                   \
-  if (!keyPressed || registers[secondNibble] != currentPressedKey) \
+#define sknpVx()                                                \
+  if (!keyPressed || registers[nibble2nd] != currentPressedKey) \
     chip8PC += 1;
 #endif
 
 inline void keyVx() {
   if (keyPressed) {
-    registers[secondNibble] = currentPressedKey;
+    registers[nibble2nd] = currentPressedKey;
     return;
   }
   chip8PC -= 1;

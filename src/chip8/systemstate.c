@@ -7,12 +7,10 @@ uint16_t *chip8PC;
 byte      registers[16];
 uint16_t  registerI;
 
-uint8_t  firstNibble;
-uint8_t  secondNibble;
-uint8_t  thirdNibble;
-uint8_t  lowByte;
-uint8_t  fourthNibble;
-uint16_t addr;
+uint8_t firstNibble;
+uint8_t thirdNibble;
+uint8_t lowByte;
+uint8_t fourthNibble;
 
 byte     currentPressedKey;
 uint16_t currentKeyTimeout;
@@ -36,6 +34,8 @@ uint16_t instructionCostCounter;
 
 bool     audioActive = false;
 uint16_t audioPeriod;
+
+uint16_t currentInstruction;
 
 #ifdef DIAGNOSTICS_ON
 /* diagnostic state */

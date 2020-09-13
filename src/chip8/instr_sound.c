@@ -7,7 +7,7 @@ static hbSndParams sndParams;
 
 void ldStVx() {
   initTimers();
-  soundTimer = registers[secondNibble];
+  soundTimer = registers[nibble2nd];
 
   if (soundTimer == 0) {
     hbSndReset(0);

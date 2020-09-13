@@ -8,11 +8,9 @@ extern uint16_t *chip8PC;
 extern byte      registers[16];
 extern uint16_t  registerI;
 extern uint8_t   firstNibble;
-extern uint8_t   secondNibble;
 extern uint8_t   thirdNibble;
 extern uint8_t   lowByte;
 extern uint8_t   fourthNibble;
-extern uint16_t  addr;
 
 extern byte     currentPressedKey;
 extern uint16_t currentKeyTimeout;
@@ -49,10 +47,15 @@ extern bool     useSimulatedTimer;
 extern bool     audioActive;
 extern uint16_t audioPeriod;
 
+extern uint16_t currentInstruction;
+
 #ifdef DIAGNOSTICS_ON
 extern bool startCounting;
 extern int  drawCount;
 extern bool startDebugging;
 #endif
+
+#define nibble2nd ((uint8_t)currentInstruction & 0xF)
+#define addr      ((currentInstruction >> 8) + (((int)nibble2nd) << 8))
 
 #endif

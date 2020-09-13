@@ -46,8 +46,6 @@ void initSystemState() {
   chip8PC = (uint16_t *)programStorage;
 }
 
-static uint16_t currentInstruction;
-
 bool executeSingleInstruction() {
 #ifdef DIAGNOSTICS_ON
   updateMachineStateDisplay();
@@ -85,11 +83,9 @@ bool executeSingleInstruction() {
 
   default: {
     firstNibble = (uint8_t)(currentInstruction >> 4) & 0xF;
-    secondNibble = (uint8_t)currentInstruction & 0xF;
     thirdNibble = (uint8_t)(currentInstruction >> 12);
     lowByte = (currentInstruction >> 8) & 0xFF;
     fourthNibble = lowByte & 0xF;
-    addr = (currentInstruction >> 8) + (((int)secondNibble) << 8);
 
     switch (firstNibble) {
     case 0x1: {

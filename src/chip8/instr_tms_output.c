@@ -272,7 +272,7 @@ static byte yy;
 
 void tmsDraw() {
   drawCommand.length = fourthNibble;
-  xx = registers[secondNibble];
+  xx = registers[nibble2nd];
   yy = registers[thirdNibble];
 
   registers[0xF] = 0;
