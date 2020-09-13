@@ -22,7 +22,7 @@ byte  startingY;
 void serialDraw() {
   registers[0x0F] = 0;
   x = registers[nibble2nd] & videoPixelWidthMask;
-  startingY = registers[thirdNibble] & videoPixelHeightMask;
+  startingY = registers[nibble3rd] & videoPixelHeightMask;
 
   spritePtr = (byte *)registerI;
 

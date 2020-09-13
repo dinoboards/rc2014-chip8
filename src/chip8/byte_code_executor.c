@@ -83,7 +83,6 @@ bool executeSingleInstruction() {
 
   default: {
     firstNibble = (uint8_t)(currentInstruction >> 4) & 0xF;
-    thirdNibble = (uint8_t)(currentInstruction >> 12);
     lowByte = (currentInstruction >> 8) & 0xFF;
     fourthNibble = lowByte & 0xF;
 

@@ -19,7 +19,7 @@
 
 #define addIVx() (registerI += registers[nibble2nd])
 
-#define ldVxVy() (registers[nibble2nd] = registers[thirdNibble])
+#define ldVxVy() (registers[nibble2nd] = registers[nibble3rd])
 
 // TODO Quicks - set I to end value
 inline void ldVxI() {
@@ -66,6 +66,7 @@ inline void ldIVx() {
 inline void andVxVy() {
   // clang-format off
   __asm
+    ; // LOAD VX ADDR INTO DE (2ndNibble)
     ld      de, _registers
     ld      h, 0
     ld	    a, (_currentInstruction)
@@ -74,9 +75,17 @@ inline void andVxVy() {
     add	    hl, de    ; hl is address of Vx
     ex      de, hl    ; de is address of Vx, Hl is _registers
 
-    ld      a, (_thirdNibble)
-    ld      c, a
-    add     hl, bc
+    ; // LOAD VY ADDR INTO HL (3rdNibble)
+    ld	    a, (_currentInstruction + 1)
+    rlca
+    rlca
+    rlca
+    rlca
+    and	    a, 0x0f
+    ld	    c, a
+    ld	    b, 0x00
+    add	    hl, bc
+
     ld      a, (de)
     and     a, (hl)
     ld      (de), a
@@ -87,6 +96,8 @@ inline void andVxVy() {
 inline void orVxVy() {
   // clang-format off
   __asm
+    ; // LOAD VX ADDR INTO DE (2ndNibble)
+
     ld      de, _registers
     ld      h, 0
     ld	    a, (_currentInstruction)
@@ -95,10 +106,17 @@ inline void orVxVy() {
     add	    hl, de    ; hl is address of Vx
     ex      de, hl    ; de is address of Vx, Hl is _registers
 
-    // ld      hl, _registers
-    ld      a, (_thirdNibble)
-    ld      c, a
-    add     hl, bc
+    ; // LOAD VY ADDR INTO HL (3rdNibble)
+    ld	    a, (_currentInstruction + 1)
+    rlca
+    rlca
+    rlca
+    rlca
+    and	    a, 0x0f
+    ld	    c, a
+    ld	    b, 0x00
+    add	    hl, bc
+
     ld      a, (de)
     or      a, (hl)
     ld      (de), a
@@ -126,12 +144,21 @@ static void addVxVy() __naked {
     ld	    ((_registers + 0x0F)), a
     ld	    de, _registers
 
-    ld	    hl, (_thirdNibble)
-    ld	    h, a
-    add	    hl, de
+
+    ; // LOAD VY b (3rdNibble)
+    ld	a, (_currentInstruction + 1)
+    rlca
+    rlca
+    rlca
+    rlca
+    and	a, 0x0f
+    ld	l, a
+    ld	h, 0x00
+    add	hl, de
     ld	    b, (hl)
 
-    ld      h, a
+    ; // LOAD VX a (2ndNibble)
+    ld      h, 0
     ld	    a, (_currentInstruction)
     and	    a, 0x0F
     ld	    l, a
@@ -148,7 +175,7 @@ static void addVxVy() __naked {
   __endasm;
   // clang-format on
 
-  // const uint16_t i = registers[secondNibble] + registers[thirdNibble];
+  // const uint16_t i = registers[nibble2nd] + registers[nibble3rd];
   // registers[secondNibble] = i;
   // registers[0xF] = i > 255;
 }
@@ -156,18 +183,18 @@ static void addVxVy() __naked {
 static void subVxVy() {
   uint8_t *register2ndNibble = &registers[nibble2nd];
 
-  registers[0xF] = *register2ndNibble > registers[thirdNibble];
-  *register2ndNibble -= registers[thirdNibble];
+  registers[0xF] = *register2ndNibble > registers[nibble3rd];
+  *register2ndNibble -= registers[nibble3rd];
 }
 
 static void subnVxVy() {
   uint8_t *register2ndNibble = &registers[nibble2nd];
 
-  registers[0xF] = *register2ndNibble < registers[thirdNibble];
-  *register2ndNibble = registers[thirdNibble] - *register2ndNibble;
+  registers[0xF] = *register2ndNibble < registers[nibble3rd];
+  *register2ndNibble = registers[nibble3rd] - *register2ndNibble;
 }
 
-static void xorVxVy() { registers[nibble2nd] ^= registers[thirdNibble]; }
+static void xorVxVy() { registers[nibble2nd] ^= registers[nibble3rd]; }
 
 static byte units;
 static byte hundreds;

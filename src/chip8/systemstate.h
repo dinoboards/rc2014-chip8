@@ -8,7 +8,6 @@ extern uint16_t *chip8PC;
 extern byte      registers[16];
 extern uint16_t  registerI;
 extern uint8_t   firstNibble;
-extern uint8_t   thirdNibble;
 extern uint8_t   lowByte;
 extern uint8_t   fourthNibble;
 
@@ -57,5 +56,6 @@ extern bool startDebugging;
 
 #define nibble2nd ((uint8_t)currentInstruction & 0xF)
 #define addr      ((currentInstruction >> 8) + (((int)nibble2nd) << 8))
+#define nibble3rd ((uint8_t)(currentInstruction >> 12))
 
 #endif

@@ -8,7 +8,6 @@ byte      registers[16];
 uint16_t  registerI;
 
 uint8_t firstNibble;
-uint8_t thirdNibble;
 uint8_t lowByte;
 uint8_t fourthNibble;
 
