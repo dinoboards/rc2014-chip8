@@ -73,7 +73,7 @@ static uint16_t process8Samples(uint16_t total) __z88dk_fastcall {
 
 static uint16_t total = 0;
 
-static uint16_t findSoundPeriod(const uint8_t *pattern) __z88dk_fastcall {
+static uint16_t findSoundPeriod() __z88dk_fastcall {
   countOfPeriods = 0;
   lastBitIndex = AUDIO_SAMPLE_SIZE;
   lastBitState = 0;
@@ -83,7 +83,7 @@ static uint16_t findSoundPeriod(const uint8_t *pattern) __z88dk_fastcall {
   currentByte = 0;
   total = 0;
 
-  const uint8_t *pPattern = pattern;
+  const uint8_t *pPattern = (const uint8_t *)registerI;
 
   currentBitIndex = AUDIO_SAMPLE_SIZE;
   while (currentBitIndex != 0) {
@@ -97,5 +97,5 @@ static uint16_t findSoundPeriod(const uint8_t *pattern) __z88dk_fastcall {
 
 void audio() {
   audioActive = true;
-  audioPeriod = findSoundPeriod((const uint8_t *)registerI);
+  audioPeriod = findSoundPeriod();
 }
