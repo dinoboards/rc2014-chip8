@@ -61,6 +61,8 @@ bool executeSingleInstruction() {
   if (useSimulatedTimer)
     instructionCostCounter += 1 + (1 * (CommandSwitches.delayFactor / 64));
 
+  serialDrawFrame();
+
   manageTimers();
   if (!checkForKeyPresses())
     return false;

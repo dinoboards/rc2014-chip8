@@ -82,7 +82,7 @@ c8pic:
 .PHONY: invaders
 invaders:
 	@cp ./test-samples/*.ch8 ./bin/
-	@cd bin && cpm "chip8 invaders.ch8"
+	@cd bin && cpm "chip8 invaders.ch8 -x 10000"
 
 .PHONY: tictac
 tictac: chip8

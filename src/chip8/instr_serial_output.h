@@ -10,4 +10,6 @@ extern void serialDraw();
 extern void serialCls();
 extern void serialVideoInit();
 
+extern void drawFrame();
+
 #endif

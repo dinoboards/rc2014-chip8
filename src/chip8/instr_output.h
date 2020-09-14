@@ -8,4 +8,9 @@ extern void videoInit();
 extern void videoClose();
 extern void videoHigh();
 
+extern void drawFrame();
+
+#define serialDrawFrame()       \
+  if (CommandSwitches.isSerial) \
+  drawFrame()
 #endif

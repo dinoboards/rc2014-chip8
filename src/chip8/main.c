@@ -25,6 +25,7 @@ bool strFind(const char *searchString) __z88dk_fastcall {
     if (strstr(*p++, searchString))
       return i;
   }
+
   return 0;
 }
 
