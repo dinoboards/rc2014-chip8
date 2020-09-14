@@ -4,7 +4,6 @@
 #include <stdbool.h>
 
 uint16_t *chip8PC;
-byte      registers[16];
 uint16_t  registerI;
 
 uint8_t firstNibble;

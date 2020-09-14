@@ -4,8 +4,10 @@
 
 #include "datatypes.h"
 
+#define registers  ((byte *)(0x100))
+#define _registers 0x100
+
 extern uint16_t *chip8PC;
-extern byte      registers[16];
 extern uint16_t  registerI;
 extern uint8_t   firstNibble;
 extern uint8_t   lowByte;

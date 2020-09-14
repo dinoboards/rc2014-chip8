@@ -142,27 +142,24 @@ static void addVxVy() __naked {
   __asm
     xor     a
     ld	    ((_registers + 0x0F)), a
+
     ld	    de, _registers
 
-
     ; // LOAD VY b (3rdNibble)
-    ld	a, (_currentInstruction + 1)
+    ld	    a, (_currentInstruction + 1)
     rlca
     rlca
     rlca
     rlca
-    and	a, 0x0f
-    ld	l, a
-    ld	h, 0x00
-    add	hl, de
-    ld	    b, (hl)
+    and	    a, 0x0f
+    ld      l, a
+    ld      h, _registers / 256
+    ld      b, (hl)
 
     ; // LOAD VX a (2ndNibble)
-    ld      h, 0
     ld	    a, (_currentInstruction)
     and	    a, 0x0F
     ld	    l, a
-    add	    hl, de
     ld	    a, (hl)
 
     add     a, b
