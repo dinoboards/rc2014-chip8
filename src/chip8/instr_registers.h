@@ -19,7 +19,31 @@
 
 #define addIVx() (registerI += registers[nibble2nd])
 
-#define ldVxVy() (registers[nibble2nd] = registers[nibble3rd])
+inline void ldVxVy() {
+  //(registers[nibble2nd] = registers[nibble3rd])
+  // clang-format off
+  __asm
+    ld        hl, (_currentInstruction)
+    ld        a, l
+
+    and	      a, 0x0f
+    ld	      d,_registers / 256
+    ld	      e, a
+
+    ld        a, h
+    rlca
+    rlca
+    rlca
+    rlca
+    and	      a, 0x0f
+    ld	      c, a
+    ld	      b, _registers / 256
+
+    ld	      a, (bc)
+    ld	      (de), a
+  __endasm;
+  // clang-format on
+}
 
 // TODO Quicks - set I to end value
 inline void ldVxI() {
@@ -67,24 +91,20 @@ inline void andVxVy() {
   // clang-format off
   __asm
     ; // LOAD VX ADDR INTO DE (2ndNibble)
-    ld      de, _registers
-    ld      h, 0
+    ld      d, _registers / 256
     ld	    a, (_currentInstruction)
     and	    a, 0x0F
-    ld	    l, a
-    add	    hl, de    ; hl is address of Vx
-    ex      de, hl    ; de is address of Vx, Hl is _registers
+    ld	    e, a
 
     ; // LOAD VY ADDR INTO HL (3rdNibble)
+    ld	    h, d
     ld	    a, (_currentInstruction + 1)
     rlca
     rlca
     rlca
     rlca
     and	    a, 0x0f
-    ld	    c, a
-    ld	    b, 0x00
-    add	    hl, bc
+    ld	    l, a
 
     ld      a, (de)
     and     a, (hl)
@@ -98,24 +118,20 @@ inline void orVxVy() {
   __asm
     ; // LOAD VX ADDR INTO DE (2ndNibble)
 
-    ld      de, _registers
-    ld      h, 0
+    ld      d, _registers / 256
     ld	    a, (_currentInstruction)
     and	    a, 0x0F
-    ld	    l, a
-    add	    hl, de    ; hl is address of Vx
-    ex      de, hl    ; de is address of Vx, Hl is _registers
+    ld	    e, a
 
     ; // LOAD VY ADDR INTO HL (3rdNibble)
+    ld      h, d
     ld	    a, (_currentInstruction + 1)
     rlca
     rlca
     rlca
     rlca
     and	    a, 0x0f
-    ld	    c, a
-    ld	    b, 0x00
-    add	    hl, bc
+    ld	    l, a
 
     ld      a, (de)
     or      a, (hl)
@@ -142,8 +158,6 @@ static void addVxVy() __naked {
   __asm
     xor     a
     ld	    ((_registers + 0x0F)), a
-
-    ld	    de, _registers
 
     ; // LOAD VY b (3rdNibble)
     ld	    a, (_currentInstruction + 1)
