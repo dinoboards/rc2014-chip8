@@ -58,10 +58,6 @@
 	v1 := vd
 	v1 += 8
 	v2 := 1
-	#i := gomez
-	#i += vc # animation frame
-	#i += v8 # direction facing
-	#sprite va vb 15
 
 	# clouds
 	i := cloud1
@@ -70,19 +66,6 @@
 	sprite v1 v0 4
 	i := cloud3
 	sprite ve v2 3
-
-	# pillar
-	i := pillar-pos # get x coord
-	i += v5
-	load v0
-	v1 :=  9
-	i := pillar
-	v2 <<= v5 # add (rotation * 16)
-	v2 <<= v2
-	v2 <<= v2
-	v2 <<= v2
-	i += v2
-	sprite v0 v1 15
 ;
 
 : draw-background
@@ -96,6 +79,21 @@
 		v0 += 8
 		if v0 != 64 then
 	again
+;
+
+: draw-pillar
+	# pillar
+	i := pillar-pos # get x coord
+	i += v5
+	load v0
+	v1 :=  9
+	i := pillar
+	v2 <<= v5 # add (rotation * 16)
+	v2 <<= v2
+	v2 <<= v2
+	v2 <<= v2
+	i += v2
+	sprite v0 v1 15
 ;
 
 ###########################################
@@ -137,6 +135,7 @@
 	clear
 	draw-background
 	draw-gomez
+	draw-pillar
 ;
 
 : wipe-left
@@ -263,10 +262,12 @@
 	draw-background
 	draw-objects
 	draw-gomez
+	draw-pillar
+
 	loop
-		draw-objects
 		move-player
 
+		draw-objects
 		i := cloud-delta
 		i += v5
 		i += v5
