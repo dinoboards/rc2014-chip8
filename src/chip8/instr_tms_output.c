@@ -34,7 +34,7 @@ void drawBits() {
   // clang-format on
 
   tmsSetWriteAddr(TMS_MD1_NAME_TABLE + currentFrameBufferIndex);
-  drawCommand.data = charFrameBuffer[currentFrameBufferIndex]; // tmsReadByte();
+  drawCommand.data = charFrameBuffer[currentFrameBufferIndex];
 
   if (drawCommand.topBits & 0x2) {
     drawCommand.data ^= 1; // top left
@@ -67,17 +67,26 @@ void drawBits() {
 inline void incrementXBy2() {
   drawCommand.x += 2;
   currentFrameBufferIndex += 1;
+
+  if (drawCommand.x >= 64 && drawCommand.x <= 65)
+    currentFrameBufferIndex -= (32);
 }
 
 inline void decrementXBy2() {
   drawCommand.x -= 2;
   currentFrameBufferIndex -= 1;
+
+  if (drawCommand.x >= 62 && drawCommand.x <= 63)
+    currentFrameBufferIndex += (32);
 }
 
 inline void moveToNextRow() {
   drawCommand.y += 2;
   currentFrameBufferIndex += (32 - 4);
   drawCommand.x -= 8;
+
+  if (drawCommand.x >= 56 && drawCommand.x <= 63)
+    currentFrameBufferIndex += (32);
 }
 
 inline void moveTo(byte xx, byte yy) {
