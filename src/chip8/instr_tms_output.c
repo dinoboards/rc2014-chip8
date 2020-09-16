@@ -301,4 +301,8 @@ void tmsVideoInit() {
   tmsClearData(&colourParams);
   tmsInitPatterns();
   tmsCls();
+
+  tmsHookTimer();
 }
+
+void tmsVideoClose() { tmsUnhookTimer(); }

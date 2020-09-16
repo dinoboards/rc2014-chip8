@@ -46,15 +46,15 @@ void parseCommandLine() {
 }
 
 void main(MainArguments *pargs) __z88dk_fastcall {
-  if (!sysTimerSearchDriver())
-    warnNoTimerFound();
-
   mainArguments = pargs;
   parseCommandLine();
 
   applyConfiguration(pargs->argv[0]);
 
   videoInit();
+
+  if (!sysTimerSearchDriver())
+    warnNoTimerFound();
 
   initSystemState();
   seedRandom();

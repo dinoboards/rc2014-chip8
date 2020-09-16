@@ -54,7 +54,11 @@ void videoInit() {
   serialVideoInit();
 }
 
-void videoClose() { dinotronSwitchSerial(); }
+void videoClose() {
+  dinotronSwitchSerial();
+
+  tmsVideoClose();
+}
 
 void videoHigh() {
   videoResMode = VideoResModeHigh;

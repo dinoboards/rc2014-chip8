@@ -58,4 +58,10 @@ extern byte tmsReadByte() __z88dk_fastcall;
 extern void tmsSetWriteAddr(uint16_t) __z88dk_fastcall;
 extern void tmsSetReadAddr(uint16_t) __z88dk_fastcall;
 
+extern void tmsInstallInterruptHandler();
+extern void tmsRemoveInterruptHandler();
+
+extern void tmsHookTimer();
+extern void tmsUnhookTimer();
+
 #endif

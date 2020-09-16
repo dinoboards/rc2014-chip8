@@ -51,6 +51,21 @@ typedef struct {
 } hbiosBankCopy;
 extern uint8_t hbSysBankCopy(hbiosBankCopy *pData) __z88dk_fastcall;
 
+typedef void (*intHandler)();
+typedef struct {
+  uint8_t vctIndex;
+  union {
+    uint8_t interruptMode;
+  };
+  union {
+    intHandler intHandlerAddr;
+    intHandler previousHandlerAddr;
+  };
+
+} hbSysParams;
+extern uint8_t hbSysIntInfo(hbSysParams *) __z88dk_fastcall;
+extern uint8_t hbSysIntSet(hbSysParams *) __z88dk_fastcall;
+
 extern uint8_t hbSndReset(uint8_t driver) __z88dk_fastcall;
 
 typedef struct {

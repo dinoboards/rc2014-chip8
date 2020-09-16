@@ -42,15 +42,19 @@ extern byte videoPixelHeight;
 extern byte videoPixelWidthMask;
 extern byte videoPixelHeightMask;
 
+#define UNSET_TIMER_MODE     0
+#define SIMULATED_TIMER_MODE 1
+#define TMS_TIMER_MODE       2
+#define HBIOS_TIMER_MODE     3
+extern byte     timerMode;
+extern uint16_t timerTick;
+
 extern uint16_t instructionCostCounter;
-extern bool     useSimulatedTimer;
 
 extern bool     audioActive;
 extern uint16_t audioPeriod;
 
 extern uint16_t currentInstruction;
-
-extern uint8_t timerSkipFlag;
 
 #ifdef DIAGNOSTICS_ON
 extern bool startCounting;

@@ -24,35 +24,27 @@ void initTimers() {
   lastTimerTick = getSysTimer();
 }
 
-inline void tickSoundTimer(byte diff) {
+inline void tickSoundTimer() {
   if (soundTimer == 0)
     return;
 
-  if (diff >= soundTimer) {
-    soundTimer = 0;
+  soundTimer--;
+
+  if (soundTimer == 0)
     soundOff();
-  } else
-    soundTimer -= diff;
 }
 
-inline void tickDelayTimer(byte diff) {
+inline void tickDelayTimer() {
   if (delayTimer == 0)
     return;
 
-  if (diff >= delayTimer)
-    delayTimer = 0;
-  else
-    delayTimer -= diff;
+  delayTimer--;
 }
 
 void manageTimers() {
 #ifdef MEASURE_PERFORMANCE
   instructionCount++;
 #endif
-
-  timerSkipFlag++;
-  if (timerSkipFlag % 16)
-    return;
 
   currentTimerTick = getSysTimer();
 
@@ -69,8 +61,11 @@ void manageTimers() {
 
   const byte diff = (byte)(currentTimerTick - lastTimerTick);
 
-  tickSoundTimer(diff);
-  tickDelayTimer(diff);
+  if (diff == 0)
+    return;
+
+  tickSoundTimer();
+  tickDelayTimer();
 
   lastTimerTick = currentTimerTick;
 }

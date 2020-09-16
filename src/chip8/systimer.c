@@ -3,19 +3,26 @@
 #include "systemstate.h"
 
 uint16_t getSysTimer() {
-  if (useSimulatedTimer)
-    return instructionCostCounter / 48;
+  if (timerMode == TMS_TIMER_MODE)
+    return timerTick;
 
-  return hbSysGetTimer16();
+  if (timerMode == HBIOS_TIMER_MODE)
+    return hbSysGetTimer16();
+
+  return instructionCostCounter / 48;
 }
 
-bool sysTimerSearchDriver() {
+uint8_t sysTimerSearchDriver() {
+  if (timerMode != 0)
+    return timerMode;
+
   uint16_t t1 = getSysTimer();
   for (uint16_t i = 0; i < 30000; i++)
     ;
   uint16_t t2 = getSysTimer();
 
-  useSimulatedTimer = t1 == t2;
+  if (t1 == t2)
+    return timerMode = SIMULATED_TIMER_MODE;
 
-  return !useSimulatedTimer;
+  return timerMode = HBIOS_TIMER_MODE;
 }

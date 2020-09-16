@@ -58,7 +58,7 @@ bool executeSingleInstruction() {
     d--;
   } while (d > 0);
 
-  if (useSimulatedTimer)
+  if (timerMode == SIMULATED_TIMER_MODE)
     instructionCostCounter += 1 + (1 * (CommandSwitches.delayFactor / 64));
 
   serialDrawFrame();

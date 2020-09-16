@@ -7,5 +7,6 @@
 extern void tmsDraw();
 extern void tmsCls();
 extern void tmsVideoInit();
+extern void tmsVideoClose();
 
 #endif

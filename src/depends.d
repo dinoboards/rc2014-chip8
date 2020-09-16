@@ -2,8 +2,8 @@
 ./chartesters.asm: chartesters.c chartesters.h
 ./chip8/byte_code_executor.asm: chip8/byte_code_executor.c datatypes.h \
  chip8/diagnostics.h chip8/key_monitor.h chip8/stack.h \
- chip8/systemstate.h chip8/systimer.h chip8/timers.h chip8/tty.h xstdio.h \
- chip8/instr_output.h chip8/instr_pc.h chip8/instr_random.h \
+ chip8/systemstate.h chip8/systimer.h hbios.h chip8/timers.h chip8/tty.h \
+ xstdio.h chip8/instr_output.h chip8/instr_pc.h chip8/instr_random.h \
  chip8/random.h chip8/instr_registers.h chip8/fontsets.h \
  chip8/instr_sound.h
 ./chip8/configreader.asm: chip8/configreader.c chip8/configreader.h token.h \
@@ -24,7 +24,7 @@
  datatypes.h chip8/instr_tms_high_output.h chip8/instr_tms_output.h \
  chip8/systemstate.h chip8/tms.h
 ./chip8/instr_serial_output.asm: chip8/instr_serial_output.c datatypes.h hbios.h \
- chip8/pigfx.h chip8/systemstate.h chip8/timers.h chip8/tty.h xstdio.h
+ chip8/pigfx.h chip8/systemstate.h chip8/timers.h chip8/tty.h
 ./chip8/instr_sound.asm: chip8/instr_sound.c chip8/instr_sound.h datatypes.h \
  hbios.h chip8/systemstate.h chip8/timers.h
 ./chip8/instr_tms_high_output.asm: chip8/instr_tms_high_output.c \
@@ -38,7 +38,8 @@
  chip8/configuration_loader.h cpm.h chip8/error_reports.h hbios.h \
  chip8/instr_output.h chip8/instr_sound.h chip8/random.h \
  chip8/systemstate.h chip8/systimer.h chip8/tms.h xstdlib.h xstdio.h
-./chip8/random.asm: chip8/random.c chip8/random.h datatypes.h chip8/systimer.h
+./chip8/random.asm: chip8/random.c chip8/random.h datatypes.h chip8/systimer.h \
+ hbios.h chip8/systemstate.h
 ./chip8/stack.asm: chip8/stack.c chip8/stack.h datatypes.h chip8/systemstate.h \
  xstdio.h
 ./chip8/systemstate.asm: chip8/systemstate.c chip8/systemstate.h datatypes.h \
@@ -53,7 +54,7 @@
 ./chip8/timers.asm: chip8/timers.c chip8/timers.h datatypes.h chip8/tty.h hbios.h \
  chip8/instr_sound.h chip8/systemstate.h chip8/systimer.h
 ./chip8/tms.asm: chip8/tms.c chip8/tms.h datatypes.h hbios.h chip8/keys.h \
- xstdio.h
+ chip8/systemstate.h
 ./chip8/tty.asm: chip8/tty.c chip8/tty.h hbios.h xstdio.h
 ./chip8asm/assembler.asm: chip8asm/assembler.c chip8asm/assembler.h datatypes.h \
  cpm.h chip8asm/emitters.h chip8asm/error_reports.h filereader.h cpm.h \

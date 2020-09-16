@@ -65,14 +65,12 @@ inline void simulateKey(const char k) {
   simulateKeyReady = true;
   simulatedKeyValue = k;
   simulatedNextTimerTick += 4;
-  timerSkipFlag = 255;
 }
 
 uint16_t getSysTimer() { return simulatedNextTimerTick; }
 
 inline void simulateTimerTick() {
   simulatedNextTimerTick++;
-  timerSkipFlag = 255;
   manageTimers();
 }
 

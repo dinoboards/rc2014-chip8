@@ -1,9 +1,8 @@
 #include "tms.h"
 #include "datatypes.h"
 #include "hbios.h"
-
 #include "keys.h"
-#include "xstdio.h"
+#include "systemstate.h"
 
 tms9918IoPorts tmsIoPorts;
 
@@ -58,4 +57,21 @@ bool tmsSearchDriver() {
     tmsDriverIndex = result.devNumber;
 
   return (status == 0);
+}
+
+hbSysParams params;
+
+void tmsHookTimer() {
+  hbSysIntInfo(&params);
+
+  if (params.interruptMode != 1)
+    return;
+
+  tmsInstallInterruptHandler();
+  timerMode = TMS_TIMER_MODE;
+}
+
+void tmsUnhookTimer() {
+  if (timerMode == TMS_TIMER_MODE)
+    tmsRemoveInterruptHandler();
 }

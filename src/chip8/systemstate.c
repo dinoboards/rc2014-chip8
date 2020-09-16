@@ -14,8 +14,9 @@ byte     currentPressedKey;
 uint16_t currentKeyTimeout;
 bool     keyPressed;
 
-byte soundTimer;
-byte delayTimer;
+byte     soundTimer;
+byte     delayTimer;
+uint16_t timerTick = 0;
 
 CliSwitches CommandSwitches;
 
@@ -27,15 +28,13 @@ byte videoPixelHeight;
 byte videoPixelWidthMask;
 byte videoPixelHeightMask;
 
-bool     useSimulatedTimer = false;
+byte     timerMode = UNSET_TIMER_MODE;
 uint16_t instructionCostCounter;
 
 bool     audioActive = false;
 uint16_t audioPeriod;
 
 uint16_t currentInstruction;
-
-uint8_t timerSkipFlag = 0;
 
 #ifdef DIAGNOSTICS_ON
 /* diagnostic state */
