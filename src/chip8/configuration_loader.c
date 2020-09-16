@@ -1,4 +1,3 @@
-
 #include "configreader.h"
 #include "cpm.h"
 #include "error_reports.h"
