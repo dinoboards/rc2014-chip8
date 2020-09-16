@@ -12,8 +12,8 @@ _configureManageTimerFunction:
 	RET	Z
 
 	XOR	A
-	ld	(l_manageTimers_00105-2), a
-	ld	(l_manageTimers_00105-1), a
+	ld	(_manageTimers), a
+	ld	(_manageTimers+1), a
 
 	RET
 

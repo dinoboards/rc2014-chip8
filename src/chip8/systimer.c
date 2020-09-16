@@ -13,13 +13,13 @@ uint16_t getSysTimer() {
 }
 
 uint8_t sysTimerSearchDriver() {
-  if (timerMode != 0)
+  if (timerMode != UNSET_TIMER_MODE)
     return timerMode;
 
-  uint16_t t1 = getSysTimer();
-  for (uint16_t i = 0; i < 30000; i++)
+  uint16_t t1 = hbSysGetTimer16();
+  for (uint16_t i = 0; i < 50000; i++)
     ;
-  uint16_t t2 = getSysTimer();
+  uint16_t t2 = hbSysGetTimer16();
 
   if (t1 == t2)
     return timerMode = SIMULATED_TIMER_MODE;
