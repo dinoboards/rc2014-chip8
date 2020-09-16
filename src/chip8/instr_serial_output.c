@@ -63,10 +63,10 @@ void drawFrame() {
   if (!pendingChanges)
     return;
 
-  if (lastTick == currentTimerTick)
+  if (lastTick == timerTick)
     return;
 
-  lastTick = currentTimerTick;
+  lastTick = timerTick;
   counter++;
 
   if (counter % 4)

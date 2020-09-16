@@ -7,6 +7,7 @@ bool appRunning = false;
   {                                                \
     xprintf(#a "\r\n");                            \
     soundTimer = 0;                                \
+    timerMode = TMS_TIMER_MODE;                    \
     resetCaptureCommands();                        \
     resetKeySimulator();                           \
     initSystemState();                             \
@@ -59,18 +60,16 @@ byte keyReady() { return simulateKeyReady; }
 
 char getKey() { return simulatedKeyValue; }
 
-uint16_t simulatedNextTimerTick = 0;
-
 inline void simulateKey(const char k) {
   simulateKeyReady = true;
   simulatedKeyValue = k;
-  simulatedNextTimerTick += 4;
+  timerTick += 4;
 }
 
-uint16_t getSysTimer() { return simulatedNextTimerTick; }
+uint16_t getSysTimer() { return timerTick; }
 
 inline void simulateTimerTick() {
-  simulatedNextTimerTick++;
+  timerTick++;
   manageTimers();
 }
 

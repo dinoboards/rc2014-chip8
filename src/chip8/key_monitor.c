@@ -7,17 +7,19 @@
 static uint16_t lastCheckTime = 0;
 
 bool checkForKeyPresses() {
-
-  if (currentTimerTick == lastCheckTime)
+  if (timerTick % 0x2)
     return true;
 
-  lastCheckTime = currentTimerTick;
+  if (timerTick == lastCheckTime)
+    return true;
+
+  lastCheckTime = timerTick;
 
   if (!keyReady()) {
     if (!keyPressed)
       return true;
 
-    if (currentTimerTick < currentKeyTimeout)
+    if (timerTick < currentKeyTimeout)
       return true;
 
     currentPressedKey = '\0';
@@ -47,7 +49,7 @@ bool checkForKeyPresses() {
   else if (currentPressedKey >= 'a' && currentPressedKey <= 'z')
     currentPressedKey += (-'a' + 10);
 
-  currentKeyTimeout = currentTimerTick + 5;
+  currentKeyTimeout = timerTick + 5;
   keyPressed = true;
 
   return true;

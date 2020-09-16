@@ -234,7 +234,7 @@ void setup_draw_top_right() {
 }
 
 void verify_draw_top_right() {
-  currentTimerTick = 10;
+  timerTick = 10;
   drawFrame();
 
   expectEqualEscapedString(buffer, "\033[1;1H\033[48;5;2m \033[m\033[48;5;0m       ");
@@ -255,13 +255,13 @@ void verify_draw_xor() {
   chip8PC = (uint16_t *)0x200; /* re-execute the instruction to erase sprite */
   executeSingleInstruction();
 
-  currentTimerTick++;
+  timerTick++;
   drawFrame();
-  currentTimerTick++;
+  timerTick++;
   drawFrame();
-  currentTimerTick++;
+  timerTick++;
   drawFrame();
-  currentTimerTick++;
+  timerTick++;
   drawFrame();
 
   expectEqualEscapedString(buffer, "");

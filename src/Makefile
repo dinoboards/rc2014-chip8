@@ -4,8 +4,11 @@ all: ../bin/chip8.com ../bin/chip8asm.com ../bin/tstasmbl.com ../bin/tstinstr.co
 RELOCASSEMBLER=node ./apploader.js --page-align
 ASSEMBLER=z80asm
 
+MEASURE=
+#-D_MEASURE_PERFORMANCE
+
 ASS_FLAGS=-mz80 \
-	-D__SDCC -D__SDCC_IY \
+	-D__SDCC -D__SDCC_IY ${MEASURE} \
 	-I"${ZCCCFG}/../../libsrc/_DEVELOPMENT/target/cpm" \
 	-I"${ZCCCFG}/../../libsrc/_DEVELOPMENT/target/z80" \
 	-I"${ZCCCFG}/../../libsrc/_DEVELOPMENT/target/hbios" \
@@ -19,6 +22,7 @@ ASS_FLAGS=-mz80 \
 
 ZSDCPP_FLAGS=-iquote"." \
 	-D__Z88DK -D__EMBEDDED -DEMBEDDED -D__EMBEDDED_Z80 -D__Z80 -DZ80 \
+	${MEASURE} \
 	-D__SDCC -D__SDCC_IY \
 	-D__SDCC 						\
 	-isystem"${ZCCCFG}/../../include/_DEVELOPMENT/sdcc"
@@ -29,7 +33,7 @@ ifdef RELEASE
 ZCCRELFLAGS=" -SO3 --max-allocs-per-node200000 -Cs\"--opt-code-speed\" --allow-unsafe-read"
 endif
 
-ZCCFLAGS="${ZCCRELFLAGS}"
+ZCCFLAGS="${MEASURE} ${ZCCRELFLAGS}"
 
 include ./depends.d
 

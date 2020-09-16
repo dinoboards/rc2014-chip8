@@ -4,9 +4,8 @@
 
 #include "datatypes.h"
 
-extern uint16_t currentTimerTick;
-
 extern void initTimers();
 extern void manageTimers();
+extern void configureManageTimerFunction();
 
 #endif

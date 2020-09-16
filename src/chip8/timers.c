@@ -5,16 +5,13 @@
 #include "systemstate.h"
 #include "systimer.h"
 
-#undef MEASURE_PERFORMANCE
-
-#ifdef MEASURE_PERFORMANCE
+#ifdef _MEASURE_PERFORMANCE
 #include "xstdio.h"
 #endif
 
-static uint16_t lastTimerTick;
-uint16_t        currentTimerTick;
+uint16_t lastTimerTick;
 
-#ifdef MEASURE_PERFORMANCE
+#ifdef _MEASURE_PERFORMANCE
 uint16_t performanceMeasureTick = 0;
 uint16_t instructionCount = 0;
 #endif
@@ -22,50 +19,18 @@ uint16_t instructionCount = 0;
 void initTimers() {
   manageTimers();
   lastTimerTick = getSysTimer();
+
+  configureManageTimerFunction();
 }
 
-inline void tickSoundTimer() {
-  if (soundTimer == 0)
-    return;
-
-  soundTimer--;
-
-  if (soundTimer == 0)
-    soundOff();
-}
-
-inline void tickDelayTimer() {
-  if (delayTimer == 0)
-    return;
-
-  delayTimer--;
-}
-
-void manageTimers() {
-#ifdef MEASURE_PERFORMANCE
+#ifdef _MEASURE_PERFORMANCE
+void reportPerformance() {
   instructionCount++;
-#endif
 
-  currentTimerTick = getSysTimer();
-
-#ifdef MEASURE_PERFORMANCE
-  if (currentTimerTick >= performanceMeasureTick) {
+  if (timerTick >= performanceMeasureTick) {
     xprintf("Count: '%d'\r\n", (instructionCount / 2));
     instructionCount = 0;
-    performanceMeasureTick = currentTimerTick + 120;
+    performanceMeasureTick = timerTick + 120;
   }
-#endif
-
-  if (soundTimer == 0 && delayTimer == 0)
-    return;
-
-  const byte diff = (byte)(currentTimerTick - lastTimerTick);
-
-  if (diff == 0)
-    return;
-
-  tickSoundTimer();
-  tickDelayTimer();
-
-  lastTimerTick = currentTimerTick;
 }
+#endif
