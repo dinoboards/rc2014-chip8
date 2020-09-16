@@ -14,6 +14,7 @@
 #include <stdarg.h>
 #include <stdio.h>
 #include <string.h>
+#include "timers.h"
 
 #include "xstdio.h"
 
@@ -55,6 +56,8 @@ void main(MainArguments *pargs) __z88dk_fastcall {
 
   if (!sysTimerSearchDriver())
     warnNoTimerFound();
+
+  configureManageTimerFunction();
 
   initSystemState();
   seedRandom();

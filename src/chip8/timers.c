@@ -19,8 +19,6 @@ uint16_t instructionCount = 0;
 void initTimers() {
   manageTimers();
   lastTimerTick = getSysTimer();
-
-  configureManageTimerFunction();
 }
 
 #ifdef _MEASURE_PERFORMANCE
