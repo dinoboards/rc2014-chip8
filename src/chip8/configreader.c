@@ -17,20 +17,20 @@ void tokeniseAlphaNumericString() {
 
   token.isColour = true;
   tokenMap("black", COL_BLACK);
-  tokenMap("green", COL_MEDGREEN    );
-  tokenMap("lightgreen", COL_LIGGREEN    );
-  tokenMap("blue", COL_DRKBLUE     );
-  tokenMap("lightblue", COL_LIGBLUE     );
-  tokenMap("darkred", COL_DRKRED      );
-  tokenMap("cyan", COL_CYAN        );
-  tokenMap("red", COL_MEDRED      );
-  tokenMap("lightred", COL_LIGRED      );
-  tokenMap("yellow", COL_DRKYELLOW   );
-  tokenMap("lightyellow", COL_LIGYELLOW   );
-  tokenMap("darkgreen", COL_DRKGREEN    );
-  tokenMap("magenta", COL_MAGENTA     );
-  tokenMap("grey", COL_GREY        );
-  tokenMap("white", COL_WHITE       );
+  tokenMap("green", COL_MEDGREEN);
+  tokenMap("lightgreen", COL_LIGGREEN);
+  tokenMap("blue", COL_DRKBLUE);
+  tokenMap("lightblue", COL_LIGBLUE);
+  tokenMap("darkred", COL_DRKRED);
+  tokenMap("cyan", COL_CYAN);
+  tokenMap("red", COL_MEDRED);
+  tokenMap("lightred", COL_LIGRED);
+  tokenMap("yellow", COL_DRKYELLOW);
+  tokenMap("lightyellow", COL_LIGYELLOW);
+  tokenMap("darkgreen", COL_DRKGREEN);
+  tokenMap("magenta", COL_MAGENTA);
+  tokenMap("grey", COL_GREY);
+  tokenMap("white", COL_WHITE);
   token.isColour = false;
 
   token.type = TokenUnknown;

@@ -9,12 +9,12 @@
 #include "random.h"
 #include "systemstate.h"
 #include "systimer.h"
+#include "timers.h"
 #include "tms.h"
 #include "xstdlib.h"
 #include <stdarg.h>
 #include <stdio.h>
 #include <string.h>
-#include "timers.h"
 
 #include "xstdio.h"
 
