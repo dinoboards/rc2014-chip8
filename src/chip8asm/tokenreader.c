@@ -40,6 +40,7 @@ static void testForInstructions() {
   tokenMap("ret", InstructionRet);
   tokenMap("ld", InstructionLd);
   tokenMap("db", InstructionDb);
+  tokenMap("ds", InstructionDs);
   tokenMap("drw", InstructionDrw);
   tokenMap("call", InstructionCall);
   tokenMap("cls", InstructionCls);
@@ -61,6 +62,7 @@ static void testForInstructions() {
   tokenMap("key", InstructionKey);
   tokenMap("subn", InstructionSubn);
   tokenMap("high", InstructionHigh);
+  tokenMap("plane", InstructionPlane);
   tokenMap("audio", InstructionAudio);
 
   token.isInstruction = false;
@@ -153,6 +155,25 @@ static bool isComma() {
   return true;
 }
 
+static bool isRangeOperator() {
+  if (tokenCurrentChar != '.')
+    return false;
+
+  tokenCurrentChar = getNext();
+  if (tokenCurrentChar != '.')
+    return false;
+
+  tokenCurrentChar = getNext();
+
+  token.value[0] = '.';
+  token.value[1] = '.';
+  token.value[2] = '\0';
+  tokenTerminatorChar = tokenCurrentChar;
+  token.type = TokenRangeOperator;
+
+  return true;
+}
+
 void getNextToken() {
   tokenCurrentChar = skipWhiteSpace(tokenCurrentChar);
   tokenCurrentChar = skipComment(tokenCurrentChar);
@@ -178,6 +199,9 @@ void getNextToken() {
     return;
 
   if (isComma())
+    return;
+
+  if (isRangeOperator())
     return;
 
   logError("Unexpected token '%c'\r\n", tokenCurrentChar);

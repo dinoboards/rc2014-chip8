@@ -1,0 +1,219 @@
+
+  CLS
+  HIGH
+  PLANE 1
+
+; DRAW A SERIES OF SPRITES
+; AND CONFIRM THE VF FLAG IS SET CORRECTLY
+
+  LD  VE, 0
+  LD  VD, 1
+
+; overflow on X, wrapped back to 0
+
+  PLANE 2
+  LD  I, SOLID
+  LD  V0, 120
+  LD  V1, 30
+  DRW V0, V1, 3
+
+  PLANE 1
+
+  LD  I, SOLID
+  LD  V0, 120
+  LD  V1, 38
+  DRW V0, V1, 3
+
+  SE  VF, VE
+  JP  FAILED3
+
+  LD  I, PATTERN3
+  LD  V0, 125
+  LD  V1, 38
+  DRW V0, V1, 3
+
+  SE  VF, VD
+  JP  FAILED3
+
+; TEST SPLIT LINE FOR LEFT SCREEN SIDE
+  CLS
+
+  PLANE 2
+  LD  I, SOLID
+  LD  V0, 0
+  LD  V1, 48
+  DRW V0, V1, 2
+
+  PLANE 1
+  LD  I, PATTERN2
+  LD  V0, 126
+  LD  V1, 45
+  DRW V0, V1, 2
+
+  SE  VF, VE
+  JP  FAILED1
+
+  ; THIS WILL DRAW LINES ON RIGHT AND LEFT - WITH ONLY LEFT OVERLAPPING
+  LD  I, SOLID
+  LD  V0, 126
+  LD  V1, 45
+  DRW V0, V1, 2
+
+  SE  VF, VD
+  JP  FAILED1
+
+
+
+; overflow on X
+  CLS
+
+  LD  I, SOLID
+  LD  V0, 127
+  LD  V1, 30
+  DRW V0, V1, 2
+
+  SE  VF, VE
+  JP  FAILED2
+
+  LD  I, SOLID
+  LD  V0, 127
+  LD  V1, 30
+  DRW V0, V1, 2
+
+  SE  VF, VD
+  JP  FAILED2
+
+  LD  I, SOLID
+  LD  V0, 127
+  LD  V1, 30
+  DRW V0, V1, 2
+
+  SE  VF, VE
+  JP  FAILED2
+
+
+
+; TEST FOR FULL ERASURE OF SPRITE
+  CLS
+
+  LD  I, PATTERN1
+  LD  V0, 10
+  LD  V1, 0
+  DRW V0, V1, 8
+
+  SE  VF, VE
+  JP  FAILED0
+
+  LD  I, PATTERN1
+  LD  V0, 10
+  LD  V1, 0
+  DRW V0, V1, 8
+
+  SE  VF, VD
+  JP  FAILED0
+
+; TEST X OVERFLOW (x of 128 is same as x of 0)
+  CLS
+
+
+  LD  I, PATTERN1
+  LD  V0, 128
+  LD  V1, 0
+  DRW V0, V1, 2
+
+  SE  VF, VE
+  JP  FAILED0
+
+  LD  I, PATTERN1
+  LD  V0, 0
+  LD  V1, 0
+  DRW V0, V1, 2
+
+  SE  VF, VD
+  JP  FAILED0
+
+; TEST Y OVERFLOW (y of 64 is same as Y of 0)
+  CLS
+
+  LD  I, PATTERN1
+  LD  V0, 0
+  LD  V1, 64
+  DRW V0, V1, 2
+
+  SE  VF, VE
+  JP  FAILED0
+
+  LD  I, PATTERN1
+  LD  V0, 0
+  LD  V1, 0
+  DRW V0, V1, 2
+
+  SE  VF, VD
+  JP  FAILED0
+
+; NON OVERLAP of BAR STRIPS
+  CLS
+
+  LD  I, PATTERN1
+  LD  V0, 64
+  LD  V1, 0
+  DRW V0, V1, 2
+
+  SE  VF, VE
+  JP  FAILED1
+
+  LD  I, PATTERN1
+  LD  V0, 65
+  LD  V1, 0
+  DRW V0, V1, 2
+
+  SE  VF, VE
+  JP  FAILED1
+
+
+OK:
+  CLS
+
+  LD  I, OK_PATTERN
+  LD  V0, 0
+  LD  V1, 0
+  DRW V0, V1, 5
+  RET
+
+FAILED0:
+  LD  VC, 0
+  JP  SHOWERR
+
+FAILED1:
+  LD  VC, 1
+  JP  SHOWERR
+
+FAILED2:
+  LD  VC, 2
+  JP  SHOWERR
+
+FAILED3:
+  LD  VC, 3
+  JP  SHOWERR
+
+SHOWERR:
+  LDF I, VC
+  LD  V0, 0
+  LD  V1, 0
+  DRW  V0, V1, 5
+  RET
+
+OK_PATTERN:
+  DB  234, 172, 168, 172, 234
+
+PATTERN1:
+  DB  170, 170, 170, 170, 170, 170, 170, 170
+
+PATTERN2:
+  DB  14, 15, 255, 15, 15, 15, 15, 15
+
+PATTERN3:
+  DB  240, 240, 240, 240, 240, 240, 240, 240
+
+SOLID:
+  DB  255, 255, 255, 255, 255, 255, 255, 255

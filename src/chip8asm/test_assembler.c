@@ -53,12 +53,12 @@ void main() {
   shouldAssemble("CALL 1025", CALL_1025);
   shouldAssemble("CALL LABL\r\n  LABL: RET", 0x2202);
   shouldAssemble("CLS", CLS);
-  shouldAssemble("DB 2, 255", 0x02FF);
   shouldAssemble("DRW V2, V3, 1", DRAW_V2_V3_1);
   shouldAssemble("DRW V2, V3, 11", DRAW_V2_V3_11);
   shouldAssemble("JP 1026", JP_1026);
   shouldAssemble("KEY V5", KEY_V5);
   shouldAssemble("LD [I], VE", LD_I_VE);
+  shouldAssemble("LD [I], VA..V1", LD_I_VA_V1);
   shouldAssemble("LD DT, V3", LD_DT_V3);
   shouldAssemble("LD I, 1234", LD_I_1234);
   shouldAssemble("LD ST, V2", LD_ST_V2);
@@ -66,6 +66,7 @@ void main() {
   shouldAssemble("LD V3, va", LD_V3_VA);
   shouldAssemble("LD VA, DT", LD_VA_DT);
   shouldAssemble("LD VB, [i]", LD_VB_I);
+  shouldAssemble("LD V5..V6, [i]", LD_V5_V6_I);
   shouldAssemble("LDF I, V4", LDF_I_V4);
   shouldAssemble("RET", RET);
   shouldAssemble("RND vE, 15", RND_VE_15);
@@ -85,7 +86,16 @@ void main() {
   shouldAssemble("SUBN V2, VE", SUBN_V2_VE);
   shouldAssemble("JP V0, 1024", JP_V0_1024);
   shouldAssemble("HIGH", HIGHRES);
+  shouldAssemble("PLANE 2", PLANE_2);
   shouldAssemble("AUDIO", AUDIO);
+
+  shouldAssemble("DB 2, 255", 0x02FF);
+  shouldAssembleDS("DB 1, 2, 3, 4", 4);
+  shouldAssembleDS("DS 50", 50);
+  shouldAssembleDS("DS 4096", 4096);
+  shouldAssembleDS("DS 6000", 6000);
+  shouldAssembleDblWidth("LD I, 6000", LD_IL_6000_1, LD_IL_6000_2);
+
 
   shouldError("BAD INSTRUCTION", "Expected Instruction but found BAD");
   shouldError("LD BADREG, 123", "Expected one of Vx, I, [I], ST or DT but found BADREG");

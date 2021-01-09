@@ -2,21 +2,95 @@
   CLS
   HIGH
 
+  PLANE 3
+  LD  I, PATTERNDUAL
+  LD  V0, 80
+  LD  V1, 20
+  DRW V0, V1, 4
+
+  PLANE 3
+  LD  I, PATTERNDUAL
+  LD  V0, 125
+  LD  V1, 50
+  DRW V0, V1, 4
+
+
+  PLANE 2
+  LD  I, PATTERNLARGE
+  LD  V0, 90
+  LD  V1, 20
+  DRW V0, V1, 0
+
+  PLANE 3
+  LD  I, PATTERNLARGEDUAL
+  LD  V0, 90
+  LD  V1, 38
+  DRW V0, V1, 0
+
+  PLANE 1
   LD I, MYSPRITE
-  LD V0, 0
-  LD V1, 0
+  LD V0, 124
+  LD V1, 60
+
 LOOP:
   DRW v0, v1, 9
-  RET
+
+  ; WAIT A BIT
+  LD  V2, 1
 
   DRW v0, v1, 9
+
   ADD V0, 1
-  ADD V1, 1
   JP LOOP
-  ;DRW v0, v1, 4
-  ;RET
+
+BLOCK:
+  DB  255, 255, 255, 255, 255, 255, 255, 255, 255, 255
 
 MYSPRITE:
   DB 16, 56, 124, 254, 16, 32, 64, 128, 255
 
-; 10, 38, 7C, FE
+PATTERN:
+  DB 64, 255, 170, 170, 170, 170, 170, 170, 170
+
+PATTERNDUAL:
+  DB  255, 0, 0, 255
+  DB  0, 0, 255, 255
+
+  db 1, 1, 1, 1
+
+; 16 x 16
+PATTERNLARGE:
+PATTERNLARGEDUAL:
+  DB  255, 255
+  DB  128,   1
+  DB  128,   1
+  DB  128,   1
+  DB  128,   1
+  DB  128,   1
+  DB  128,   1
+  DB  128,   1
+  DB  128,   1
+  DB  128,   1
+  DB  128,   1
+  DB  128,   1
+  DB  128,   1
+  DB  128,   1
+  DB  128,   1
+  DB  255, 255
+
+  DB  0, 0
+  DB 127, 254
+  DB 127, 254
+  DB 127, 254
+  DB 127, 254
+  DB 127, 254
+  DB 127, 254
+  DB 127, 254
+  DB 127, 254
+  DB 127, 254
+  DB 127, 254
+  DB 127, 254
+  DB 127, 254
+  DB 127, 254
+  DB 127, 254
+  DB 255, 255

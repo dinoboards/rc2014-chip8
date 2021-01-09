@@ -32,10 +32,14 @@ void main() {
   defaultFCB->dr = 0;
   defaultFCB->ex = 0;
 
-  xprintf("Attempting to write to file\r\n");
+  xprintf("Total Byte Count %d\r\n", currentAddress);
+
   chk(fMake(defaultFCB));
-  chk(fDmaOff(programStorage));
-  chk(fWrite(defaultFCB));
+
+  for(uint16_t addr = 0; addr < currentAddress; addr += 128) {
+    chk(fDmaOff(addr + programStorage));
+    chk(fWrite(defaultFCB));
+  }
   chk(fClose(defaultFCB));
   xprintf("File written\r\n");
 }

@@ -8,6 +8,7 @@ typedef enum {
   TokenEnd,
   TokenAlphanumeric,
   TokenComma,
+  TokenRangeOperator,
   TokenLabel,
   TokenExpression,
 
@@ -35,6 +36,7 @@ typedef enum {
   InstructionRet,
   InstructionLd,
   InstructionDb,
+  InstructionDs,
   InstructionDrw,
   InstructionCall,
   InstructionCls,
@@ -56,6 +58,7 @@ typedef enum {
   InstructionKey,
   InstructionSubn,
   InstructionHigh,
+  InstructionPlane,
   InstructionAudio
 } TokenType;
 

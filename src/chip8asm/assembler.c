@@ -1,4 +1,3 @@
-// #include "charconstants.h"
 #include "assembler.h"
 #include "cpm.h"
 #include "datatypes.h"
@@ -9,7 +8,6 @@
 #include "systemstate.h"
 #include "token_parser.h"
 #include "tokenreader.h"
-#include "xstdio.h"
 
 #define getNext() getNextToken()
 
@@ -34,30 +32,54 @@ Set Vx = delay timer value.
 The value of DT is placed into Vx.
 -------------
 Fx65 - LD Vx, [I]
-Read registers V0 through Vx from memory starting at location I.
+Set registers V0 through Vx from memory starting at location I.
 
 The interpreter reads values from memory starting at location I into registers V0 through Vx.
+-------------
+5xy3 - LD Vx..Vy, [i]
+Set registers Vx through Vy (inclusive ) from memory starting at location I.
+
+The interpreter reads values from memory starting at location I into registers V0 through Vx.
+I is not incremented.
 */
 inline void assLdVx() {
   const byte x = expectToBeVRegister();
 
   getNext();
-  expectToBeComma();
 
+  if (currentIsRangeOperator()) {
+    getNext();
+    const byte y = expectToBeVRegister();
+
+    getNext();
+    expectToBeComma();
+    getNext();
+    expectToBeIndexedI();
+
+    emitNibbles(0x5, x, y, 3);
+    return;
+  }
+
+  expectToBeComma();
   getNext();
+
 
   if (currentIsVRegister()) {
     const byte y = expectToBeVRegister();
 
     emitNibbles(0x8, x, y, 0);
     return;
-  } else if (currentIsDT()) {
+  }
+
+  if (currentIsDT()) {
     expectToBeDT();
 
     emit2Nibble(0xF, x);
     emitByte(0x07);
     return;
-  } else if (currentIsIndexedI()) {
+  }
+
+  if (currentIsIndexedI()) {
     expectToBeIndexedI();
 
     emit2Nibble(0xF, x);
@@ -75,6 +97,11 @@ Fx55 - LD [I], Vx
 Store registers V0 through Vx in memory starting at location I.
 
 The interpreter copies the values of registers V0 through Vx into memory, starting at the address in I.
+-----------
+5xy2 - LD [i], Vx..Vy
+Store registers Vx through Vy (inclusive ) to memory starting at location I.
+
+I is not incremented.
 */
 inline void assLdIVx() {
   expectToBeIndexedI();
@@ -84,6 +111,16 @@ inline void assLdIVx() {
 
   getNext();
   const byte x = expectToBeVRegister();
+
+  if (tokenTerminatorChar == '.') {
+    getNext();
+    expectRangeOperator();
+    getNext();
+    const byte y = expectToBeVRegister();
+
+    emitNibbles(0x5, x, y, 2);
+    return;
+  }
 
   emit2Nibble(0xF, x);
   emitByte(0x55);
@@ -102,7 +139,13 @@ inline void assLdI() {
   expectToBeComma();
 
   getNext();
-  const int x = expectToBeInt();
+  const int x = expectToBeInt16();
+
+  if (x >= 4096) {
+    emit(0xF000);
+    emit(x);
+    return;
+  }
 
   emit(0xA000 | x);
 }
@@ -186,6 +229,15 @@ inline void assDb() {
     }
 
   } while (isMore);
+}
+
+inline void assDs() {
+  getNext();
+  int x = expectToBeInt16();
+
+  for(int c = x; x > 0; x--) {
+    emitByte(0);
+  }
 }
 
 // Dxyn - DRW Vx, Vy, nibble
@@ -623,6 +675,19 @@ inline void assKey() {
 
 inline void assHigh() { emit(0x00FF); }
 
+/*
+FN01 - PLANE N
+Set drawing plane to 0, 1, 2 or 3
+
+Default is Plane 1
+*/
+inline void assPlane() {
+  getNext();
+  const int x = expectToBeInt();
+
+  emitNibbles(0xF, x, 0, 1);
+}
+
 inline void assAudio() { emit(0xF002); }
 
 void assemble(byte pc) __z88dk_fastcall {
@@ -655,6 +720,10 @@ void assemble(byte pc) __z88dk_fastcall {
 
     case InstructionDb:
       assDb();
+      break;
+
+    case InstructionDs:
+      assDs();
       break;
 
     case InstructionDrw:
@@ -735,6 +804,10 @@ void assemble(byte pc) __z88dk_fastcall {
 
     case InstructionHigh:
       assHigh();
+      break;
+
+    case InstructionPlane:
+      assPlane();
       break;
 
     case InstructionAudio:

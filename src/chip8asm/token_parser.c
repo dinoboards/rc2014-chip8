@@ -18,12 +18,16 @@ byte expectToBeByte() {
   return (byte)x;
 }
 
+uint16_t expectToBeInt16() {
+  return evaluate(token.value);
+}
+
 uint16_t expectToBeInt() {
   uint16_t x = evaluate(token.value);
 
   if (x > 4095) {
-    xprintf("Expected a expression upto 4095.  Number out of range\r\n");
-    exit(1);
+    errorIntTooLarge(x);
+    return 0;
   }
 
   return x;
@@ -117,4 +121,9 @@ byte expectToBeNibble() {
   }
 
   return (byte)x;
+}
+
+void expectRangeOperator() {
+    if (!currentIsRangeOperator())
+    expectedError("..");
 }

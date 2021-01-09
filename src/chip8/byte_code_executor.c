@@ -92,7 +92,8 @@ bool executeSingleInstruction() {
 
     switch (firstNibble) {
     case 0x1: {
-      jp();
+      if (jp())
+        return false;
       break;
     }
 
@@ -112,7 +113,22 @@ bool executeSingleInstruction() {
     }
 
     case 0x5: {
-      seVxVy();
+      switch(fourthNibble) {
+        case 0x0:
+          seVxVy();
+          break;
+
+        case 0x2:
+          ldIVxVy();
+          break;
+
+        case 0x3:
+          ldVxVyI();
+          break;
+
+        default:
+          goto badInstruction;
+      }
       break;
     }
 
@@ -178,6 +194,7 @@ bool executeSingleInstruction() {
     }
 
     case 0x9: {
+      // TODO Check for 9xx0
       sneVxVy();
       break;
     }
@@ -221,6 +238,15 @@ bool executeSingleInstruction() {
 
     case 0xF: {
       switch (lowByte) {
+
+      case 0x00:
+        ldILargeAddr();
+        break;
+
+      case 0x01: {
+        videoPlane();
+        break;
+      }
 
       case 0x07: {
         ldVxDt();
@@ -279,6 +305,11 @@ bool executeSingleInstruction() {
       return false;
     }
   }
+  }
+
+  if ((uint16_t)chip8PC < 0x200) {
+    xprintf("PC counter below 0x200 -  %04X\r\n", chip8PC);
+    return false;
   }
 
   return true;

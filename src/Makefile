@@ -4,8 +4,10 @@ SHELL := bash
 MAKEFLAGS += --warn-undefined-variables
 MAKEFLAGS += --no-builtin-rules
 
+VIDEO ?= V9958
+
 .PHONY: all
-all: ../bin/chip8.com ../bin/chip8asm.com ../bin/tstasmbl.com ../bin/tstinstr.com
+all: ../bin/chip8-${VIDEO}.com ../bin/chip8asm.com ../bin/tstasmbl.com ../bin/tstinstr.com
 
 RELOCASSEMBLER=node ./apploader.js --page-align
 ASSEMBLER=z80asm
@@ -15,6 +17,7 @@ MEASURE=
 
 ASS_FLAGS=-mz80 \
 	-D__SDCC -D__SDCC_IY ${MEASURE} \
+	-D${VIDEO} \
 	-I"${ZCCCFG}/../../libsrc/_DEVELOPMENT/target/cpm" \
 	-I"${ZCCCFG}/../../libsrc/_DEVELOPMENT/target/z80" \
 	-I"${ZCCCFG}/../../libsrc/_DEVELOPMENT/target/hbios" \
@@ -29,6 +32,7 @@ ASS_FLAGS=-mz80 \
 ZSDCPP_FLAGS=-iquote"." \
 	-D__Z88DK -D__EMBEDDED -DEMBEDDED -D__EMBEDDED_Z80 -D__Z80 -DZ80 \
 	${MEASURE} \
+	-D${VIDEO} \
 	-D__SDCC -D__SDCC_IY \
 	-D__SDCC 						\
 	-isystem"${ZCCCFG}/../../include/_DEVELOPMENT/sdcc"
@@ -39,7 +43,7 @@ ifdef RELEASE
 ZCCRELFLAGS=" -SO3 --max-allocs-per-node200000 -Cs\"--opt-code-speed\" --allow-unsafe-read"
 endif
 
-ZCCFLAGS="${MEASURE} ${ZCCRELFLAGS}"
+ZCCFLAGS="${MEASURE} ${ZCCRELFLAGS} "
 
 include ./depends.d
 
@@ -63,11 +67,12 @@ chip8_objects = memap.o relocmem.asm crt.o reloccrt.o hbios.o hbios_cio.o hbios_
 	mv tstasmbl_code_crt_init.bin ../bin/tstasmbl.com
 	echo -e "\nBuilt ./bin/tstasmbl.com"
 
-../bin/chip8.com: $(filter-out %test_instruction.o, $(chip8_objects))
+../bin/chip8-${VIDEO}.com: $(filter-out %test_instruction.o, $(chip8_objects))
 	@mkdir -p ../bin
-	$(RELOCASSEMBLER) -ochip8.bin -b $(ASS_FLAGS) memap.o $(filter-out memap.o,$^)
-	mv chip8.bin ../bin/chip8.com
-	echo -e "\nBuilt ./bin/chip8.com"
+	$(RELOCASSEMBLER) -ochip8-${VIDEO}.bin -b $(ASS_FLAGS) memap.o $(filter-out memap.o,$^)
+	mv chip8-${VIDEO}.bin ../bin/chip8-${VIDEO}.com
+	cp ../bin/chip8-${VIDEO}.com ../bin/chip8.com
+	echo -e "\nBuilt ./bin/chip8-${VIDEO}.com (./bin/chip8.com)"
 
 ../bin/tstinstr.com: $(filter-out $(exclude_from_tstinstr),$(chip8_objects))
 	@$(RELOCASSEMBLER) -otstinstr.bin -b $(ASS_FLAGS) memap.o $(filter-out memap.o,$^)
@@ -97,4 +102,4 @@ deps:
 	echo "./depends.d created"
 
 clean:
-	@git clean -xf
+	@git clean -Xf

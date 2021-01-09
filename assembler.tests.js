@@ -30,7 +30,7 @@ async function test(sampleName) {
 
   const result = Buffer.compare(compiledFile, expected);
   if (result != 0) {
-    console.log("\u001b[31mAssembly failed to produce correct output\u001b[0m");
+    console.log(`\u001b[31mAssembly failed to produce correct output for ${sampleName}\u001b[0m`);
     process.nextTick(() => process.exit(-1));
   }
 }

@@ -139,7 +139,7 @@ START:
   }
 
 IN_LEADING_DIGITS:
-  if (currentChar >= '0' && currentChar < '9') {
+  if (currentChar >= '0' && currentChar <= '9') {
     readCh();
     goto IN_LEADING_DIGITS;
   }

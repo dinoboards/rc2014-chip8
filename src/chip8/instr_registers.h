@@ -7,6 +7,8 @@
 
 #define ldVxByte()  (registers[nibble2nd] = lowByte)
 #define ldIAddr()   (registerI = addr)
+#define ldILargeAddr() (registerI = invertByteOrder(*chip8PC++))
+
 #define addVxByte() (registers[nibble2nd] += lowByte)
 
 #define ldDtVx()                         \
@@ -49,11 +51,7 @@ inline void ldVxVy() {
 inline void ldVxI() {
   // clang-format off
   __asm
-    ld	    hl, _registerI
-    ld	    a, (hl)
-    inc	    hl
-    ld	    h, (hl)
-    ld	    l, a
+    ld	    hl, (_registerI)
     ld	    de, _registers
 
     ld	    a, (_currentInstruction)
@@ -70,10 +68,7 @@ inline void ldVxI() {
 inline void ldIVx() {
   // clang-format off
   __asm
-    ld	    hl, _registerI
-    ld	    e, (hl)
-    inc	    hl
-    ld	    d, (hl)
+    ld	    de, (_registerI)
     ld	    hl, _registers
 
     ld	    a, (_currentInstruction)
@@ -86,6 +81,9 @@ inline void ldIVx() {
   __endasm;
   // clang-format on
 }
+
+extern void ldIVxVy();
+extern void ldVxVyI();
 
 inline void andVxVy() {
   // clang-format off
@@ -196,16 +194,24 @@ static uint8_t *register2ndNibble;
 static void subVxVy() {
   register2ndNibble = &registers[nibble2nd];
   const uint8_t *register3rdNibble = &registers[nibble3rd];
-  registers[0xF] = *register2ndNibble > *register3rdNibble;
+
+  //quirks - set flag before subtraction
+
+  const byte f = *register2ndNibble >= *register3rdNibble;
   *register2ndNibble -= *register3rdNibble;
+  registers[0xF] = f;
 }
 
 static void subnVxVy() {
   register2ndNibble = &registers[nibble2nd];
   const uint8_t *register3rdNibble = &registers[nibble3rd];
 
-  registers[0xF] = *register2ndNibble < *register3rdNibble;
+  const byte f = *register2ndNibble <= *register3rdNibble;
   *register2ndNibble = *register3rdNibble - *register2ndNibble;
+
+  //quirks - set flag before subtraction
+
+  registers[0xF] = f;
 }
 
 static void xorVxVy() { registers[nibble2nd] ^= registers[nibble3rd]; }
@@ -233,4 +239,5 @@ static void ldfIVx() {
 
   registerI = (uint16_t)&fonts[x * 5];
 }
+
 #endif

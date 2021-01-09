@@ -8,7 +8,12 @@
 #include <stdio.h>
 #include <string.h>
 
+#include "xstdio.h"
+
 #define ESC "\033"
+
+#define PIXEL_WIDTH 64
+#define PIXEL_HEIGHT 32
 
 byte videoMemory[64 * 32 / 8];
 byte bufferedVideoMemory[64 * 32 / 8];
@@ -31,15 +36,15 @@ static uint8_t lastTick = 0;
 static uint8_t counter = 255;
 
 void serialDraw() {
+  registers[0xF] = 0;
   pendingChanges = true;
-  registers[0x0F] = 0;
   x = registers[nibble2nd] & 63;
   startingY = registers[nibble3rd] & 31;
-
   spritePtr = (byte *)registerI;
 
   for (y = startingY; y < startingY + fourthNibble; y++) {
     spriteByte = *spritePtr++;
+
     indexForY = (y & 31) * (64 / 8);
 
     for (bitCounter = 8; bitCounter != 0; bitCounter--) {
@@ -57,6 +62,8 @@ void serialDraw() {
     }
     x -= 8;
   }
+
+  xprintf("\r\n");
 }
 
 void drawFrame() {

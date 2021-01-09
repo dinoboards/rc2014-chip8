@@ -7,6 +7,8 @@ all:
 
 header_files = $(wildcard ./chip8asm/*.h) $(wildcard ./chip8/*.h) $(wildcard ./*.h)
 
+VIDEO ?= V9958
+
 .PHONY: deps
 deps:
 	@$(MAKE) -C ./src deps -s -j 4 -O
@@ -35,7 +37,7 @@ tstasmbl:
 .PHONY: chip8
 chip8:
 	@mkdir -p ./bin
-	@$(MAKE) -C ./src ../bin/chip8.com -s -j 4 -O
+	@VIDEO=$(VIDEO) $(MAKE) -C ./src ../bin/chip8-${VIDEO}.com -s -j 4 -O
 
 .PHONY: clean
 clean:
@@ -72,7 +74,13 @@ symbols:
 draw:
 	@cp ./test-samples/draw.cas ./bin/
 	@cd bin && cpm chip8asm draw.cas
-	@cd bin && cpm "chip8 draw.ch8 -x 100000"
+	# @cd bin && cpm "chip8 draw.ch8 -x 100000"
+
+.PHONY: large
+large:
+	@cp ./test-samples/large.cas ./bin/
+	@cd bin && cpm chip8asm large.cas
+	# @cd bin && cpm "chip8 large.ch8 -x 100000"
 
 .PHONY: c8pic
 c8pic:
@@ -99,3 +107,14 @@ blinky: chip8
 music: chip8
 	@cp ./test-samples/music* ./bin/
 	@cd bin && cpm "chip8 music.ch8"
+
+
+.PHONY: super
+super: chip8
+	@cd bin && cpm "chip8 super.ch8"
+
+.PHONY: testxor
+testxor:
+	@cp ./test-samples/testxor.cas ./bin/
+	@cd bin && cpm chip8asm testxor.cas
+	# @cd bin && cpm "chip8 testxor.ch8 -x 100000"

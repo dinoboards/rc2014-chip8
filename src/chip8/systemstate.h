@@ -66,4 +66,12 @@ extern bool startDebugging;
 #define addr      ((currentInstruction >> 8) + (((int)nibble2nd) << 8))
 #define nibble3rd ((uint8_t)(currentInstruction >> 12))
 
+#define HIRES_WIDTH  128
+#define HIRES_WIDTH_MASK  255
+#define HIRES_HEIGHT 64
+#define HIRES_HEIGHT_MASK 127
+
+#define LORES_WIDTH  64
+#define LORES_HEIGHT 32
+
 #endif

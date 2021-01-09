@@ -1,7 +1,7 @@
 #include "instr_output.h"
 #include "error_reports.h"
 #include "instr_serial_output.h"
-#include "instr_tms_high_output.h"
+#include "instr_v9958_output.h"
 #include "instr_tms_output.h"
 #include "systemstate.h"
 #include "tms.h"
@@ -12,7 +12,7 @@ void draw() {
   else if (videoResMode == VideoResModeLow)
     tmsDraw();
   else
-    tmsHighDraw();
+    v9958Draw();
 }
 
 void cls() {
@@ -21,7 +21,7 @@ void cls() {
   else if (videoResMode == VideoResModeLow)
     tmsCls();
   else
-    tmsHighCls();
+    v9958Cls();
 }
 
 void videoInit() {
@@ -58,5 +58,8 @@ void videoHigh() {
   videoPixelHeight = 64;
   videoPixelWidthMask = 127;
   videoPixelHeightMask = 63;
-  tmsHighVideoInit();
+
+  if (CommandSwitches.isTms)
+    v9958VideoInit();
 }
+

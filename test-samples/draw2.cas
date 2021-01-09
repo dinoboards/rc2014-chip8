@@ -1,0 +1,62 @@
+
+  CLS
+  HIGH
+
+  PLANE 2
+
+  LD  V0, 125
+  LD  V1, 44
+
+LOOP:
+  LD  I, ONE
+  DRW v0, v1, 8
+  DRW v0, v1, 8
+
+  LD  I, TWO
+  DRW v0, v1, 8
+  DRW v0, v1, 8
+
+  LD  I, THREE
+  DRW v0, v1, 8
+  DRW v0, v1, 8
+
+  LD  I, FOUR
+  DRW v0, v1, 8
+  DRW v0, v1, 8
+
+  LD  I, FIVE
+  DRW v0, v1, 8
+  DRW v0, v1, 8
+
+  LD  I, SIX
+  DRW v0, v1, 8
+  DRW v0, v1, 8
+
+  LD  I, SEVEN
+  DRW v0, v1, 8
+  DRW v0, v1, 8
+
+  ADD V1, 1
+
+  JP  LOOP
+
+ONE:
+  DB  0, 60, 40, 60, 126, 126, 60, 36
+
+TWO:
+  DB  0, 60, 40, 60, 252, 60, 60, 36
+
+THREE:
+  DB  60, 40, 60, 252, 60, 60, 40, 8
+
+FOUR:
+  DB  0, 60, 40, 60, 252, 60, 60, 24
+
+FIVE:
+  DB  60, 40, 60, 252, 60, 60, 24, 16
+
+SIX:
+  DB  60, 40, 60, 60, 126, 60, 40, 0
+
+SEVEN:
+  DB  0, 60, 169, 126, 60, 60, 60, 36

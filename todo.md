@@ -18,3 +18,12 @@ Issues:
   ./ look for other potential deduping re the tokening processing
   * review use of chk and chkMsg
   * fix chip8asm/filereader's use of chk
+
+v9958:
+  1. spike use of high speed CPU to VRAM functions - do they wrap as required - yes - overheads start to add up.
+  2. Disable sprite processing? Already disabled.
+  3. Disable vdp during processing?
+  4. Disable ints during processing?
+
+  5. Add colour planes
+  6. Can we use VDP to CPU to read XOR impact? no!

@@ -30,6 +30,8 @@ void logError(const char *msg, ...) {
 
 void errorExit() { testErrored = true; }
 
+#define instructionEquals(loc, word) (programStorage[(loc)] != (byte)((word) >> 8) || programStorage[(loc)+1] != (byte)((word) & 0xFF))
+
 void shouldAssemble(const char *source, uint16_t expectedWord) {
   content = (char *)source;
   programStorage[0] = 0;
@@ -45,17 +47,74 @@ void shouldAssemble(const char *source, uint16_t expectedWord) {
 
   xprintf("%04X should be assembled from:\r\n  %s\r\n\r\n", expectedWord, source);
 
+  //?????
   if (testErrored) {
     xprintf(RED "  Failed.  %s\r\n" RESET, logBuffer);
     testFailure = true;
     return;
   }
 
-  if (programStorage[0] != (byte)(expectedWord >> 8) || programStorage[1] != (byte)(expectedWord & 0xFF)) {
+  if (instructionEquals(0, expectedWord)) {
     xprintf(RED "  Failure: translated to %02X%02X\r\n\r\n" RESET, (int)programStorage[0], (int)programStorage[1]);
     testFailure = true;
   }
 }
+
+void shouldAssembleDblWidth(const char *source, uint16_t expectedWord1, uint16_t expectedWord2) {
+  content = (char *)source;
+  programStorage[0] = 0;
+  programStorage[1] = 0;
+  testErrored = false;
+  xbuffer[0] = '\0';
+  logBuffer[0] = '\0';
+
+  initLabelStorage();
+  assemble(1);
+  content = (char *)source;
+  assemble(2);
+
+  xprintf("%04X, %04X should be assembled from:\r\n  %s\r\n\r\n", expectedWord1, expectedWord2, source);
+
+  //?????
+  if (testErrored) {
+    xprintf(RED "  Failed.  %s\r\n" RESET, logBuffer);
+    testFailure = true;
+    return;
+  }
+
+  if (instructionEquals(0, expectedWord1) && instructionEquals(2, expectedWord2)) {
+    xprintf(RED "  Failure: translated to %02X%02X%02X%02X\r\n\r\n" RESET, (int)programStorage[0], (int)programStorage[1], (int)programStorage[2], (int)programStorage[3]);
+    testFailure = true;
+  }
+}
+
+void shouldAssembleDS(const char* source, uint16_t expectedPCCount) {
+  content = (char *)source;
+  programStorage[0] = 0;
+  programStorage[1] = 0;
+  testErrored = false;
+  xbuffer[0] = '\0';
+  logBuffer[0] = '\0';
+
+  initLabelStorage();
+  assemble(1);
+  content = (char *)source;
+  assemble(2);
+
+  xprintf("%s should reserve %d bytes\r\n\r\n", source, expectedPCCount);
+
+  if (testErrored) {
+    xprintf(RED "  Failed.  %s\r\n" RESET, logBuffer);
+    testFailure = true;
+    return;
+  }
+
+  if (programPtr != (programStorage + expectedPCCount)) {
+      xprintf(RED "  Failure: expected PC to be increment by %d - got %d\r\n\r\n" RESET, expectedPCCount, programPtr - programStorage);
+    testFailure = true;
+  }
+}
+
 
 void shouldError(const char *source, const char *errorMessage) {
   content = (char *)source;

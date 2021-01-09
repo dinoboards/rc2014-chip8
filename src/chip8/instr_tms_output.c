@@ -2,6 +2,7 @@
 #include "instr_tms_output.h"
 #include "systemstate.h"
 #include "tms.h"
+#include "vid_int.h"
 #include <string.h>
 
 typedef struct {
@@ -311,7 +312,7 @@ void tmsVideoInit() {
   tmsInitPatterns();
   tmsCls();
 
-  tmsHookTimer();
+  vsyncHookTimer();
 }
 
-void tmsVideoClose() { tmsUnhookTimer(); }
+void tmsVideoClose() { vsyncUnhookTimer(); }
