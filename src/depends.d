@@ -36,8 +36,8 @@
 ./chip8/main.asm: chip8/main.c chip8/byte_code_executor.h datatypes.h \
  chip8/configuration_loader.h cpm.h chip8/error_reports.h hbios.h \
  chip8/instr_output.h chip8/instr_sound.h chip8/random.h \
- chip8/systemstate.h chip8/systimer.h chip8/tms.h xstdlib.h \
- chip8/timers.h xstdio.h
+ chip8/systemstate.h chip8/systimer.h chip8/timers.h chip8/tms.h \
+ xstdlib.h xstdio.h
 ./chip8/random.asm: chip8/random.c chip8/random.h datatypes.h chip8/systimer.h \
  hbios.h chip8/systemstate.h
 ./chip8/stack.asm: chip8/stack.c chip8/stack.h datatypes.h chip8/systemstate.h \

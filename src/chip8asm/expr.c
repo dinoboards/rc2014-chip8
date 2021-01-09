@@ -53,7 +53,7 @@ inline void abortEvaluation() {
   lookAhead = END_INPUT;
 }
 
-void read() {
+void readCh() {
   if (tokenIndex >= MAX_WORKING_BUFFER) {
     errorExpressionTooLong();
     abortEvaluation();
@@ -77,34 +77,34 @@ START:
 
   case '-':
   case '+':
-    read();
+    readCh();
     lookAhead = ADD_SUB_OP;
     return;
 
   case '*':
   case '/':
   case '%':
-    read();
+    readCh();
     lookAhead = MUL_DIV_REM_OP;
     return;
 
   case '|':
-    read();
+    readCh();
     lookAhead = OP_OR;
     return;
 
   case '&':
-    read();
+    readCh();
     lookAhead = AND_OP;
     return;
 
   case '(':
-    read();
+    readCh();
     lookAhead = LEFT_PAREN;
     return;
 
   case ')':
-    read();
+    readCh();
     lookAhead = RIGHT_PAREN;
     return;
 
@@ -118,7 +118,7 @@ START:
   case '7':
   case '8':
   case '9':
-    read();
+    readCh();
     goto IN_LEADING_DIGITS;
 
   case '\n':
@@ -129,7 +129,7 @@ START:
 
   default:
     if (isCharLetter(currentChar) || currentChar == '_') {
-      read();
+      readCh();
       goto IN_LEADING_ALPHA;
     }
     errorUnexpectedCharacter(currentChar);
@@ -140,7 +140,7 @@ START:
 
 IN_LEADING_DIGITS:
   if (currentChar >= '0' && currentChar < '9') {
-    read();
+    readCh();
     goto IN_LEADING_DIGITS;
   }
   lookAhead = NUMBER;
@@ -148,7 +148,7 @@ IN_LEADING_DIGITS:
 
 IN_LEADING_ALPHA:
   if (isCharAlpha(currentChar)) {
-    read();
+    readCh();
     goto IN_LEADING_ALPHA;
   } else {
     lookAhead = ALPHA;

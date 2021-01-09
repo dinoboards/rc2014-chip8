@@ -9,12 +9,12 @@ header_files = $(wildcard ./chip8asm/*.h) $(wildcard ./chip8/*.h) $(wildcard ./*
 
 .PHONY: deps
 deps:
-	@$(MAKE) -C ./src deps -s -j 4
+	@$(MAKE) -C ./src deps -s -j 4 -O
 
 .PHONY: chip8asm
 chip8asm:
 	@mkdir -p ./bin
-	@$(MAKE) -C ./src ../bin/chip8asm.com -s -j 4
+	@$(MAKE) -C ./src ../bin/chip8asm.com -s -j 4 -O
 	@cp ./test-samples/*.cas ./bin/
 	@cp ./test-samples/*.ch8 ./bin/
 
@@ -22,12 +22,12 @@ test: tstinstr tstasmbl
 
 tstinstr:
 	@mkdir -p ./bin
-	@$(MAKE) -C ./src ../bin/tstinstr.com -s -j 4
+	@$(MAKE) -C ./src ../bin/tstinstr.com -s -j 4 -O
 	@(cd bin && cpm tstinstr)
 
 tstasmbl:
 	@mkdir -p ./bin
-	@$(MAKE) -C ./src ../bin/tstasmbl.com -s -j 4
+	@$(MAKE) -C ./src ../bin/tstasmbl.com -s -j 4 -O
 	@(cd bin && cpm tstasmbl)
 	@./assembler.tests.js
 
@@ -35,7 +35,7 @@ tstasmbl:
 .PHONY: chip8
 chip8:
 	@mkdir -p ./bin
-	@$(MAKE) -C ./src ../bin/chip8.com -s -j 4
+	@$(MAKE) -C ./src ../bin/chip8.com -s -j 4 -O
 
 .PHONY: clean
 clean:

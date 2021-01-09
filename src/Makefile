@@ -1,3 +1,9 @@
+SHELL := bash
+.SHELLFLAGS := -eu -o pipefail -c
+.ONESHELL:
+MAKEFLAGS += --warn-undefined-variables
+MAKEFLAGS += --no-builtin-rules
+
 .PHONY: all
 all: ../bin/chip8.com ../bin/chip8asm.com ../bin/tstasmbl.com ../bin/tstinstr.com
 
@@ -47,50 +53,48 @@ chip8_objects = memap.o relocmem.asm crt.o reloccrt.o hbios.o hbios_cio.o hbios_
 
 ../bin/chip8asm.com: $(filter-out %test_assembler.o, $(chip8asm_objects))
 	@$(ASSEMBLER) -o$(basename $<).bin -b $(ASS_FLAGS) memap.o $(filter-out memap.o,$^)
-	@mkdir -p ../bin
-	@mv crt_code_crt_init.bin ../bin/chip8asm.com
-	@echo "\nBuilt ./bin/chip8asm.com"
+	mkdir -p ../bin
+	mv crt_code_crt_init.bin ../bin/chip8asm.com
+	echo -e "\nBuilt ./bin/chip8asm.com"
 
 ../bin/tstasmbl.com: $(filter-out $(exclude_from_tests),$(chip8asm_objects))
 	@$(ASSEMBLER) -otstasmbl.bin -b $(ASS_FLAGS) memap.o $(filter-out memap.o,$^)
-	@mkdir -p ../bin
-	@mv tstasmbl_code_crt_init.bin ../bin/tstasmbl.com
-	@echo "\nBuilt ./bin/tstasmbl.com"
+	mkdir -p ../bin
+	mv tstasmbl_code_crt_init.bin ../bin/tstasmbl.com
+	echo -e "\nBuilt ./bin/tstasmbl.com"
 
 ../bin/chip8.com: $(filter-out %test_instruction.o, $(chip8_objects))
 	@mkdir -p ../bin
 	$(RELOCASSEMBLER) -ochip8.bin -b $(ASS_FLAGS) memap.o $(filter-out memap.o,$^)
 	mv chip8.bin ../bin/chip8.com
-	@echo "\nBuilt ./bin/chip8.com"
+	echo -e "\nBuilt ./bin/chip8.com"
 
 ../bin/tstinstr.com: $(filter-out $(exclude_from_tstinstr),$(chip8_objects))
 	@$(RELOCASSEMBLER) -otstinstr.bin -b $(ASS_FLAGS) memap.o $(filter-out memap.o,$^)
-	@mkdir -p ../bin
-	@mv tstinstr.bin ../bin/tstinstr.com
-	@echo "\nBuilt ./bin/tstinstr.com"
+	mkdir -p ../bin
+	mv tstinstr.bin ../bin/tstinstr.com
+	echo -e "\nBuilt ./bin/tstinstr.com"
 
 #-DDIAGNOSTICS_ON
 %.asm: %.c
-	@zcc +embedded -subtype=none -lm -clib=sdcc_iy -vn -cleanup -m -S --list $< -o $@  -create-app  -Cs --Werror --c-code-in-asm $(ZCCFLAGS)
-	@echo "compiled $< to $@"
+	@zcc +embedded -subtype=none -lm -compiler=sdcc -clib=sdcc_iy -m -S --list $< -o $@  -create-app  -Cs --Werror --c-code-in-asm $(ZCCFLAGS)
+	echo "compiled $< to $@"
 
 %.o: %.asm
 	@$(ASSEMBLER) -o$(basename $<).bin $(ASS_FLAGS) $(basename $<).asm
-	@echo "Assembled $< to $@"
+	echo "Assembled $< to $@"
 
-deps: SHELL := bash
 deps:
-	@echo "" > ./depends.d && \
-	find -name "*.c" | while read -r file; do \
-		file_no_ext="$${file%.*}" 							; \
-		filename=$$(basename $$file_no_ext)			; \
-		from="$$filename.rel"										; \
-		to="$$file_no_ext.asm"									; \
-		zsdcpp ${ZSDCPP_FLAGS} -MM -MF /tmp/deps.deps $$file; \
-		sed "s+$$from+$$to+g" /tmp/deps.deps >> ./depends.d; \
-	done && \
+	@echo "" > ./depends.d
+	find -name "*.c" | while read -r file; do
+		file_no_ext="$${file%.*}"
+		filename=$$(basename $$file_no_ext)
+		from="$$filename.rel"
+		to="$$file_no_ext.asm"
+		zsdcpp ${ZSDCPP_FLAGS} -MM -MF /tmp/deps.deps $$file
+		sed "s+$$from+$$to+g" /tmp/deps.deps >> ./depends.d
+	done
 	echo "./depends.d created"
-
 
 clean:
 	@git clean -xf
