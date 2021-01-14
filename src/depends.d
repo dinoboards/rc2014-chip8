@@ -21,7 +21,7 @@
 ./chip8/instr_output.asm: chip8/instr_output.c chip8/instr_output.h chip8/v9958.h \
  datatypes.h chip8/error_reports.h chip8/instr_serial_output.h \
  chip8/instr_tms_output.h chip8/instr_v9958_output.h chip8/systemstate.h \
- chip8/tms.h
+ chip8/tms.h chip8/vdp.h hbios.h
 ./chip8/instr_serial_output.asm: chip8/instr_serial_output.c datatypes.h hbios.h \
  chip8/pigfx.h chip8/systemstate.h chip8/timers.h chip8/tty.h xstdio.h
 ./chip8/instr_sound.asm: chip8/instr_sound.c chip8/instr_sound.h datatypes.h \
@@ -38,7 +38,7 @@
  chip8/configuration_loader.h cpm.h chip8/error_reports.h hbios.h \
  chip8/instr_output.h chip8/v9958.h chip8/instr_sound.h chip8/random.h \
  chip8/systemstate.h chip8/systimer.h chip8/timers.h chip8/tms.h \
- xstdlib.h xstdio.h
+ xstdlib.h
 ./chip8/random.asm: chip8/random.c chip8/random.h datatypes.h chip8/systimer.h \
  hbios.h chip8/systemstate.h
 ./chip8/stack.asm: chip8/stack.c chip8/stack.h datatypes.h chip8/systemstate.h \

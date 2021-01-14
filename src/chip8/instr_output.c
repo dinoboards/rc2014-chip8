@@ -5,6 +5,8 @@
 #include "instr_v9958_output.h"
 #include "systemstate.h"
 #include "tms.h"
+#include "vdp.h"
+#include "hbios.h"
 
 void draw() {
   if (CommandSwitches.isSerial)
@@ -25,6 +27,26 @@ void cls() {
 }
 
 void videoInit() {
+
+  const uint8_t vdpType = videoChipProbe();
+
+  switch(vdpType) {
+    case VDP_NONE:
+      print("Error: No VDP detected.\r\n");
+      break;
+
+    case VDP_TMS:
+      print("TMS9918 VDP Detected.  Only lores supported.\r\n");
+      break;
+
+    case VDP_V9938:
+      print("V9938 VDP Detected.\r\n");
+      break;
+
+    case VDP_V9958:
+      print("V9958 VDP Detected.\r\n");
+  }
+
   videoResMode = VideoResModeLow;
   videoPixelWidth = 64;
   videoPixelHeight = 32;

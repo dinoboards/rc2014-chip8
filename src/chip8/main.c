@@ -16,8 +16,6 @@
 #include <stdio.h>
 #include <string.h>
 
-#include "xstdio.h"
-
 MainArguments *mainArguments;
 
 bool strFind(const char *searchString) __z88dk_fastcall {
@@ -46,7 +44,6 @@ void parseCommandLine() {
     abortConflictTmsAndSerial();
 }
 
-extern void findXorHit(uint8_t x1, uint8_t x2, uint8_t y, uint8_t c);
 
 void main(MainArguments *pargs) __z88dk_fastcall {
   mainArguments = pargs;
@@ -80,9 +77,6 @@ void main(MainArguments *pargs) __z88dk_fastcall {
   while (executeSingleInstruction())
     ;
 
-  // findXorHit(0, 15, 5, 3);
-
-  xprintf("finished!\r\n");
   videoClose();
   hbSndReset(0);
 }
