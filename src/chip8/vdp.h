@@ -3,8 +3,8 @@
 
 #include "datatypes.h"
 
-#define VDP_NONE 255
-#define VDP_TMS 0
+#define VDP_NONE  255
+#define VDP_TMS   0
 #define VDP_V9938 1
 #define VDP_V9958 2
 

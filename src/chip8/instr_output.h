@@ -6,15 +6,12 @@
 
 extern void draw();
 extern void cls();
-extern void videoInit();
+extern bool videoInit();
 extern void videoClose();
 extern void videoHigh();
 
 extern void drawFrame();
 
-#define serialDrawFrame()       \
-  if (CommandSwitches.isSerial) \
-  drawFrame()
-#endif
-
 #define videoPlane() _color = nibble2nd
+
+#endif

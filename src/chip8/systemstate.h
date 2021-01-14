@@ -21,8 +21,6 @@ extern byte soundTimer;
 extern byte delayTimer;
 
 typedef struct {
-  bool     isSerial : 1;
-  bool     isTms : 1;
   bool     isHelp : 1;
   uint16_t delayFactor;
 } CliSwitches;

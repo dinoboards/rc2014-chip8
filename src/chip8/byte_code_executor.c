@@ -55,15 +55,13 @@ bool executeSingleInstruction() {
 
   currentInstruction = readInstruction(); // high/low bytes in inverted order
 
-  uint16_t d = CommandSwitches.delayFactor + 1;
-  do {
+  uint16_t d = CommandSwitches.delayFactor;
+  while (d > 0) {
     d--;
-  } while (d > 0);
+  }
 
   if (timerMode == SIMULATED_TIMER_MODE)
     instructionCostCounter += 1 + (1 * (CommandSwitches.delayFactor / 64));
-
-  serialDrawFrame();
 
   manageTimers();
   if (!checkForKeyPresses())

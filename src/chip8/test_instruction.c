@@ -2,7 +2,6 @@
 #include "byte_code_executor.h"
 #include "datatypes.h"
 #include "fontsets.h"
-#include "instr_serial_output.h"
 #include "stack.h"
 #include "systemstate.h"
 #include "terminal_codes.h"
@@ -355,56 +354,6 @@ void setup_sne_v0_v2_no_skips() {
 
 void verify_sne_v0_v2_no_skips() { expectEqualPtrs(chip8PC, (uint16_t *)0x202, "PC"); }
 
-void setup_cls() { programStorage[0] = invertByteOrder(CLS); }
-
-void verify_cls() { expectEqualEscapedString(buffer, "\033[=2h\033[=00f\033[?25l\033[2J\033[m\033[48;5;0m"); }
-
-void setup_draw_top_right() {
-  serialVideoInit();
-
-  registers[2] = 0;
-  registers[3] = 0;
-  registerI = 0x202;
-  programStorage[0] = invertByteOrder(DRAW_V2_V3_1);
-  programStorage[(registerI - 0x200) / 2] = 0x80;
-}
-
-void verify_draw_top_right() {
-  timerTick = 10;
-  drawFrame();
-
-  expectEqualEscapedString(buffer, "\033[1;1H\033[48;5;2m \033[m\033[48;5;0m       ");
-  expectEqualBytes(registers[0x0F], 0, "VF");
-}
-
-void setup_draw_xor() {
-  serialVideoInit();
-
-  registers[2] = 60;
-  registers[3] = 0;
-  registerI = 0x202;
-  programStorage[0] = invertByteOrder(DRAW_V2_V3_1);
-  programStorage[(registerI - 0x200) / 2] = 0x04;
-}
-
-void verify_draw_xor() {
-  programStorage[(registerI - 0x200) / 2] = 0xFE;
-  chip8PC = (uint16_t *)0x200; /* re-execute the instruction to erase sprite */
-  executeSingleInstruction();
-
-  timerTick++;
-  drawFrame();
-  timerTick++;
-  drawFrame();
-  timerTick++;
-  drawFrame();
-  timerTick++;
-  drawFrame();
-
-  // expectEqualEscapedString(buffer, "");
-  expectEqualBytes(registers[0x0F], 1, "VF");
-}
-
 void setup_jp_1026() { programStorage[0] = invertByteOrder(JP_1026); }
 
 void verify_jp_1026() { expectEqualPtrs(chip8PC, (uint16_t *)0x402, "PC"); }
@@ -699,7 +648,6 @@ void setup_skips_dbl_word_instruction() {
 void verify_skips_dbl_word_instruction() { expectEqualPtrs(chip8PC, (uint16_t *)0x206, "PC"); }
 
 void main() {
-  CommandSwitches.isSerial = true;
   CommandSwitches.delayFactor = 0;
 
   assert(add_i_v9);
@@ -710,9 +658,6 @@ void main() {
   assert(or_v7_v2);
   assert(bcd_i_v3);
   assert(call_1025);
-  assert(cls);
-  assert(draw_top_right);
-  assert(draw_xor);
   assert(jp_1026);
   assert(key_v5);
   assert(ld_dt_v3);

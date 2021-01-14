@@ -20,7 +20,6 @@ chartesters.asm
 systemstate.asm
 stack.asm
 instr_tms_output.asm
-instr_serial_output.asm
 token_parser.asm
 emitters.asm
 assembler.asm
