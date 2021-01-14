@@ -451,17 +451,17 @@ l_drawRow__00109:
 	jp	_drawSegment
 
 
-	PUBLIC _v9959DrawPlane
+	PUBLIC _v9958DrawPlane
 	EXTERN	_fourthNibble, _yy
 
-_v9959DrawPlane:
+_v9958DrawPlane:
 	ex	de, hl
 ; for(byte row = fourthNibble; row > 0; row--) {
 	ld	hl, _fourthNibble
 	ld	b, (hl)
 	ld	hl, _yAddOne
 
-l_v9959DrawPlane_00103:
+l_v9958DrawPlane_00103:
 ; yAddOne = (yy + 1) & PIXEL_HEIGHT_MASK;
 
 	ld	a,(_yy)
@@ -484,7 +484,7 @@ l_v9959DrawPlane_00103:
 	ld	(_yy), a
 
 ; for(byte row = fourthNibble; row > 0; row--) {
-	djnz	l_v9959DrawPlane_00103
+	djnz	l_v9958DrawPlane_00103
 
 	ret
 

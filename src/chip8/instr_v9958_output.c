@@ -17,8 +17,8 @@ byte xxTo;
 
 extern void initDrawParams();
 extern void drawRow(byte pSpriteData) __z88dk_fastcall;
-extern void v9959DrawPlane(byte *pSpriteData) __z88dk_fastcall;
-extern void v9959DrawDblPlane(byte *pSpriteData) __z88dk_fastcall;
+extern void v9958DrawPlane(byte *pSpriteData) __z88dk_fastcall;
+extern void v9958DrawDblPlane(byte *pSpriteData) __z88dk_fastcall;
 
 void v9958Draw() {
   registers[15] = 0;
@@ -31,13 +31,13 @@ void v9958Draw() {
     if (_color == 3) {
       _color = 1;
       const uint8_t originalYY = yy;
-      v9959DrawDblPlane((byte *)registerI);
+      v9958DrawDblPlane((byte *)registerI);
       yy = originalYY;
       _color = 2;
-      v9959DrawDblPlane((byte *)(registerI + 32));
+      v9958DrawDblPlane((byte *)(registerI + 32));
       _color = 3;
     } else
-      v9959DrawDblPlane((byte *)registerI);
+      v9958DrawDblPlane((byte *)registerI);
 
     return;
   }
@@ -45,16 +45,16 @@ void v9958Draw() {
   if (_color == 3) {
     _color = 1;
     const uint8_t originalYY = yy;
-    v9959DrawPlane((byte *)registerI);
+    v9958DrawPlane((byte *)registerI);
     yy = originalYY;
     _color = 2;
-    v9959DrawPlane((byte *)(registerI + fourthNibble));
+    v9958DrawPlane((byte *)(registerI + fourthNibble));
     _color = 3;
   } else
-    v9959DrawPlane((byte *)registerI);
+    v9958DrawPlane((byte *)registerI);
 }
 
-void v9959DrawDblPlane(byte *pSpriteData) __z88dk_fastcall {
+void v9958DrawDblPlane(byte *pSpriteData) __z88dk_fastcall {
   for (byte row = 16; row > 0; row--) {
     yAddOne = (yy + 1) & PIXEL_HEIGHT_MASK;
 
