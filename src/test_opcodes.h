@@ -51,4 +51,5 @@
 #define LD_V2_V0_I 0x5203
 #define LD_V1_V1_I 0x5113
 
-#define SUBN_VF_V1 0x8f17
+#define SUBN_VF_V1  0x8f17
+#define SCRL_DOWN_5 0x00C5

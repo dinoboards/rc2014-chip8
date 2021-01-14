@@ -21,6 +21,8 @@ extern void     expectRangeOperator();
 extern void expectToBeST();
 extern void expectToBeDT();
 
+extern void expectToBeDown();
+
 #define currentIsIRegister()     (token.type == RegisterI)
 #define currentIsST()            (token.type == RegisterST)
 #define currentIsVRegister()     (token.isVRegister)
@@ -29,5 +31,6 @@ extern void expectToBeDT();
 #define currentIsComma()         (token.type == TokenComma)
 #define currentIsBCD()           (token.type == TokenBCD)
 #define currentIsRangeOperator() (token.type == TokenRangeOperator)
+#define currentIsDown()          (token.type == TokenDown)
 
 #endif

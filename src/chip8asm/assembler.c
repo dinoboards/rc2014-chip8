@@ -682,12 +682,26 @@ Default is Plane 1
 */
 inline void assPlane() {
   getNext();
-  const int x = expectToBeInt();
+  const int x = expectToBeNibble();
 
   emitNibbles(0xF, x, 0, 1);
 }
 
 inline void assAudio() { emit(0xF002); }
+
+/*
+00CN - SCROLL DOWN N PIXELS
+
+*/
+inline void assScroll() {
+  getNext();
+  expectToBeDown();
+
+  getNext();
+  const int x = expectToBeNibble();
+
+  emitNibbles(0x0, 0x0, 0xc, x);
+}
 
 void assemble(byte pc) __z88dk_fastcall {
   parseCount = pc;
@@ -811,6 +825,10 @@ void assemble(byte pc) __z88dk_fastcall {
 
     case InstructionAudio:
       assAudio();
+      break;
+
+    case InstructionScrl:
+      assScroll();
       break;
 
     default:

@@ -11,6 +11,7 @@ typedef enum {
   TokenRangeOperator,
   TokenLabel,
   TokenExpression,
+  TokenDown,
 
   RegisterV0,
   RegisterV1,
@@ -59,7 +60,8 @@ typedef enum {
   InstructionSubn,
   InstructionHigh,
   InstructionPlane,
-  InstructionAudio
+  InstructionAudio,
+  InstructionScrl
 } TokenType;
 
 #define MAX_TOKEN_LENGTH 256

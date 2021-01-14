@@ -96,6 +96,8 @@ void main() {
   shouldAssembleDS("DS 6000", 6000);
   shouldAssembleDblWidth("LD I, 6000", LD_IL_6000_1, LD_IL_6000_2);
 
+  shouldAssemble("SCRL DOWN 5", SCRL_DOWN_5);
+
   shouldError("BAD INSTRUCTION", "Expected Instruction but found BAD");
   shouldError("LD BADREG, 123", "Expected one of Vx, I, [I], ST or DT but found BADREG");
   shouldError("JP NOWHERE", "Unknown label 'NOWHERE' referenced at line number 1");

@@ -125,3 +125,8 @@ void expectRangeOperator() {
   if (!currentIsRangeOperator())
     expectedError("..");
 }
+
+void expectToBeDown() {
+  if (!currentIsDown())
+    expectedError("DOWN");
+}
