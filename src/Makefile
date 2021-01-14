@@ -53,7 +53,7 @@ exclude_from_tests = %main.o %filereader.o %exit.o %error.o %tty.o %keys.o %syst
 exclude_from_tstinstr = $(exclude_from_tests) %configreader.o %configuration_loader.o %error_reports.o  %token.o
 
 chip8_sources = $(wildcard ./chip8/*.c) $(wildcard ./chip8/*.asm)
-chip8_objects = memap.o relocmem.asm crt.o reloccrt.o hbios.o hbios_cio.o hbios_sys.o hbios_snd.o cpm.o cpmasm.o xstdio.o chartesters.o token.o filereader.o xstrtol.o $(patsubst %.asm,%.o,$(patsubst %.c,%.o,$(chip8_sources)))
+chip8_objects = memap.o relocmem.asm crt.o reloccrt.o hbios.o hbios_cio.o hbios_snd.o cpm.o cpmasm.o xstdio.o chartesters.o token.o filereader.o xstrtol.o $(patsubst %.asm,%.o,$(patsubst %.c,%.o,$(chip8_sources)))
 
 ../bin/chip8asm.com: $(filter-out %test_assembler.o, $(chip8asm_objects))
 	@$(ASSEMBLER) -o$(basename $<).bin -b $(ASS_FLAGS) memap.o $(filter-out memap.o,$^)
