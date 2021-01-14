@@ -16,11 +16,12 @@
 ./chip8/fontsets.asm: chip8/fontsets.c chip8/fontsets.h datatypes.h
 ./chip8/instr_output.asm: chip8/instr_output.c chip8/instr_output.h chip8/v9958.h \
  datatypes.h chip8/error_reports.h hbios.h chip8/instr_tms_output.h \
- chip8/instr_v9958_output.h chip8/systemstate.h chip8/tms.h chip8/vdp.h
+ chip8/vid_int.h chip8/instr_v9958_output.h chip8/systemstate.h \
+ chip8/tms.h chip8/vdp.h
 ./chip8/instr_sound.asm: chip8/instr_sound.c chip8/instr_sound.h datatypes.h \
  hbios.h chip8/systemstate.h chip8/timers.h
 ./chip8/instr_tms_output.asm: chip8/instr_tms_output.c chip8/instr_tms_output.h \
- datatypes.h chip8/systemstate.h chip8/tms.h chip8/vid_int.h
+ datatypes.h chip8/vid_int.h chip8/systemstate.h chip8/tms.h
 ./chip8/instr_v9958_output.asm: chip8/instr_v9958_output.c \
  chip8/instr_v9958_output.h datatypes.h chip8/instr_output.h \
  chip8/v9958.h chip8/systemstate.h
@@ -50,8 +51,6 @@
 ./chip8/tty.asm: chip8/tty.c chip8/tty.h hbios.h xstdio.h
 ./chip8/v9958.asm: chip8/v9958.c chip8/v9958.h datatypes.h chip8/systemstate.h \
  xstdio.h
-./chip8/vid_int.asm: chip8/vid_int.c chip8/vid_int.h hbios.h chip8/systemstate.h \
- datatypes.h chip8/tms.h
 ./chip8asm/assembler.asm: chip8asm/assembler.c chip8asm/assembler.h datatypes.h \
  cpm.h chip8asm/emitters.h chip8asm/error_reports.h filereader.h cpm.h \
  chip8asm/labels.h chip8asm/systemstate.h chip8asm/token_parser.h \

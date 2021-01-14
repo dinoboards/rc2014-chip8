@@ -3,10 +3,12 @@
 #define __INSTR_TMS_OUTPUT
 
 #include "datatypes.h"
+#include "vid_int.h"
 
 extern void tmsDraw();
 extern void tmsCls();
 extern void tmsVideoInit();
-extern void tmsVideoClose();
+
+#define tmsVideoClose() vsyncRemoveInterruptHandler()
 
 #endif

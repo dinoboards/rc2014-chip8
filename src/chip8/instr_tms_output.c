@@ -314,5 +314,3 @@ void tmsVideoInit() {
 
   vsyncInstallInterruptHandler();
 }
-
-void tmsVideoClose() { vsyncRemoveInterruptHandler(); }
