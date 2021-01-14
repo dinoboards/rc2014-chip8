@@ -55,9 +55,6 @@ bool executeSingleInstruction() {
     d--;
   }
 
-  if (timerMode == SIMULATED_TIMER_MODE)
-    instructionCostCounter += 1 + (1 * (CommandSwitches.delayFactor / 64));
-
   manageTimers();
   if (!checkForKeyPresses())
     return false;

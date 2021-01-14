@@ -1,18 +1,9 @@
 
-	PUBLIC	_hbSysGetTimer16, _hbSysBankCopy, _hbSysIntInfo, _hbSysIntSet
+	PUBLIC	_hbSysBankCopy
 
 	SECTION CODE
 
 include "hbios_sys.inc"
-
-	;extern uint16_t hbSysGetTimer() __z88dk_fastcall;
-_hbSysGetTimer16:
-	PUSH	IX
-	LD	BC, 0xF8D0
-	RST	08
-
-	POP	IX
-	RET
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -63,56 +54,5 @@ _hbSysBankCopyErr:
 	POP	IX
 	RET
 
-
-
-; typedef struct {
-;   uint8_t sizeOfInterruptVectorTable;
-;   uint8_t interruptMode;
-; } hbSysParams;
-; extern uint8_t hbSysIntInfo(hbSysParams*) __z88dk_fastcall;
-_hbSysIntInfo:
-	PUSH	IX
-
-	LD	BC, BF_SYSINT * 256 + BF_SYSINT_INFO
-	PUSH	HL
-	RST	08
-	POP	HL
-
-	LD	(HL), E
-	INC	HL
-	LD	(HL), D
-	LD	L, A
-
-	POP	IX
-	RET
-
-
-_hbSysIntSet:
-	PUSH	IX
-
-	LD	BC, BF_SYSINT * 256 + BF_SYSINT_SET
-
-	LD	E, (HL)
-	INC	HL
-	LD	A, (HL)
-	INC	HL
-	PUSH	HL
-	LD	H, (HL)
-	LD	L, A
-
-	RST	08
-	POP	BC
-
-	EX	DE, HL
-	POP	HL
-	INC	HL
-	LD	(HL), E
-	INC	HL
-	LD	(HL), D
-
-	LD	L, A
-
-	POP	IX
-	RET
 
 	SECTION IGNORE

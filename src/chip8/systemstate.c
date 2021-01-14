@@ -28,9 +28,6 @@ byte videoPixelHeight;
 byte videoPixelWidthMask;
 byte videoPixelHeightMask;
 
-byte     timerMode = UNSET_TIMER_MODE;
-uint16_t instructionCostCounter;
-
 bool     audioActive = false;
 uint16_t audioPeriod;
 

@@ -7,7 +7,6 @@ bool appRunning = false;
   {                                                \
     xprintf(#a "\r\n");                            \
     soundTimer = 0;                                \
-    timerMode = TMS_TIMER_MODE;                    \
     resetCaptureCommands();                        \
     resetKeySimulator();                           \
     initSystemState();                             \

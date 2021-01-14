@@ -5,7 +5,4 @@
 extern void vsyncInstallInterruptHandler();
 extern void vsyncRemoveInterruptHandler();
 
-extern void vsyncHookTimer();
-extern void vsyncUnhookTimer();
-
 #endif

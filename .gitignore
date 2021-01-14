@@ -35,7 +35,6 @@ package-log.json
 package.json
 key_monitor.asm
 keys.asm
-systimer.asm
 random.asm
 tms.asm
 timers.asm
@@ -49,5 +48,4 @@ token.asm
 instr_v9958_output.asm
 instr_sound.asm
 src/chip8/v9958.asm
-src/chip8/vid_int.asm
 src/chip8/hires_mirror.asm

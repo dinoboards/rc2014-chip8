@@ -1,57 +1,10 @@
-	PUBLIC	_manageTimers, _configureManageTimerFunction
-	EXTERN	_timerMode, _timerTick, _timerTick, _hbSysGetTimer16, _instructionCostCounter, __divuint_callee, _soundTimer
+	PUBLIC	_manageTimers
+	EXTERN	_timerMode, _timerTick, _timerTick, _instructionCostCounter, __divuint_callee, _soundTimer
 	EXTERN _soundOff, _delayTimer, _lastTimerTick, _reportPerformance
 
 	SECTION CODE
 
-; define MEASURE_PERFORMANCE
-
-_configureManageTimerFunction:
-	ld	a, (_timerMode)
-	sub	a,0x02
-	RET	Z
-
-	XOR	A
-	ld	(_manageTimers), a
-	ld	(_manageTimers+1), a
-
-	RET
-
 _manageTimers:
-;chip8/timers.c:57: if (timerMode == TMS_TIMER_MODE)
-	jr	manageTimerTMSTicks		; CHANGE TO NOP WHEN NOT TMS TICKS
-
-l_manageTimers_00105:
-;chip8/timers.c:60: else if (timerMode == HBIOS_TIMER_MODE)
-	ld	a, (_timerMode)
-	sub	a, 0x03
-	jr	NZ, l_manageTimers_00102
-
-;chip8/timers.c:61: timerTick = hbSysGetTimer16();
-	call	_hbSysGetTimer16
-	ld	c, l
-	ld	b, h
-	ld	(_timerTick), bc
-	jr	l_manageTimers_00106
-
-l_manageTimers_00102:
-;chip8/timers.c:64: timerTick = instructionCostCounter / 48;
-	ld	hl, 0x0030
-	push	hl
-	ld	hl, (_instructionCostCounter)
-	push	hl
-	call	__divuint_callee
-	ld	c, l
-	ld	b, h
-	ld	(_timerTick), bc
-
-	jr	l_manageTimers_00106
-
-;chip8/timers.c:58: timerTick = timerTick;
-
-manageTimerTMSTicks:
-l_manageTimers_00106:
-
 ifdef _MEASURE_PERFORMANCE
 	call	_reportPerformance
 endif

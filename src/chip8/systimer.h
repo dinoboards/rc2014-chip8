@@ -7,9 +7,5 @@
 #include "systemstate.h"
 #include "systimer.h"
 
-// #define getSysTimer() ((timerMode == TMS_TIMER_MODE) ? timerTick : (timerMode == HBIOS_TIMER_MODE) ? hbSysGetTimer16() : instructionCostCounter / 48)
-
-extern uint16_t getSysTimer();
-extern uint8_t  sysTimerSearchDriver();
-
+#define getSysTimer() timerTick
 #endif

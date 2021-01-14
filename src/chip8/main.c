@@ -56,10 +56,7 @@ void main(MainArguments *pargs) __z88dk_fastcall {
   if (!videoInit())
     return;
 
-  if (!sysTimerSearchDriver())
-    warnNoTimerFound();
-
-  configureManageTimerFunction();
+  // configureManageTimerFunction();
 
   initSystemState();
   seedRandom();

@@ -6,6 +6,6 @@
 
 extern void initTimers();
 extern void manageTimers();
-extern void configureManageTimerFunction();
+// extern void configureManageTimerFunction();
 
 #endif
