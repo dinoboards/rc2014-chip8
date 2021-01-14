@@ -12,7 +12,7 @@
 
 #define ESC "\033"
 
-#define PIXEL_WIDTH 64
+#define PIXEL_WIDTH  64
 #define PIXEL_HEIGHT 32
 
 byte videoMemory[64 * 32 / 8];

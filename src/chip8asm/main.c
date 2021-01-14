@@ -36,7 +36,7 @@ void main() {
 
   chk(fMake(defaultFCB));
 
-  for(uint16_t addr = 0; addr < currentAddress; addr += 128) {
+  for (uint16_t addr = 0; addr < currentAddress; addr += 128) {
     chk(fDmaOff(addr + programStorage));
     chk(fWrite(defaultFCB));
   }

@@ -1,7 +1,7 @@
-#include "tms.h"
+#include "vid_int.h"
 #include "hbios.h"
 #include "systemstate.h"
-#include "vid_int.h"
+#include "tms.h"
 
 hbSysParams params;
 

@@ -1,8 +1,8 @@
 #include "instr_output.h"
 #include "error_reports.h"
 #include "instr_serial_output.h"
-#include "instr_v9958_output.h"
 #include "instr_tms_output.h"
+#include "instr_v9958_output.h"
 #include "systemstate.h"
 #include "tms.h"
 
@@ -62,4 +62,3 @@ void videoHigh() {
   if (CommandSwitches.isTms)
     v9958VideoInit();
 }
-

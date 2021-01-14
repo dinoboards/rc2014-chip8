@@ -5,8 +5,8 @@
 #include "fontsets.h"
 #include "timers.h"
 
-#define ldVxByte()  (registers[nibble2nd] = lowByte)
-#define ldIAddr()   (registerI = addr)
+#define ldVxByte()     (registers[nibble2nd] = lowByte)
+#define ldIAddr()      (registerI = addr)
 #define ldILargeAddr() (registerI = invertByteOrder(*chip8PC++))
 
 #define addVxByte() (registers[nibble2nd] += lowByte)
@@ -195,7 +195,7 @@ static void subVxVy() {
   register2ndNibble = &registers[nibble2nd];
   const uint8_t *register3rdNibble = &registers[nibble3rd];
 
-  //quirks - set flag before subtraction
+  // quirks - set flag before subtraction
 
   const byte f = *register2ndNibble >= *register3rdNibble;
   *register2ndNibble -= *register3rdNibble;
@@ -209,7 +209,7 @@ static void subnVxVy() {
   const byte f = *register2ndNibble <= *register3rdNibble;
   *register2ndNibble = *register3rdNibble - *register2ndNibble;
 
-  //quirks - set flag before subtraction
+  // quirks - set flag before subtraction
 
   registers[0xF] = f;
 }

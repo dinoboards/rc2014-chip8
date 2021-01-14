@@ -82,7 +82,6 @@ void main(MainArguments *pargs) __z88dk_fastcall {
 
   // findXorHit(0, 15, 5, 3);
 
-
   xprintf("finished!\r\n");
   videoClose();
   hbSndReset(0);

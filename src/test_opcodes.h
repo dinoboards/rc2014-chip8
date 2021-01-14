@@ -40,15 +40,15 @@
 #define HIGHRES       0x00FF
 #define PLANE_2       0xF201
 
-#define LD_IL_6000_1  0xF000
-#define LD_IL_6000_2  0x1770
+#define LD_IL_6000_1 0xF000
+#define LD_IL_6000_2 0x1770
 
-#define JP_0002       0x1002
+#define JP_0002 0x1002
 
-#define LD_I_VA_V1    0x5A12
-#define LD_I_V2_V3    0x5232
-#define LD_V5_V6_I    0x5563
-#define LD_V2_V0_I    0x5203
-#define LD_V1_V1_I    0x5113
+#define LD_I_VA_V1 0x5A12
+#define LD_I_V2_V3 0x5232
+#define LD_V5_V6_I 0x5563
+#define LD_V2_V0_I 0x5203
+#define LD_V1_V1_I 0x5113
 
-#define SUBN_VF_V1    0x8f17
+#define SUBN_VF_V1 0x8f17

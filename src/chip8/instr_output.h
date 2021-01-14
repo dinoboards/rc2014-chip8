@@ -14,7 +14,7 @@ extern void drawFrame();
 
 #define serialDrawFrame()       \
   if (CommandSwitches.isSerial) \
-    drawFrame()
+  drawFrame()
 #endif
 
 #define videoPlane() _color = nibble2nd

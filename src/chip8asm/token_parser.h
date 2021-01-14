@@ -21,13 +21,13 @@ extern void     expectRangeOperator();
 extern void expectToBeST();
 extern void expectToBeDT();
 
-#define currentIsIRegister()      (token.type == RegisterI)
-#define currentIsST()             (token.type == RegisterST)
-#define currentIsVRegister()      (token.isVRegister)
-#define currentIsDT()             (token.type == RegisterDT)
-#define currentIsIndexedI()       (token.type == RegisterIndexedI)
-#define currentIsComma()          (token.type == TokenComma)
-#define currentIsBCD()            (token.type == TokenBCD)
-#define currentIsRangeOperator()  (token.type == TokenRangeOperator)
+#define currentIsIRegister()     (token.type == RegisterI)
+#define currentIsST()            (token.type == RegisterST)
+#define currentIsVRegister()     (token.isVRegister)
+#define currentIsDT()            (token.type == RegisterDT)
+#define currentIsIndexedI()      (token.type == RegisterIndexedI)
+#define currentIsComma()         (token.type == TokenComma)
+#define currentIsBCD()           (token.type == TokenBCD)
+#define currentIsRangeOperator() (token.type == TokenRangeOperator)
 
 #endif

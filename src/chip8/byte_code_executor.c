@@ -113,21 +113,21 @@ bool executeSingleInstruction() {
     }
 
     case 0x5: {
-      switch(fourthNibble) {
-        case 0x0:
-          seVxVy();
-          break;
+      switch (fourthNibble) {
+      case 0x0:
+        seVxVy();
+        break;
 
-        case 0x2:
-          ldIVxVy();
-          break;
+      case 0x2:
+        ldIVxVy();
+        break;
 
-        case 0x3:
-          ldVxVyI();
-          break;
+      case 0x3:
+        ldVxVyI();
+        break;
 
-        default:
-          goto badInstruction;
+      default:
+        goto badInstruction;
       }
       break;
     }

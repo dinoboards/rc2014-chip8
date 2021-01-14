@@ -18,9 +18,7 @@ byte expectToBeByte() {
   return (byte)x;
 }
 
-uint16_t expectToBeInt16() {
-  return evaluate(token.value);
-}
+uint16_t expectToBeInt16() { return evaluate(token.value); }
 
 uint16_t expectToBeInt() {
   uint16_t x = evaluate(token.value);
@@ -124,6 +122,6 @@ byte expectToBeNibble() {
 }
 
 void expectRangeOperator() {
-    if (!currentIsRangeOperator())
+  if (!currentIsRangeOperator())
     expectedError("..");
 }

@@ -1,6 +1,6 @@
 inline uint8_t call() {
   if (addr < 0x200) {
-      xprintf("Illegal jump to %04X at %p\r\n", addr, chip8PC - 1);
+    xprintf("Illegal jump to %04X at %p\r\n", addr, chip8PC - 1);
     return true;
   }
 
@@ -30,7 +30,7 @@ inline uint8_t call() {
 
 inline uint8_t jp() {
   if (addr < 0x200) {
-      xprintf("Illegal jump to %04X at %p\r\n", addr, chip8PC - 1);
+    xprintf("Illegal jump to %04X at %p\r\n", addr, chip8PC - 1);
     return true;
   }
 
@@ -42,7 +42,7 @@ inline uint8_t jpV0Addr() {
   chip8PC = (uint16_t *)(addr + registers[0]);
 
   if ((uint16_t)chip8PC < 0x200) {
-      xprintf("Illegal jump to %04X at %p\r\n", addr, chip8PC - 1);
+    xprintf("Illegal jump to %04X at %p\r\n", addr, chip8PC - 1);
     return true;
   }
 

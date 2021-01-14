@@ -63,7 +63,6 @@ inline void assLdVx() {
   expectToBeComma();
   getNext();
 
-
   if (currentIsVRegister()) {
     const byte y = expectToBeVRegister();
 
@@ -235,7 +234,7 @@ inline void assDs() {
   getNext();
   int x = expectToBeInt16();
 
-  for(int c = x; x > 0; x--) {
+  for (int c = x; x > 0; x--) {
     emitByte(0);
   }
 }

@@ -30,7 +30,7 @@ void logError(const char *msg, ...) {
 
 void errorExit() { testErrored = true; }
 
-#define instructionEquals(loc, word) (programStorage[(loc)] != (byte)((word) >> 8) || programStorage[(loc)+1] != (byte)((word) & 0xFF))
+#define instructionEquals(loc, word) (programStorage[(loc)] != (byte)((word) >> 8) || programStorage[(loc) + 1] != (byte)((word)&0xFF))
 
 void shouldAssemble(const char *source, uint16_t expectedWord) {
   content = (char *)source;
@@ -88,7 +88,7 @@ void shouldAssembleDblWidth(const char *source, uint16_t expectedWord1, uint16_t
   }
 }
 
-void shouldAssembleDS(const char* source, uint16_t expectedPCCount) {
+void shouldAssembleDS(const char *source, uint16_t expectedPCCount) {
   content = (char *)source;
   programStorage[0] = 0;
   programStorage[1] = 0;
@@ -110,11 +110,10 @@ void shouldAssembleDS(const char* source, uint16_t expectedPCCount) {
   }
 
   if (programPtr != (programStorage + expectedPCCount)) {
-      xprintf(RED "  Failure: expected PC to be increment by %d - got %d\r\n\r\n" RESET, expectedPCCount, programPtr - programStorage);
+    xprintf(RED "  Failure: expected PC to be increment by %d - got %d\r\n\r\n" RESET, expectedPCCount, programPtr - programStorage);
     testFailure = true;
   }
 }
-
 
 void shouldError(const char *source, const char *errorMessage) {
   content = (char *)source;

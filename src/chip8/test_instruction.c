@@ -30,7 +30,6 @@ void setup_ld_i_1234() { programStorage[0] = invertByteOrder(LD_I_1234); }
 
 void verify_ld_i_1234() { expectEqualInts(registerI, 1234, "I"); }
 
-
 void setup_ld_i_6000() {
   programStorage[0] = invertByteOrder(LD_IL_6000_1);
   programStorage[1] = invertByteOrder(LD_IL_6000_2);
@@ -122,7 +121,6 @@ void verify_ld_v2_v0_i() {
   expectEqualBytes(registers[3], 3, "V3");
 }
 
-
 void setup_ld_v1_v1_i() {
   registerI = 0x600;
   ((byte *)registerI)[0] = 10;
@@ -173,7 +171,6 @@ void verify_ld_i_ve() {
   expectEqualBytes(pExpected[0xE], 24, "[i+0xE]");
   // expectEqualInts(registerI, 0x600 + 15, "I"); //quirks
 }
-
 
 void setup_ld_i_va_v1() {
   registerI = 0x600;
@@ -230,7 +227,6 @@ void verify_ld_i_v2_v3() {
   expectEqualBytes(pExpected[0xE], 0, "[i+0xE]");
   expectEqualInts(registerI, 0x600, "I");
 }
-
 
 void setup_call_1025() { programStorage[0] = invertByteOrder(CALL_1025); }
 
@@ -637,16 +633,13 @@ void verify_subn_v2_ve_with_borrow() {
   expectEqualBytes(registers[0xF], 0x0, "VF");
 }
 
-
 void setup_subn_vf_v1_with_no_borrow() {
   registers[0x1] = 72;
   registers[0xF] = 128;
   programStorage[0] = invertByteOrder(SUBN_VF_V1);
 }
 
-void verify_subn_vf_v1_with_no_borrow() {
-  expectEqualBytes(registers[0xF], 0x0, "VF");
-}
+void verify_subn_vf_v1_with_no_borrow() { expectEqualBytes(registers[0xF], 0x0, "VF"); }
 
 void setup_xor_v3_ve() {
   registers[0x3] = 0x41;
@@ -721,10 +714,7 @@ void main() {
   assert(ld_i_v2_v3);
   assert(ld_st_v2);
   assert(ld_v0_i);
-  assert(ld_v5_v6_i)
-  assert(ld_v2_v0_i)
-  assert(ld_v1_v1_i)
-  assert(ld_v1_10);
+  assert(ld_v5_v6_i) assert(ld_v2_v0_i) assert(ld_v1_v1_i) assert(ld_v1_10);
   assert(ld_v3_va); // LD_V3_VA)
   assert(ld_va_dt);
   assert(ld_vb_i);
