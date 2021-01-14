@@ -29,13 +29,6 @@ bool checkForKeyPresses() {
 
   currentPressedKey = getKey();
 
-#ifdef DIAGNOSTICS_ON
-  if (currentPressedKey == 'x' || currentPressedKey == 'X') {
-    startDebugging = true;
-    return true;
-  }
-#endif
-
   if (currentPressedKey == CTRL_Z) {
     return false;
   }

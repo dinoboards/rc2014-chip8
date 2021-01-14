@@ -35,10 +35,3 @@ bool     audioActive = false;
 uint16_t audioPeriod;
 
 uint16_t currentInstruction;
-
-#ifdef DIAGNOSTICS_ON
-/* diagnostic state */
-bool startCounting = false;
-int  drawCount = 0;
-bool startDebugging = true;
-#endif

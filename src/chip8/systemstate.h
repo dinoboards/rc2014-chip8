@@ -54,12 +54,6 @@ extern uint16_t audioPeriod;
 
 extern uint16_t currentInstruction;
 
-#ifdef DIAGNOSTICS_ON
-extern bool startCounting;
-extern int  drawCount;
-extern bool startDebugging;
-#endif
-
 #define nibble2nd ((uint8_t)currentInstruction & 0xF)
 #define addr      ((currentInstruction >> 8) + (((int)nibble2nd) << 8))
 #define nibble3rd ((uint8_t)(currentInstruction >> 12))

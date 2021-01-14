@@ -1,5 +1,4 @@
 #include "datatypes.h"
-#include "diagnostics.h"
 #include "key_monitor.h"
 #include "stack.h"
 #include "systemstate.h"
@@ -49,10 +48,6 @@ void initSystemState() {
 }
 
 bool executeSingleInstruction() {
-#ifdef DIAGNOSTICS_ON
-  updateMachineStateDisplay();
-#endif
-
   currentInstruction = readInstruction(); // high/low bytes in inverted order
 
   uint16_t d = CommandSwitches.delayFactor;

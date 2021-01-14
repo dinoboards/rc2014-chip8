@@ -74,23 +74,12 @@ inline void skpVx() {
   }
 }
 
-#ifdef DIAGNOSTICS_ON
-inline void sknpVx() {
-  if (!keyPressed || registers[nibble2nd] != currentPressedKey) {
-    chip8PC += 1;
-    testForLargeInstruction();
-  } else
-    startCounting = true;
-}
-
-#else
 inline void sknpVx() {
   if (!keyPressed || registers[nibble2nd] != currentPressedKey) {
     testForLargeInstruction();
     chip8PC += 1;
   }
 }
-#endif
 
 inline void keyVx() {
   if (keyPressed) {
