@@ -1,23 +1,10 @@
 
-	PUBLIC	_outDat, _outCmd, _waitForCommandCompletion, _setReadRegisterToZero
-	PUBLIC	__fromX, __fromY, _longSide, _shortSide, __color, _dir, __operation
-	PUBLIC	__startX, __startY
+	PUBLIC	_waitForCommandCompletion, _setReadRegisterToZero
+	PUBLIC	__color
 
 	SECTION CODE
 
 	include "v9958.inc"
-
-; void outDat(uint8_t b) __z88dk_fastcall
-_outDat:
-	LD	A, L
-	OUT	(VDP_DATA), A
-	RET
-
-; void outCmd(uint8_t b) __z88dk_fastcall
-_outCmd:
-	LD	A, L
-	OUT	(VDP_ADDR), A
-	RET
 
 _waitForCommandCompletion:
 	; Set read register to 2
@@ -44,31 +31,7 @@ _setReadRegisterToZero:
 
 	SECTION	DATA
 
-R32:
-__startX:	DW	0
-
-R34:
-__startY:	DW	0
-
-R36:
-__fromX:	DW	0
-
-R38:
-__fromY:	DW	0
-
-R40:
-_longSide:	DW	0
-
-R42:
-_shortSide:	DW	0
-
 R44:
 __color:	DB	0
-
-R45:
-_dir:		DB	0
-
-R46:
-__operation:	DB	0
 
 	SECTION IGNORE

@@ -13,9 +13,6 @@ typedef struct {
   uint8_t green;
 } RGB;
 
-extern void outCmd(uint8_t) __z88dk_fastcall;
-extern void outDat(uint8_t) __z88dk_fastcall;
-
 extern void setPalette(RGB *) __z88dk_fastcall;
 extern void setMode4(uint8_t lines, uint8_t mode);
 extern void setMode6(uint8_t lines, uint8_t mode);
@@ -33,13 +30,7 @@ extern void _writeRegister(uint16_t rd) __z88dk_fastcall;
 void waitForCommandCompletion();
 void setReadRegisterToZero();
 
-extern uint8_t  dir;
-extern uint16_t longSide;
-extern uint16_t shortSide;
-extern uint16_t _fromX;
-extern uint16_t _fromY;
 extern uint8_t  _color;
-extern uint8_t  _operation;
 extern uint16_t _toX;
 extern uint16_t _toY;
 

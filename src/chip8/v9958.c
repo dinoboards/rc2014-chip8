@@ -73,11 +73,12 @@ void _writeRegister(uint16_t rd) __z88dk_fastcall {
 }
 
 void setBaseRegisters(uint8_t *pReg) __z88dk_fastcall {
-  DI
+  DI;
 
-      for (uint8_t i = 0; i < REGISTER_COUNT; i++) writeRegister(i, *pReg++);
+  for (uint8_t i = 0; i < REGISTER_COUNT; i++)
+    writeRegister(i, *pReg++);
 
-  EI
+  EI;
 }
 
 void setVideoSignal(uint8_t *pReg, uint8_t lines, uint8_t mode) {
@@ -152,20 +153,21 @@ void setMode7(uint8_t lines, uint8_t mode) {
 }
 
 void setPalette(RGB *pPalette) __z88dk_fastcall {
-  DI writeRegister(16, 0);
+  DI;
+  writeRegister(16, 0);
   for (uint8_t c = 0; c < 16; c++) {
     outPal(pPalette->red * 16 + pPalette->blue);
     outPal(pPalette->green);
     pPalette++;
   }
-  EI
+  EI;
 }
 
 void clearScreenBank0(uint8_t color) __z88dk_fastcall {
-  DI
-      // // Clear bitmap data from 0x0000 to 0x3FFF
+  DI;
+  // // Clear bitmap data from 0x0000 to 0x3FFF
 
-      writeRegister(17, 36);         // Set Indirect register Access
+  writeRegister(17, 36);             // Set Indirect register Access
   outRegIndInt(0);                   // DX
   outRegIndInt(0);                   // DY
   outRegIndInt(512);                 // NX
@@ -175,14 +177,14 @@ void clearScreenBank0(uint8_t color) __z88dk_fastcall {
   outRegIndByte(CMD_VDP_TO_VRAM);
   waitForCommandCompletion();
   setReadRegisterToZero();
-  EI
+  EI;
 }
 
 void clearScreenBank1(uint8_t color) __z88dk_fastcall {
-  DI
-      // // Clear bitmap data from 0x0000 to 0x3FFF
+  DI;
+  // // Clear bitmap data from 0x0000 to 0x3FFF
 
-      writeRegister(17, 36);         // Set Indirect register Access
+  writeRegister(17, 36);             // Set Indirect register Access
   outRegIndInt(512);                 // DX
   outRegIndInt(212);                 // DY
   outRegIndInt(512);                 // NX
@@ -192,5 +194,5 @@ void clearScreenBank1(uint8_t color) __z88dk_fastcall {
   outRegIndByte(CMD_VDP_TO_VRAM);
   waitForCommandCompletion();
   setReadRegisterToZero();
-  EI
+  EI;
 }

@@ -1,8 +1,8 @@
 	PUBLIC	_initDrawParams, _drawSegment, _drawRow
 
-	EXTERN	_xx, _yy, _xxTo, __fromX, __fromY, __color_, __operation, __toY, __color, _yAddOne
+	EXTERN	_xx, _yy, _xxTo, __fromX, __fromY, __color_, __toY, __color, _yAddOne
 	EXTERN	_spriteRowData, _currentVideoPlane
-	EXTERN	_waitForCommandCompletion, __startX, __startY, __operation, _dir
+	EXTERN	_waitForCommandCompletion
 
 	EXTERN	_longSide, _shortSide
 
