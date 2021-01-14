@@ -1,0 +1,91 @@
+
+  CLS
+  HIGH
+  PLANE 1
+
+; DRAW A SERIES OF SPRITES
+; and then scroll down
+
+  LD  VE, 0
+  LD  VD, 1
+
+  PLANE 2
+  LD  I, SOLID
+  LD  V0, 64
+  LD  V1, 32
+  DRW V0, V1, 1
+
+  ; MOVE LINE ABOVE DOWN 1 PIXEL -> 65
+  SCRL DOWN 2
+
+  LD  V0, 64
+  LD  V1, 32
+  DRW V0, V1, 1
+
+  ; EXPECT NO OVERLAP
+  SE  VF, VE
+  JP  FAILED3
+
+  LD  V0, 66
+  LD  V1, 32
+  DRW V0, V1, 1
+
+  ; EXPECT NO OVERLAP
+  SE  VF, VE
+  JP  FAILED3
+
+  ; LINE SHOULD NOW BE AT 65
+  LD  V0, 65
+  LD  V1, 32
+  DRW V0, V1, 1
+
+  ; EXPECT NO OVERLAP
+  SE  VF, VE
+  JP  FAILED3
+
+OK:
+  CLS
+
+  LD  I, OK_PATTERN
+  LD  V0, 0
+  LD  V1, 0
+  DRW V0, V1, 5
+  RET
+
+FAILED0:
+  LD  VC, 0
+  JP  SHOWERR
+
+FAILED1:
+  LD  VC, 1
+  JP  SHOWERR
+
+FAILED2:
+  LD  VC, 2
+  JP  SHOWERR
+
+FAILED3:
+  LD  VC, 3
+  JP  SHOWERR
+
+SHOWERR:
+  LDF I, VC
+  LD  V0, 0
+  LD  V1, 0
+  DRW  V0, V1, 5
+  RET
+
+OK_PATTERN:
+  DB  234, 172, 168, 172, 234
+
+PATTERN1:
+  DB  170, 170, 170, 170, 170, 170, 170, 170
+
+PATTERN2:
+  DB  14, 15, 255, 15, 15, 15, 15, 15
+
+PATTERN3:
+  DB  240, 240, 240, 240, 240, 240, 240, 240
+
+SOLID:
+  DB  255, 255, 255, 255, 255, 255, 255, 255

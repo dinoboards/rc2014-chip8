@@ -47,256 +47,283 @@ void initSystemState() {
   chip8PC = (uint16_t *)programStorage;
 }
 
-bool executeSingleInstruction() {
-  currentInstruction = readInstruction(); // high/low bytes in inverted order
+void delay(uint16_t d) __z88dk_fastcall {
 
-  uint16_t d = CommandSwitches.delayFactor;
+  // uint16_t d = CommandSwitches.delayFactor;
   while (d > 0) {
     d--;
   }
+}
 
+bool executeSingleInstruction() {
+  currentInstruction = readInstruction(); // high/low bytes in inverted order
+
+  if(CommandSwitches.delayFactor>0)
+    delay(CommandSwitches.delayFactor);
   manageTimers();
   if (!checkForKeyPresses())
     return false;
 
-  switch (currentInstruction) {
-  case 0xFF00:
-    videoHigh();
-    break;
+  firstNibble = (uint8_t)(currentInstruction >> 4) & 0xF;
+  lowByte = (currentInstruction >> 8) & 0xFF;
+  fourthNibble = lowByte & 0xF;
 
-  case 0x02F0:
-    audio();
-    break;
-
-  case 0xE000:
-    cls();
-    break;
-
-  case 0xEE00:
-    if (ret())
-      return false;
-    break;
-
-  default: {
-    firstNibble = (uint8_t)(currentInstruction >> 4) & 0xF;
-    lowByte = (currentInstruction >> 8) & 0xFF;
-    fourthNibble = lowByte & 0xF;
-
-    switch (firstNibble) {
-    case 0x1: {
-      if (jp())
-        return false;
-      break;
-    }
-
-    case 0x2: {
-      call();
-      break;
-    }
-
-    case 0x3: {
-      seVxByte();
-      break;
-    }
-
-    case 0x4: {
-      sneVxByte();
-      break;
-    }
-
-    case 0x5: {
-      switch (fourthNibble) {
-      case 0x0:
-        seVxVy();
-        break;
-
-      case 0x2:
-        ldIVxVy();
-        break;
-
-      case 0x3:
-        ldVxVyI();
-        break;
-
-      default:
-        goto badInstruction;
-      }
-      break;
-    }
-
-    case 0x6:
-      ldVxByte();
-      break;
-
-    case 0x7: {
-      addVxByte();
-      break;
-    }
-
-    case 0x8: {
-      switch (fourthNibble) {
-      case 0x0: {
-        ldVxVy();
-        break;
-      }
-
-      case 0x1: {
-        orVxVy();
-        break;
-      }
-
-      case 0x2: {
-        andVxVy();
-        break;
-      }
-
-      case 0x3: {
-        xorVxVy();
-        break;
-      }
-
-      case 0x4: {
-        addVxVy();
-        break;
-      }
-
-      case 0x5: {
-        subVxVy();
-        break;
-      }
-
-      case 0x6: {
-        shrVxVy();
-        break;
-      }
-
-      case 0x7:
-        subnVxVy();
-        break;
-
-      case 0xE: {
-        shlVxVy();
-        break;
-      }
-
-      default:
-        goto badInstruction;
-      }
-      break;
-    }
-
-    case 0x9: {
-      // TODO Check for 9xx0
-      sneVxVy();
-      break;
-    }
-
-    case 0xA:
-      ldIAddr();
-      break;
-
-    case 0xB:
-      jpV0Addr();
-      break;
-
-    case 0xC: {
-      rnd();
-      break;
-    }
-
-    case 0xD: {
-      draw();
-      break;
-    }
-
-    case 0xE: {
+  switch (firstNibble) {
+  case 0x0: {
+    switch (InstrfirstByte) {
+    case 0x00: {
       switch (lowByte) {
-      case 0x9E: {
-        skpVx();
+      case 0xFF:
+        videoHigh();
         break;
-      }
 
-      case 0xA1: {
-        sknpVx();
+      case 0xE0:
+        cls();
         break;
-      }
+
+      case 0xEE:
+        if (ret())
+          return false;
+        break;
 
       default:
-        goto badInstruction;
-      }
+        switch (nibble3rd) {
+        case 0xC:
+          scrlDown();
+          break;
 
-      break;
-    }
-
-    case 0xF: {
-      switch (lowByte) {
-
-      case 0x00:
-        ldILargeAddr();
-        break;
-
-      case 0x01: {
-        videoPlane();
-        break;
-      }
-
-      case 0x07: {
-        ldVxDt();
-        break;
-      }
-
-      case 0x0A: {
-        keyVx();
-        break;
-      }
-
-      case 0x15: {
-        ldDtVx();
-        break;
-      }
-
-      case 0x18: {
-        ldStVx();
-        break;
-      }
-
-      case 0x1E: {
-        addIVx();
-        break;
-      }
-
-      case 0x29: {
-        ldfIVx();
-        break;
-      }
-
-      case 0x33: {
-        bcdIVx();
-        break;
-      }
-
-      case 0x55: {
-        ldIVx();
-        break;
-      }
-
-      case 0x65: {
-        ldVxI();
-        break;
-      }
-
-      default:
-        goto badInstruction;
+        default:
+          goto badInstruction;
+        }
       }
       break;
     }
 
     default:
-    badInstruction:
-      xprintf("Bad instruction %04X at %p\r\n", invertByteOrder(currentInstruction), chip8PC - 1);
-      return false;
+      goto badInstruction;
     }
+    break;
   }
+
+  case 0x1: {
+    if (jp())
+      return false;
+    break;
+  }
+
+  case 0x2: {
+    call();
+    break;
+  }
+
+  case 0x3: {
+    seVxByte();
+    break;
+  }
+
+  case 0x4: {
+    sneVxByte();
+    break;
+  }
+
+  case 0x5: {
+    switch (fourthNibble) {
+    case 0x0:
+      seVxVy();
+      break;
+
+    case 0x2:
+      ldIVxVy();
+      break;
+
+    case 0x3:
+      ldVxVyI();
+      break;
+
+    default:
+      goto badInstruction;
+    }
+    break;
+  }
+
+  case 0x6:
+    ldVxByte();
+    break;
+
+  case 0x7: {
+    addVxByte();
+    break;
+  }
+
+  case 0x8: {
+    switch (fourthNibble) {
+    case 0x0: {
+      ldVxVy();
+      break;
+    }
+
+    case 0x1: {
+      orVxVy();
+      break;
+    }
+
+    case 0x2: {
+      andVxVy();
+      break;
+    }
+
+    case 0x3: {
+      xorVxVy();
+      break;
+    }
+
+    case 0x4: {
+      addVxVy();
+      break;
+    }
+
+    case 0x5: {
+      subVxVy();
+      break;
+    }
+
+    case 0x6: {
+      shrVxVy();
+      break;
+    }
+
+    case 0x7:
+      subnVxVy();
+      break;
+
+    case 0xE: {
+      shlVxVy();
+      break;
+    }
+
+    default:
+      goto badInstruction;
+    }
+    break;
+  }
+
+  case 0x9: {
+    // TODO Check for 9xx0
+    sneVxVy();
+    break;
+  }
+
+  case 0xA:
+    ldIAddr();
+    break;
+
+  case 0xB:
+    jpV0Addr();
+    break;
+
+  case 0xC: {
+    rnd();
+    break;
+  }
+
+  case 0xD: {
+    draw();
+    break;
+  }
+
+  case 0xE: {
+    switch (lowByte) {
+    case 0x9E: {
+      skpVx();
+      break;
+    }
+
+    case 0xA1: {
+      sknpVx();
+      break;
+    }
+
+    default:
+      goto badInstruction;
+    }
+
+    break;
+  }
+
+  case 0xF: {
+    switch (lowByte) {
+
+    case 0x00:
+      ldILargeAddr();
+      break;
+
+    case 0x01: {
+      videoPlane();
+      break;
+    }
+
+    case 0x02:
+      if (InstrfirstByte == 0xF0)
+        audio();
+      else
+        goto badInstruction;
+      break;
+
+    case 0x07: {
+      ldVxDt();
+      break;
+    }
+
+    case 0x0A: {
+      keyVx();
+      break;
+    }
+
+    case 0x15: {
+      ldDtVx();
+      break;
+    }
+
+    case 0x18: {
+      ldStVx();
+      break;
+    }
+
+    case 0x1E: {
+      addIVx();
+      break;
+    }
+
+    case 0x29: {
+      ldfIVx();
+      break;
+    }
+
+    case 0x33: {
+      bcdIVx();
+      break;
+    }
+
+    case 0x55: {
+      ldIVx();
+      break;
+    }
+
+    case 0x65: {
+      ldVxI();
+      break;
+    }
+
+    default:
+      goto badInstruction;
+    }
+    break;
+  }
+
+  default:
+  badInstruction:
+    xprintf("Bad instruction %04X at %p\r\n", invertByteOrder(currentInstruction), chip8PC - 1);
+    return false;
   }
 
   if ((uint16_t)chip8PC < 0x200) {

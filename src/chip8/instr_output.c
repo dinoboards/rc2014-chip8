@@ -63,3 +63,10 @@ void videoHigh() {
 
   v9958VideoInit();
 }
+
+void scrlDown() {
+  if (videoResMode != VideoResModeLow)
+    // tmsScrollDown();
+  // else
+    v9958ScrollDown();
+}

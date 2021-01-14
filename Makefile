@@ -117,4 +117,8 @@ super: chip8
 testxor:
 	@cp ./test-samples/testxor.cas ./bin/
 	@cd bin && cpm chip8asm testxor.cas
-	# @cd bin && cpm "chip8 testxor.ch8 -x 100000"
+
+.PHONY: testscrl
+testscrl:
+	@cp ./test-samples/testscrl.cas ./bin/
+	@cd bin && cpm chip8asm testscrl.cas
