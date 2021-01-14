@@ -4,7 +4,7 @@
 	EXTERN	_spriteRowData, _currentVideoPlane
 	EXTERN	_waitForCommandCompletion, __startX, __startY, __operation, _dir
 
-	EXTERN	_longSide, _shortSide, _commandFromR36, _commandFromR32
+	EXTERN	_longSide, _shortSide
 
 	SECTION CODE
 
@@ -47,23 +47,11 @@ _testSegmentLoop0:
 	RRCA
 	JR	C, _testSegmentLoop0
 
-	; SET INDIRECT REGISTER TO 32
-	LD	A, 32
-	OUT	(VDP_ADDR), A
-	LD	A, 0x80 | 17
-	OUT	(VDP_ADDR), A
-
-	; R32
-	ld	(__startX), a
-	OUT	(VDP_REGS), a
-	xor	a
-	OUT	(VDP_REGS), a
-
 	; r#34
-	ld	a, (_yy)
-	OUT	(VDP_REGS), a
-	xor	a
-	OUT	(VDP_REGS), a
+	LD	A, (_yy)
+	OUT	(VDP_ADDR), A
+	LD	A, 0x80 | 34
+	OUT	(VDP_ADDR), A
 
 	ld	a, (__color)
 	ld	e, a
@@ -104,7 +92,6 @@ _testSegmentLoop2:
 	OUT	(VDP_ADDR), A
 	IN	A, (VDP_ADDR)
 
-	; call	_commandFromR32		; Assumes does not destry DE or A'
 	; A => CURRENT COLOUR CODE
 	; H IS NEW COLOUR CODE
 
