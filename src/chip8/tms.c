@@ -4,8 +4,6 @@
 #include "keys.h"
 #include "systemstate.h"
 
-// tms9918IoPorts tmsIoPorts;
-
 byte tmsRegisters[8] = {
     0x00,                               /* Graphics I Mode,No External Video */
     0xC0 | 32,                          /* 16K,Enable Display, Enable Int.,8x8 Sprites,Mag.Off */

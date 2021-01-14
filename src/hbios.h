@@ -17,15 +17,6 @@ extern uint8_t hbCioIn(hbCioParams *) __z88dk_fastcall;
 extern uint8_t hbCioIst(uint8_t) __z88dk_fastcall;
 extern uint8_t hbCioOut(hbCioParams *) __z88dk_fastcall;
 
-typedef struct {
-  uint8_t  destBank;
-  uint8_t  sourceBank;
-  uint16_t byteCount;
-  void *   destAddr;
-  void *   sourceAddr;
-} hbiosBankCopy;
-extern uint8_t hbSysBankCopy(hbiosBankCopy *pData) __z88dk_fastcall;
-
 extern uint8_t hbSndReset(uint8_t driver) __z88dk_fastcall;
 
 typedef struct {
