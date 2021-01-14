@@ -26,3 +26,7 @@ Issues:
   * fix chip8asm/filereader's use of chk
 
 v9958:
+
+
+BUG:
+  VDP lores app will crash, if run after using hires mode - seems vdp is not correctly re-initialised

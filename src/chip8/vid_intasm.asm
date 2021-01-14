@@ -1,13 +1,14 @@
 	PUBLIC _vsyncInstallInterruptHandler, _vsyncRemoveInterruptHandler
-	EXTERN _timerTick, _tmsIoPorts
+	EXTERN _timerTick
 
 	SECTION CODE
 ; INTERRUPT HANDLING (VSYNC) FOR TIMER TICK
 
 include "hbios_sys.inc"
+include	"v9958.inc"
 
 intHandler:
-	LD	A, (_tmsIoPorts + 1) 	; CMDREG
+	LD	A, VDP_ADDR
  	LD	C, A
 	IN	A, (C)			; TEST FOR INT FLAG
 	AND	$80

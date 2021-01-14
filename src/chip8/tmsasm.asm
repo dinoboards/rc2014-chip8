@@ -1,9 +1,11 @@
 	PUBLIC  _tmsSetMode1, _tmsWriteData, _tmsReadData, _tmsClearData, _tmsReadByte
 	PUBLIC _tmsWriteByte, _tmsSetReadAddr, _tmsSetWriteAddr
-	EXTERN	_tmsRegisters, _tmsColour, _tmsIoPorts
+	EXTERN	_tmsRegisters, _tmsColour
 	EXTERN _timerTick
 
 	SECTION CODE
+
+include	"v9958.inc"
 
 ; void initMode1()
 tmsIoDelay:
@@ -20,8 +22,7 @@ _tmsSetMode1:
 	LD	D, 0x7F			;$80 - 1
 
 INITMODE1:
-	LD	A, (_tmsIoPorts + 1)
-	LD	C, A
+	LD	C, VDP_ADDR
 	LD	A, (HL)
 
 	DI
@@ -39,8 +40,7 @@ INITMODE1:
 
 ;extern void tmsWriteData(tmsDataParams* p) __z88dk_fastcall;
 _tmsWriteData:
-	LD	A, (_tmsIoPorts + 1)
-	LD	C, A
+	LD	C, VDP_ADDR
 	LD	A, (HL)
 	INC	HL
 	DI
@@ -62,8 +62,7 @@ _tmsWriteData:
 	LD	H, (HL)		; DE IS LENGTH
 	LD	L, A		; HL IS SOURCE ADDRES
 
-	LD	A, (_tmsIoPorts)
-	LD	C, A
+	LD	C, VDP_DATA
 
 _tmsWriteData1:
 	LD	B, (hl)
@@ -80,8 +79,7 @@ _tmsWriteData1:
 
 ;extern void tmsReadData(tmsDataParams* p) __z88dk_fastcall;
 _tmsReadData:
-	LD	A, (_tmsIoPorts + 1)
-	LD	C, A
+	LD	C, VDP_ADDR
 	LD	A, (HL)
 	INC	HL
 	DI
@@ -103,8 +101,7 @@ _tmsReadData:
 	LD	H, (HL)		; DE IS LENGTH
 	LD	L, A		; HL IS SOURCE ADDRES
 
-	LD	A, (_tmsIoPorts)
-	LD	C, A
+	LD	C, VDP_DATA
 
 _tmsReadData1:
 	IN	A, (C)
@@ -121,8 +118,7 @@ _tmsReadData1:
 
 ;extern void tmsClearData(tmsClearParams* p) __z88dk_fastcall;
 _tmsClearData:
-	LD	A, (_tmsIoPorts + 1)
-	LD	C, A
+	LD	C, VDP_ADDR
 	LD	A, (HL)
 	INC	HL
 	DI
@@ -141,8 +137,7 @@ _tmsClearData:
 	INC	HL
 	LD	B, (HL)
 
-	LD	A, (_tmsIoPorts)
-	LD	C, A
+	LD	C, VDP_DATA
 
 _tmsClearData1:
 	INC	HL
@@ -161,8 +156,7 @@ _tmsClearData1:
 ;extern void tmsSetWriteAddr(void*) __z88dk_fastcall;
 
 _tmsSetWriteAddr:
-	LD	A, (_tmsIoPorts + 1)
-	LD	C, A
+	LD	C, VDP_ADDR
 	LD	A, l
 	DI
 	OUT	(C), A
@@ -175,8 +169,7 @@ _tmsSetWriteAddr:
 
 ;extern void tmsSetReadAddr(void*) __z88dk_fastcall;
 _tmsSetReadAddr:
-	LD	A, (_tmsIoPorts + 1)
-	LD	C, A
+	LD	C, VDP_ADDR
 	LD	A, L
 	DI
 	OUT	(C), A
@@ -189,16 +182,14 @@ _tmsSetReadAddr:
 
 ; extern void tmsWriteByte(byte) __z88dk_fastcall;
 _tmsWriteByte:
-	LD	A, (_tmsIoPorts)
-	LD	C, A
+	LD	C, VDP_DATA
 	LD	A, L
 	OUT	(C), A
 	RET
 
 ; extern byte tmsReadByte() __z88dk_fastcall;
 _tmsReadByte:
-	LD	A, (_tmsIoPorts)
-	LD	C, A
+	LD	C, VDP_DATA
 	IN	L, (C)
 	RET
 

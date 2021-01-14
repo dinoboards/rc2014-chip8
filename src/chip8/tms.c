@@ -4,7 +4,7 @@
 #include "keys.h"
 #include "systemstate.h"
 
-tms9918IoPorts tmsIoPorts;
+// tms9918IoPorts tmsIoPorts;
 
 byte tmsRegisters[8] = {
     0x00,                               /* Graphics I Mode,No External Video */
@@ -28,33 +28,18 @@ void tmsInit() {
   data.func = 0;
   data.unit = tmsDriverIndex;
 
-  // TODO : Check result for error
-  hbSysGetVda(&data);
+  // // TODO : Check result for error
+  // hbSysGetVda(&data);
 
-  hbiosBankCopy copyData;
-  copyData.sourceBank = HCB_BIDBIOS;
-  copyData.destBank = HCB_BIDUSR;
-  copyData.sourceAddr = ((byte *)data.driverDataAddr) + 4;
-  copyData.destAddr = (void *)tmsIoPorts;
-  copyData.byteCount = 2;
+  // hbiosBankCopy copyData;
+  // copyData.sourceBank = HCB_BIDBIOS;
+  // copyData.destBank = HCB_BIDUSR;
+  // copyData.sourceAddr = ((byte *)data.driverDataAddr) + 4;
+  // copyData.destAddr = (void *)tmsIoPorts;
+  // copyData.byteCount = 2;
 
-  // TODO : Check result for error
-  hbSysBankCopy(&copyData);
+  // // TODO : Check result for error
+  // hbSysBankCopy(&copyData);
 
   tmsClearData(&clearParams);
-}
-
-bool tmsSearchDriver() {
-  hbiosVdaDev result;
-  result.unitId = 0;
-  uint8_t status = hbVdaDev(&result);
-  while (status == 0 && result.devType != VDADEV_TMS) {
-    result.unitId++;
-    status = hbVdaDev(&result);
-  }
-
-  if (status == 0)
-    tmsDriverIndex = result.devNumber;
-
-  return (status == 0);
 }

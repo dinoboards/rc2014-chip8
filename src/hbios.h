@@ -27,21 +27,6 @@ typedef struct {
 } hbiosDriverEntry;
 extern uint8_t hbSysGetVda(hbiosDriverEntry *pData) __z88dk_fastcall;
 
-#define VDADEV_VDU  ((uint8_t)0x00) /* ECB VDU - MOTOROLA 6545 */
-#define VDADEV_CVDU ((uint8_t)0x10) /* ECB COLOR VDU - MOS 8563 */
-#define VDADEV_NEC  ((uint8_t)0x20) /* ECB UPD7220 - NEC UPD7220 */
-#define VDADEV_TMS  ((uint8_t)0x30) /* N8 ONBOARD VDA SUBSYSTEM - TMS 9918 */
-#define VDADEV_VGA  ((uint8_t)0x40) /* ECB VGA3 - HITACHI HD6445 */
-
-typedef struct {
-  uint8_t unitId;
-  uint8_t devType;
-  uint8_t devNumber;
-  uint8_t devMode;
-  uint8_t devBaseIO;
-} hbiosVdaDev;
-extern uint8_t hbVdaDev(hbiosVdaDev *result) __z88dk_fastcall;
-
 typedef struct {
   uint8_t  destBank;
   uint8_t  sourceBank;
