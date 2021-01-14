@@ -12,21 +12,39 @@ inline uint8_t call() {
 
 #define ret() popPc()
 
-#define seVxByte()                     \
-  if (registers[nibble2nd] == lowByte) \
-  chip8PC += 1
+#define testForLargeInstruction()             \
+  {                                           \
+    if (*chip8PC == LOAD_I_LARGE_INSTRUCTION) \
+      chip8PC += 1;                           \
+  }
 
-#define seVxVy()                                    \
-  if (registers[nibble2nd] == registers[nibble3rd]) \
-  chip8PC += 1
+inline void seVxByte() {
+  if (registers[nibble2nd] == lowByte) {
+    testForLargeInstruction();
+    chip8PC += 1;
+  }
+}
 
-#define sneVxByte()                    \
-  if (registers[nibble2nd] != lowByte) \
-  chip8PC += 1
+inline void seVxVy() {
+  if (registers[nibble2nd] == registers[nibble3rd]) {
+    testForLargeInstruction();
+    chip8PC += 1;
+  }
+}
 
-#define sneVxVy()                                   \
-  if (registers[nibble2nd] != registers[nibble3rd]) \
-  chip8PC += 1
+inline void sneVxByte() {
+  if (registers[nibble2nd] != lowByte) {
+    testForLargeInstruction();
+    chip8PC += 1;
+  }
+}
+
+inline void sneVxVy() {
+  if (registers[nibble2nd] != registers[nibble3rd]) {
+    testForLargeInstruction();
+    chip8PC += 1;
+  }
+}
 
 inline uint8_t jp() {
   if (addr < 0x200) {
@@ -49,21 +67,29 @@ inline uint8_t jpV0Addr() {
   return false;
 }
 
-#define skpVx()                                                \
-  if (keyPressed && registers[nibble2nd] == currentPressedKey) \
+inline void skpVx() {
+  if (keyPressed && registers[nibble2nd] == currentPressedKey) {
+    testForLargeInstruction();
     chip8PC += 1;
+  }
+}
 
 #ifdef DIAGNOSTICS_ON
-#define sknpVx()                                                \
-  if (!keyPressed || registers[nibble2nd] != currentPressedKey) \
-    chip8PC += 1;                                               \
-  else                                                          \
-    startCounting = true
+inline void sknpVx() {
+  if (!keyPressed || registers[nibble2nd] != currentPressedKey) {
+    chip8PC += 1;
+    testForLargeInstruction();
+  } else
+    startCounting = true;
+}
 
 #else
-#define sknpVx()                                                \
-  if (!keyPressed || registers[nibble2nd] != currentPressedKey) \
+inline void sknpVx() {
+  if (!keyPressed || registers[nibble2nd] != currentPressedKey) {
+    testForLargeInstruction();
     chip8PC += 1;
+  }
+}
 #endif
 
 inline void keyVx() {

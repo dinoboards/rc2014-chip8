@@ -11,6 +11,8 @@
 #include <stdio.h>
 #include <string.h>
 
+#define LOAD_I_LARGE_INSTRUCTION 0x00F0
+
 #include "instr_output.h"
 #include "instr_pc.h"
 #include "instr_random.h"

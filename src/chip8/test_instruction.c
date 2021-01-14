@@ -689,6 +689,15 @@ void verify_audio() {
   expectEqualInts(audioActive, 1, "audioActive");
 }
 
+void setup_skips_dbl_word_instruction() {
+  registers[4] = 15;
+  programStorage[0] = invertByteOrder(SE_V4_15);
+  programStorage[1] = invertByteOrder(LD_IL_6000_1);
+  programStorage[2] = invertByteOrder(LD_IL_6000_2);
+}
+
+void verify_skips_dbl_word_instruction() { expectEqualPtrs(chip8PC, (uint16_t *)0x206, "PC"); }
+
 void main() {
   CommandSwitches.isSerial = true;
   CommandSwitches.delayFactor = 0;
@@ -752,6 +761,8 @@ void main() {
   assert(audio);
 
   assertTerminates(final_ret);
+
+  assert(skips_dbl_word_instruction);
 
   // assert(bad_jump);
 
