@@ -22,6 +22,7 @@ ASS_FLAGS=-mz80 \
 	-I"${ZCCCFG}/../../libsrc/_DEVELOPMENT/target/z80" \
 	-I"${ZCCCFG}/../../libsrc/_DEVELOPMENT/target/hbios" \
 	-I"${ZCCCFG}/../../lib" \
+	-I"chip8/" \
 	-L. \
 	-L"${ZCCCFG}/../../libsrc/_DEVELOPMENT/lib/sdcc_iy" \
 	-lmath32 \
@@ -47,12 +48,14 @@ ZCCFLAGS="${MEASURE} ${ZCCRELFLAGS} "
 
 include ./depends.d
 
+# VPATH := chip8/instr_v9958_output
+
 chip8asm_sources = $(wildcard ./chip8asm/*.c) $(wildcard ./chip8asm/*.asm)
 chip8asm_objects = crt.o memap.o cpm.o cpmasm.o hbios_cio.o hbios.o memap.o nonreloccrt.o xstdio.o chartesters.o token.o filereader.o xstrtol.o $(patsubst %.asm,%.o,$(patsubst %.c,%.o,$(chip8asm_sources)))
 exclude_from_tests = %main.o %filereader.o %exit.o %error.o %tty.o %keys.o %systimer.o %random.o
 exclude_from_tstinstr = $(exclude_from_tests) %configreader.o %configuration_loader.o %error_reports.o  %token.o
 
-chip8_sources = $(wildcard ./chip8/*.c) $(wildcard ./chip8/*.asm)
+chip8_sources = $(wildcard ./chip8/*.c) $(wildcard ./chip8/*.asm) $(wildcard ./chip8/instr_v9958_output/*.asm)
 chip8_objects = memap.o relocmem.asm crt.o reloccrt.o hbios.o hbios_cio.o hbios_snd.o cpm.o cpmasm.o xstdio.o chartesters.o token.o filereader.o xstrtol.o $(patsubst %.asm,%.o,$(patsubst %.c,%.o,$(chip8_sources)))
 
 ../bin/chip8asm.com: $(filter-out %test_assembler.o, $(chip8asm_objects))
