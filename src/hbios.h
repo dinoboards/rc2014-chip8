@@ -20,14 +20,6 @@ extern uint8_t hbCioOut(hbCioParams *) __z88dk_fastcall;
 extern uint16_t hbSysGetTimer16();
 
 typedef struct {
-  uint8_t func;
-  uint8_t unit;
-  void *  driverFnAddr;
-  void *  driverDataAddr;
-} hbiosDriverEntry;
-extern uint8_t hbSysGetVda(hbiosDriverEntry *pData) __z88dk_fastcall;
-
-typedef struct {
   uint8_t  destBank;
   uint8_t  sourceBank;
   uint16_t byteCount;

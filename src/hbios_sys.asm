@@ -1,5 +1,5 @@
 
-	PUBLIC	_hbSysGetTimer16, _hbSysGetVda, _hbSysBankCopy, _hbSysIntInfo, _hbSysIntSet
+	PUBLIC	_hbSysGetTimer16, _hbSysBankCopy, _hbSysIntInfo, _hbSysIntSet
 
 	SECTION CODE
 
@@ -14,51 +14,6 @@ _hbSysGetTimer16:
 	POP	IX
 	RET
 
-; typedef struct  {
-;   uint8_t func;
-;   uint8_t unit;
-;   void* driverFnAddr;
-;   void* driverDataAddr;
-; } hbiosDriverEntry;
-; byte hbSysGetVda(hbiosDriverEntry* pData) __z88dk_fastcall
-
-_hbSysGetVda:
-	PUSH	IX
-
-	LD	BC, SYSGET_VDAFN
-	LD	D, (HL)
-	INC	HL		; VDAFN
-	LD	E, (HL)		; UNIT
-	INC	HL
-	PUSH	HL
-
-	RST	08		; DE NOW CONTAINS ADDR OF TMS DATA/CONFIG
-
-	PUSH	HL
-	POP	BC
-	POP	HL
-	PUSH	AF
-
-	LD	A, C
-	LD	(HL), A
-
-	INC	HL
-	LD	A, B
-	LD	(HL), A
-
-	INC	HL
-	LD	A, E
-	LD	(HL), A
-
-	INC	HL
-	LD	A, D
-	LD	(HL), A
-
-	POP	AF
-	LD	L, A
-	LD	H, 0
-	POP	IX
-	RET
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 

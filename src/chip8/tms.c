@@ -24,22 +24,5 @@ void tmsRegisterColours(uint8_t bkColour, uint8_t fgColour) { tmsRegisters[7] = 
 static uint8_t tmsDriverIndex = 0;
 
 void tmsInit() {
-  hbiosDriverEntry data;
-  data.func = 0;
-  data.unit = tmsDriverIndex;
-
-  // // TODO : Check result for error
-  // hbSysGetVda(&data);
-
-  // hbiosBankCopy copyData;
-  // copyData.sourceBank = HCB_BIDBIOS;
-  // copyData.destBank = HCB_BIDUSR;
-  // copyData.sourceAddr = ((byte *)data.driverDataAddr) + 4;
-  // copyData.destAddr = (void *)tmsIoPorts;
-  // copyData.byteCount = 2;
-
-  // // TODO : Check result for error
-  // hbSysBankCopy(&copyData);
-
   tmsClearData(&clearParams);
 }
