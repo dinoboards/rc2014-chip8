@@ -1,4 +1,4 @@
-	PUBLIC	_v9958ScrollDown
+	PUBLIC	_v9958ScrollUp
 
 	EXTERN	_initDrawParams, _waitForCommandCompletion
 	EXTERN	__color, _yy, _fourthNibble, __color
@@ -26,7 +26,7 @@
 
 	; then lastly clear all line 0 for color plane
 
-_v9958ScrollDown:
+_v9958ScrollUp:
 	LD	A, (__color)
 	LD	C, A
 	RRCA
@@ -45,17 +45,15 @@ _v9958ScrollDown:
 
 ; READ EACH ROW INTO BUFFER
 	LD	A, (_fourthNibble)
+	LD	D, A			;LOOP FOR Y = COUNT to 63
 	LD	C, A
-	LD	A, HIRES_HEIGHT-1
-	SUB	C			;LOOP FOR Y = 63 - COUNT to 0
-	LD	D, A
 
 nextRow:
 	LD	HL, LINESRC
 	CALL	readLineFromVdp
 
 	LD	A, D		; CALCULATE THE DEST LINE INDEX
-	ADD	C
+	SUB	C
 	LD	D, A
 	CALL	readLineFromVdp
 
@@ -110,15 +108,22 @@ wrLoop2:
 
 
 	LD	A, D		; RESTORE THE DEST LINE INDEX
-	SUB	C
+	ADD	C
 	LD	D, A
 
-	DEC	D
-	JP	P, nextRow
+	INC	D
+	LD	A, 63
+	CP	D
+	JP	NZ, nextRow
 
 	LD	A, (_fourthNibble)
 	DEC	A
 	LD	D, A
+
+	LD	A, 63
+	SUB	D
+	LD	D, 63
+
 
 	LD	A, (COLOR_MASK)
 	CPL
@@ -128,7 +133,8 @@ clearNextRow:
 	LD	HL, LINESRC
 	CALL	readLineFromVdp
 	CALL	clearLine
-	DEC	D
-	JP	P, clearNextRow
+	INC	D
+	LD	A, 64
+	CP	D
+	JR	NZ, clearNextRow
 	RET
-

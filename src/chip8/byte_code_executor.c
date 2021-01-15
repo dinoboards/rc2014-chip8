@@ -92,6 +92,10 @@ bool executeSingleInstruction() {
           scrlDown();
           break;
 
+        case 0xD:
+          scrlUp();
+          break;
+
         default:
           goto badInstruction;
         }

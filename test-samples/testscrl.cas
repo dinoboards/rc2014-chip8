@@ -9,43 +9,33 @@
   LD  VE, 0
   LD  VD, 1
 
+  ; TEST SCROLLING UP 1 PIXEL
+
+  CALL  SETUP
+
+  SCRL UP 1
+
+  LD  V0, 60
+  LD  V1, 32
+  DRW V0, V1, 1
+
+  ; SHOULD HAVE MOVED - SO NO OVERLAP
+  SE  VF, VE
+  JP  FAILED4
+
+  ; SHOULD OVER LAP NOW
+  LD  V0, 60
+  LD  V1, 31
+  DRW V0, V1, 1
+
+  SE  VF, VF
+  JP  FAILED4
+
+
   ;TEST SCROLLING DOWN 1 PLANE FOR 1 PIXEL
 
-  PLANE 1
-  LD  I, SOLID
-  LD  V0, 60
-  LD  V1, 32
-  DRW V0, V1, 1
-
-  LD  V0, 68
-  LD  V1, 32
-  DRW V0, V1, 1
-
-  LD  V0, 16
-  LD  V1, 16
-  DRW V0, V1, 2
-
-  CALL  MARKERS
-
-  PLANE 2
-  CALL  MARKERS
-
-  LD  V0, 24
-  LD  V1, 16
-  DRW V0, V1, 2
-
-  LD  I, SOLID
-  LD  V0, 60
-  LD  V1, 32
-  DRW V0, V1, 1
-
-  LD  V0, 60
-  LD  V1, 0
-  DRW V0, V1, 1
-
-  LD  V0, 0
-  LD  V1, 0
-  DRW V0, V1, 1
+  CLS
+  CALL  SETUP
 
   SCRL DOWN 1
 
@@ -57,9 +47,6 @@
   SE  VF, VE
   JP  FAILED4
 
-  LD  V0, 60
-  LD  V1, 32
-  DRW V0, V1, 1
 
   ; SHOULD OVER LAP NOW
   LD  V0, 60
@@ -186,6 +173,44 @@ SHOWERR:
   LD  V0, 0
   LD  V1, 0
   DRW  V0, V1, 5
+  RET
+
+SETUP:
+  PLANE 1
+  LD  I, SOLID
+  LD  V0, 60
+  LD  V1, 32
+  DRW V0, V1, 1
+
+  LD  V0, 68
+  LD  V1, 32
+  DRW V0, V1, 1
+
+  LD  V0, 16
+  LD  V1, 16
+  DRW V0, V1, 2
+
+  CALL  MARKERS
+
+  PLANE 2
+  CALL  MARKERS
+
+  LD  V0, 24
+  LD  V1, 16
+  DRW V0, V1, 2
+
+  LD  I, SOLID
+  LD  V0, 60
+  LD  V1, 32
+  DRW V0, V1, 1
+
+  LD  V0, 60
+  LD  V1, 0
+  DRW V0, V1, 1
+
+  LD  V0, 0
+  LD  V1, 0
+  DRW V0, V1, 1
   RET
 
 OK_PATTERN:

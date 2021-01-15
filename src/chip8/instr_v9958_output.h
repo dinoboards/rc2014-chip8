@@ -6,5 +6,6 @@ extern void v9958Draw();
 extern void v9958Cls();
 extern void v9958VideoInit();
 extern void v9958ScrollDown();
+extern void v9958ScrollUp();
 
 #endif

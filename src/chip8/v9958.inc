@@ -17,3 +17,8 @@ VDP_ADDR:       equ     $99             ; VDP address (write only)
 VDP_STAT:       equ     $99             ; VDP status (read only)
 VDP_PALT:       equ     $9A             ; VDP palette latch (write only)
 VDP_REGS:       equ     $9B             ; VDP register access (write only)
+
+HIRES_WIDTH		EQU	128
+HIRES_WIDTH_MASK	EQU	255
+HIRES_HEIGHT		EQU	64
+HIRES_HEIGHT_MASK	EQU	127

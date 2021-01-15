@@ -705,15 +705,12 @@ inline void assScroll() {
     return;
   }
 
-  // if(currentIsUp()) {
   expectToBeUp();
 
   getNext();
   const int x = expectToBeNibble();
 
   emitNibbles(0x0, 0x0, 0xd, x);
-  // return;
-  // }
 }
 
 void assemble(byte pc) __z88dk_fastcall {
