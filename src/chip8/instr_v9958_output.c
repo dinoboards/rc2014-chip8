@@ -82,7 +82,3 @@ void v9958VideoInit() {
 
   initDrawParams();
 }
-
-void v9958ScrollDown() {
-  //not implemented yet!
-}
