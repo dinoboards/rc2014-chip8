@@ -130,3 +130,8 @@ void expectToBeDown() {
   if (!currentIsDown())
     expectedError("DOWN");
 }
+
+void expectToBeUp() {
+  if (!currentIsUp())
+    expectedError("UP");
+}

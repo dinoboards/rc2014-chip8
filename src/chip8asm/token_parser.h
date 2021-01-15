@@ -22,6 +22,7 @@ extern void expectToBeST();
 extern void expectToBeDT();
 
 extern void expectToBeDown();
+extern void expectToBeUp();
 
 #define currentIsIRegister()     (token.type == RegisterI)
 #define currentIsST()            (token.type == RegisterST)
@@ -32,5 +33,6 @@ extern void expectToBeDown();
 #define currentIsBCD()           (token.type == TokenBCD)
 #define currentIsRangeOperator() (token.type == TokenRangeOperator)
 #define currentIsDown()          (token.type == TokenDown)
+#define currentIsUp()            (token.type == TokenUp)
 
 #endif

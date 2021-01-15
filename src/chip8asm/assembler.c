@@ -691,16 +691,29 @@ inline void assAudio() { emit(0xF002); }
 
 /*
 00CN - SCROLL DOWN N PIXELS
-
+00DN - SCROLL UP N PIXELS
 */
 inline void assScroll() {
   getNext();
-  expectToBeDown();
+  if (currentIsDown()) {
+    expectToBeDown();
+
+    getNext();
+    const int x = expectToBeNibble();
+
+    emitNibbles(0x0, 0x0, 0xc, x);
+    return;
+  }
+
+  // if(currentIsUp()) {
+  expectToBeUp();
 
   getNext();
   const int x = expectToBeNibble();
 
-  emitNibbles(0x0, 0x0, 0xc, x);
+  emitNibbles(0x0, 0x0, 0xd, x);
+  // return;
+  // }
 }
 
 void assemble(byte pc) __z88dk_fastcall {

@@ -97,6 +97,7 @@ void main() {
   shouldAssembleDblWidth("LD I, 6000", LD_IL_6000_1, LD_IL_6000_2);
 
   shouldAssemble("SCRL DOWN 5", SCRL_DOWN_5);
+  shouldAssemble("SCRL UP 5", SCRL_UP_5);
 
   shouldError("BAD INSTRUCTION", "Expected Instruction but found BAD");
   shouldError("LD BADREG, 123", "Expected one of Vx, I, [I], ST or DT but found BADREG");
