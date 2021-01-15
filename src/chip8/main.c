@@ -56,8 +56,6 @@ void main(MainArguments *pargs) __z88dk_fastcall {
   if (!videoInit())
     return;
 
-  // configureManageTimerFunction();
-
   initSystemState();
   seedRandom();
   hbSndReset(0);

@@ -47,11 +47,10 @@ extern uint16_t audioPeriod;
 
 extern uint16_t currentInstruction;
 
-#define nibble2nd ((uint8_t)currentInstruction & 0xF)
-#define addr      ((currentInstruction >> 8) + (((int)nibble2nd) << 8))
-#define nibble3rd ((uint8_t)(currentInstruction >> 12))
+#define nibble2nd      ((uint8_t)currentInstruction & 0xF)
+#define addr           ((currentInstruction >> 8) + (((int)nibble2nd) << 8))
+#define nibble3rd      ((uint8_t)(currentInstruction >> 12))
 #define InstrfirstByte ((uint8_t)(currentInstruction)&0xFF)
-
 
 #define HIRES_WIDTH       128
 #define HIRES_WIDTH_MASK  255

@@ -9,6 +9,69 @@
   LD  VE, 0
   LD  VD, 1
 
+  ;TEST SCROLLING DOWN 1 PLANE FOR 1 PIXEL
+
+  PLANE 1
+  LD  I, SOLID
+  LD  V0, 60
+  LD  V1, 32
+  DRW V0, V1, 1
+
+  LD  V0, 68
+  LD  V1, 32
+  DRW V0, V1, 1
+
+  LD  V0, 16
+  LD  V1, 16
+  DRW V0, V1, 2
+
+  CALL  MARKERS
+
+  PLANE 2
+  CALL  MARKERS
+
+  LD  V0, 24
+  LD  V1, 16
+  DRW V0, V1, 2
+
+  LD  I, SOLID
+  LD  V0, 60
+  LD  V1, 32
+  DRW V0, V1, 1
+
+  LD  V0, 60
+  LD  V1, 0
+  DRW V0, V1, 1
+
+  LD  V0, 0
+  LD  V1, 0
+  DRW V0, V1, 1
+
+  SCRL DOWN 1
+
+  LD  V0, 60
+  LD  V1, 32
+  DRW V0, V1, 1
+
+  ; SHOULD HAVE MOVED - SO NO OVERLAP
+  SE  VF, VE
+  JP  FAILED4
+
+  LD  V0, 60
+  LD  V1, 32
+  DRW V0, V1, 1
+
+  ; SHOULD OVER LAP NOW
+  LD  V0, 60
+  LD  V1, 34
+  DRW V0, V1, 1
+
+  SE  VF, VF
+  JP  FAILED4
+
+  CLS
+
+  ; TEST SCROLLING DOWN 1 PIXEL
   PLANE 2
   LD  I, SOLID
   LD  V0, 60
@@ -41,6 +104,7 @@
   SE  VF, VF
   JP  FAILED1
 
+  ; TEST SCROLLING DOWN 2 PIXELS
   CLS
   PLANE 2
   LD  I, SOLID
@@ -99,6 +163,23 @@ FAILED2:
 FAILED3:
   LD  VC, 3
   JP  SHOWERR
+
+FAILED4:
+  LD  VC, 4
+  JP  SHOWERR
+
+MARKERS:
+  LD  V2, 120
+  LD  V3, 0
+
+LOOP:
+  DRW V2, V3, 1
+  ADD V3, 2
+
+  SE  V3, 64
+  JP  LOOP
+  RET
+
 
 SHOWERR:
   LDF I, VC

@@ -65,8 +65,11 @@ void videoHigh() {
 }
 
 void scrlDown() {
+  if (fourthNibble == 0)
+    return;
+
   if (videoResMode != VideoResModeLow)
     // tmsScrollDown();
-  // else
+    // else
     v9958ScrollDown();
 }

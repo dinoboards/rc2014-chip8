@@ -58,7 +58,7 @@ void delay(uint16_t d) __z88dk_fastcall {
 bool executeSingleInstruction() {
   currentInstruction = readInstruction(); // high/low bytes in inverted order
 
-  if(CommandSwitches.delayFactor>0)
+  if (CommandSwitches.delayFactor > 0)
     delay(CommandSwitches.delayFactor);
   manageTimers();
   if (!checkForKeyPresses())
