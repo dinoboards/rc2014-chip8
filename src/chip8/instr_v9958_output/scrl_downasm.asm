@@ -1,7 +1,7 @@
 	PUBLIC	_v9958ScrollDown
 
 	EXTERN	_initDrawParams, _waitForCommandCompletion
-	EXTERN	__color, _yy
+	EXTERN	__color, _yy, _fourthNibble
 
 	SECTION CODE
 
@@ -38,8 +38,11 @@ _v9958ScrollDown:
 
 
 ; READ EACH ROW INTO BUFFER
-again:
-	LD	B, HIRES_HEIGHT-1 	;LOOP FOR Y = 63 to 1
+	LD	A, (_fourthNibble)
+	LD	C, A
+	LD	A, HIRES_HEIGHT
+	SUB	C			;LOOP FOR Y = 63 TO COUNT
+	LD	B, A
 
 nextRow:
 	LD	HL, LINEDST
@@ -49,7 +52,10 @@ nextRow:
 
 
 	; READ NEXT LINE
-	DEC	B
+	LD	A, B		; CALCULATE THE SOURCE LINE INDEX
+	SUB	C
+	LD	B, A
+
 	LD	HL, LINESRC
 	push	bc
 	CALL	readFromVdp
@@ -63,13 +69,18 @@ nextRow:
 
 ; 	; move linesrc to linedst
 
-	INC	B
+	LD	A, B		; RESTORE THE DEST LINE INDEX
+	ADD	C
+	LD	B, A
 	LD	HL, LINEDST
 	push	bc
 	CALL	writeLineTwiceToDVP
 	pop	bc
 
-	DJNZ	nextRow
+	DEC	B
+	LD	A, B
+	CP	C
+	JR	NZ, nextRow
 
 	call	clearTopLine
 
@@ -134,20 +145,41 @@ wrLoop2:
 	ret
 
 
+; X = 0
+; width = 256
+; Y = 0
+; height = count (C)
+
 clearTopLine:
-	XOR	a
+	LD	A, 36
+	OUT	(VDP_ADDR), A
+	LD	A, 0x80 | 17
+	OUT	(VDP_ADDR), A
+
+	LD	B, 11
+	XOR	A
+clrLoop:
 	OUT	(VDP_REGS), A
+	DJNZ	clrLoop
+
+	;R#41 = width high = 1
+	LD	A, 1
 	OUT	(VDP_ADDR), A
-	ld	a, 0x40	; WRITE MODE
+	LD	A, 0x80 | 41
 	OUT	(VDP_ADDR), A
 
-	ld	b, 0
-	xor	a
-clLoop1:
-	out	(VDP_DATA), a
-	djnz	clLoop1
+	;R#42 = height
+	LD	A, C
+	OUT	(VDP_ADDR), A
+	LD	A, 0x80 | 42
+	OUT	(VDP_ADDR), A
 
-	ret
+	LD	A, CMD_VDP_TO_VRAM
+	OUT	(VDP_ADDR), A
+	LD	A, 0x80 | 46
+	OUT	(VDP_ADDR), A
+
+	RET
 
 
 processLine:
