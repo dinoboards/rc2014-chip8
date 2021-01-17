@@ -28,6 +28,8 @@
 
 _v9958ScrollDown:
 	LD	A, (__color)
+	CP	3
+	JR	Z, SCROLL_DN_ALL_PLANES
 	LD	C, A
 	RRCA
 	RRCA
@@ -132,3 +134,129 @@ clearNextRow:
 	JP	P, clearNextRow
 	RET
 
+SCROLL_DN_ALL_PLANES:
+
+	DI
+	CALL	_waitForCommandCompletion
+
+	LD	A, (_fourthNibble)
+	ADD	A	; double it
+	LD	D, A
+
+	; CLEAR TOP LINES
+	LD	A, 36
+	OUT	(VDP_ADDR), A
+	LD	A, 0x80 | 17
+	OUT	(VDP_ADDR), A
+
+	; R36/37 - DX = 0
+	XOR	A
+	OUT	(VDP_REGS), A
+	OUT	(VDP_REGS), A
+
+	; R38/39 - DY = 0
+	OUT	(VDP_REGS), A
+	OUT	(VDP_REGS), A
+
+	; R40/41 - DOTS WIDE = HIRES_WIDTH*2
+	XOR	A
+	OUT	(VDP_REGS), A
+	LD	A, 1
+	OUT	(VDP_REGS), A
+
+	; R42/43 - DOTS HEIGH = _fourthNibble*2
+	LD	A, D
+	OUT	(VDP_REGS), A
+	XOR	A
+	OUT	(VDP_REGS), A
+
+	;R44 - COLOR - BACKGROUND - 0
+	XOR	A
+	OUT	(VDP_REGS), A
+
+	;R45 - DIRECTION - RIGHT, DOWN
+	XOR	A
+	OUT	(VDP_REGS), A
+
+	;R46 - CMD
+	LD	A, CMD_VDP_TO_VRAM
+	OUT	(VDP_REGS), A
+
+	CALL	_waitForCommandCompletion
+
+
+
+
+
+
+
+
+
+
+
+
+
+	LD	A, 34
+	OUT	(VDP_ADDR), A
+	LD	A, 0x80 | 17
+	OUT	(VDP_ADDR), A
+
+	LD	A, HIRES_HEIGHT*2-1
+	SUB	D
+	LD	D, A
+
+; 	;R34 = SOURCE Y = HEIGHT - COUNT
+	OUT	(VDP_REGS), A
+
+	; HIGH
+	XOR	A
+	OUT	(VDP_REGS), A
+
+	;R36 = X = 0 (LOW)
+	OUT	(VDP_REGS), A
+
+	;R37 = X = 0 (HIGH)
+	OUT	(VDP_REGS), A
+
+	;R38 = DEST Y = HIRES_HEIGHT*2-2
+	LD	A, HIRES_HEIGHT*2-1  ; 127
+	OUT	(VDP_REGS), A
+	XOR	A
+
+	;R39 = DEST Y = 0
+	OUT	(VDP_REGS), A
+
+;	;R40 AND R41 NOT USED
+	OUT	(VDP_REGS), A
+	OUT	(VDP_REGS), A
+
+
+	;R42 = NUMBER OF DOTS TO SHIFT
+	; HEIGHT - COUNT
+	LD	A, D ; HIRES_HEIGHT*2-2
+	ADD	1
+	OUT	(VDP_REGS), A
+	;R43 DOTS (HIGH)
+	XOR	A
+	OUT	(VDP_REGS), A
+
+;	;R44 NOT USED
+	OUT	(VDP_REGS), A
+
+	; DIRECTION
+	;XOR	A	; SHIFT DN?????
+	LD	A, 0x08
+	OUT	(VDP_REGS), A
+
+	; OPERATION
+	LD	A, CMD_VRAM_TO_VRAM_Y_ONLY
+	OUT	(VDP_REGS), A
+
+
+	;RESET DEFAULT STATUS REGISTER INDEX
+	XOR	A
+	OUT	(VDP_ADDR), A
+	LD	A, 0x80 | 15
+	OUT	(VDP_ADDR), A
+	EI
+	RET

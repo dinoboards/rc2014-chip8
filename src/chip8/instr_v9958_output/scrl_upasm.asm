@@ -146,15 +146,63 @@ SCROLL_UP_ALL_PLANES:
 	DI
 	CALL	_waitForCommandCompletion
 
+	LD	A, (_fourthNibble)
+	ADD	A	; double it
+	LD	D, A
+
+
+	; CLEAR BOTTOM LINES
+	LD	A, 36
+	OUT	(VDP_ADDR), A
+	LD	A, 0x80 | 17
+	OUT	(VDP_ADDR), A
+
+	; R36/37 - DX = 0
+	XOR	A
+	OUT	(VDP_REGS), A
+	OUT	(VDP_REGS), A
+
+	LD	A, HIRES_HEIGHT*2-1
+	SUB	D
+	; R38/39 - DY = 0
+	OUT	(VDP_REGS), A
+	XOR	A
+	OUT	(VDP_REGS), A
+
+	; R40/41 - DOTS WIDE = HIRES_WIDTH*2
+	XOR	A
+	OUT	(VDP_REGS), A
+	LD	A, 1
+	OUT	(VDP_REGS), A
+
+	; R42/43 - DOTS HEIGHT = _fourthNibble*2
+	LD	A, D
+	OUT	(VDP_REGS), A
+	XOR	A
+	OUT	(VDP_REGS), A
+
+	;R44 - COLOR - BACKGROUND - 0
+	XOR	A
+	OUT	(VDP_REGS), A
+
+	;R45 - DIRECTION - RIGHT, DOWN
+	OUT	(VDP_REGS), A
+
+	;R46 - CMD
+	LD	A, CMD_VDP_TO_VRAM
+	OUT	(VDP_REGS), A
+
+	CALL	_waitForCommandCompletion
+
+
+	; SCROLL UP
+
 	LD	A, 34
 	OUT	(VDP_ADDR), A
 	LD	A, 0x80 | 17
 	OUT	(VDP_ADDR), A
 
-	LD	A, (_fourthNibble)
-	ADD	A	; double it
-	LD	D, A
-
+	LD	A, D
 ; 	;R34 = SOURCE Y = COUNT (LOW)
 	OUT	(VDP_REGS), A
 
