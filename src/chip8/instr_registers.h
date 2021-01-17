@@ -154,16 +154,13 @@ inline void shlVxVy() {
 static void addVxVy() __naked {
   // clang-format off
   __asm
-    xor     a
-    ld	    ((_registers + 0x0F)), a
-
     ; // LOAD VY b (3rdNibble)
     ld	    a, (_currentInstruction + 1)
     rlca
     rlca
     rlca
     rlca
-    and	    a, 0x0f
+    and	    a, 0x0F
     ld      l, a
     ld      h, _registers / 256
     ld      b, (hl)
@@ -176,10 +173,15 @@ static void addVxVy() __naked {
 
     add     a, b
     ld      (hl), a
-    ret     nc
+    jr     nc, addVxVyClrF
 
     ld      a, 1
-    ld	    (_registers + 0x0f), a
+    ld	    (_registers + 0x0F), a
+    ret
+
+addVxVyClrF:
+    xor     a
+    ld	    (_registers + 0x0F), a
     ret
   __endasm;
   // clang-format on
