@@ -4,10 +4,51 @@
   PLANE 1
 
 ; DRAW A SERIES OF SPRITES
-; and then scroll down
+; and then scroll
 
   LD  VE, 0
   LD  VD, 1
+
+  ; TEST SCROLLING UP 1 PIXEL ON ALL PLANES
+
+  CALL  SETUP
+
+  PLANE 3
+  SCRL UP  1
+
+  PLANE 1
+  ; SHOULD HAVE MOVED UP 1
+  LD  V0, 60
+  LD  V1, 31
+  DRW V0, V1, 1
+  SE  VF, VF
+  JP  FAILED5
+
+  PLANE 2
+  ; SHOULD ALSO HAVE MOVED UP 1
+  LD  V0, 60
+  LD  V1, 31
+  DRW V0, V1, 1
+  SE  VF, VF
+  JP  FAILED5
+
+  PLANE 2
+  ; SHOULD HAVE MOVED UP 1
+  LD  V0, 68
+  LD  V1, 32
+  DRW V0, V1, 1
+  SE  VF, VF
+  JP  FAILED5
+
+  PLANE 1
+  ; SHOULD HAVE MOVED UP 1
+  LD  V0, 68
+  LD  V1, 31
+  DRW V0, V1, 1
+  SE  VF, VF
+  JP  FAILED5
+
+  JP  OK
 
   ; TEST SCROLLING UP 1 PIXEL
 
@@ -155,6 +196,10 @@ FAILED4:
   LD  VC, 4
   JP  SHOWERR
 
+FAILED5:
+  LD  VC, 5
+  JP  SHOWERR
+
 MARKERS:
   LD  V2, 120
   LD  V3, 0
@@ -194,6 +239,10 @@ SETUP:
 
   PLANE 2
   CALL  MARKERS
+
+  LD  V0, 68
+  LD  V1, 33
+  DRW  V0, V1, 1
 
   LD  V0, 24
   LD  V1, 16

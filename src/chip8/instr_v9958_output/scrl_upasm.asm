@@ -28,6 +28,8 @@
 
 _v9958ScrollUp:
 	LD	A, (__color)
+	CP	3
+	JR	Z, SCROLL_UP_ALL_PLANES
 	LD	C, A
 	RRCA
 	RRCA
@@ -137,4 +139,71 @@ clearNextRow:
 	LD	A, 64
 	CP	D
 	JR	NZ, clearNextRow
+	RET
+
+SCROLL_UP_ALL_PLANES:
+
+	DI
+	CALL	_waitForCommandCompletion
+
+	LD	A, 34
+	OUT	(VDP_ADDR), A
+	LD	A, 0x80 | 17
+	OUT	(VDP_ADDR), A
+
+	LD	A, (_fourthNibble)
+	ADD	A	; double it
+	LD	D, A
+
+; 	;R34 = SOURCE Y = COUNT (LOW)
+	OUT	(VDP_REGS), A
+
+	; HIGH
+	XOR	A
+	OUT	(VDP_REGS), A
+
+	;R36 = X = 0 (LOW)
+	OUT	(VDP_REGS), A
+
+	;R37 = X = 0 (HIGH)
+	OUT	(VDP_REGS), A
+
+	;R38 = DEST Y = 0
+	OUT	(VDP_REGS), A
+
+	;R39 = DEST Y = 0
+	OUT	(VDP_REGS), A
+
+;	;R40 AND R41 NOT USED
+	OUT	(VDP_REGS), A
+	OUT	(VDP_REGS), A
+
+
+	;R42 = NUMBER OF DOTS TO SHIFT
+	; HEIGHT - COUNT
+	LD	A, HIRES_HEIGHT*2
+	SUB	D
+	OUT	(VDP_REGS), A
+	;R43 DOTS (HIGH)
+	XOR	A
+	OUT	(VDP_REGS), A
+
+;	;R44 NOT USED
+	OUT	(VDP_REGS), A
+
+	; DIRECTION
+	LD	A, 0x80	; SHIFT UP
+	OUT	(VDP_REGS), A
+
+	; OPERATION
+	LD	A, CMD_VRAM_TO_VRAM_Y_ONLY
+	OUT	(VDP_REGS), A
+
+
+	;RESET DEFAULT STATUS REGISTER INDEX
+	XOR	A
+	OUT	(VDP_ADDR), A
+	LD	A, 0x80 | 15
+	OUT	(VDP_ADDR), A
+	EI
 	RET

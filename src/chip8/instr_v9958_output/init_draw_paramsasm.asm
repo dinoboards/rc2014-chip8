@@ -15,6 +15,6 @@ _initDrawParams:
 	XOR	A
 loop:
 	OUT	(VDP_REGS), A
-	djnz	loop
+	DJNZ	loop
 	RET
 
