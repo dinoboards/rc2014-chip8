@@ -212,8 +212,10 @@ bool executeSingleInstruction() {
   }
 
   case 0x9: {
-    // TODO Check for 9xx0
-    sneVxVy();
+    if (fourthNibble == 0)
+      sneVxVy();
+    else
+      goto badInstruction;
     break;
   }
 
