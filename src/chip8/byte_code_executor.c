@@ -42,14 +42,13 @@ inline uint16_t readInstruction() {
 }
 
 void initSystemState() {
-  memset(registers, 0, sizeof(registers));
+  memset(registers, 0, 16);
   registerI = 0;
   chip8PC = (uint16_t *)programStorage;
 }
 
 void delay(uint16_t d) __z88dk_fastcall {
 
-  // uint16_t d = CommandSwitches.delayFactor;
   while (d > 0) {
     d--;
   }
