@@ -15,13 +15,15 @@ static byte spriteHeight;
 byte yAddOne;
 byte xxTo;
 
-extern void initDrawParams();
+extern void waitAndClearCommandRegisters();
 extern void drawRow(byte pSpriteData) __z88dk_fastcall;
 extern void v9958DrawPlane(byte *pSpriteData) __z88dk_fastcall;
 extern void v9958DrawDblPlane(byte *pSpriteData) __z88dk_fastcall;
 
 void v9958Draw() {
   registers[15] = 0;
+
+  waitAndClearCommandRegisters();
 
   xx = (registers[nibble2nd] * 2) & PIXEL_WIDTH_MASK;
   yy = (registers[nibble3rd] * 2) & PIXEL_HEIGHT_MASK;
@@ -80,5 +82,5 @@ void v9958VideoInit() {
   setPalette(palette);
   clearScreenBank0(0);
 
-  initDrawParams();
+  waitAndClearCommandRegisters();
 }

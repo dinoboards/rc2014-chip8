@@ -1,6 +1,6 @@
 	PUBLIC	_drawSegment
 
-	EXTERN	_waitForCommandCompletion, _testSegment
+	EXTERN	_waitForCommandCompletion, _testSegment, _initDrawParams
 	EXTERN	__color, _yy, _yAddOne
 
 	SECTION CODE
@@ -19,7 +19,6 @@ _drawSegment:
 ; if( xxTo < xx) {
 
 	DI
-
 	xor	a
 	;R41= longside high
 	OUT	(VDP_ADDR), A

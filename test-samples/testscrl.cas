@@ -9,6 +9,45 @@
   LD  VE, 0
   LD  VD, 1
 
+  ; TEST SCROLLING DOWN 1 PIXEL ON ALL PLANES
+
+  CALL  SETUP
+
+  PLANE 3
+  SCRL DOWN  1
+
+  PLANE 1
+  ; SHOULD HAVE MOVED DOWN 1
+  LD  V0, 68
+  LD  V1, 33
+  DRW V0, V1, 1
+  SE  VF, VD
+  JP  FAILED5
+
+  PLANE 1
+  ; SHOULD HAVE MOVED DOWN 1
+  LD  V0, 60
+  LD  V1, 33
+  DRW V0, V1, 1
+  SE  VF, VD
+  JP  FAILED5
+
+  PLANE 2
+  ; SHOULD ALSO HAVE MOVED UP 1
+  LD  V0, 60
+  LD  V1, 33
+  DRW V0, V1, 1
+  SE  VF, VD
+  JP  FAILED5
+
+  PLANE 2
+  ; SHOULD HAVE MOVED UP 1
+  LD  V0, 68
+  LD  V1, 34
+  DRW V0, V1, 1
+  SE  VF, VD
+  JP  FAILED5
+
   ; TEST SCROLLING UP 1 PIXEL ON ALL PLANES
 
   CALL  SETUP
@@ -21,7 +60,7 @@
   LD  V0, 60
   LD  V1, 31
   DRW V0, V1, 1
-  SE  VF, VF
+  SE  VF, VD
   JP  FAILED5
 
   PLANE 2
@@ -29,7 +68,7 @@
   LD  V0, 60
   LD  V1, 31
   DRW V0, V1, 1
-  SE  VF, VF
+  SE  VF, VD
   JP  FAILED5
 
   PLANE 2
@@ -37,7 +76,7 @@
   LD  V0, 68
   LD  V1, 32
   DRW V0, V1, 1
-  SE  VF, VF
+  SE  VF, VD
   JP  FAILED5
 
   PLANE 1
@@ -45,18 +84,16 @@
   LD  V0, 68
   LD  V1, 31
   DRW V0, V1, 1
-  SE  VF, VF
+  SE  VF, VD
   JP  FAILED5
-
-  JP  OK
 
   ; TEST SCROLLING UP 1 PIXEL
 
   CALL  SETUP
-
+  PLANE 1
   SCRL UP 1
 
-  LD  V0, 60
+  LD  V0, 58
   LD  V1, 32
   DRW V0, V1, 1
 
@@ -69,15 +106,14 @@
   LD  V1, 31
   DRW V0, V1, 1
 
-  SE  VF, VF
+  SE  VF, VD
   JP  FAILED4
 
 
   ;TEST SCROLLING DOWN 1 PLANE FOR 1 PIXEL
 
-  CLS
   CALL  SETUP
-
+  PLANE 1
   SCRL DOWN 1
 
   LD  V0, 60
@@ -88,13 +124,12 @@
   SE  VF, VE
   JP  FAILED4
 
-
   ; SHOULD OVER LAP NOW
   LD  V0, 60
-  LD  V1, 34
+  LD  V1, 33
   DRW V0, V1, 1
 
-  SE  VF, VF
+  SE  VF, VD
   JP  FAILED4
 
   CLS
@@ -129,7 +164,7 @@
   LD  V1, 33
   DRW V0, V1, 1
 
-  SE  VF, VF
+  SE  VF, VD
   JP  FAILED1
 
   ; TEST SCROLLING DOWN 2 PIXELS
@@ -163,16 +198,14 @@
   LD  V1, 34
   DRW V0, V1, 1
 
-  SE  VF, VF
+  SE  VF, VD
   JP  FAILED2
 
 
 OK:
-  CLS
-
   LD  I, OK_PATTERN
   LD  V0, 0
-  LD  V1, 0
+  LD  V1, 58
   DRW V0, V1, 5
   RET
 
@@ -216,11 +249,13 @@ LOOP:
 SHOWERR:
   LDF I, VC
   LD  V0, 0
-  LD  V1, 0
+  LD  V1, 58
   DRW  V0, V1, 5
   RET
 
 SETUP:
+  CLS
+
   PLANE 1
   LD  I, SOLID
   LD  V0, 60

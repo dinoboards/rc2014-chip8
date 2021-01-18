@@ -1,5 +1,5 @@
 
-	PUBLIC	_waitForCommandCompletion, _setReadRegisterToZero
+	PUBLIC	_waitForCommandCompletion, _setReadRegisterToZero, _initDrawParams, _waitAndClearCommandRegisters
 	PUBLIC	__color
 
 	SECTION CODE
@@ -28,6 +28,27 @@ _setReadRegisterToZero:
 
 	RET
 
+_initDrawParams:
+	; clear all registers
+	LD	A, 32
+	OUT	(VDP_ADDR), A
+	LD	A, 0x80 | 17
+	OUT	(VDP_ADDR), A
+
+	LD	B, 15
+	XOR	A
+loop:
+	OUT	(VDP_REGS), A
+	DJNZ	loop
+	RET
+
+_waitAndClearCommandRegisters:
+	DI
+	CALL	_waitForCommandCompletion
+	CALL	_initDrawParams
+	CALL	_setReadRegisterToZero
+	EI
+	RET
 
 	SECTION	DATA
 

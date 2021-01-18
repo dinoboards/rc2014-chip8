@@ -29,7 +29,7 @@
 _v9958ScrollDown:
 	LD	A, (__color)
 	CP	3
-	JR	Z, SCROLL_DN_ALL_PLANES
+	JR	Z, scrollDownAllPlanes
 	LD	C, A
 	RRCA
 	RRCA
@@ -62,7 +62,6 @@ nextRow:
 	CALL	readLineFromVdp
 
 	ld	a, d
-
 
 	exx
 
@@ -134,8 +133,7 @@ clearNextRow:
 	JP	P, clearNextRow
 	RET
 
-SCROLL_DN_ALL_PLANES:
-
+scrollDownAllPlanes:
 	DI
 	CALL	_waitForCommandCompletion
 
@@ -143,7 +141,10 @@ SCROLL_DN_ALL_PLANES:
 	ADD	A	; double it
 	LD	D, A
 
-	; CLEAR TOP LINES
+	; INVOKE CMD_VDP_TO_VRAM TO CLEAR
+	; TOP LINES FROM 0 FOR HEIGHT OF  _fourthNibble * 2
+
+	; SETUP INDIRECT REGISTER ACCESS FROM R#36
 	LD	A, 36
 	OUT	(VDP_ADDR), A
 	LD	A, 0x80 | 17
