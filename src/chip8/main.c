@@ -11,10 +11,13 @@
 #include "systimer.h"
 #include "timers.h"
 #include "tms.h"
+#include "xstdio.h"
 #include "xstdlib.h"
 #include <stdarg.h>
 #include <stdio.h>
 #include <string.h>
+
+extern void *himem;
 
 MainArguments *mainArguments;
 
@@ -52,6 +55,8 @@ void main(MainArguments *pargs) __z88dk_fastcall {
   applyConfiguration(pargs->argv[0]);
 
   chkMsg(fOpen(defaultFCB), "Unable to open file");
+
+  xprintf("Total available memory: %u\r\n", (uint16_t)&himem - 0x200);
 
   if (!videoInit())
     return;
