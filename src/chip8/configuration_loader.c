@@ -21,18 +21,8 @@ inline void applySingleConfig() {
   }
 }
 
-void applyConfiguration(const char *pName) {
-  FCB configFCB;
-  resetFCB(pName, "CFG", &configFCB);
-
-  uint8_t exists = fOpen(&configFCB);
-
-  if (exists == 0xFF)
-    return;
-
-  fClose(&configFCB);
-
-  setFileStream(&configFCB);
+void parseConfiguration(FCB *configFCB) __z88dk_fastcall {
+  setFileStream(configFCB);
   openTokenStream();
   getNextToken();
 
@@ -42,6 +32,21 @@ void applyConfiguration(const char *pName) {
   }
 
   closeTokenStream();
+}
+
+void applyConfiguration(const char *pName) __z88dk_fastcall {
+  FCB configFCB;
+
+  resetFCB(pName, "CFG", &configFCB);
+
+  uint8_t exists = fOpen(&configFCB);
+
+  if (exists == 0xFF)
+    return;
+
+  fClose(&configFCB);
+
+  parseConfiguration(&configFCB);
 }
 
 static void applyConfigColour(const uint8_t colourIndex) __z88dk_fastcall {

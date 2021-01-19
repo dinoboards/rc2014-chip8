@@ -31,19 +31,23 @@
 ./chip8/main.asm: chip8/main.c chip8/byte_code_executor.h datatypes.h \
  chip8/configuration_loader.h cpm.h chip8/error_reports.h hbios.h \
  chip8/instr_output.h chip8/v9958.h chip8/instr_sound.h chip8/random.h \
- chip8/systemstate.h chip8/systimer.h chip8/timers.h chip8/tms.h \
- xstdlib.h xstdio.h
+ chip8/systemstate.h chip8/systimer.h chip8/timers.h chip8/tms.h xstdio.h \
+ xstdlib.h
 ./chip8/random.asm: chip8/random.c chip8/random.h datatypes.h chip8/systimer.h \
  hbios.h chip8/systemstate.h
 ./chip8/stack.asm: chip8/stack.c chip8/stack.h datatypes.h chip8/systemstate.h \
  xstdio.h
 ./chip8/systemstate.asm: chip8/systemstate.c chip8/systemstate.h datatypes.h \
  chip8/tms.h
+./chip8/test_configuration.asm: chip8/test_configuration.c \
+ chip8/test_configuration.h chip8/configreader.h token.h datatypes.h \
+ chip8/configuration_loader.h cpm.h chip8/systemstate.h datatypes.h \
+ test_expectations.h terminal_codes.h xstdio.h chip8/tms.h xstdio.h
 ./chip8/test_instruction.asm: chip8/test_instruction.c chip8/byte_code_executor.h \
  datatypes.h chip8/fontsets.h chip8/stack.h chip8/systemstate.h \
  terminal_codes.h test_opcodes.h chip8/timers.h xstdio.h \
- chip8/test_helpers.h chip8/keys.h test_expectations.h terminal_codes.h \
- xstdio.h
+ chip8/test_helpers.h chip8/keys.h test_expectations.h datatypes.h \
+ terminal_codes.h xstdio.h
 ./chip8/timers.asm: chip8/timers.c chip8/timers.h datatypes.h chip8/tty.h hbios.h \
  chip8/instr_sound.h chip8/systemstate.h chip8/systimer.h
 ./chip8/tms.asm: chip8/tms.c chip8/tms.h datatypes.h hbios.h chip8/keys.h \
@@ -73,9 +77,9 @@
  datatypes.h
 ./chip8asm/test_assembler.asm: chip8asm/test_assembler.c chip8asm/assembler.h \
  datatypes.h chip8asm/labels.h chip8asm/systemstate.h cpm.h \
- chip8asm/expr.h test_opcodes.h xstdio.h test_expectations.h \
+ chip8asm/expr.h test_opcodes.h xstdio.h test_expectations.h datatypes.h \
  terminal_codes.h xstdio.h chip8asm/test_helper.h terminal_codes.h \
- chip8asm/tokenreader.h token.h datatypes.h
+ chip8asm/tokenreader.h token.h
 ./chip8asm/tokenreader.asm: chip8asm/tokenreader.c chip8asm/tokenreader.h token.h \
  datatypes.h chartesters.h cpm.h datatypes.h chip8asm/error.h \
  chip8asm/exit.h filereader.h cpm.h
@@ -86,6 +90,8 @@
 ./filereader.asm: filereader.c filereader.h cpm.h charconstants.h \
  datatypes.h
 ./hbios.asm: hbios.c hbios.h
+./test_expectations.asm: test_expectations.c test_expectations.h \
+ datatypes.h terminal_codes.h xstdio.h
 ./token.asm: token.c token.h datatypes.h charconstants.h chartesters.h \
  filereader.h cpm.h
 ./xstdio.asm: xstdio.c xstdio.h datatypes.h hbios.h

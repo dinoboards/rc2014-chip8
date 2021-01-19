@@ -647,7 +647,11 @@ void setup_skips_dbl_word_instruction() {
 
 void verify_skips_dbl_word_instruction() { expectEqualPtrs(chip8PC, (uint16_t *)0x206, "PC"); }
 
+extern void testConfigurtionParser();
+
 void main() {
+  testConfigurtionParser();
+
   CommandSwitches.delayFactor = 0;
 
   assert(add_i_v9);

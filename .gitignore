@@ -49,3 +49,5 @@ instr_v9958_output.asm
 instr_sound.asm
 src/chip8/v9958.asm
 src/chip8/hires_mirror.asm
+src/chip8/test_configuration.asm
+src/test_expectations.asm
