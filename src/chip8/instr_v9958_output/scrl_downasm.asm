@@ -134,13 +134,13 @@ clearNextRow:
 	RET
 
 scrollDownAllPlanes:
-	DI
-	CALL	_waitForCommandCompletion
-
 	LD	A, (_fourthNibble)
 	ADD	A	; double it
 	LD	D, A
 	LD	E, A
+
+	DI
+	CALL	_waitForCommandCompletion
 
 	; SETUP COMMAND TO SHIFT DOWN _fourthNibble*2 DOTS
 	LD	A, 34

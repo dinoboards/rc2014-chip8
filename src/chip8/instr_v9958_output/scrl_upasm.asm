@@ -29,7 +29,7 @@
 _v9958ScrollUp:
 	LD	A, (__color)
 	CP	3
-	JR	Z, SCROLL_UP_ALL_PLANES
+	JR	Z, scrollDownAllPlanes
 	LD	C, A
 	RRCA
 	RRCA
@@ -141,65 +141,18 @@ clearNextRow:
 	JR	NZ, clearNextRow
 	RET
 
-SCROLL_UP_ALL_PLANES:
+scrollDownAllPlanes:
+	LD	A, (_fourthNibble)
+	ADD	A	; double it
+	LD	D, A
+	LD	E, A
 
 	DI
 	CALL	_waitForCommandCompletion
 
-	LD	A, (_fourthNibble)
-	ADD	A	; double it
-	LD	D, A
+	; SETUP COMMAND TO SHIFT UP _fourthNibble*2 DOTS
 
-
-	; CLEAR BOTTOM LINES
-	LD	A, 36
-	OUT	(VDP_ADDR), A
-	LD	A, 0x80 | 17
-	OUT	(VDP_ADDR), A
-
-	; R36/37 - DX = 0
-	XOR	A
-	OUT	(VDP_REGS), A
-	OUT	(VDP_REGS), A
-
-	LD	A, HIRES_HEIGHT*2-1
-	DEC	A
-	SUB	D
-	; R38/39 - DY = 0
-	OUT	(VDP_REGS), A
-	XOR	A
-	OUT	(VDP_REGS), A
-
-	; R40/41 - DOTS WIDE = HIRES_WIDTH*2
-	XOR	A
-	OUT	(VDP_REGS), A
-	LD	A, 1
-	OUT	(VDP_REGS), A
-
-	; R42/43 - DOTS HEIGHT = _fourthNibble*2
-	LD	A, D
-	OUT	(VDP_REGS), A
-	XOR	A
-	OUT	(VDP_REGS), A
-
-	;R44 - COLOR - BACKGROUND - 0
-	XOR	A
-	OUT	(VDP_REGS), A
-
-	;R45 - DIRECTION - RIGHT, DOWN
-	OUT	(VDP_REGS), A
-
-	;R46 - CMD
-	LD	A, CMD_VDP_TO_VRAM
-	OUT	(VDP_REGS), A
-
-	CALL	_waitForCommandCompletion
-
-
-
-
-	; SCROLL UP
-
+	; SETUP INDIRECT REGISTER ACCESS FROM R#34
 	LD	A, 34
 	OUT	(VDP_ADDR), A
 	LD	A, 0x80 | 17
@@ -229,7 +182,6 @@ SCROLL_UP_ALL_PLANES:
 	OUT	(VDP_REGS), A
 	OUT	(VDP_REGS), A
 
-
 	;R42 = NUMBER OF DOTS TO SHIFT
 	; HEIGHT - COUNT
 	LD	A, HIRES_HEIGHT*2
@@ -249,6 +201,54 @@ SCROLL_UP_ALL_PLANES:
 	; OPERATION
 	LD	A, CMD_VRAM_TO_VRAM_Y_ONLY
 	OUT	(VDP_REGS), A
+
+
+	; INVOKE CMD_VDP_TO_VRAM TO CLEAR
+	; BOTTOM LINES FROM ( HIRES_HEIGHT*2)-( _fourthNibble*2) FOR HEIGHT OF  _fourthNibble * 2
+	CALL	_waitForCommandCompletion
+
+	; SETUP INDIRECT REGISTER ACCESS FROM R#36
+	LD	A, 36
+	OUT	(VDP_ADDR), A
+	LD	A, 0x80 | 17
+	OUT	(VDP_ADDR), A
+
+	; R36/37 - DX = 0
+	XOR	A
+	OUT	(VDP_REGS), A
+	OUT	(VDP_REGS), A
+
+	LD	A, HIRES_HEIGHT*2
+	; DEC	A
+	SUB	D
+	; R38/39 - DY = 0
+	OUT	(VDP_REGS), A
+	XOR	A
+	OUT	(VDP_REGS), A
+
+	; R40/41 - DOTS WIDE = HIRES_WIDTH*2
+	XOR	A
+	OUT	(VDP_REGS), A
+	LD	A, 1
+	OUT	(VDP_REGS), A
+
+	; R42/43 - DOTS HEIGHT = _fourthNibble*2
+	LD	A, E
+	OUT	(VDP_REGS), A
+	XOR	A
+	OUT	(VDP_REGS), A
+
+	;R44 - COLOR - BACKGROUND - 0
+	XOR	A
+	OUT	(VDP_REGS), A
+
+	;R45 - DIRECTION - RIGHT, DOWN
+	OUT	(VDP_REGS), A
+
+	;R46 - CMD
+	LD	A, CMD_VDP_TO_VRAM
+	OUT	(VDP_REGS), A
+
 
 	;RESET DEFAULT STATUS REGISTER INDEX
 	XOR	A

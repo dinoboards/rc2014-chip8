@@ -9,7 +9,6 @@
   LD  VE, 0
   LD  VD, 1
 
-
   ; TEST SCROLLING DOWN 4 PIXEL ON ALL PLANES
   CALL  SETUP
 
@@ -23,6 +22,29 @@
 
   SE  VF, VD
   JP  FAILED6
+
+  ; TEST SCROLLING UP 4 PIXEL ON ALL PLANES
+  CALL  SETUP
+
+  PLANE 3
+  SCRL UP  4
+
+
+  PLANE 1
+  LD  V0, 0
+  LD  V1, 60
+  DRW V0, V1, 1
+
+  SE  VF, VE
+  JP  FAILED7
+
+  PLANE 1
+  LD  V0, 0
+  LD  V1, 59
+  DRW V0, V1, 1
+
+  SE  VF, VD
+  JP  FAILED7
 
 
   ; TEST SCROLLING DOWN 1 PIXEL ON ALL PLANES
@@ -252,6 +274,10 @@ FAILED6:
   LD  VC, 6
   JP  SHOWERR
 
+FAILED7:
+  LD  VC, 6
+  JP  SHOWERR
+
 MARKERS:
   LD  V2, 120
   LD  V3, 0
@@ -325,6 +351,18 @@ LOOP1:
 
   SE  V0, 15
   JP  LOOP1
+
+
+  LD  V0, 0
+  LD  V1, 63
+LOOP2:
+  DRW V0, V1, 1
+  ADD V0, 1
+  ADD V1, 254
+
+  SE  V0, 15
+  JP  LOOP2
+
 
   RET
 
