@@ -39,11 +39,15 @@ _v9958ScrollUp:
 	LD	(COLOR_MASK), A
 
 	DI
+
+	; SETUP INDIRECT REGISTER ACCESS FOR R#14
+	; NON-INCREMENTING
 	LD	A, 0x80 | 14
 	OUT	(VDP_ADDR), A
 	LD	A, 0x80 | 17
 	OUT	(VDP_ADDR), A
 	EI
+
 
 ; READ EACH ROW INTO BUFFER
 	LD	A, (_fourthNibble)
@@ -60,7 +64,6 @@ nextRow:
 	CALL	readLineFromVdp
 
 	ld	a, d
-
 
 	exx
 
@@ -108,24 +111,23 @@ wrLoop2:
 	EI
 	exx
 
-
 	LD	A, D		; RESTORE THE DEST LINE INDEX
 	ADD	C
 	LD	D, A
 
 	INC	D
-	LD	A, 63
+	LD	A, 64
 	CP	D
 	JP	NZ, nextRow
 
+
+	; CLEAR THE BOTTOM LINES
 	LD	A, (_fourthNibble)
-	DEC	A
 	LD	D, A
 
-	LD	A, 63
+	LD	A, 64
 	SUB	D
-	LD	D, 63
-
+	LD	D, A
 
 	LD	A, (COLOR_MASK)
 	CPL
