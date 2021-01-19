@@ -140,63 +140,9 @@ scrollDownAllPlanes:
 	LD	A, (_fourthNibble)
 	ADD	A	; double it
 	LD	D, A
+	LD	E, A
 
-	; INVOKE CMD_VDP_TO_VRAM TO CLEAR
-	; TOP LINES FROM 0 FOR HEIGHT OF  _fourthNibble * 2
-
-	; SETUP INDIRECT REGISTER ACCESS FROM R#36
-	LD	A, 36
-	OUT	(VDP_ADDR), A
-	LD	A, 0x80 | 17
-	OUT	(VDP_ADDR), A
-
-	; R36/37 - DX = 0
-	XOR	A
-	OUT	(VDP_REGS), A
-	OUT	(VDP_REGS), A
-
-	; R38/39 - DY = 0
-	OUT	(VDP_REGS), A
-	OUT	(VDP_REGS), A
-
-	; R40/41 - DOTS WIDE = HIRES_WIDTH*2
-	XOR	A
-	OUT	(VDP_REGS), A
-	LD	A, 1
-	OUT	(VDP_REGS), A
-
-	; R42/43 - DOTS HEIGH = _fourthNibble*2
-	LD	A, D
-	OUT	(VDP_REGS), A
-	XOR	A
-	OUT	(VDP_REGS), A
-
-	;R44 - COLOR - BACKGROUND - 0
-	XOR	A
-	OUT	(VDP_REGS), A
-
-	;R45 - DIRECTION - RIGHT, DOWN
-	XOR	A
-	OUT	(VDP_REGS), A
-
-	;R46 - CMD
-	LD	A, CMD_VDP_TO_VRAM
-	OUT	(VDP_REGS), A
-
-	CALL	_waitForCommandCompletion
-
-
-
-
-
-
-
-
-
-
-
-
-
+	; SETUP COMMAND TO SHIFT DOWN _fourthNibble*2 DOTS
 	LD	A, 34
 	OUT	(VDP_ADDR), A
 	LD	A, 0x80 | 17
@@ -231,7 +177,6 @@ scrollDownAllPlanes:
 	OUT	(VDP_REGS), A
 	OUT	(VDP_REGS), A
 
-
 	;R42 = NUMBER OF DOTS TO SHIFT
 	; HEIGHT - COUNT
 	LD	A, D ; HIRES_HEIGHT*2-2
@@ -254,6 +199,50 @@ scrollDownAllPlanes:
 	OUT	(VDP_REGS), A
 
 
+	; INVOKE CMD_VDP_TO_VRAM TO CLEAR
+	; TOP LINES FROM 0 FOR HEIGHT OF  _fourthNibble * 2
+	CALL	_waitForCommandCompletion
+
+	; SETUP INDIRECT REGISTER ACCESS FROM R#36
+	LD	A, 36
+	OUT	(VDP_ADDR), A
+	LD	A, 0x80 | 17
+	OUT	(VDP_ADDR), A
+
+	; R36/37 - DX = 0
+	XOR	A
+	OUT	(VDP_REGS), A
+	OUT	(VDP_REGS), A
+
+	; R38/39 - DY = 0
+	OUT	(VDP_REGS), A
+	OUT	(VDP_REGS), A
+
+	; R40/41 - DOTS WIDE = HIRES_WIDTH*2
+	XOR	A
+	OUT	(VDP_REGS), A
+	LD	A, 1
+	OUT	(VDP_REGS), A
+
+	; R42/43 - DOTS HEIGH = _fourthNibble*2
+	LD	A, E
+	OUT	(VDP_REGS), A
+	XOR	A
+	OUT	(VDP_REGS), A
+
+	;R44 - COLOR - BACKGROUND - 0
+	XOR	A
+	OUT	(VDP_REGS), A
+
+	;R45 - DIRECTION - RIGHT, DOWN
+	XOR	A
+	OUT	(VDP_REGS), A
+
+	;R46 - CMD
+	LD	A, CMD_VDP_TO_VRAM
+	OUT	(VDP_REGS), A
+
+SKIP:
 	;RESET DEFAULT STATUS REGISTER INDEX
 	XOR	A
 	OUT	(VDP_ADDR), A
