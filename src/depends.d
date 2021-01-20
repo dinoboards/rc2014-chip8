@@ -6,8 +6,8 @@
  chip8/v9958.h chip8/instr_pc.h chip8/instr_random.h chip8/random.h \
  chip8/instr_registers.h chip8/fontsets.h chip8/instr_sound.h
 ./chip8/configreader.asm: chip8/configreader.c chip8/configreader.h token.h \
- datatypes.h datatypes.h chip8/error_reports.h filereader.h cpm.h \
- chip8/tms.h
+ datatypes.h charconstants.h datatypes.h chip8/error_reports.h \
+ filereader.h cpm.h chip8/tms.h
 ./chip8/configuration_loader.asm: chip8/configuration_loader.c \
  chip8/configreader.h token.h datatypes.h cpm.h chip8/error_reports.h \
  filereader.h cpm.h chip8/systemstate.h datatypes.h

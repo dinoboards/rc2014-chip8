@@ -1,4 +1,5 @@
 #include "configreader.h"
+#include "charconstants.h"
 #include "datatypes.h"
 #include "error_reports.h"
 #include "filereader.h"
@@ -33,6 +34,30 @@ void tokeniseAlphaNumericString() {
   tokenMap("white", COL_WHITE);
   token.isColour = false;
 
+  tokenMap("key", TokenKey);
+
+  if (strlen(token.value) == 1) {
+    const char c = token.value[0];
+    if ((c >= '0' && c <= '9') || (c >= 'A' && c < 'Z') || (c >= 'a' && c < 'z')) {
+      token.type = TokenIdentifier;
+      return;
+    }
+  }
+
+  if (tokenEquals("space")) {
+    token.type = TokenIdentifier;
+    token.value[0] = ' ';
+    token.value[1] = 0;
+    return;
+  }
+
+  if (tokenEquals("cr")) {
+    token.type = TokenIdentifier;
+    token.value[0] = 13;
+    token.value[1] = 0;
+    return;
+  }
+
   token.type = TokenUnknown;
 }
 
@@ -42,10 +67,24 @@ static bool isEqual() {
 
   tokenCurrentChar = getNext();
 
-  token.value[0] = ',';
+  token.value[0] = '=';
   token.value[1] = '\0';
   tokenTerminatorChar = tokenCurrentChar;
   token.type = TokenEquals;
+
+  return true;
+}
+
+static bool isDash() {
+  if (tokenCurrentChar != '-')
+    return false;
+
+  tokenCurrentChar = getNext();
+
+  token.value[0] = '-';
+  token.value[1] = '\0';
+  tokenTerminatorChar = tokenCurrentChar;
+  token.type = TokenDash;
 
   return true;
 }
@@ -59,12 +98,15 @@ void getNextToken() {
   token.type = TokenEnd;
   token.isColour = false;
 
-  if (!tokenCurrentChar) {
+  if (!tokenCurrentChar || tokenCurrentChar == CTRL_Z) {
     tokenTerminatorChar = tokenCurrentChar;
     return;
   }
 
   if (isEqual())
+    return;
+
+  if (isDash())
     return;
 
   if (isAlphaNumeric(token.value))

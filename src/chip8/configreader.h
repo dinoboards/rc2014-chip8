@@ -11,7 +11,10 @@ typedef enum {
   TokenUnknown,
   TokenEnd,
   TokenColour0,
-  TokenColour1
+  TokenColour1,
+  TokenKey,
+  TokenIdentifier,
+  TokenDash
 } TokenType;
 
 #define MAX_TOKEN_LENGTH 32

@@ -9,35 +9,78 @@
 #include "xstdio.h"
 // typedef _lastError {  } lastError;
 
+bool unexpectedTokenInvoked;
+bool expectedErrorInvoked;
+
 void unexpectedEntry() {}
 void expectedEqualSign() {}
-void unexpectedToken() {}
-
-const char *colourConfiguration = "COLOR0 = lightblue\r\n"
-                                  "COLOR1 = black\r\n"
-                                  "\x1a";
+void unexpectedToken() {
+  xprintf("unexpected token type: %d, value: %s\r\n", token.type, token.value);
+  unexpectedTokenInvoked = true;
+}
+void expectedError(const char *p) __z88dk_fastcall {
+  (void)p;
+  xprintf("expected error %s\r\n", p);
+  expectedErrorInvoked = true;
+}
 
 char *pNextChar;
 char *pConfigurationUnderTest;
 
-extern void setFileStream(FCB *_fcb) { (void)_fcb; }
-extern void openFileStream() { pNextChar = pConfigurationUnderTest; }
+void setFileStream(FCB *_fcb) { (void)_fcb; }
+void openFileStream() { pNextChar = pConfigurationUnderTest; }
+void closeFileStream() {}
+char getNextCharRaw() { return *pNextChar++; }
 
-extern void closeFileStream() {}
+#define assert(config)                                    \
+  {                                                       \
+    pConfigurationUnderTest = (char *)testConfig##config; \
+    unexpectedTokenInvoked = false;                       \
+    expectedErrorInvoked = false;                         \
+    parseConfiguration(&fcb);                             \
+    assert##config();                                     \
+  }
 
-extern char getNextCharRaw() { return *pNextChar++; }
-
-void testConfigurtionParser() {
-  pConfigurationUnderTest = (char *)colourConfiguration;
-
-  FCB fcb;
-
-  parseConfiguration(&fcb);
-
-  xprintf("Configuration Processing:\r\n");
-
+const char *testConfigColours = "COLOR0 = lightblue\r\n"
+                                "COLOR1 = black\r\n"
+                                "\x1a";
+void assertColours() {
   expectEqualBytes(gameColours[0], COL_LIGBLUE, "COLOR0 = LIGHT BLUE");
   expectEqualBytes(gameColours[1], COL_BLACK, "COLOR1 = BLACK");
+}
+
+const char *testConfigSingleKey = "KEY-1 = KEY-a\r\n"
+                                  "\x1a";
+
+void assertSingleKey() {
+  expectEqualChars(gameKeys[1], 'a', "KEY-1");
+  expectFalse(unexpectedTokenInvoked, "unexpectedToken");
+  expectFalse(expectedErrorInvoked, "expectedError");
+}
+
+const char *testConfigKeySpace = "KEy-a = KEY-SPACE\r\n"
+                                 "\x1a";
+
+void assertKeySpace() {
+  expectEqualChars(gameKeys[10], ' ', "KEY-SPACE");
+  expectFalse(unexpectedTokenInvoked, "unexpectedToken");
+  expectFalse(expectedErrorInvoked, "expectedError");
+}
+
+const char *testConfigKeyCr = "KEy-f = KEY-CR\r\n"
+                              "\x1a";
+
+void assertKeyCr() { expectEqualChars(gameKeys[15], 13, "KEY-CR"); }
+
+void testConfigurtionParser() {
+  FCB fcb;
+  xprintf("Configuration Processing:\r\n");
+
+  assert(Colours);
+
+  assert(SingleKey);
+  assert(KeySpace);
+  assert(KeyCr);
 
   xprintf(testFailure ? RED "Tests Failed\r\n\n" RESET : BRIGHT_WHITE "All Passed\r\n\n" RESET);
 }

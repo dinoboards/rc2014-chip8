@@ -33,3 +33,9 @@ void tmsDriverNotFound() {
 }
 
 void warnNoTimerFound() { xprintf("Warning: No timer found.\r\n"); }
+
+void expectedError(const char *p) __z88dk_fastcall {
+  getToLineEnd();
+  xprintf("\r\n%s\r\n\r\nExpected '%s' but found %s\r\n at line number %d\r\n", p, token.currentLine, token.value, currentLineNumber);
+  exit(1);
+}

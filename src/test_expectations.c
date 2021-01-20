@@ -35,6 +35,16 @@ void expectEqualBytes(byte a, byte b, const char *msg) {
   xprintf(RED "Expected %s to equal %d, but was %d\r\n" RESET, msg, b, a);
 }
 
+void expectEqualChars(char a, char b, const char *msg) {
+  if (a == b) {
+    xprintf("\t%s == %02X\r\n", msg, a);
+    return;
+  }
+
+  testFailure = true;
+  xprintf(RED "Expected %s to equal '%c', but was '%c'\r\n" RESET, msg, b, a);
+}
+
 void expectEqualInts(int a, int b, const char *msg) {
   if (a == b) {
     xprintf("\t%s == %d\r\n", msg, a);
