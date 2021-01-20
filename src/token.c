@@ -8,6 +8,7 @@ char tokenCurrentChar;
 char tokenTerminatorChar;
 bool isOnlyAlphaNumeric;
 bool isOnlyLetters;
+bool isOnlyDigits;
 byte currentLineIndex;
 
 static char *pTokenValue;
@@ -78,6 +79,7 @@ bool isAlphaNumeric(const char *p) __z88dk_fastcall {
 
   isOnlyAlphaNumeric = true;
   isOnlyLetters = true;
+  isOnlyDigits = true;
 
   while (isCharExpression(tokenCurrentChar)) {
     if (!isCharAlpha(tokenCurrentChar))
@@ -85,6 +87,9 @@ bool isAlphaNumeric(const char *p) __z88dk_fastcall {
 
     if (!isCharLetter(tokenCurrentChar))
       isOnlyLetters = false;
+
+    if (!isDigit(tokenCurrentChar))
+      isOnlyDigits = false;
 
     *pTokenValue++ = tokenCurrentChar;
     tokenCurrentChar = getNext();

@@ -5,6 +5,8 @@
 #include "filereader.h"
 #include "tms.h"
 
+#include "xstdlib.h"
+
 Token      token;
 const char commentChar = '#';
 
@@ -13,8 +15,7 @@ char getNext() { return _getNext(token.currentLine); }
 DEF_TOKEN_EQUALS(token.value)
 
 void tokeniseAlphaNumericString() {
-  tokenMap("color0", TokenColour0);
-  tokenMap("color1", TokenColour1);
+  tokenMap("color", TokenColour);
 
   token.isColour = true;
   tokenMap("black", COL_BLACK);
@@ -38,7 +39,7 @@ void tokeniseAlphaNumericString() {
 
   if (strlen(token.value) == 1) {
     const char c = token.value[0];
-    if ((c >= '0' && c <= '9') || (c >= 'A' && c < 'Z') || (c >= 'a' && c < 'z')) {
+    if ((c >= 'A' && c < 'Z') || (c >= 'a' && c < 'z')) {
       token.type = TokenIdentifier;
       return;
     }
@@ -55,6 +56,12 @@ void tokeniseAlphaNumericString() {
     token.type = TokenIdentifier;
     token.value[0] = 13;
     token.value[1] = 0;
+    return;
+  }
+
+  if (isOnlyDigits) {
+    token.type = TokenNumber;
+    token.number = xstrtol(token.value, (char *)0, 10);
     return;
   }
 

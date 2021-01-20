@@ -10,11 +10,11 @@ typedef enum {
   TokenAlphanumeric,
   TokenUnknown,
   TokenEnd,
-  TokenColour0,
-  TokenColour1,
+  TokenColour,
   TokenKey,
   TokenIdentifier,
-  TokenDash
+  TokenDash,
+  TokenNumber
 } TokenType;
 
 #define MAX_TOKEN_LENGTH 32
@@ -23,6 +23,7 @@ typedef struct TokenStruct {
   char      currentLine[MAX_TOKEN_LENGTH];
   char      value[MAX_TOKEN_LENGTH];
   TokenType type;
+  long      number;
   bool      isColour : 1;
 } Token;
 

@@ -20,7 +20,7 @@ uint16_t timerTick = 0;
 
 CliSwitches CommandSwitches;
 
-byte gameColours[2] = {COL_BLACK, COL_DRKGREEN};
+byte gameColours[4] = {COL_BLACK, COL_DRKGREEN, COL_DRKRED, COL_GREY};
 char gameKeys[16] = {'0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'a', 'b', 'c', 'd', 'e', 'f'};
 
 byte videoResMode = VideoResModeLow;

@@ -27,7 +27,7 @@ typedef struct {
 
 extern CliSwitches CommandSwitches;
 
-extern byte gameColours[2];
+extern byte gameColours[4];
 extern char gameKeys[16];
 
 extern uint16_t delayFactor;

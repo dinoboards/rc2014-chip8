@@ -4,17 +4,13 @@
 #include "filereader.h"
 #include "systemstate.h"
 
-static void applyConfigColour(const uint8_t colourIndex) __z88dk_fastcall;
+static void applyConfigColour();
 static void applyConfigKey();
 
 inline void applySingleConfig() {
   switch (token.type) {
-  case TokenColour0:
-    applyConfigColour(0);
-    break;
-
-  case TokenColour1:
-    applyConfigColour(1);
+  case TokenColour:
+    applyConfigColour();
     break;
 
   case TokenKey:
@@ -56,16 +52,14 @@ void applyConfiguration(const char *pName) __z88dk_fastcall {
   parseConfiguration(&configFCB);
 }
 
-static void applyConfigColour(const uint8_t colourIndex) __z88dk_fastcall {
-  getNextToken();
-  if (token.type != TokenEquals)
-    expectedEqualSign();
-
-  getNextToken();
-  gameColours[colourIndex] = token.type;
-}
-
 uint8_t expectToBeHexCharIdentifier() {
+  if (token.type == TokenNumber) {
+    if (token.number >= 0 && token.number <= 9)
+      return (uint8_t)token.number;
+
+    expectedError("hex key code");
+  }
+
   if (token.type != TokenIdentifier)
     expectedError("hex key code");
 
@@ -107,6 +101,34 @@ void expectToBeKey() {
 void expectToBeDash() {
   if (token.type != TokenDash)
     expectedError("-");
+}
+
+#include "xstdio.h"
+
+uint8_t expectToBeNumberUp(uint8_t upper) {
+  if (token.type != TokenNumber)
+    expectedError("number");
+
+  const uint8_t n = (uint8_t)token.number;
+
+  if (n > upper)
+    expectedError("number too large");
+
+  return n;
+}
+
+static void applyConfigColour() {
+  getNextToken();
+  expectToBeDash();
+
+  getNextToken();
+  const uint8_t b = expectToBeNumberUp(3);
+
+  getNextToken();
+  expectToBeEquals();
+
+  getNextToken();
+  gameColours[b] = token.type;
 }
 
 static void applyConfigKey() {

@@ -9,6 +9,7 @@ extern char       tokenTerminatorChar;
 extern int        currentLineNumber;
 extern bool       isOnlyAlphaNumeric;
 extern bool       isOnlyLetters;
+extern bool       isOnlyDigits;
 extern byte       currentLineIndex;
 extern const char commentChar;
 

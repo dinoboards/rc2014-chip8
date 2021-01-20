@@ -41,13 +41,19 @@ char getNextCharRaw() { return *pNextChar++; }
     assert##config();                                     \
   }
 
-const char *testConfigColours = "COLOR0 = lightblue\r\n"
-                                "COLOR1 = black\r\n"
+const char *testConfigColours = "COLOR-0 = lightblue\r\n"
+                                "COLOR-1 = black\r\n"
+                                "COLOR-3 = cyan\r\n"
                                 "\x1a";
 void assertColours() {
-  expectEqualBytes(gameColours[0], COL_LIGBLUE, "COLOR0 = LIGHT BLUE");
-  expectEqualBytes(gameColours[1], COL_BLACK, "COLOR1 = BLACK");
+  expectEqualBytes(gameColours[0], COL_LIGBLUE, "COLOR-0 = LIGHT BLUE");
+  expectEqualBytes(gameColours[1], COL_BLACK, "COLOR-1 = BLACK");
+  expectEqualBytes(gameColours[3], COL_CYAN, "COLOR-14 = CYAN");
 }
+
+const char *testConfigColoursBadIndex = "COLOR-6 = lightblue\r\n"
+                                        "\x1a";
+void assertColoursBadIndex() { expectTrue(expectedErrorInvoked, "expectedError"); }
 
 const char *testConfigSingleKey = "KEY-1 = KEY-a\r\n"
                                   "\x1a";
@@ -77,6 +83,7 @@ void testConfigurtionParser() {
   xprintf("Configuration Processing:\r\n");
 
   assert(Colours);
+  assert(ColoursBadIndex);
 
   assert(SingleKey);
   assert(KeySpace);
