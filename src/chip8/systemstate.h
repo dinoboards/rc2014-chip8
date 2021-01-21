@@ -45,6 +45,8 @@ extern uint16_t timerTick;
 
 extern bool     audioActive;
 extern uint16_t audioPeriod;
+typedef enum _audioSystem { AS_NONE, AS_MSX, AS_HBIOS } audioSystem;
+extern audioSystem installedAudioSystem;
 
 extern uint16_t currentInstruction;
 

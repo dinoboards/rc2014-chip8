@@ -37,7 +37,7 @@ tstasmbl:
 .PHONY: chip8
 chip8:
 	@mkdir -p ./bin
-	@VIDEO=$(VIDEO) $(MAKE) -C ./src ../bin/chip8-${VIDEO}.com -s -j 6 -O
+	@VIDEO=$(VIDEO) $(MAKE) -C ./src ../bin/chip8-${VIDEO}.com -s -j 4 -O
 
 .PHONY: clean
 clean:

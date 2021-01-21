@@ -1,3 +1,4 @@
+#include "audio.h"
 #include "byte_code_executor.h"
 #include "configuration_loader.h"
 #include "cpm.h"
@@ -61,6 +62,8 @@ void main(MainArguments *pargs) __z88dk_fastcall {
   if (!videoInit())
     return;
 
+  audioInit();
+
   initSystemState();
   seedRandom();
   hbSndReset(0);
@@ -79,5 +82,5 @@ void main(MainArguments *pargs) __z88dk_fastcall {
     ;
 
   videoClose();
-  hbSndReset(0);
+  soundOff();
 }

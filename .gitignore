@@ -51,3 +51,6 @@ src/chip8/v9958.asm
 src/chip8/hires_mirror.asm
 src/chip8/test_configuration.asm
 src/test_expectations.asm
+src/chip8/instr_sound_hbios.asm
+src/chip8/instr_sound_msx.asm
+src/chip8/audio.asm

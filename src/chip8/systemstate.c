@@ -29,7 +29,8 @@ byte videoPixelHeight;
 byte videoPixelWidthMask;
 byte videoPixelHeightMask;
 
-bool     audioActive = false;
-uint16_t audioPeriod;
+bool        audioActive = false;
+uint16_t    audioPeriod;
+audioSystem installedAudioSystem = AS_NONE;
 
 uint16_t currentInstruction;

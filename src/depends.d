@@ -1,5 +1,7 @@
 
 ./chartesters.asm: chartesters.c chartesters.h
+./chip8/audio.asm: chip8/audio.c chip8/audio.h datatypes.h hbios.h \
+ chip8/instr_sound_msx.h chip8/systemstate.h
 ./chip8/byte_code_executor.asm: chip8/byte_code_executor.c datatypes.h \
  chip8/key_monitor.h chip8/stack.h chip8/systemstate.h chip8/systimer.h \
  hbios.h chip8/timers.h chip8/tty.h xstdio.h chip8/instr_output.h \
@@ -19,7 +21,13 @@
  chip8/vid_int.h chip8/instr_v9958_output.h chip8/systemstate.h \
  chip8/tms.h chip8/vdp.h
 ./chip8/instr_sound.asm: chip8/instr_sound.c chip8/instr_sound.h datatypes.h \
- hbios.h chip8/systemstate.h chip8/timers.h
+ chip8/audio.h hbios.h chip8/instr_sound_hbios.h chip8/instr_sound_msx.h \
+ chip8/systemstate.h chip8/timers.h
+./chip8/instr_sound_hbios.asm: chip8/instr_sound_hbios.c \
+ chip8/instr_sound_hbios.h hbios.h chip8/instr_sound.h datatypes.h \
+ chip8/systemstate.h chip8/timers.h
+./chip8/instr_sound_msx.asm: chip8/instr_sound_msx.c chip8/instr_sound_msx.h \
+ chip8/audio.h datatypes.h chip8/systemstate.h chip8/timers.h
 ./chip8/instr_tms_output.asm: chip8/instr_tms_output.c chip8/instr_tms_output.h \
  datatypes.h chip8/vid_int.h chip8/systemstate.h chip8/tms.h
 ./chip8/instr_v9958_output.asm: chip8/instr_v9958_output.c \
@@ -28,11 +36,11 @@
 ./chip8/keys.asm: chip8/keys.c chip8/keys.h datatypes.h hbios.h
 ./chip8/key_monitor.asm: chip8/key_monitor.c charconstants.h chip8/keys.h \
  datatypes.h chip8/systemstate.h chip8/timers.h xstdio.h
-./chip8/main.asm: chip8/main.c chip8/byte_code_executor.h datatypes.h \
- chip8/configuration_loader.h cpm.h chip8/error_reports.h hbios.h \
- chip8/instr_output.h chip8/v9958.h chip8/instr_sound.h chip8/random.h \
- chip8/systemstate.h chip8/systimer.h chip8/timers.h chip8/tms.h xstdio.h \
- xstdlib.h
+./chip8/main.asm: chip8/main.c chip8/audio.h datatypes.h \
+ chip8/byte_code_executor.h chip8/configuration_loader.h cpm.h \
+ chip8/error_reports.h hbios.h chip8/instr_output.h chip8/v9958.h \
+ chip8/instr_sound.h chip8/random.h chip8/systemstate.h chip8/systimer.h \
+ chip8/timers.h chip8/tms.h xstdio.h xstdlib.h
 ./chip8/random.asm: chip8/random.c chip8/random.h datatypes.h chip8/systimer.h \
  hbios.h chip8/systemstate.h
 ./chip8/stack.asm: chip8/stack.c chip8/stack.h datatypes.h chip8/systemstate.h \
