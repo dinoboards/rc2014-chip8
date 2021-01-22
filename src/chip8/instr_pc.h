@@ -68,22 +68,23 @@ inline uint8_t jpV0Addr() {
 }
 
 inline void skpVx() {
-  if (keyPressed && registers[nibble2nd] == currentPressedKey) {
+  if (isKeyDown(registers[nibble2nd])) {
     testForLargeInstruction();
     chip8PC += 1;
   }
 }
 
 inline void sknpVx() {
-  if (!keyPressed || registers[nibble2nd] != currentPressedKey) {
+  if (!isKeyDown(registers[nibble2nd])) {
     testForLargeInstruction();
     chip8PC += 1;
   }
 }
 
 inline void keyVx() {
-  if (keyPressed) {
-    registers[nibble2nd] = currentPressedKey;
+  const uint8_t b = currentKey();
+  if (b != 255) {
+    registers[nibble2nd] = b;
     return;
   }
   chip8PC -= 1;

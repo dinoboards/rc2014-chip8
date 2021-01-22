@@ -30,8 +30,8 @@
  chip8/instr_v9958_output.h datatypes.h chip8/instr_output.h \
  chip8/v9958.h chip8/systemstate.h
 ./chip8/keys.asm: chip8/keys.c chip8/keys.h datatypes.h hbios.h
-./chip8/key_monitor.asm: chip8/key_monitor.c charconstants.h chip8/keys.h \
- datatypes.h chip8/systemstate.h chip8/timers.h
+./chip8/key_monitor.asm: chip8/key_monitor.c chip8/key_monitor.h datatypes.h \
+ charconstants.h chip8/keys.h chip8/systemstate.h chip8/timers.h
 ./chip8/main.asm: chip8/main.c chip8/audio.h datatypes.h \
  chip8/byte_code_executor.h chip8/configuration_loader.h cpm.h \
  chip8/error_reports.h hbios.h chip8/instr_output.h chip8/v9958.h \

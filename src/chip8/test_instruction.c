@@ -649,10 +649,28 @@ void verify_skips_dbl_word_instruction() { expectEqualPtrs(chip8PC, (uint16_t *)
 
 extern void testConfigurtionParser();
 
+void resetKeyConfiguration() {
+  gameKeyCount = 15;
+
+  for (int i = 0; i <= 9; i++) {
+    gameKeys[i].asciiKeyChar = i + '0';
+    gameKeys[i].type = KC_ASCII;
+    gameKeys[i].hexCode = i;
+  }
+
+  for (int i = 10; i <= 15; i++) {
+    gameKeys[i].asciiKeyChar = i + 'a' - 10;
+    gameKeys[i].type = KC_ASCII;
+    gameKeys[i].hexCode = i;
+  }
+}
+
 void main() {
   testConfigurtionParser();
 
   CommandSwitches.delayFactor = 0;
+
+  resetKeyConfiguration();
 
   assert(add_i_v9);
   assert(add_v6_v1_no_carry);

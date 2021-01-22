@@ -48,8 +48,14 @@ void tokeniseAlphaNumericString() {
 
   if (strlen(token.value) == 1) {
     const char c = token.value[0];
-    if ((c >= 'A' && c <= 'Z') || (c >= 'a' && c <= 'z')) {
+    if ((c >= 'a' && c <= 'z')) {
       token.type = TokenIdentifier;
+      return;
+    }
+
+    if ((c >= 'A' && c <= 'Z')) {
+      token.type = TokenIdentifier;
+      token.value[0] = c + ('a' - 'A'); // to lower it
       return;
     }
   }

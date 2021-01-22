@@ -54,8 +54,9 @@ typedef enum {
 
 } ControllerDirection;
 
+#define GAME_KEYS_MAX 64
 extern byte             gameColours[4];
-extern KeyConfiguration gameKeys[64];
+extern KeyConfiguration gameKeys[GAME_KEYS_MAX];
 extern uint8_t          gameKeyCount; // TODO: watch for overflow of gameKeys
 
 extern uint16_t delayFactor;

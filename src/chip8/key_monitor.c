@@ -1,3 +1,4 @@
+#include "key_monitor.h"
 #include "charconstants.h"
 #include "keys.h"
 #include "systemstate.h"
@@ -32,17 +33,31 @@ bool checkForKeyPresses() {
     return false;
   }
 
-  if (currentPressedKey >= '0' && currentPressedKey <= '9')
-    currentPressedKey -= '0';
-
-  else if (currentPressedKey >= 'A' && currentPressedKey <= 'Z')
-    currentPressedKey += (-'A' + 10);
-
-  else if (currentPressedKey >= 'a' && currentPressedKey <= 'z')
-    currentPressedKey += (-'a' + 10);
-
   currentKeyTimeout = timerTick + 5;
   keyPressed = true;
 
   return true;
+}
+
+uint8_t isKeyDown(uint8_t c) __z88dk_fastcall { return (keyPressed && c == currentKey()); }
+
+inline uint8_t toLower(uint8_t c) { return ((c >= 'A' && c <= 'Z')) ? c + ('a' - 'A') : c; }
+
+KeyConfiguration *pConfig;
+
+uint8_t currentKey() {
+  if (!keyPressed)
+    return 255;
+
+  pConfig = gameKeys;
+  const uint8_t c = toLower(currentPressedKey);
+
+  while (pConfig <= &gameKeys[GAME_KEYS_MAX - 1]) {
+    if (pConfig->type == KC_ASCII && pConfig->asciiKeyChar == c)
+      return pConfig->hexCode;
+
+    pConfig++;
+  }
+
+  return 255;
 }
