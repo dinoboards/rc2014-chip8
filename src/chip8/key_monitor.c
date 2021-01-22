@@ -60,6 +60,13 @@ uint8_t currentKey() {
     if (isYm2149 && pConfig->type == KC_CTRL_DIR && pConfig->controllerDirection == d)
       return pConfig->hexCode;
 
+    if (isYm2149 && pConfig->type == KC_CTRL_BTNS) {
+      const uint8_t b1 = getControllerButton(1);
+      const uint8_t b2 = getControllerButton(3);
+      if ((b1 && pConfig->controllerButton1) || (b2 && pConfig->controllerButton2))
+        return pConfig->hexCode;
+    }
+
     pConfig++;
   }
 

@@ -69,6 +69,8 @@ uint8_t getControllerDirection(uint8_t port) __z88dk_fastcall {
   return 0;
 }
 
+uint8_t getControllerButton(uint8_t b) __z88dk_fastcall { return b; }
+
 bool ym2149Probe() { return false; }
 
 audioCommand command;

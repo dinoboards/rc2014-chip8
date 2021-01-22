@@ -21,11 +21,11 @@ typedef enum {
   TokenDirection
 } TokenType;
 
-#define MAX_TOKEN_LENGTH 32
+#define MAX_LINE_LENGTH 128
 
 typedef struct TokenStruct {
-  char      currentLine[MAX_TOKEN_LENGTH];
-  char      value[MAX_TOKEN_LENGTH];
+  char      currentLine[MAX_LINE_LENGTH];
+  char      value[MAX_LINE_LENGTH];
   TokenType type;
   long      number;
   bool      isColour : 1;

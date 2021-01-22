@@ -65,11 +65,11 @@ typedef enum {
   InstructionScrl
 } TokenType;
 
-#define MAX_TOKEN_LENGTH 256
+#define MAX_LINE_LENGTH 256
 
 typedef struct TokenStruct {
-  char      currentLine[MAX_TOKEN_LENGTH];
-  char      value[MAX_TOKEN_LENGTH];
+  char      currentLine[MAX_LINE_LENGTH];
+  char      value[MAX_LINE_LENGTH];
   TokenType type;
   bool      isInstruction;
   bool      isVRegister;

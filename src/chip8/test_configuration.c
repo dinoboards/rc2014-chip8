@@ -172,6 +172,46 @@ void assertControllerButtons() {
   expectFalse(expectedErrorInvoked, "expectedError");
 }
 
+const char *testConfigInvadersConfiguration = "KEY-4 = KEY-A,CTRL-LEFT\r\n"
+                                              "KEY-5 = KEY-SPACE,CTRL-BTN-1,CTRL-BTN-2\r\n"
+                                              "KEY-6 = KEY-D,CTRL-RIGHT\r\n"
+                                              "\x1a";
+
+void assertInvadersConfiguration() {
+  expectEqualChars(gameKeys[0].asciiKeyChar, 'a', "gameKeys[0].asciiKeyChar");
+  expectEqualBytes(gameKeys[0].hexCode, 4, "gameKeys[0].hexCode");
+  expectEqualBytes(gameKeys[0].type, KC_ASCII, "gameKeys[0].type");
+
+  expectEqualBytes(gameKeys[1].controllerDirection, CONTROLLER_DIRECTION_LEFT, "gameKeys[1].controllerDirection");
+  expectEqualBytes(gameKeys[1].hexCode, 4, "gameKeys[1].hexCode");
+  expectEqualBytes(gameKeys[1].type, KC_CTRL_DIR, "gameKeys[1].type");
+
+  expectEqualChars(gameKeys[2].asciiKeyChar, ' ', "gameKeys[2].asciiKeyChar");
+  expectEqualBytes(gameKeys[2].hexCode, 5, "gameKeys[2].hexCode");
+  expectEqualBytes(gameKeys[2].type, KC_ASCII, "gameKeys[2].type");
+
+  expectTrue(gameKeys[3].controllerButton1, "gameKeys[3].controllerButton1");
+  expectFalse(gameKeys[3].controllerButton2, "gameKeys[3].controllerButton2");
+  expectEqualBytes(gameKeys[3].hexCode, 5, "gameKeys[3].hexCode");
+  expectEqualBytes(gameKeys[3].type, KC_CTRL_BTNS, "gameKeys[3].type");
+
+  expectFalse(gameKeys[4].controllerButton1, "gameKeys[4].controllerButton1");
+  expectTrue(gameKeys[4].controllerButton2, "gameKeys[4].controllerButton2");
+  expectEqualBytes(gameKeys[4].hexCode, 5, "gameKeys[4].hexCode");
+  expectEqualBytes(gameKeys[4].type, KC_CTRL_BTNS, "gameKeys[4].type");
+
+  expectEqualChars(gameKeys[5].asciiKeyChar, 'd', "gameKeys[5].asciiKeyChar");
+  expectEqualBytes(gameKeys[5].hexCode, 6, "gameKeys[5].hexCode");
+  expectEqualBytes(gameKeys[5].type, KC_ASCII, "gameKeys[5].type");
+
+  expectEqualBytes(gameKeys[6].controllerDirection, CONTROLLER_DIRECTION_RIGHT, "gameKeys[6].controllerDirection");
+  expectEqualBytes(gameKeys[6].hexCode, 6, "gameKeys[6].hexCode");
+  expectEqualBytes(gameKeys[6].type, KC_CTRL_DIR, "gameKeys[6].type");
+
+  expectFalse(unexpectedTokenInvoked, "unexpectedToken");
+  expectFalse(expectedErrorInvoked, "expectedError");
+}
+
 void testConfigurtionParser() {
   FCB fcb;
   xprintf("Configuration Processing:\r\n");
@@ -187,6 +227,7 @@ void testConfigurtionParser() {
   assert(KeySpace);
   assert(ControllerSubDirection);
   assert(ControllerButtons);
+  assert(InvadersConfiguration);
 
   xprintf(testFailure ? RED "Tests Failed\r\n\n" RESET : BRIGHT_WHITE "All Passed\r\n\n" RESET);
 }

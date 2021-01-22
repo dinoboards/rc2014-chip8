@@ -190,8 +190,8 @@ loop:
 
       gameKeys[gameKeyCount].hexCode = pSourceKey;
       gameKeys[gameKeyCount].type = KC_CTRL_BTNS;
-      gameKeys[gameKeyCount].controllerButton1 = direction & 1;
-      gameKeys[gameKeyCount].controllerButton2 = direction & 2;
+      gameKeys[gameKeyCount].controllerButton1 = !!(direction & 1);
+      gameKeys[gameKeyCount].controllerButton2 = !!(direction & 2);
 
       gameKeyCount++;
     } else {
