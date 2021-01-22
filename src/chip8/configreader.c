@@ -3,6 +3,7 @@
 #include "datatypes.h"
 #include "error_reports.h"
 #include "filereader.h"
+#include "systemstate.h"
 #include "tms.h"
 
 #include "xstdlib.h"
@@ -13,6 +14,13 @@ const char commentChar = '#';
 char getNext() { return _getNext(token.currentLine); }
 
 DEF_TOKEN_EQUALS(token.value)
+
+#define tokenDirectionMap(v, d)  \
+  if (tokenEquals(v)) {          \
+    token.type = TokenDirection; \
+    token.number = d;            \
+    return;                      \
+  }
 
 void tokeniseAlphaNumericString() {
   tokenMap("color", TokenColour);
@@ -36,14 +44,20 @@ void tokeniseAlphaNumericString() {
   token.isColour = false;
 
   tokenMap("key", TokenKey);
+  tokenMap("ctrl", TokenCtrl);
 
   if (strlen(token.value) == 1) {
     const char c = token.value[0];
-    if ((c >= 'A' && c < 'Z') || (c >= 'a' && c < 'z')) {
+    if ((c >= 'A' && c <= 'Z') || (c >= 'a' && c <= 'z')) {
       token.type = TokenIdentifier;
       return;
     }
   }
+
+  tokenDirectionMap("up", CONTROLLER_DIRECTION_UP);
+  tokenDirectionMap("down", CONTROLLER_DIRECTION_DOWN);
+  tokenDirectionMap("left", CONTROLLER_DIRECTION_LEFT);
+  tokenDirectionMap("right", CONTROLLER_DIRECTION_RIGHT);
 
   if (tokenEquals("space")) {
     token.type = TokenIdentifier;

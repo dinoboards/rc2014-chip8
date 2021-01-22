@@ -7,7 +7,6 @@
 #include "tms.h"
 
 #include "xstdio.h"
-// typedef _lastError {  } lastError;
 
 bool unexpectedTokenInvoked;
 bool expectedErrorInvoked;
@@ -32,11 +31,15 @@ void openFileStream() { pNextChar = pConfigurationUnderTest; }
 void closeFileStream() {}
 char getNextCharRaw() { return *pNextChar++; }
 
+extern bool haveAppliedAKeyConfig;
+
 #define assert(config)                                    \
   {                                                       \
+    haveAppliedAKeyConfig = 0;                            \
     pConfigurationUnderTest = (char *)testConfig##config; \
     unexpectedTokenInvoked = false;                       \
     expectedErrorInvoked = false;                         \
+    xprintf(#config ": \r\n");                            \
     parseConfiguration(&fcb);                             \
     assert##config();                                     \
   }
@@ -59,24 +62,81 @@ const char *testConfigSingleKey = "KEY-1 = KEY-a\r\n"
                                   "\x1a";
 
 void assertSingleKey() {
-  expectEqualChars(gameKeys[1], 'a', "KEY-1");
+  expectEqualChars(gameKeys[0].asciiKeyChar, 'a', "gameKeys[0].asciiKeyChar");
+  expectEqualBytes(gameKeys[0].hexCode, 1, "gameKeys[0].hexCode");
+  expectEqualChars(gameKeys[0].type, KC_ASCII, "gameKeys[0].type");
   expectFalse(unexpectedTokenInvoked, "unexpectedToken");
   expectFalse(expectedErrorInvoked, "expectedError");
 }
 
-const char *testConfigKeySpace = "KEy-a = KEY-SPACE\r\n"
+const char *testConfigTwoMappedKeys = "KEY-1 = KEY-a\r\n"
+                                      "KEY-a = KEY-z\r\n"
+                                      "\x1a";
+
+void assertTwoMappedKeys() {
+  expectEqualChars(gameKeys[0].asciiKeyChar, 'a', "gameKeys[0].asciiKeyChar");
+  expectEqualBytes(gameKeys[0].hexCode, 1, "gameKeys[0].hexCode");
+  expectEqualChars(gameKeys[0].type, KC_ASCII, "gameKeys[0].type");
+
+  expectEqualChars(gameKeys[1].asciiKeyChar, 'z', "gameKeys[1].asciiKeyChar");
+  expectEqualBytes(gameKeys[1].hexCode, 10, "gameKeys[1].hexCode");
+  expectEqualChars(gameKeys[1].type, KC_ASCII, "gameKeys[1].type");
+
+  expectFalse(unexpectedTokenInvoked, "unexpectedToken");
+  expectFalse(expectedErrorInvoked, "expectedError");
+}
+
+const char *testConfigControllerDirection = "KEY-2 = CTRL-UP\r\n"
+                                            "\x1a";
+
+void assertControllerDirection() {
+  expectEqualBytes(gameKeys[0].controllerDirection, CONTROLLER_DIRECTION_UP, "gameKeys[0].controllerDirection");
+  expectEqualBytes(gameKeys[0].hexCode, 2, "gameKeys[0].hexCode");
+  expectEqualChars(gameKeys[0].type, KC_CTRL_DIR, "gameKeys[0].type");
+
+  expectFalse(unexpectedTokenInvoked, "unexpectedToken");
+  expectFalse(expectedErrorInvoked, "expectedError");
+}
+
+const char *testConfigMultipleKeyMapping = "KEY-1 = KEY-CR\r\n"
+                                           "KEY-1 = CTRL-DOWN\r\n"
+                                           "\x1a";
+
+void assertMultipleKeyMapping() {
+  expectEqualBytes(gameKeys[0].asciiKeyChar, 13, "gameKeys[0].asciiKeyChar");
+  expectEqualBytes(gameKeys[0].hexCode, 1, "gameKeys[0].hexCode");
+  expectEqualChars(gameKeys[0].type, KC_ASCII, "gameKeys[0].type");
+
+  expectEqualBytes(gameKeys[1].controllerDirection, CONTROLLER_DIRECTION_DOWN, "gameKeys[0].controllerDirection");
+  expectEqualBytes(gameKeys[1].hexCode, 1, "gameKeys[1].hexCode");
+  expectEqualChars(gameKeys[1].type, KC_CTRL_DIR, "gameKeys[1].type");
+
+  expectFalse(unexpectedTokenInvoked, "unexpectedToken");
+  expectFalse(expectedErrorInvoked, "expectedError");
+}
+
+const char *testConfigControllerMultipleDirection = "KEY-2 = CTRL-UP-RIGHT\r\n"
+                                                    "\x1a";
+
+void assertControllerMultipleDirection() {
+  expectEqualBytes(gameKeys[0].controllerDirection, CONTROLLER_DIRECTION_UP_RIGHT, "gameKeys[0].controllerDirection");
+  expectEqualBytes(gameKeys[0].hexCode, 2, "gameKeys[0].hexCode");
+  expectEqualChars(gameKeys[0].type, KC_CTRL_DIR, "gameKeys[0].type");
+
+  expectFalse(unexpectedTokenInvoked, "unexpectedToken");
+  expectFalse(expectedErrorInvoked, "expectedError");
+}
+
+const char *testConfigKeySpace = "KEy-f = KEY-SPACE\r\n"
                                  "\x1a";
 
 void assertKeySpace() {
-  expectEqualChars(gameKeys[10], ' ', "KEY-SPACE");
+  expectEqualChars(gameKeys[0].asciiKeyChar, ' ', "gameKeys[0].asciiKeyChar");
+  expectEqualBytes(gameKeys[0].hexCode, 15, "gameKeys[0].hexCode");
+  expectEqualChars(gameKeys[0].type, KC_ASCII, "gameKeys[0].type");
   expectFalse(unexpectedTokenInvoked, "unexpectedToken");
   expectFalse(expectedErrorInvoked, "expectedError");
 }
-
-const char *testConfigKeyCr = "KEy-f = KEY-CR\r\n"
-                              "\x1a";
-
-void assertKeyCr() { expectEqualChars(gameKeys[15], 13, "KEY-CR"); }
 
 void testConfigurtionParser() {
   FCB fcb;
@@ -86,8 +146,11 @@ void testConfigurtionParser() {
   assert(ColoursBadIndex);
 
   assert(SingleKey);
+  assert(TwoMappedKeys);
+  assert(ControllerDirection);
+  assert(ControllerMultipleDirection);
+  assert(MultipleKeyMapping);
   assert(KeySpace);
-  assert(KeyCr);
 
   xprintf(testFailure ? RED "Tests Failed\r\n\n" RESET : BRIGHT_WHITE "All Passed\r\n\n" RESET);
 }

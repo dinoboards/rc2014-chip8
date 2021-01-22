@@ -27,8 +27,36 @@ typedef struct {
 
 extern CliSwitches CommandSwitches;
 
-extern byte gameColours[4];
-extern char gameKeys[16];
+typedef enum { KC_ASCII, KC_CTRL_DIR, KC_CTRL_BTNS } keyConfigurationDirection;
+
+typedef struct KeyConfigurationStruct {
+  uint8_t                   hexCode : 4; /* Code for chip up keypress 0 - 9, a-f */
+  keyConfigurationDirection type : 2;    // 0 -> ascii, 1 -> controller direction, 2 -> controller button
+  union {
+    char    asciiKeyChar;        // serial key char to map to hexCode
+    uint8_t controllerDirection; // 1 to 8 to indicate a controller direction flag
+    struct {
+      uint8_t controllerButton1 : 1;
+      uint8_t controllerButton2 : 1;
+    };
+  };
+} KeyConfiguration;
+
+typedef enum {
+  CONTROLLER_DIRECTION_UP = 1,
+  CONTROLLER_DIRECTION_UP_RIGHT,
+  CONTROLLER_DIRECTION_RIGHT,
+  CONTROLLER_DIRECTION_DOWN_RIGHT,
+  CONTROLLER_DIRECTION_DOWN,
+  CONTROLLER_DIRECTION_DOWN_LEFT,
+  CONTROLLER_DIRECTION_LEFT,
+  CONTROLLER_DIRECTION_UP_LEFT
+
+} ControllerDirection;
+
+extern byte             gameColours[4];
+extern KeyConfiguration gameKeys[64];
+extern uint8_t          gameKeyCount; // TODO: watch for overflow of gameKeys
 
 extern uint16_t delayFactor;
 

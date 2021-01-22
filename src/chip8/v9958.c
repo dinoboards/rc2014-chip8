@@ -1,10 +1,7 @@
 #include "v9958.h"
+#include "systemstate.h"
 #include <stdbool.h>
 #include <stdlib.h>
-
-#include "systemstate.h"
-
-#include "xstdio.h"
 
 // clang-format off
 #define DI __asm \

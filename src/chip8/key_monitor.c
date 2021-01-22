@@ -2,7 +2,6 @@
 #include "keys.h"
 #include "systemstate.h"
 #include "timers.h"
-#include "xstdio.h"
 
 static uint16_t lastCheckTime = 0;
 

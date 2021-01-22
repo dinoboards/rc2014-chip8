@@ -83,7 +83,7 @@ uint8_t expectToBeHexCharIdentifier() {
 
 const char *expectToBeKeyIdentifier() {
   if (token.type != TokenIdentifier)
-    expectedError("hex key code");
+    return (char *)expectedError("key identifier");
 
   return token.value;
 }
@@ -93,9 +93,14 @@ void expectToBeEquals() {
     expectedError("=");
 }
 
+void expectToBeCtrl() {
+  if (token.type != TokenCtrl)
+    expectedError("one of KEY- or CTRL-");
+}
+
 void expectToBeKey() {
   if (token.type != TokenKey)
-    expectedError("KEY-");
+    expectedError("one of KEY- or CTRL-");
 }
 
 void expectToBeDash() {
@@ -103,7 +108,33 @@ void expectToBeDash() {
     expectedError("-");
 }
 
-#include "xstdio.h"
+const ControllerDirection expectToBeDirection() {
+  if (token.type != TokenDirection)
+    return (ControllerDirection)expectedError("direction (UP, DOWN, UP-RIGHT, ...)");
+
+  return token.number;
+}
+
+const ControllerDirection expectToBeSubDirection(ControllerDirection d) __z88dk_fastcall {
+  if (d == CONTROLLER_DIRECTION_UP)
+    switch (token.number) {
+    case CONTROLLER_DIRECTION_RIGHT:
+      return CONTROLLER_DIRECTION_UP_RIGHT;
+
+    case CONTROLLER_DIRECTION_LEFT:
+      return CONTROLLER_DIRECTION_UP_LEFT;
+    }
+  else if (d == CONTROLLER_DIRECTION_DOWN)
+    switch (token.number) {
+    case CONTROLLER_DIRECTION_RIGHT:
+      return CONTROLLER_DIRECTION_DOWN_RIGHT;
+
+    case CONTROLLER_DIRECTION_LEFT:
+      return CONTROLLER_DIRECTION_DOWN_LEFT;
+    }
+
+  return (ControllerDirection)expectedError("UP-xxx or DOWN-xxx");
+}
 
 uint8_t expectToBeNumberUp(uint8_t upper) {
   if (token.type != TokenNumber)
@@ -131,7 +162,13 @@ static void applyConfigColour() {
   gameColours[b] = token.type;
 }
 
+bool haveAppliedAKeyConfig = false;
+
 static void applyConfigKey() {
+  if (!haveAppliedAKeyConfig) {
+    gameKeyCount = 0;
+    haveAppliedAKeyConfig = true;
+  }
   getNextToken();
   expectToBeDash();
 
@@ -142,6 +179,37 @@ static void applyConfigKey() {
   expectToBeEquals();
 
   getNextToken();
+  if (token.type == TokenCtrl) {
+    expectToBeCtrl();
+
+    getNextToken();
+    expectToBeDash();
+
+    getNextToken();
+    const uint8_t direction = expectToBeDirection();
+
+    getNextToken();
+    if (token.type == TokenDash) {
+
+      getNextToken();
+      const uint8_t subDirection = expectToBeSubDirection(direction);
+      gameKeys[gameKeyCount].hexCode = pSourceKey;
+      gameKeys[gameKeyCount].type = KC_CTRL_DIR;
+      gameKeys[gameKeyCount].controllerDirection = subDirection;
+
+      gameKeyCount++;
+      return;
+    }
+
+    gameKeys[gameKeyCount].hexCode = pSourceKey;
+    gameKeys[gameKeyCount].type = KC_CTRL_DIR;
+    gameKeys[gameKeyCount].controllerDirection = direction;
+
+    gameKeyCount++;
+
+    return;
+  }
+
   expectToBeKey();
 
   getNextToken();
@@ -150,5 +218,8 @@ static void applyConfigKey() {
   getNextToken();
   const char *c = expectToBeKeyIdentifier();
 
-  gameKeys[pSourceKey] = c[0];
+  gameKeys[gameKeyCount].hexCode = pSourceKey;
+  gameKeys[gameKeyCount].asciiKeyChar = c[0];
+  gameKeys[gameKeyCount].type = KC_ASCII;
+  gameKeyCount++;
 }

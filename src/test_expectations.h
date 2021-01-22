@@ -3,7 +3,6 @@
 
 #include "datatypes.h"
 #include "terminal_codes.h"
-#include "xstdio.h"
 #include <string.h>
 
 extern bool testFailure;
