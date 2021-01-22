@@ -17,6 +17,7 @@ typedef enum {
   TokenComma,
   TokenNumber,
   TokenCtrl,
+  TokenBtn,
   TokenDirection
 } TokenType;
 

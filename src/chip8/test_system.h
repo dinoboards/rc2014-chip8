@@ -1,6 +1,8 @@
 #ifndef __TEST_SYSTEM
 #define __TEST_SYSTEM
 
+#include "datatypes.h"
+
 extern bool appRunning;
 
 #define assert(a)                                  \

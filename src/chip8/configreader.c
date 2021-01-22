@@ -45,6 +45,7 @@ void tokeniseAlphaNumericString() {
 
   tokenMap("key", TokenKey);
   tokenMap("ctrl", TokenCtrl);
+  tokenMap("btn", TokenBtn);
 
   if (strlen(token.value) == 1) {
     const char c = token.value[0];

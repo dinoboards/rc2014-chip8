@@ -93,14 +93,9 @@ void expectToBeEquals() {
     expectedError("=");
 }
 
-void expectToBeCtrl() {
-  if (token.type != TokenCtrl)
-    expectedError("one of KEY- or CTRL-");
-}
-
 void expectToBeKey() {
   if (token.type != TokenKey)
-    expectedError("one of KEY- or CTRL-");
+    expectedError("one of KEY-, CTRL- or BTN-");
 }
 
 void expectToBeDash() {
@@ -110,7 +105,7 @@ void expectToBeDash() {
 
 const ControllerDirection expectToBeDirection() {
   if (token.type != TokenDirection)
-    return (ControllerDirection)expectedError("direction (UP, DOWN, UP-RIGHT, ...)");
+    return (ControllerDirection)expectedError("direction (UP, DOWN, LEFT, RIGHT, or BTN-<number>)");
 
   return token.number;
 }
@@ -182,34 +177,46 @@ loop:
   getNextToken();
 
   if (token.type == TokenCtrl) {
-    expectToBeCtrl();
-
     getNextToken();
     expectToBeDash();
 
     getNextToken();
-    const uint8_t direction = expectToBeDirection();
+    if (token.type == TokenBtn) {
+      getNextToken();
+      expectToBeDash();
 
-    if (tokenTerminatorChar == '-') {
-      getNextToken(); // Dash
+      getNextToken();
+      const uint8_t direction = expectToBeNumberUp(3);
 
-      getNextToken(); // sub-direction
-      const uint8_t subDirection = expectToBeSubDirection(direction);
       gameKeys[gameKeyCount].hexCode = pSourceKey;
-      gameKeys[gameKeyCount].type = KC_CTRL_DIR;
-      gameKeys[gameKeyCount].controllerDirection = subDirection;
+      gameKeys[gameKeyCount].type = KC_CTRL_BTNS;
+      gameKeys[gameKeyCount].controllerButton1 = direction & 1;
+      gameKeys[gameKeyCount].controllerButton2 = direction & 2;
 
       gameKeyCount++;
-      return;
+    } else {
+      const uint8_t direction = expectToBeDirection();
+
+      if (tokenTerminatorChar == '-') {
+        getNextToken(); // Dash
+
+        getNextToken(); // sub-direction
+        const uint8_t subDirection = expectToBeSubDirection(direction);
+        gameKeys[gameKeyCount].hexCode = pSourceKey;
+        gameKeys[gameKeyCount].type = KC_CTRL_DIR;
+        gameKeys[gameKeyCount].controllerDirection = subDirection;
+
+        gameKeyCount++;
+        return;
+      }
+
+      gameKeys[gameKeyCount].hexCode = pSourceKey;
+      gameKeys[gameKeyCount].type = KC_CTRL_DIR;
+      gameKeys[gameKeyCount].controllerDirection = direction;
+
+      gameKeyCount++;
     }
-
-    gameKeys[gameKeyCount].hexCode = pSourceKey;
-    gameKeys[gameKeyCount].type = KC_CTRL_DIR;
-    gameKeys[gameKeyCount].controllerDirection = direction;
-
-    gameKeyCount++;
   } else {
-
     expectToBeKey();
 
     getNextToken();

@@ -52,9 +52,8 @@
  datatypes.h chip8/fontsets.h chip8/stack.h chip8/systemstate.h \
  terminal_codes.h test_expectations.h datatypes.h terminal_codes.h \
  test_opcodes.h chip8/test_system.h xstdio.h
-./chip8/test_system.asm: chip8/test_system.c chip8/test_system.h \
- chip8/systemstate.h datatypes.h chip8/timers.h chip8/ym2149.h \
- chip8/audio.h
+./chip8/test_system.asm: chip8/test_system.c chip8/test_system.h datatypes.h \
+ chip8/systemstate.h chip8/timers.h chip8/ym2149.h chip8/audio.h
 ./chip8/timers.asm: chip8/timers.c chip8/timers.h datatypes.h chip8/tty.h hbios.h \
  chip8/instr_sound.h chip8/systemstate.h chip8/systimer.h
 ./chip8/tms.asm: chip8/tms.c chip8/tms.h datatypes.h hbios.h chip8/keys.h \
