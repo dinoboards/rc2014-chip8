@@ -98,8 +98,7 @@ void assertControllerDirection() {
   expectFalse(expectedErrorInvoked, "expectedError");
 }
 
-const char *testConfigMultipleKeyMapping = "KEY-1 = KEY-CR\r\n"
-                                           "KEY-1 = CTRL-DOWN\r\n"
+const char *testConfigMultipleKeyMapping = "KEY-1 = KEY-CR, CTRL-DOWN\r\n"
                                            "\x1a";
 
 void assertMultipleKeyMapping() {
@@ -107,7 +106,7 @@ void assertMultipleKeyMapping() {
   expectEqualBytes(gameKeys[0].hexCode, 1, "gameKeys[0].hexCode");
   expectEqualChars(gameKeys[0].type, KC_ASCII, "gameKeys[0].type");
 
-  expectEqualBytes(gameKeys[1].controllerDirection, CONTROLLER_DIRECTION_DOWN, "gameKeys[0].controllerDirection");
+  expectEqualBytes(gameKeys[1].controllerDirection, CONTROLLER_DIRECTION_DOWN, "gameKeys[1].controllerDirection");
   expectEqualBytes(gameKeys[1].hexCode, 1, "gameKeys[1].hexCode");
   expectEqualChars(gameKeys[1].type, KC_CTRL_DIR, "gameKeys[1].type");
 

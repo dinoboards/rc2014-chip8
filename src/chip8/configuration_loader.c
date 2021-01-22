@@ -178,6 +178,7 @@ static void applyConfigKey() {
   getNextToken();
   expectToBeEquals();
 
+loop:
   getNextToken();
   if (token.type == TokenCtrl) {
     expectToBeCtrl();
@@ -222,4 +223,9 @@ static void applyConfigKey() {
   gameKeys[gameKeyCount].asciiKeyChar = c[0];
   gameKeys[gameKeyCount].type = KC_ASCII;
   gameKeyCount++;
+
+  if (tokenTerminatorChar == ',') {
+    getNextToken();
+    goto loop;
+  }
 }

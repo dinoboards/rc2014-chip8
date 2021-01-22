@@ -14,6 +14,7 @@ typedef enum {
   TokenKey,
   TokenIdentifier,
   TokenDash,
+  TokenComma,
   TokenNumber,
   TokenCtrl,
   TokenDirection

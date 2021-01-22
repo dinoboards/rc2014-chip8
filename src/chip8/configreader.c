@@ -116,6 +116,20 @@ static bool isDash() {
   return true;
 }
 
+static bool isComma() {
+  if (tokenCurrentChar != ',')
+    return false;
+
+  tokenCurrentChar = getNext();
+
+  token.value[0] = ',';
+  token.value[1] = '\0';
+  tokenTerminatorChar = tokenCurrentChar;
+  token.type = TokenComma;
+
+  return true;
+}
+
 void getNextToken() {
   tokenCurrentChar = skipWhiteSpace(tokenCurrentChar);
   tokenCurrentChar = skipComment(tokenCurrentChar);
@@ -134,6 +148,9 @@ void getNextToken() {
     return;
 
   if (isDash())
+    return;
+
+  if (isComma())
     return;
 
   if (isAlphaNumeric(token.value))
