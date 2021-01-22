@@ -180,6 +180,7 @@ static void applyConfigKey() {
 
 loop:
   getNextToken();
+
   if (token.type == TokenCtrl) {
     expectToBeCtrl();
 
@@ -189,10 +190,10 @@ loop:
     getNextToken();
     const uint8_t direction = expectToBeDirection();
 
-    getNextToken();
-    if (token.type == TokenDash) {
+    if (tokenTerminatorChar == '-') {
+      getNextToken(); // Dash
 
-      getNextToken();
+      getNextToken(); // sub-direction
       const uint8_t subDirection = expectToBeSubDirection(direction);
       gameKeys[gameKeyCount].hexCode = pSourceKey;
       gameKeys[gameKeyCount].type = KC_CTRL_DIR;
@@ -207,22 +208,21 @@ loop:
     gameKeys[gameKeyCount].controllerDirection = direction;
 
     gameKeyCount++;
+  } else {
 
-    return;
+    expectToBeKey();
+
+    getNextToken();
+    expectToBeDash();
+
+    getNextToken();
+    const char *c = expectToBeKeyIdentifier();
+
+    gameKeys[gameKeyCount].hexCode = pSourceKey;
+    gameKeys[gameKeyCount].asciiKeyChar = c[0];
+    gameKeys[gameKeyCount].type = KC_ASCII;
+    gameKeyCount++;
   }
-
-  expectToBeKey();
-
-  getNextToken();
-  expectToBeDash();
-
-  getNextToken();
-  const char *c = expectToBeKeyIdentifier();
-
-  gameKeys[gameKeyCount].hexCode = pSourceKey;
-  gameKeys[gameKeyCount].asciiKeyChar = c[0];
-  gameKeys[gameKeyCount].type = KC_ASCII;
-  gameKeyCount++;
 
   if (tokenTerminatorChar == ',') {
     getNextToken();

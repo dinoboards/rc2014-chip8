@@ -57,3 +57,4 @@ src/chip8/audio.asm
 
 src/chip8/hbios_audio.asm
 src/chip8/ym2149.asm
+src/chip8/test_system.asm

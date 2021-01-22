@@ -5,14 +5,10 @@
 #include "stack.h"
 #include "systemstate.h"
 #include "terminal_codes.h"
+#include "test_expectations.h"
 #include "test_opcodes.h"
-#include "timers.h"
+#include "test_system.h"
 #include "xstdio.h"
-#include <stdarg.h>
-#include <stdio.h>
-#include <string.h>
-
-#include "test_helpers.h"
 
 void setup_ld_v1_10() { programStorage[0] = invertByteOrder(LD_V1_10); }
 

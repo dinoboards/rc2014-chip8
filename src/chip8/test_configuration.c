@@ -98,7 +98,8 @@ void assertControllerDirection() {
   expectFalse(expectedErrorInvoked, "expectedError");
 }
 
-const char *testConfigMultipleKeyMapping = "KEY-1 = KEY-CR, CTRL-DOWN\r\n"
+const char *testConfigMultipleKeyMapping = "KEY-1 = KEY-CR,CTRL-DOWN\r\n"
+                                           "KEY-2 = KEY-SPACE\r\n"
                                            "\x1a";
 
 void assertMultipleKeyMapping() {
