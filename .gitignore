@@ -54,3 +54,6 @@ src/test_expectations.asm
 src/chip8/instr_sound_hbios.asm
 src/chip8/instr_sound_msx.asm
 src/chip8/audio.asm
+
+src/chip8/hbios_audio.asm
+src/chip8/ym2149.asm

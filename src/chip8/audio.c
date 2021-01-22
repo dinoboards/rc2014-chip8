@@ -1,22 +1,38 @@
 #include "audio.h"
 #include "datatypes.h"
 #include "hbios.h"
-#include "instr_sound_msx.h"
+#include "hbios_audio.h"
 #include "systemstate.h"
+#include "ym2149.h"
 
 void audioInit() {
-  const uint8_t audType = audioChipProbe();
+  const bool ym2149Found = ym2149Probe();
 
-  switch (audType) {
-  case 1:
-    installedAudioSystem = AS_MSX;
+  if (ym2149Found) {
+    installedAudioSystem = AS_YM2149;
     print("YM2149 Audio Found\r\n");
-    msx_soundInit();
-    break;
-
-  default:
-    installedAudioSystem = AS_HBIOS;
-    print("HBIOS Audio\r\n");
-    break;
+    ym2149Init();
+    return;
   }
+
+  installedAudioSystem = AS_HBIOS;
+  print("HBIOS Audio\r\n");
+}
+
+void audioPlay(uint16_t p) __z88dk_fastcall {
+  if (installedAudioSystem == AS_YM2149) {
+    ym2149Play(p);
+    return;
+  }
+
+  hbiosAudioPlay(p);
+}
+
+void audioStop() {
+  if (installedAudioSystem == AS_YM2149) {
+    ym2149Stop();
+    return;
+  }
+
+  hbiosAudioStop();
 }

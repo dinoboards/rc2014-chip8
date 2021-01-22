@@ -6,7 +6,8 @@
 #define AUDIO_SAMPLE_SIZE (16 * 8)
 
 extern void ldStVx();
-extern void soundOff();
 extern void audio();
+
+#define soundOff() audioStop()
 
 #endif

@@ -44,7 +44,27 @@ void parseCommandLine() {
     CommandSwitches.delayFactor = 0;
 }
 
+// #include "ym2149.h"
+
 void main(MainArguments *pargs) __z88dk_fastcall {
+  // (void)pargs;
+
+  // audioInit();
+
+  // uint8_t oldd = 255, oldb = 255;
+
+  // while(true) {
+  //   const uint8_t d = getControllerDirection(1);
+
+  //   const uint8_t b = getControllerButton(1) | (getControllerButton(3) << 1);
+
+  //   if(oldd != d || oldb != b)
+  //     xprintf("Direction %02X, buttons: %02X\r\n", d, b);
+
+  //   oldd = d;
+  //   oldb = b;
+  // }
+
   mainArguments = pargs;
   parseCommandLine();
 

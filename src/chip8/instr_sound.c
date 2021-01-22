@@ -1,8 +1,6 @@
 #include "instr_sound.h"
 #include "audio.h"
 #include "hbios.h"
-#include "instr_sound_hbios.h"
-#include "instr_sound_msx.h"
 #include "systemstate.h"
 #include "timers.h"
 
@@ -11,21 +9,14 @@ void ldStVx() {
   soundTimer = registers[nibble2nd];
 
   if (soundTimer == 0) {
-    soundOff();
+    audioStop();
     return;
   }
 
-  if (installedAudioSystem == AS_HBIOS)
-    hbios_ldStVx();
+  if (audioActive)
+    audioPlay(audioPeriod);
   else
-    msx_ldStVx();
-}
-
-void soundOff() {
-  if (installedAudioSystem == AS_HBIOS)
-    hbios_soundOff();
-  else
-    msx_soundOff();
+    audioPlay(0x550);
 }
 
 static uint8_t countOfPeriods = 0;

@@ -1,6 +1,6 @@
 	PUBLIC	_manageTimers
 	EXTERN	_timerMode, _timerTick, _timerTick, _instructionCostCounter, __divuint_callee, _soundTimer
-	EXTERN _soundOff, _delayTimer, _lastTimerTick, _reportPerformance
+	EXTERN _audioStop, _delayTimer, _lastTimerTick, _reportPerformance
 
 	SECTION CODE
 
@@ -44,7 +44,7 @@ l_manageTimers_00108:
 	jr	NZ, l_manageTimers_00116
 
 ;chip8/timers.c:34: soundOff();
-	call	_soundOff
+	call	_audioStop
 
 ;chip8/timers.c:78: tickSoundTimer();
 
