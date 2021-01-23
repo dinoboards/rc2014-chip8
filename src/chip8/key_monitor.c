@@ -44,16 +44,14 @@ bool checkForKeyPresses() {
 KeyConfiguration *pConfig;
 
 uint8_t currentDirection;
-uint8_t currentButton1;
-uint8_t currentButton2;
+uint8_t currentButtons;
 
 uint8_t isKeyDown(uint8_t c) __z88dk_fastcall {
   pConfig = gameKeys;
 
   if (isYm2149) {
     currentDirection = getControllerDirection(1);
-    currentButton1 = isYm2149 ? getControllerButton(1) : 0;
-    currentButton2 = isYm2149 ? getControllerButton(3) : 0;
+    currentButtons = getControllerButton(1) | (getControllerButton(3) << 1);
   }
 
   while (pConfig <= &gameKeys[GAME_KEYS_MAX - 1]) {
@@ -66,9 +64,10 @@ uint8_t isKeyDown(uint8_t c) __z88dk_fastcall {
     if (isYm2149 && pConfig->type == KC_CTRL_DIR && pConfig->controllerDirection == currentDirection)
       return true;
 
-    if (isYm2149 && pConfig->type == KC_CTRL_BTNS)
-      if ((currentButton1 && pConfig->controllerButton1) || (currentButton2 && pConfig->controllerButton2))
+    if (isYm2149 && pConfig->type == KC_CTRL_BTNS) {
+      if ((currentButtons & pConfig->controllerButtons == currentButtons))
         return true;
+    }
 
   next:
     pConfig++;
@@ -82,8 +81,7 @@ uint8_t currentKey() {
 
   if (isYm2149) {
     currentDirection = getControllerDirection(1);
-    currentButton1 = getControllerButton(1);
-    currentButton2 = getControllerButton(3);
+    currentButtons = getControllerButton(1) | getControllerButton(3) < 1;
   }
 
   while (pConfig <= &gameKeys[GAME_KEYS_MAX - 1]) {
@@ -94,8 +92,10 @@ uint8_t currentKey() {
       if (pConfig->type == KC_CTRL_DIR && pConfig->controllerDirection == currentDirection)
         return pConfig->hexCode;
 
-      if ((pConfig->type == KC_CTRL_BTNS) && (currentButton1 && pConfig->controllerButton1) || (currentButton2 && pConfig->controllerButton2))
-        return pConfig->hexCode;
+      if ((pConfig->type == KC_CTRL_BTNS)) {
+        if ((currentButtons & pConfig->controllerButtons == currentButtons))
+          return pConfig->hexCode;
+      }
     }
 
     pConfig++;

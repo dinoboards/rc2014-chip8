@@ -38,10 +38,7 @@ typedef struct KeyConfigurationStruct {
       uint8_t controllerId : 1; // controller number (0 or 1)
       union {
         uint8_t controllerDirection : 5; // 1 to 8 to indicate a controller direction flag
-        struct {
-          uint8_t controllerButton1 : 1;
-          uint8_t controllerButton2 : 1;
-        };
+        uint8_t controllerButtons : 2;
       };
     };
   };

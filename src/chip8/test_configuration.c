@@ -189,8 +189,7 @@ void assertControllerButtons() {
   expectEqualBytes(gameKeys[0].hexCode, 1, "gameKeys[0].hexCode");
   expectEqualChars(gameKeys[0].type, KC_CTRL_DIR, "gameKeys[0].type");
 
-  expectTrue(gameKeys[1].controllerButton1, "gameKeys[1].controllerButton1");
-  expectFalse(gameKeys[1].controllerButton2, "gameKeys[1].controllerButton2");
+  expectEqualBytes(gameKeys[1].controllerButtons, 0x1, "gameKeys[1].controllerButtons");
   expectEqualBytes(gameKeys[1].hexCode, 2, "gameKeys[1].hexCode");
   expectEqualBytes(gameKeys[1].type, KC_CTRL_BTNS, "gameKeys[1].type");
 
@@ -216,13 +215,11 @@ void assertInvadersConfiguration() {
   expectEqualBytes(gameKeys[2].hexCode, 5, "gameKeys[2].hexCode");
   expectEqualBytes(gameKeys[2].type, KC_ASCII, "gameKeys[2].type");
 
-  expectTrue(gameKeys[3].controllerButton1, "gameKeys[3].controllerButton1");
-  expectFalse(gameKeys[3].controllerButton2, "gameKeys[3].controllerButton2");
+  expectEqualBytes(gameKeys[3].controllerButtons, 0x01, "gameKeys[3].controllerButtons");
   expectEqualBytes(gameKeys[3].hexCode, 5, "gameKeys[3].hexCode");
   expectEqualBytes(gameKeys[3].type, KC_CTRL_BTNS, "gameKeys[3].type");
 
-  expectFalse(gameKeys[4].controllerButton1, "gameKeys[4].controllerButton1");
-  expectTrue(gameKeys[4].controllerButton2, "gameKeys[4].controllerButton2");
+  expectEqualBytes(gameKeys[4].controllerButtons, 0x02, "gameKeys[4].controllerButtons");
   expectEqualBytes(gameKeys[4].hexCode, 5, "gameKeys[4].hexCode");
   expectEqualBytes(gameKeys[4].type, KC_CTRL_BTNS, "gameKeys[4].type");
 
