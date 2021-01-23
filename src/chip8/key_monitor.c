@@ -4,6 +4,7 @@
 #include "systemstate.h"
 #include "timers.h"
 #include "ym2149.h"
+#include <string.h>
 
 static uint16_t lastCheckTime = 0;
 inline uint8_t  toLower(uint8_t c) { return ((c >= 'A' && c <= 'Z')) ? c + ('a' - 'A') : c; }
@@ -42,31 +43,51 @@ bool checkForKeyPresses() {
 }
 
 KeyConfiguration *pConfig;
+KeyConfiguration  config;
 
-uint8_t currentDirection;
-uint8_t currentButtons;
+uint8_t currentDirection1;
+uint8_t currentButtons1;
+uint8_t currentDirection2;
+uint8_t currentButtons2;
 
-uint8_t isKeyDown(uint8_t c) __z88dk_fastcall {
+void loadControllerStates() {
+  currentDirection1 = getControllerDirection(1);
+  currentButtons1 = getControllerButton(1) | (getControllerButton(3) << 1);
+  currentDirection2 = getControllerDirection(2);
+  currentButtons2 = getControllerButton(2) | (getControllerButton(4) << 1);
+}
+
+#define matchingSerialChar() (keyPressed && config.asciiKeyChar == currentPressedKey)
+#define matchingDirection(n) (isYm2149 && config.controllerId == (n - 1) && config.controllerDirection == currentDirection##n)
+#define matchingButtons(n)   (isYm2149 && config.controllerId == (n - 1) && ((currentButtons##n & config.controllerButtons) == config.controllerButtons))
+
+uint8_t isKeyDown(const uint8_t c) __z88dk_fastcall {
   pConfig = gameKeys;
 
-  if (isYm2149) {
-    currentDirection = getControllerDirection(1);
-    currentButtons = getControllerButton(1) | (getControllerButton(3) << 1);
-  }
+  if (isYm2149)
+    loadControllerStates();
 
-  while (pConfig <= &gameKeys[GAME_KEYS_MAX - 1]) {
-    if (pConfig->hexCode != c)
+  while (pConfig != &gameKeys[gameKeyCount]) {
+    memcpy(&config, pConfig, sizeof(KeyConfiguration));
+
+    if (config.hexCode != c)
       goto next;
 
-    if (pConfig->type == KC_ASCII && keyPressed && pConfig->asciiKeyChar == currentPressedKey)
-      return true;
-
-    if (isYm2149 && pConfig->type == KC_CTRL_DIR && pConfig->controllerDirection == currentDirection)
-      return true;
-
-    if (isYm2149 && pConfig->type == KC_CTRL_BTNS) {
-      if ((currentButtons & pConfig->controllerButtons == currentButtons))
+    switch (config.type) {
+    case KC_ASCII:
+      if (matchingSerialChar())
         return true;
+      break;
+
+    case KC_CTRL_DIR:
+      if (matchingDirection(1) || matchingDirection(2))
+        return true;
+      break;
+
+    case KC_CTRL_BTNS:
+      if (matchingButtons(2))
+        return true;
+      break;
     }
 
   next:
@@ -79,23 +100,27 @@ uint8_t isKeyDown(uint8_t c) __z88dk_fastcall {
 uint8_t currentKey() {
   pConfig = gameKeys;
 
-  if (isYm2149) {
-    currentDirection = getControllerDirection(1);
-    currentButtons = getControllerButton(1) | getControllerButton(3) < 1;
-  }
+  if (isYm2149)
+    loadControllerStates();
 
-  while (pConfig <= &gameKeys[GAME_KEYS_MAX - 1]) {
-    if (keyPressed && pConfig->type == KC_ASCII && pConfig->asciiKeyChar == currentPressedKey)
-      return pConfig->hexCode;
+  while (pConfig != &gameKeys[gameKeyCount]) {
+    memcpy(&config, pConfig, sizeof(KeyConfiguration));
 
-    if (isYm2149) {
-      if (pConfig->type == KC_CTRL_DIR && pConfig->controllerDirection == currentDirection)
-        return pConfig->hexCode;
+    switch (config.type) {
+    case KC_ASCII:
+      if (matchingSerialChar())
+        return config.hexCode;
+      break;
 
-      if ((pConfig->type == KC_CTRL_BTNS)) {
-        if ((currentButtons & pConfig->controllerButtons == currentButtons))
-          return pConfig->hexCode;
-      }
+    case KC_CTRL_DIR:
+      if (matchingDirection(1) || matchingDirection(2))
+        return config.hexCode;
+      break;
+
+    case KC_CTRL_BTNS:
+      if (matchingButtons(1) || matchingButtons(2))
+        return config.hexCode;
+      break;
     }
 
     pConfig++;

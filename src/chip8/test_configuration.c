@@ -197,9 +197,9 @@ void assertControllerButtons() {
   expectFalse(expectedErrorInvoked, "expectedError");
 }
 
-const char *testConfigInvadersConfiguration = "KEY-4 = KEY-A,CTRL-LEFT\r\n"
-                                              "KEY-5 = KEY-SPACE,CTRL-1-BTN-1,CTRL-1-BTN-2\r\n"
-                                              "KEY-6 = KEY-D,CTRL-RIGHT\r\n"
+const char *testConfigInvadersConfiguration = "KEY-4 = KEY-A,CTRL-2-LEFT\r\n"
+                                              "KEY-5 = KEY-SPACE,CTRL-2-BTN-1,CTRL-2-BTN-2\r\n"
+                                              "KEY-6 = KEY-D,CTRL-2-RIGHT\r\n"
                                               "\x1a";
 
 void assertInvadersConfiguration() {
@@ -210,6 +210,7 @@ void assertInvadersConfiguration() {
   expectEqualBytes(gameKeys[1].controllerDirection, CONTROLLER_DIRECTION_LEFT, "gameKeys[1].controllerDirection");
   expectEqualBytes(gameKeys[1].hexCode, 4, "gameKeys[1].hexCode");
   expectEqualBytes(gameKeys[1].type, KC_CTRL_DIR, "gameKeys[1].type");
+  expectEqualBytes(gameKeys[1].controllerId, 1, "gameKeys[1].controllerId");
 
   expectEqualChars(gameKeys[2].asciiKeyChar, ' ', "gameKeys[2].asciiKeyChar");
   expectEqualBytes(gameKeys[2].hexCode, 5, "gameKeys[2].hexCode");
@@ -218,10 +219,12 @@ void assertInvadersConfiguration() {
   expectEqualBytes(gameKeys[3].controllerButtons, 0x01, "gameKeys[3].controllerButtons");
   expectEqualBytes(gameKeys[3].hexCode, 5, "gameKeys[3].hexCode");
   expectEqualBytes(gameKeys[3].type, KC_CTRL_BTNS, "gameKeys[3].type");
+  expectEqualBytes(gameKeys[3].controllerId, 1, "gameKeys[3].controllerId");
 
   expectEqualBytes(gameKeys[4].controllerButtons, 0x02, "gameKeys[4].controllerButtons");
   expectEqualBytes(gameKeys[4].hexCode, 5, "gameKeys[4].hexCode");
   expectEqualBytes(gameKeys[4].type, KC_CTRL_BTNS, "gameKeys[4].type");
+  expectEqualBytes(gameKeys[4].controllerId, 1, "gameKeys[4].controllerId");
 
   expectEqualChars(gameKeys[5].asciiKeyChar, 'd', "gameKeys[5].asciiKeyChar");
   expectEqualBytes(gameKeys[5].hexCode, 6, "gameKeys[5].hexCode");
@@ -230,6 +233,7 @@ void assertInvadersConfiguration() {
   expectEqualBytes(gameKeys[6].controllerDirection, CONTROLLER_DIRECTION_RIGHT, "gameKeys[6].controllerDirection");
   expectEqualBytes(gameKeys[6].hexCode, 6, "gameKeys[6].hexCode");
   expectEqualBytes(gameKeys[6].type, KC_CTRL_DIR, "gameKeys[6].type");
+  expectEqualBytes(gameKeys[6].controllerId, 1, "gameKeys[6].controllerId");
 
   expectFalse(unexpectedTokenInvoked, "unexpectedToken");
   expectFalse(expectedErrorInvoked, "expectedError");

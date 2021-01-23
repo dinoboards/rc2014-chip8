@@ -51,27 +51,28 @@ void main(MainArguments *pargs) __z88dk_fastcall {
 
   // audioInit();
 
-  // uint8_t oldd = 255, oldb = 255;
+  // uint8_t oldd = 255, oldb1 = 255, oldb2 = 255;
 
   // while(true) {
-  //   const uint8_t d = getControllerDirection(1);
+  //   const uint8_t d = getControllerDirection(2);
+  //   const uint8_t b1 = getControllerButton(2);
+  //   const uint8_t b2 = getControllerButton(4);
 
-  //   const uint8_t b = getControllerButton(1) | (getControllerButton(3) << 1);
-
-  //   if(oldd != d || oldb != b)
-  //     xprintf("Direction %02X, buttons: %02X\r\n", d, b);
+  //   if(oldd != d || oldb1 != b1 || oldb2 != b2)
+  //     xprintf("Direction %02X, buttons: %02X %02X\r\n", d, b1, b2);
 
   //   oldd = d;
-  //   oldb = b;
+  //   oldb1 = b1;
+  //   oldb2 = b2;
   // }
 
-  mainArguments = pargs;
-  parseCommandLine();
+  // mainArguments = pargs;
+  // parseCommandLine();
 
-  if (CommandSwitches.isHelp) {
-    print("Usage:\r\n   chip8 <filename> [-X <delay>]\r\n\r\n");
-    return;
-  }
+  // if (CommandSwitches.isHelp) {
+  //   print("Usage:\r\n   chip8 <filename> [-X <delay>]\r\n\r\n");
+  //   return;
+  // }
 
   applyConfiguration(pargs->argv[0]);
 
