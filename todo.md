@@ -25,7 +25,7 @@ v9958:
 
 BUG:
   VDP lores app will crash, if run after using hires mode - seems vdp is not correctly re-initialised
-  Controller only detect single button pressing - need to support concurrent button
+  ./ Controller only detect single button pressing - need to support concurrent button
 
 
 Done:
