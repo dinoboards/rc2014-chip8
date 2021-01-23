@@ -85,7 +85,7 @@ uint8_t isKeyDown(const uint8_t c) __z88dk_fastcall {
       break;
 
     case KC_CTRL_BTNS:
-      if (matchingButtons(2))
+      if (matchingButtons(1) || matchingButtons(2))
         return true;
       break;
     }
