@@ -35,5 +35,6 @@ byte videoPixelHeightMask;
 bool        audioActive = false;
 uint16_t    audioPeriod;
 audioSystem installedAudioSystem = AS_NONE;
+bool        isYm2149;
 
 uint16_t currentInstruction;

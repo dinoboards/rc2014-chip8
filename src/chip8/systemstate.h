@@ -76,6 +76,7 @@ extern bool     audioActive;
 extern uint16_t audioPeriod;
 typedef enum _audioSystem { AS_NONE, AS_YM2149, AS_HBIOS } audioSystem;
 extern audioSystem installedAudioSystem;
+extern bool        isYm2149;
 
 extern uint16_t currentInstruction;
 

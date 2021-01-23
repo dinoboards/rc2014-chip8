@@ -10,6 +10,7 @@ void audioInit() {
 
   if (ym2149Found) {
     installedAudioSystem = AS_YM2149;
+    isYm2149 = true;
     print("YM2149 Audio Found\r\n");
     ym2149Init();
     return;
@@ -20,7 +21,7 @@ void audioInit() {
 }
 
 void audioPlay(uint16_t p) __z88dk_fastcall {
-  if (installedAudioSystem == AS_YM2149) {
+  if (isYm2149) {
     ym2149Play(p);
     return;
   }
@@ -29,7 +30,7 @@ void audioPlay(uint16_t p) __z88dk_fastcall {
 }
 
 void audioStop() {
-  if (installedAudioSystem == AS_YM2149) {
+  if (isYm2149) {
     ym2149Stop();
     return;
   }
