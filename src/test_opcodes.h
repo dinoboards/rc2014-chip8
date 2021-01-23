@@ -54,3 +54,4 @@
 #define SUBN_VF_V1  0x8f17
 #define SCRL_DOWN_5 0x00C5
 #define SCRL_UP_5   0x00D5
+#define SCRL_LEFT   0x00FC

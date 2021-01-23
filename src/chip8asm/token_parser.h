@@ -23,6 +23,7 @@ extern void expectToBeDT();
 
 extern void expectToBeDown();
 extern void expectToBeUp();
+extern void expectToBeLeft();
 
 #define currentIsIRegister()     (token.type == RegisterI)
 #define currentIsST()            (token.type == RegisterST)
@@ -34,5 +35,6 @@ extern void expectToBeUp();
 #define currentIsRangeOperator() (token.type == TokenRangeOperator)
 #define currentIsDown()          (token.type == TokenDown)
 #define currentIsUp()            (token.type == TokenUp)
+#define currentIsLeft()          (token.type == TokenLeft)
 
 #endif

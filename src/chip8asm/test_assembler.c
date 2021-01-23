@@ -98,6 +98,7 @@ void main() {
 
   shouldAssemble("SCRL DOWN 5", SCRL_DOWN_5);
   shouldAssemble("SCRL UP 5", SCRL_UP_5);
+  shouldAssemble("SCRL LEFT", SCRL_LEFT);
 
   shouldError("BAD INSTRUCTION", "Expected Instruction but found BAD");
   shouldError("LD BADREG, 123", "Expected one of Vx, I, [I], ST or DT but found BADREG");

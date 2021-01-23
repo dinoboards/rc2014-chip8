@@ -128,10 +128,15 @@ void expectRangeOperator() {
 
 void expectToBeDown() {
   if (!currentIsDown())
-    expectedError("one of DOWN, UP");
+    expectedError("one of DOWN, UP, LEFT or RIGHT");
 }
 
 void expectToBeUp() {
   if (!currentIsUp())
-    expectedError("one of DOWN, UP");
+    expectedError("one of DOWN, UP, LEFT or RIGHT");
+}
+
+void expectToBeLeft() {
+  if (!currentIsLeft())
+    expectedError("one of DOWN, UP, LEFT or RIGHT");
 }

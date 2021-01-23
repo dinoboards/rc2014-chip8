@@ -13,6 +13,7 @@ typedef enum {
   TokenExpression,
   TokenDown,
   TokenUp,
+  TokenLeft,
 
   RegisterV0,
   RegisterV1,

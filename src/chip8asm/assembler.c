@@ -692,6 +692,7 @@ inline void assAudio() { emit(0xF002); }
 /*
 00CN - SCROLL DOWN N PIXELS
 00DN - SCROLL UP N PIXELS
+00FC - SCROLL LEFT
 */
 inline void assScroll() {
   getNext();
@@ -705,6 +706,12 @@ inline void assScroll() {
     return;
   }
 
+  if (currentIsLeft()) {
+    expectToBeLeft();
+
+    emit(0x00FC);
+    return;
+  }
   expectToBeUp();
 
   getNext();
