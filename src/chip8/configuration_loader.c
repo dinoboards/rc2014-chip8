@@ -177,10 +177,23 @@ loop:
   getNextToken();
 
   if (token.type == TokenCtrl) {
+    gameKeys[gameKeyCount].hexCode = pSourceKey;
+
     getNextToken();
     expectToBeDash();
 
     getNextToken();
+
+    if (token.type == TokenNumber) {
+      const uint8_t controllerId = expectToBeNumberUp(2);
+      gameKeys[gameKeyCount].controllerId = controllerId - 1;
+
+      getNextToken();
+      expectToBeDash();
+      getNextToken();
+    } else
+      gameKeys[gameKeyCount].controllerId = 0;
+
     if (token.type == TokenBtn) {
       getNextToken();
       expectToBeDash();
@@ -188,7 +201,6 @@ loop:
       getNextToken();
       const uint8_t direction = expectToBeNumberUp(3);
 
-      gameKeys[gameKeyCount].hexCode = pSourceKey;
       gameKeys[gameKeyCount].type = KC_CTRL_BTNS;
       gameKeys[gameKeyCount].controllerButton1 = !!(direction & 1);
       gameKeys[gameKeyCount].controllerButton2 = !!(direction & 2);
@@ -202,7 +214,6 @@ loop:
 
         getNextToken(); // sub-direction
         const uint8_t subDirection = expectToBeSubDirection(direction);
-        gameKeys[gameKeyCount].hexCode = pSourceKey;
         gameKeys[gameKeyCount].type = KC_CTRL_DIR;
         gameKeys[gameKeyCount].controllerDirection = subDirection;
 
@@ -210,7 +221,6 @@ loop:
         return;
       }
 
-      gameKeys[gameKeyCount].hexCode = pSourceKey;
       gameKeys[gameKeyCount].type = KC_CTRL_DIR;
       gameKeys[gameKeyCount].controllerDirection = direction;
 

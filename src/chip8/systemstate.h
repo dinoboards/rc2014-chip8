@@ -33,11 +33,16 @@ typedef struct KeyConfigurationStruct {
   uint8_t                   hexCode : 4; /* Code for chip up keypress 0 - 9, a-f */
   keyConfigurationDirection type : 2;    // 0 -> ascii, 1 -> controller direction, 2 -> controller button
   union {
-    char    asciiKeyChar;        // serial key char to map to hexCode
-    uint8_t controllerDirection; // 1 to 8 to indicate a controller direction flag
+    char asciiKeyChar; // serial key char to map to hexCode
     struct {
-      uint8_t controllerButton1 : 1;
-      uint8_t controllerButton2 : 1;
+      uint8_t controllerId : 1; // controller number (0 or 1)
+      union {
+        uint8_t controllerDirection : 5; // 1 to 8 to indicate a controller direction flag
+        struct {
+          uint8_t controllerButton1 : 1;
+          uint8_t controllerButton2 : 1;
+        };
+      };
     };
   };
 } KeyConfiguration;

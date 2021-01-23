@@ -85,7 +85,6 @@ void assertTwoMappedKeys() {
   expectFalse(unexpectedTokenInvoked, "unexpectedToken");
   expectFalse(expectedErrorInvoked, "expectedError");
 }
-
 const char *testConfigControllerDirection = "KEY-2 = CTRL-UP\r\n"
                                             "\x1a";
 
@@ -93,12 +92,39 @@ void assertControllerDirection() {
   expectEqualBytes(gameKeys[0].controllerDirection, CONTROLLER_DIRECTION_UP, "gameKeys[0].controllerDirection");
   expectEqualBytes(gameKeys[0].hexCode, 2, "gameKeys[0].hexCode");
   expectEqualBytes(gameKeys[0].type, KC_CTRL_DIR, "gameKeys[0].type");
+  expectEqualBytes(gameKeys[0].controllerId, 0, "gameKeys[0].controllerId");
 
   expectFalse(unexpectedTokenInvoked, "unexpectedToken");
   expectFalse(expectedErrorInvoked, "expectedError");
 }
 
-const char *testConfigMultipleKeyMapping = "KEY-1 = KEY-CR,CTRL-DOWN\r\n"
+const char *testConfigController1Direction = "KEY-2 = CTRL-1-UP\r\n"
+                                             "\x1a";
+
+void assertController1Direction() {
+  expectEqualBytes(gameKeys[0].controllerDirection, CONTROLLER_DIRECTION_UP, "gameKeys[0].controllerDirection");
+  expectEqualBytes(gameKeys[0].hexCode, 2, "gameKeys[0].hexCode");
+  expectEqualBytes(gameKeys[0].type, KC_CTRL_DIR, "gameKeys[0].type");
+  expectEqualBytes(gameKeys[0].controllerId, 0, "gameKeys[0].controllerId");
+
+  expectFalse(unexpectedTokenInvoked, "unexpectedToken");
+  expectFalse(expectedErrorInvoked, "expectedError");
+}
+
+const char *testConfigController2Direction = "KEY-2 = CTRL-2-UP\r\n"
+                                             "\x1a";
+
+void assertController2Direction() {
+  expectEqualBytes(gameKeys[0].controllerDirection, CONTROLLER_DIRECTION_UP, "gameKeys[0].controllerDirection");
+  expectEqualBytes(gameKeys[0].hexCode, 2, "gameKeys[0].hexCode");
+  expectEqualBytes(gameKeys[0].type, KC_CTRL_DIR, "gameKeys[0].type");
+  expectEqualBytes(gameKeys[0].controllerId, 1, "gameKeys[0].controllerId");
+
+  expectFalse(unexpectedTokenInvoked, "unexpectedToken");
+  expectFalse(expectedErrorInvoked, "expectedError");
+}
+
+const char *testConfigMultipleKeyMapping = "KEY-1 = KEY-CR,CTRL-1-DOWN\r\n"
                                            "KEY-2 = KEY-SPACE\r\n"
                                            "\x1a";
 
@@ -119,7 +145,7 @@ void assertMultipleKeyMapping() {
   expectFalse(expectedErrorInvoked, "expectedError");
 }
 
-const char *testConfigControllerMultipleDirection = "KEY-2 = CTRL-UP-RIGHT\r\n"
+const char *testConfigControllerMultipleDirection = "KEY-2 = CTRL-1-UP-RIGHT\r\n"
                                                     "\x1a";
 
 void assertControllerMultipleDirection() {
@@ -142,7 +168,7 @@ void assertKeySpace() {
   expectFalse(expectedErrorInvoked, "expectedError");
 }
 
-const char *testConfigControllerSubDirection = "KEY-1 = CTRL-UP-LEFT\r\n"
+const char *testConfigControllerSubDirection = "KEY-1 = CTRL-1-UP-LEFT\r\n"
                                                "\x1a";
 
 void assertControllerSubDirection() {
@@ -154,8 +180,8 @@ void assertControllerSubDirection() {
   expectFalse(expectedErrorInvoked, "expectedError");
 }
 
-const char *testConfigControllerButtons = "KEY-1 = CTRL-UP-LEFT\r\n"
-                                          "KEY-2 = CTRL-BTN-1\r\n"
+const char *testConfigControllerButtons = "KEY-1 = CTRL-1-UP-LEFT\r\n"
+                                          "KEY-2 = CTRL-1-BTN-1\r\n"
                                           "\x1a";
 
 void assertControllerButtons() {
@@ -173,7 +199,7 @@ void assertControllerButtons() {
 }
 
 const char *testConfigInvadersConfiguration = "KEY-4 = KEY-A,CTRL-LEFT\r\n"
-                                              "KEY-5 = KEY-SPACE,CTRL-BTN-1,CTRL-BTN-2\r\n"
+                                              "KEY-5 = KEY-SPACE,CTRL-1-BTN-1,CTRL-1-BTN-2\r\n"
                                               "KEY-6 = KEY-D,CTRL-RIGHT\r\n"
                                               "\x1a";
 
@@ -222,6 +248,8 @@ void testConfigurtionParser() {
   assert(SingleKey);
   assert(TwoMappedKeys);
   assert(ControllerDirection);
+  assert(Controller1Direction);
+  assert(Controller2Direction);
   assert(ControllerMultipleDirection);
   assert(MultipleKeyMapping);
   assert(KeySpace);
