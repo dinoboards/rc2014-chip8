@@ -10,8 +10,8 @@
 10. add support for super-chip/octo instructions
 11. Create seperate MSX/HBIOS builds
 13. serial input/controller needs to be made more faster
-14. colour mapping needs to be completed (for standard 16 pallet mode)
-15. more refined colour pallet map to rgb values for v9958
+14. colour mapping needs to be completed (for standard 16 palette mode)
+15. more refined colour palette map to rgb values for v9958
 16. Documentation/samples for configuration file
 17. Add support for dual controller mapping
 

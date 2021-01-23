@@ -85,6 +85,10 @@ bool executeSingleInstruction() {
           return false;
         break;
 
+      case 0xFC:
+        scrlLeft();
+        break;
+
       default:
         switch (nibble3rd) {
         case 0xC:

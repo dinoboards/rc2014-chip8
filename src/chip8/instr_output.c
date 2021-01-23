@@ -79,3 +79,12 @@ void scrlUp() {
   if (videoResMode != VideoResModeLow)
     v9958ScrollUp();
 }
+
+#include "xstdio.h"
+
+void scrlLeft() {
+  if (videoResMode != VideoResModeLow) {
+    xprintf("scroll left %d\r\n", _color);
+    v9958ScrollLeft();
+  }
+}
