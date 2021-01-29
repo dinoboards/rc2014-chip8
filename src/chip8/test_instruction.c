@@ -630,7 +630,7 @@ void setup_audio() {
 }
 
 void verify_audio() {
-  expectEqualInts(audioPeriod, 254, "audioPeriod");
+  expectEqualInts(audioPeriod, 508, "audioPeriod");
   expectEqualInts(audioActive, 1, "audioActive");
 }
 

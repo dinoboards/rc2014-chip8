@@ -84,7 +84,6 @@ void scrlUp() {
 
 void scrlLeft() {
   if (videoResMode != VideoResModeLow) {
-    xprintf("scroll left %d\r\n", _color);
     v9958ScrollLeft();
   }
 }

@@ -11,7 +11,6 @@ static byte spriteHeight;
 #define PIXEL_WIDTH_MASK  255
 #define PIXEL_HEIGHT_MASK 127
 
-// byte spriteRowData;
 byte yAddOne;
 byte xxTo;
 
@@ -74,7 +73,7 @@ void v9958DrawDblPlane(byte *pSpriteData) __z88dk_fastcall {
 void v9958Cls() { clearScreenBank0(0); }
 
 RGB palette[16] = {
-    {0, 0, 0}, {0, 0, 7}, {0, 7, 0}, {7, 0, 0}, {0, 7, 7}, {7, 0, 7}, {7, 7, 0}, {7, 7, 7}, {15, 7, 15}, {0, 0, 15}, {0, 15, 0}, {0, 15, 15}, {15, 0, 0}, {15, 0, 15}, {15, 15, 0}, {15, 15, 15},
+  {0, 0, 0}, {0xF, 0xd, 0}, {0xF, 2, 0}, {6, 2, 0}, {7, 0, 7}, {7, 7, 0}, {7, 7, 7}, {15, 7, 15}, {0, 0, 15}, {0, 15, 0}, {0, 15, 15}, {15, 0, 0}, {15, 0, 15}, {15, 15, 0}, {15, 15, 15}, {15, 15, 15}
 };
 
 void v9958VideoInit() {

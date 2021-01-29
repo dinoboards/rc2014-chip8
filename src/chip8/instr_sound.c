@@ -16,7 +16,7 @@ void ldStVx() {
   if (audioActive)
     audioPlay(audioPeriod);
   else
-    audioPlay(0x550);
+    audioPlay(0x700);
 }
 
 static uint8_t countOfPeriods = 0;
@@ -71,7 +71,7 @@ static uint16_t findSoundPeriod() __z88dk_fastcall {
     total = process8Samples(total);
   }
 
-  return total * 64 / countOfPeriods;
+  return total * 128 / countOfPeriods;
 }
 
 void audio() {
