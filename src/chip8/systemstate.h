@@ -11,7 +11,14 @@ extern uint16_t *chip8PC;
 extern uint16_t  registerI;
 extern uint8_t   fourthNibble;
 
-#define lowByte (*(((uint8_t *)&currentInstruction) + 1))
+#define lowByte  (*(((uint8_t *)&currentInstruction) + 1))
+#define highByte (*(((uint8_t *)&currentInstruction)))
+
+#define firstNibble (highByte >> 4)
+#define nibble2nd   (highByte & 0xF)
+#define nibble3rd   (lowByte >> 4)
+
+#define addr (lowByte + (((uint16_t)nibble2nd) << 8))
 
 extern byte     currentPressedKey;
 extern uint16_t currentKeyTimeout;
@@ -81,11 +88,6 @@ extern audioSystem installedAudioSystem;
 extern bool        isYm2149;
 
 extern uint16_t currentInstruction;
-
-#define nibble2nd      ((uint8_t)currentInstruction & 0xF)
-#define addr           ((currentInstruction >> 8) + (((int)nibble2nd) << 8))
-#define nibble3rd      ((uint8_t)(currentInstruction >> 12))
-#define InstrfirstByte ((uint8_t)(currentInstruction)&0xFF)
 
 #define HIRES_WIDTH       128
 #define HIRES_WIDTH_MASK  255

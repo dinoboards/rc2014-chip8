@@ -63,12 +63,11 @@ bool executeSingleInstruction() {
   if (!checkForKeyPresses())
     return false;
 
-  const uint8_t firstNibble = (*((uint8_t *)&currentInstruction) >> 4);
   fourthNibble = lowByte & 0xF;
 
   switch (firstNibble) {
   case 0x0: {
-    switch (InstrfirstByte) {
+    switch (highByte) {
     case 0x00: {
       switch (lowByte) {
       case 0xFF:
@@ -262,7 +261,7 @@ bool executeSingleInstruction() {
     switch (lowByte) {
 
     case 0x00:
-      if (InstrfirstByte == 0xF0)
+      if (highByte == 0xF0)
         ldILargeAddr();
       else
         goto badInstruction;
@@ -274,7 +273,7 @@ bool executeSingleInstruction() {
     }
 
     case 0x02:
-      if (InstrfirstByte == 0xF0)
+      if (highByte == 0xF0)
         audio();
       else
         goto badInstruction;

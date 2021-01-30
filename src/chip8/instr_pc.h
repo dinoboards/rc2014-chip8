@@ -1,11 +1,13 @@
 inline uint8_t call() {
-  if (addr < 0x200) {
-    xprintf("Illegal jump to %04X at %p\r\n", addr, chip8PC - 1);
+  const uint16_t a = addr;
+
+  if (a < 0x200) {
+    xprintf("Illegal jump to %04X at %p\r\n", a, chip8PC - 1);
     return true;
   }
 
   pushPc();
-  chip8PC = (uint16_t *)addr;
+  chip8PC = (uint16_t *)a;
 
   return false;
 }
@@ -47,12 +49,13 @@ inline void sneVxVy() {
 }
 
 inline uint8_t jp() {
-  if (addr < 0x200) {
-    xprintf("Illegal jump to %04X at %p\r\n", addr, chip8PC - 1);
+  const uint16_t a = addr;
+  if (a < 0x200) {
+    xprintf("Illegal jump to %04X at %p\r\n", a, chip8PC - 1);
     return true;
   }
 
-  chip8PC = (uint16_t *)addr;
+  chip8PC = (uint16_t *)a;
   return false;
 }
 
