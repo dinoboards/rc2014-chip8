@@ -13,6 +13,8 @@ typedef struct {
   uint8_t blue;
 } RGB;
 
+extern RGB palette[16];
+
 extern void setPalette(RGB *) __z88dk_fastcall;
 extern void setMode4(uint8_t lines, uint8_t mode);
 extern void setMode6(uint8_t lines, uint8_t mode);

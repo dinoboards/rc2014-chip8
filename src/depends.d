@@ -12,7 +12,7 @@
  filereader.h cpm.h chip8/systemstate.h chip8/tms.h xstdlib.h
 ./chip8/configuration_loader.asm: chip8/configuration_loader.c \
  chip8/configreader.h token.h datatypes.h cpm.h chip8/error_reports.h \
- datatypes.h filereader.h cpm.h chip8/systemstate.h
+ datatypes.h filereader.h cpm.h chip8/systemstate.h chip8/v9958.h
 ./chip8/error_reports.asm: chip8/error_reports.c chip8/error_reports.h \
  datatypes.h chip8/configreader.h token.h datatypes.h xstdio.h
 ./chip8/fontsets.asm: chip8/fontsets.c chip8/fontsets.h datatypes.h
@@ -21,7 +21,7 @@
 ./chip8/instr_output.asm: chip8/instr_output.c chip8/instr_output.h chip8/v9958.h \
  datatypes.h chip8/error_reports.h hbios.h chip8/instr_tms_output.h \
  chip8/vid_int.h chip8/instr_v9958_output.h chip8/systemstate.h \
- chip8/tms.h chip8/vdp.h
+ chip8/tms.h chip8/vdp.h xstdio.h
 ./chip8/instr_sound.asm: chip8/instr_sound.c chip8/instr_sound.h datatypes.h \
  chip8/audio.h hbios.h chip8/systemstate.h chip8/timers.h
 ./chip8/instr_tms_output.asm: chip8/instr_tms_output.c chip8/instr_tms_output.h \
@@ -47,7 +47,7 @@
 ./chip8/test_configuration.asm: chip8/test_configuration.c \
  chip8/test_configuration.h chip8/configreader.h token.h datatypes.h \
  chip8/configuration_loader.h cpm.h chip8/systemstate.h datatypes.h \
- test_expectations.h terminal_codes.h chip8/tms.h xstdio.h
+ test_expectations.h terminal_codes.h chip8/tms.h chip8/v9958.h xstdio.h
 ./chip8/test_instruction.asm: chip8/test_instruction.c chip8/byte_code_executor.h \
  datatypes.h chip8/fontsets.h chip8/stack.h chip8/systemstate.h \
  terminal_codes.h test_expectations.h datatypes.h terminal_codes.h \

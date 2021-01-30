@@ -3,6 +3,7 @@
 #include "error_reports.h"
 #include "filereader.h"
 #include "systemstate.h"
+#include "v9958.h"
 
 static void applyConfigColour();
 static void applyConfigKey();
@@ -103,6 +104,11 @@ void expectToBeDash() {
     expectedError("-");
 }
 
+void expectToBeComma() {
+  if (token.type != TokenComma)
+    expectedError(",");
+}
+
 const ControllerDirection expectToBeDirection() {
   if (token.type != TokenDirection)
     return (ControllerDirection)expectedError("direction (UP, DOWN, LEFT, RIGHT, or BTN-<number>)");
@@ -154,6 +160,26 @@ static void applyConfigColour() {
   expectToBeEquals();
 
   getNextToken();
+
+  if (token.type == TokenNumber) {
+    // SET RGB FOR V9958
+    const uint8_t red = expectToBeNumberUp(15);
+    getNextToken();
+    expectToBeComma();
+    getNextToken();
+    const uint8_t green = expectToBeNumberUp(15);
+    getNextToken();
+    expectToBeComma();
+    getNextToken();
+    const uint8_t blue = expectToBeNumberUp(15);
+
+    palette[b].red = red;
+    palette[b].green = green;
+    palette[b].blue = blue;
+
+    return;
+  }
+
   gameColours[b] = token.type;
 }
 
