@@ -5,10 +5,7 @@
 
 uint16_t *chip8PC;
 uint16_t  registerI;
-
-uint8_t firstNibble;
-uint8_t lowByte;
-uint8_t fourthNibble;
+uint8_t   fourthNibble;
 
 byte     currentPressedKey;
 uint16_t currentKeyTimeout;

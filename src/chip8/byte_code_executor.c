@@ -63,8 +63,7 @@ bool executeSingleInstruction() {
   if (!checkForKeyPresses())
     return false;
 
-  firstNibble = (uint8_t)(currentInstruction >> 4) & 0xF;
-  lowByte = (currentInstruction >> 8) & 0xFF;
+  const uint8_t firstNibble = (*((uint8_t *)&currentInstruction) >> 4);
   fourthNibble = lowByte & 0xF;
 
   switch (firstNibble) {
