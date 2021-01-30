@@ -132,7 +132,8 @@ bool executeSingleInstruction() {
   }
 
   case 0x5: {
-    switch (fourthNibble) {
+    const uint8_t x = fourthNibble;
+    switch (x) {
     case 0x0:
       seVxVy();
       break;
@@ -161,7 +162,8 @@ bool executeSingleInstruction() {
   }
 
   case 0x8: {
-    switch (fourthNibble) {
+    const uint8_t x = fourthNibble;
+    switch (x) {
     case 0x0: {
       ldVxVy();
       break;
