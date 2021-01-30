@@ -14,38 +14,32 @@ inline uint8_t call() {
 
 #define ret() popPc()
 
-#define testForLargeInstruction()             \
+#define skipNextInstruction()                 \
   {                                           \
     if (*chip8PC == LOAD_I_LARGE_INSTRUCTION) \
+      chip8PC += 2;                           \
+    else                                      \
       chip8PC += 1;                           \
   }
 
 inline void seVxByte() {
-  if (registers[nibble2nd] == lowByte) {
-    testForLargeInstruction();
-    chip8PC += 1;
-  }
+  if (registers[nibble2nd] == lowByte)
+    skipNextInstruction();
 }
 
 inline void seVxVy() {
-  if (registers[nibble2nd] == registers[nibble3rd]) {
-    testForLargeInstruction();
-    chip8PC += 1;
-  }
+  if (registers[nibble2nd] == registers[nibble3rd])
+    skipNextInstruction();
 }
 
 inline void sneVxByte() {
-  if (registers[nibble2nd] != lowByte) {
-    testForLargeInstruction();
-    chip8PC += 1;
-  }
+  if (registers[nibble2nd] != lowByte)
+    skipNextInstruction();
 }
 
 inline void sneVxVy() {
-  if (registers[nibble2nd] != registers[nibble3rd]) {
-    testForLargeInstruction();
-    chip8PC += 1;
-  }
+  if (registers[nibble2nd] != registers[nibble3rd])
+    skipNextInstruction();
 }
 
 inline uint8_t jp() {
@@ -71,17 +65,13 @@ inline uint8_t jpV0Addr() {
 }
 
 inline void skpVx() {
-  if (isKeyDown(registers[nibble2nd])) {
-    testForLargeInstruction();
-    chip8PC += 1;
-  }
+  if (isKeyDown(registers[nibble2nd]))
+    skipNextInstruction();
 }
 
 inline void sknpVx() {
-  if (!isKeyDown(registers[nibble2nd])) {
-    testForLargeInstruction();
-    chip8PC += 1;
-  }
+  if (!isKeyDown(registers[nibble2nd]))
+    skipNextInstruction();
 }
 
 inline void keyVx() {
