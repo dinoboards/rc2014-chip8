@@ -263,7 +263,10 @@ bool executeSingleInstruction() {
     switch (lowByte) {
 
     case 0x00:
-      ldILargeAddr();
+      if (InstrfirstByte == 0xF0)
+        ldILargeAddr();
+      else
+        goto badInstruction;
       break;
 
     case 0x01: {
