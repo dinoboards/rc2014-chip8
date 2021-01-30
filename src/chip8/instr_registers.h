@@ -191,18 +191,9 @@ addVxVyClrF:
   // registers[0xF] = i > 255;
 }
 
-static uint8_t *register2ndNibble;
+uint8_t *register2ndNibble;
 
-static void subVxVy() {
-  register2ndNibble = &registers[nibble2nd];
-  const uint8_t *register3rdNibble = &registers[nibble3rd];
-
-  // quirks - set flag before subtraction
-
-  const byte f = *register2ndNibble >= *register3rdNibble;
-  *register2ndNibble -= *register3rdNibble;
-  registers[0xF] = f;
-}
+extern void subVxVy();
 
 static void subnVxVy() {
   register2ndNibble = &registers[nibble2nd];
@@ -216,7 +207,7 @@ static void subnVxVy() {
   registers[0xF] = f;
 }
 
-static void xorVxVy() { registers[nibble2nd] ^= registers[nibble3rd]; }
+inline void xorVxVy() { registers[nibble2nd] ^= registers[nibble3rd]; }
 
 static byte units;
 static byte hundreds;
