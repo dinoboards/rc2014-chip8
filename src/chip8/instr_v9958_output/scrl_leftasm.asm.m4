@@ -7,14 +7,16 @@
 	SECTION CODE
 
 	include	"v9958.inc"
-	include	"macros.inc"
+	include(`macros.inc.m4')
+
+
 
 _v9958ScrollLeft:
 	LD	A, (__color)
 	CP	3
 	JR	Z, scrollDownAllPlanes
 
-	M_STORE_COLOR_MASK_FROM_A
+	M_STORE_COLOR_MASK_FROM_A()
 
 	ld	d, HIRES_HEIGHT - 1
 
@@ -62,7 +64,7 @@ nextRow:
 	ld	b, 124
 
 wrLoop1:
-	M_APPLY_COLOR_MASK_TRANSFORM
+	M_APPLY_COLOR_MASK_TRANSFORM()
 
 	INC	HL
 	INC	DE
@@ -98,7 +100,7 @@ wrLoop2:
 	out	(VDP_DATA), a
 	djnz	wrLoop2
 
-	M_RESET_V9958_DEFAULT_REGISTER
+	M_RESET_V9958_DEFAULT_REGISTER()
 	EI
 
 	exx
@@ -189,6 +191,6 @@ scrollDownAllPlanes:
 	LD	A, CMD_VDP_TO_VRAM | CMD_LOGIC_IMP
 	OUT	(VDP_REGS), A			; R46 COMMAND
 
-	M_RESET_V9958_DEFAULT_REGISTER
+	M_RESET_V9958_DEFAULT_REGISTER()
 	EI
 	RET

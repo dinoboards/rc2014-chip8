@@ -43,7 +43,7 @@ endif
 
 ZCCFLAGS="${MEASURE} ${ZCCRELFLAGS} "
 
-ASSEMBLER=zcc +embedded -subtype=none -D${VIDEO} -Ca="-opt-speed" -c -Ca="-I./chip8/"
+ASSEMBLER=zcc +embedded -subtype=none -D${VIDEO} -Ca="-opt-speed" -c -Ca="-I./chip8/" -Cm="-I./chip8/"
 CCOMP=zcc +embedded -subtype=none -lm -compiler=sdcc -clib=sdcc_iy -m -S -Cs --Werror --c-code-in-asm $(ZCCFLAGS)
 LINK_WITH_RELOCATOR=node ./apploader.js --page-align
 LINKER=z80asm
@@ -55,8 +55,8 @@ chip8asm_objects = crt.o memap.o cpm.o cpmasm.o hbios_cio.o hbios.o memap.o nonr
 exclude_from_tests = %main.o %filereader.o %exit.o %error.o %tty.o %keys.o %systimer.o %random.o %ym2149.o %ym2149asm.o
 exclude_from_tstinstr = $(exclude_from_tests)  %error_reports.o
 
-chip8_sources = $(wildcard ./chip8/*.c) $(wildcard ./chip8/*.asm) $(wildcard ./chip8/instr_v9958_output/*.asm)
-chip8_objects = memap.o relocmem.asm crt.o reloccrt.o hbios.o hbios_cio.o hbios_snd.o cpm.o cpmasm.o xstdio.o chartesters.o token.o filereader.o xstrtol.o $(patsubst %.asm,%.o,$(patsubst %.c,%.o,$(chip8_sources)))
+chip8_sources = $(wildcard ./chip8/*.c) $(wildcard ./chip8/*.asm) $(wildcard ./chip8/*.asm.m4) $(wildcard ./chip8/instr_v9958_output/*.asm) $(wildcard ./chip8/instr_v9958_output/*.asm.m4)
+chip8_objects = memap.o relocmem.asm crt.o reloccrt.o hbios.o hbios_cio.o hbios_snd.o cpm.o cpmasm.o xstdio.o chartesters.o token.o filereader.o xstrtol.o $(patsubst %.asm.m4,%.o,$(patsubst %.asm,%.o,$(patsubst %.c,%.o,$(chip8_sources))))
 
 ../bin/chip8asm.com: $(filter-out %test_assembler.o, $(chip8asm_objects))
 	@$(LINKER) -o$(basename $<).bin -b $(LINKER_FLAGS) memap.o $(filter-out memap.o,$^)
@@ -83,9 +83,14 @@ chip8_objects = memap.o relocmem.asm crt.o reloccrt.o hbios.o hbios_cio.o hbios_
 	mv tstinstr.bin ../bin/tstinstr.com
 	echo -e "\nBuilt ./bin/tstinstr.com"
 
+
 %.asm: %.c
 	@$(CCOMP) $< -o $@
 	echo "compiled $< to $@"
+
+%.o: %.asm.m4
+	@$(ASSEMBLER) $<
+	echo "Assembled $< to $@"
 
 %.o: %.asm
 	@$(ASSEMBLER) $<
