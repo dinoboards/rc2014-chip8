@@ -31,13 +31,8 @@ _v9958ScrollUp:
 	LD	A, (__color)
 	CP	3
 	JR	Z, scrollDownAllPlanes
-	LD	C, A
-	RRCA
-	RRCA
-	RRCA
-	RRCA
-	OR	C
-	LD	(COLOR_MASK), A
+
+	M_STORE_COLOR_MASK_FROM_A()
 
 	DI
 
@@ -87,7 +82,8 @@ nextRow:
 
 	ld	b, 128
 wrLoop1:
-	call	processPixels
+	M_APPLY_COLOR_MASK_TRANSFORM()
+
 	INC	HL
 	INC	DE
 	out	(VDP_DATA), a
@@ -105,10 +101,7 @@ wrLoop2:
 	out	(VDP_DATA), a
 	djnz	wrLoop2
 
-	XOR	A
-	OUT	(VDP_ADDR), A
-	LD	A, $80 | 15
-	OUT	(VDP_ADDR), A
+	M_RESET_V9958_DEFAULT_REGISTER()
 	EI
 	exx
 
@@ -253,10 +246,6 @@ scrollDownAllPlanes:
 	OUT	(VDP_REGS), A
 
 
-	;RESET DEFAULT STATUS REGISTER INDEX
-	XOR	A
-	OUT	(VDP_ADDR), A
-	LD	A, 0x80 | 15
-	OUT	(VDP_ADDR), A
+	M_RESET_V9958_DEFAULT_REGISTER()
 	EI
 	RET
