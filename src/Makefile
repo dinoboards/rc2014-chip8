@@ -43,7 +43,7 @@ endif
 
 ZCCFLAGS="${MEASURE} ${ZCCRELFLAGS} "
 
-ASSEMBLER=zcc +embedded -subtype=none -D${VIDEO} -Ca="-opt-speed" -c -Ca="-I./chip8/" -Cm="-I./chip8/"
+ASSEMBLER=zcc +embedded -subtype=none -Ca="-D${VIDEO} ${MEASURE}" -Ca="-opt-speed" -c -Ca="-I./chip8/" -Cm="-I./chip8/"
 CCOMP=zcc +embedded -subtype=none -lm -compiler=sdcc -clib=sdcc_iy -m -S -Cs --Werror --c-code-in-asm $(ZCCFLAGS)
 LINK_WITH_RELOCATOR=node ./apploader.js --page-align
 LINKER=z80asm
