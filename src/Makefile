@@ -98,6 +98,7 @@ chip8_objects = memap.o relocmem.asm crt.o reloccrt.o hbios.o hbios_cio.o hbios_
 
 deps:
 	@echo "" > ./depends.d
+	# C Dependencies
 	find -name "*.c" | while read -r file; do
 		file_no_ext="$${file%.*}"
 		filename=$$(basename $$file_no_ext)
@@ -106,7 +107,38 @@ deps:
 		zsdcpp ${ZSDCPP_FLAGS} -MM -MF /tmp/deps.deps $$file
 		sed "s+$$from+$$to+g" /tmp/deps.deps >> ./depends.d
 	done
+
+	# ASM include dependencies
+	find -name "*.asm" | while read -r file; do
+	file_no_ext="$${file%.*}"
+	printf "$$file_no_ext.o:" >> ./depends.d
+	printf " $$file" >> ./depends.d
+	sed -n '/include/s/^[\t ]*include[\t ]*"\{0,1\}\(.*\)".*$$/\1/p' < $$file | while read -r depfile; do
+		depfilepath=$$(find -iname $$depfile)
+		printf " $$depfilepath" >> ./depends.d
+	done
+	echo "" >> ./depends.d
+	done
+
+	# ASM include dependencies
+	find -name "*.asm.m4" | while read -r file; do
+	file_no_ext="$${file%.*}"
+	file_no_ext="$${file_no_ext%.*}"
+	printf "$$file_no_ext.o:" >> ./depends.d
+	printf " $$file" >> ./depends.d
+	sed  -n '/include/s/^[\t ]*include(.\(.*\)'\'')/\1/p' < $$file | while read -r depfile; do
+		depfilepath=$$(find -iname $$depfile)
+		printf " $$depfilepath" >> ./depends.d
+	done
+	sed -n '/include/s/^[\t ]*include[\t ]*"\{0,1\}\(.*\)".*$$/\1/p' < $$file | while read -r depfile; do
+		depfilepath=$$(find -iname $$depfile)
+		printf " $$depfilepath" >> ./depends.d
+	done
+	echo "" >> ./depends.d
+	done
+
 	echo "./depends.d created"
 
 clean:
 	@git clean -Xf
+

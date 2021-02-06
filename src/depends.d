@@ -102,3 +102,30 @@
 ./token.asm: token.c token.h datatypes.h charconstants.h chartesters.h \
  filereader.h cpm.h
 ./xstdio.asm: xstdio.c xstdio.h datatypes.h hbios.h
+./chip8/instr_registerasm.o: ./chip8/instr_registerasm.asm
+./chip8/instr_v9958_output/draw_planeasm.o: ./chip8/instr_v9958_output/draw_planeasm.asm ./chip8/v9958.inc
+./chip8/instr_v9958_output/draw_rowasm.o: ./chip8/instr_v9958_output/draw_rowasm.asm ./chip8/v9958.inc
+./chip8/instr_v9958_output/draw_segmentasm.o: ./chip8/instr_v9958_output/draw_segmentasm.asm ./chip8/v9958.inc
+./chip8/instr_v9958_output/scrl_downasm.o: ./chip8/instr_v9958_output/scrl_downasm.asm ./chip8/v9958.inc
+./chip8/instr_v9958_output/scrl_upasm.o: ./chip8/instr_v9958_output/scrl_upasm.asm ./chip8/v9958.inc
+./chip8/instr_v9958_output/scroll_commonasm.o: ./chip8/instr_v9958_output/scroll_commonasm.asm ./chip8/v9958.inc
+./chip8/instr_v9958_output/test_segmentasm.o: ./chip8/instr_v9958_output/test_segmentasm.asm ./chip8/v9958.inc
+./chip8/sub_vx_vy_asm.o: ./chip8/sub_vx_vy_asm.asm
+./chip8/timerasm.o: ./chip8/timerasm.asm
+./chip8/tmsasm.o: ./chip8/tmsasm.asm ./chip8/v9958.inc
+./chip8/v9958asm.o: ./chip8/v9958asm.asm ./chip8/v9958.inc
+./chip8/video_detection.o: ./chip8/video_detection.asm
+./chip8/vid_intasm.o: ./chip8/vid_intasm.asm ./hbios_sys.inc ./chip8/v9958.inc
+./chip8/ym2149asm.o: ./chip8/ym2149asm.asm
+./chip8asm/data.o: ./chip8asm/data.asm
+./cpmasm.o: ./cpmasm.asm
+./crt.o: ./crt.asm
+./hbios_cio.o: ./hbios_cio.asm
+./hbios_snd.o: ./hbios_snd.asm
+./loader.o: ./loader.asm
+./memap.o: ./memap.asm
+./nonreloccrt.o: ./nonreloccrt.asm
+./reloccrt.o: ./reloccrt.asm
+./relocmem.o: ./relocmem.asm
+./xstrtol.o: ./xstrtol.asm
+./chip8/instr_v9958_output/scrl_leftasm.o: ./chip8/instr_v9958_output/scrl_leftasm.asm.m4 ./chip8/macros.inc.m4 ./chip8/v9958.inc

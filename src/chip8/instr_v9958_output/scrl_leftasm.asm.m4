@@ -10,7 +10,6 @@
 	include(`macros.inc.m4')
 
 
-
 _v9958ScrollLeft:
 	LD	A, (__color)
 	CP	3
