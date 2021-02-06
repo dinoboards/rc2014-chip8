@@ -2,21 +2,110 @@
 
 	EXTERN	 _waitForCommandCompletion ;_initDrawParams,
 	EXTERN	__color ;, _yy, _fourthNibble, __color
-	; EXTERN	processPixels, clearLine, readLineFromVdp, COLOR_MASK, LINESRC, LINEDST
+	EXTERN	processPixels, clearLine, readLineFromVdp, COLOR_MASK, LINESRC, LINEDST
 
 	SECTION CODE
 
 	include	"v9958.inc"
-
+	include	"macros.inc"
 
 _v9958ScrollLeft:
 	LD	A, (__color)
 	CP	3
 	JR	Z, scrollDownAllPlanes
 
-	; NOT SUPPORTED YET
+	M_STORE_COLOR_MASK_FROM_A
+
+	ld	d, HIRES_HEIGHT - 1
+
+	; for each line
+	;  readLineFromVdp to LINESRC
+	;  set HL to LINEDST
+	;  set DE to LINESRC+4
+	;  for b = 124 to 0
+	;    processPixels
+	;    out byte
+	;  for b = 4 to 0
+	;    clearPixels
+	;  repeat line write - with persisted processed pixels in LINEDST
+
+	DI
+	; SETUP INDIRECT REGISTER ACCESS FOR R#14
+	; NON-INCREMENTING
+	LD	A, 0x80 | 14
+	OUT	(VDP_ADDR), A
+	LD	A, 0x80 | 17
+	OUT	(VDP_ADDR), A
+	EI
+
+nextRow:
+	LD	HL, LINESRC
+	CALL	readLineFromVdp
+
+	XOR	a
+
+	DI
+	OUT	(VDP_REGS), A
+	OUT	(VDP_ADDR), A
+	ld	a, D
+	or	0x40	; WRITE MODE
+	OUT	(VDP_ADDR), A
+
+	exx
+
+	LD	HL, LINESRC
+	LD	DE, LINESRC + 4
+
+	LD	A, (COLOR_MASK)
+	LD	C, A
+
+	ld	b, 124
+
+wrLoop1:
+	M_APPLY_COLOR_MASK_TRANSFORM
+
+	INC	HL
+	INC	DE
+	out	(VDP_DATA), a
+	djnz	wrLoop1
 
 
+	LD	A, C
+	CPL
+	AND	$33
+	LD	C, A
+
+	ld	b, 4
+
+clearRightColumn:
+	ld	a, (hl)
+	and	c
+	ld	(hl), a
+	inc	hl
+	out	(VDP_DATA), a
+	djnz	clearRightColumn
+
+	; repeat for 2nd line
+	LD	HL, LINESRC
+	ld	b, 128
+wrLoop2:
+	LD	a, (HL)
+	INC	HL
+	nop
+	nop
+	nop
+	nop
+	out	(VDP_DATA), a
+	djnz	wrLoop2
+
+	M_RESET_V9958_DEFAULT_REGISTER
+	EI
+
+	exx
+	DEC	D
+	JP	P, nextRow
+
+	RET
 
 
 
@@ -100,11 +189,6 @@ scrollDownAllPlanes:
 	LD	A, CMD_VDP_TO_VRAM | CMD_LOGIC_IMP
 	OUT	(VDP_REGS), A			; R46 COMMAND
 
-
-	;RESET DEFAULT STATUS REGISTER INDEX
-	XOR	A
-	OUT	(VDP_ADDR), A
-	LD	A, 0x80 | 15
-	OUT	(VDP_ADDR), A
+	M_RESET_V9958_DEFAULT_REGISTER
 	EI
 	RET

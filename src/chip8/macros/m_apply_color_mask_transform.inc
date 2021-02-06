@@ -1,0 +1,27 @@
+	; APPLY TRANSFORMATION OF COLOR MASK
+	; APPLY THE COLOR AS MASKED IN C FROM (DE) TO (HL)
+
+	; IF (C & (DE)) // BIT IS ON
+	;   (HL) = (HL) | ((DE) & C)
+	; ELSE
+	;   (HL) = (HL) & ((DE) | ~C)
+
+	LD	A, (DE)		; SOURCE
+	AND	C
+	JR	Z, COLOR_OFF
+
+	OR	(HL)
+	LD	(HL), A
+	JR	COLOR_ON
+
+COLOR_OFF:
+	LD	A, C
+	CPL		; A IS ~COLOR
+	AND	$33
+	EX	DE, HL
+	OR	(HL)	; A = A | SOURCE
+	EX	DE, HL
+	AND	(HL)	; A = A & DEST
+	LD	(HL), A
+
+COLOR_ON:

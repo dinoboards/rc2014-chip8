@@ -7,7 +7,7 @@
 	include	"v9958.inc"
 
 ; params:
-; y co-ord - b
+; y co-ord - d
 ; location - hl
 readLineFromVdp:
 	XOR	a
@@ -28,10 +28,10 @@ loop:
 	INC	HL
 	djnz	loop
 
-	XOR	A
-	OUT	(VDP_ADDR), A
-	LD	A, $80 | 15
-	OUT	(VDP_ADDR), A
+	; XOR	A
+	; OUT	(VDP_ADDR), A
+	; LD	A, $80 | 15
+	; OUT	(VDP_ADDR), A
 	EI
 	ret
 
@@ -67,7 +67,12 @@ plColorOff:
 ; X = 0
 ; width = 256
 ; Y = 0
-; height = count (C)
+; height = count
+; C = color mask :
+	; LD	A, (COLOR_MASK)
+	; CPL
+	; AND	$33
+	; LD	C, A
 
 clearLine:
 
