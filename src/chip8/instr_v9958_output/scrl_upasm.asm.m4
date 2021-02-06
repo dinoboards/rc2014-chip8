@@ -7,6 +7,7 @@
 	SECTION CODE
 
 	include	"v9958.inc"
+	include(`macros.inc.m4')
 
 	;    c = colour plane
 	;    s = line(y) byte

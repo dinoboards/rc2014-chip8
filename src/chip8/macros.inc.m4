@@ -9,7 +9,11 @@ define(`M_APPLY_COLOR_MASK_TRANSFORM', `
 
 	LD	A, (DE)		; SOURCE
 	AND	C
-	JR	Z, COLOR_ON
+	JR	Z, COLOR_OFF
+
+	OR	(HL)
+	LD	(HL), a
+	JR	COLOR_ON
 
 COLOR_OFF:
 	LD	A, C

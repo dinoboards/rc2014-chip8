@@ -28,10 +28,6 @@ loop:
 	INC	HL
 	djnz	loop
 
-	; XOR	A
-	; OUT	(VDP_ADDR), A
-	; LD	A, $80 | 15
-	; OUT	(VDP_ADDR), A
 	EI
 	ret
 
