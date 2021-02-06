@@ -2,7 +2,7 @@
 
 	EXTERN	_initDrawParams, _waitForCommandCompletion
 	EXTERN	__color, _yy, _fourthNibble, __color
-	EXTERN	processPixels, clearLine, readLineFromVdp, COLOR_MASK, LINESRC, LINEDST
+	EXTERN	clearLine, readLineFromVdp, COLOR_MASK, LINESRC, LINEDST
 
 	SECTION CODE
 
@@ -35,7 +35,6 @@ _v9958ScrollUp:
 	M_STORE_COLOR_MASK_FROM_A()
 
 	DI
-
 	; SETUP INDIRECT REGISTER ACCESS FOR R#14
 	; NON-INCREMENTING
 	LD	A, 0x80 | 14
@@ -43,7 +42,6 @@ _v9958ScrollUp:
 	LD	A, 0x80 | 17
 	OUT	(VDP_ADDR), A
 	EI
-
 
 ; READ EACH ROW INTO BUFFER
 	LD	A, (_fourthNibble)

@@ -2,7 +2,7 @@
 
 	EXTERN	 _waitForCommandCompletion ;_initDrawParams,
 	EXTERN	__color ;, _yy, _fourthNibble, __color
-	EXTERN	processPixels, clearLine, readLineFromVdp, COLOR_MASK, LINESRC, LINEDST
+	EXTERN	clearLine, readLineFromVdp, COLOR_MASK, LINESRC, LINEDST
 
 	SECTION CODE
 
@@ -24,7 +24,7 @@ _v9958ScrollLeft:
 	;  set HL to LINEDST
 	;  set DE to LINESRC+4
 	;  for b = 124 to 0
-	;    processPixels
+	;    _APPLY_COLOR_MASK_TRANSFORM
 	;    out byte
 	;  for b = 4 to 0
 	;    clearPixels

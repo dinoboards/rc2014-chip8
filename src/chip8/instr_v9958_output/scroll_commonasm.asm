@@ -1,5 +1,5 @@
 
-	PUBLIC	processPixels, clearLine, readLineFromVdp
+	PUBLIC	clearLine, readLineFromVdp
 	PUBLIC	COLOR_MASK, LINESRC, LINEDST
 
 	SECTION	CODE
@@ -30,34 +30,6 @@ loop:
 
 	EI
 	ret
-
-
-	; for each byte:
-	; if (c & s) // bit is on
-	;   d = d or (s and c)
-	; else
-	;   d = d and (s or ~c)
-	; send byte d
-
-processPixels:
-	LD	A, (DE)		; SOURCE
-	AND	C
-	JR	Z, plColorOff
-
-	OR	(HL)
-	LD	(HL), a
-	RET
-
-plColorOff:
-	LD	A, C
-	CPL		; a is ~color
-	and	0x33
-	EX	DE, HL
-	OR	(HL)	; a = a | source
-	EX	DE, HL
-	AND	(HL)	; a = a & dest
-	LD	(HL),A
-	RET
 
 
 ; X = 0
