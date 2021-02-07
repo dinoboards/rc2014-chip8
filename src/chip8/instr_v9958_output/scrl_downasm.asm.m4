@@ -101,7 +101,6 @@ wrLoop2:
 	out	(VDP_DATA), a
 	djnz	wrLoop2
 
-	M_RESET_V9958_DEFAULT_REGISTER()
 	EI
 	exx
 
