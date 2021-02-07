@@ -1,7 +1,7 @@
 	PUBLIC	_v9958ScrollLeft
 
-	EXTERN	 _waitForCommandCompletion ;_initDrawParams,
-	EXTERN	__color ;, _yy, _fourthNibble, __color
+	EXTERN	 _waitForCommandCompletion
+	EXTERN	__color
 	EXTERN	clearLine, readLineFromVdp, COLOR_MASK, LINESRC, LINEDST
 
 	SECTION CODE
