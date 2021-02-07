@@ -6,6 +6,8 @@
 	SECTION CODE
 
 	include	"v9958.inc"
+	include(`macros.inc.m4')
+
 ; Params: (_xx (c), _yy, _xxTo, _yAddOne)
 ; DRAW TWO HORIZONTAL LINES WITH SAME START X AND END X CO-ORDINATES
 ; AUTO WRAPS LINE IF IT GOES BEYOND SCREEN RIGHT
@@ -170,10 +172,7 @@ _drawSegment:
 	LD	A, 0x80 | 46
 	OUT	(VDP_ADDR), A
 
-	XOR	A
-	OUT	(VDP_ADDR), A
-	LD	A, 0x80 | 15
-	OUT	(VDP_ADDR), A
+	M_RESET_V9958_DEFAULT_REGISTER()
 	EI
 	RET
 
@@ -230,10 +229,6 @@ l_drawSegment_00102:
 	LD	A, 0x80 | 46
 	OUT	(VDP_ADDR), A
 
-	XOR	A
-	OUT	(VDP_ADDR), A
-	LD	A, 0x80 | 15
-	OUT	(VDP_ADDR), A
-
+	M_RESET_V9958_DEFAULT_REGISTER()
 	EI
 	RET

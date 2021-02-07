@@ -116,7 +116,6 @@
 ./chip8/instr_tms_output.o: ./chip8/instr_tms_output.asm
 ./chip8/instr_v9958_output/draw_planeasm.o: ./chip8/instr_v9958_output/draw_planeasm.asm ./chip8/v9958.inc
 ./chip8/instr_v9958_output/draw_rowasm.o: ./chip8/instr_v9958_output/draw_rowasm.asm ./chip8/v9958.inc
-./chip8/instr_v9958_output/draw_segmentasm.o: ./chip8/instr_v9958_output/draw_segmentasm.asm ./chip8/v9958.inc
 ./chip8/instr_v9958_output/scroll_commonasm.o: ./chip8/instr_v9958_output/scroll_commonasm.asm ./chip8/v9958.inc
 ./chip8/instr_v9958_output/test_segmentasm.o: ./chip8/instr_v9958_output/test_segmentasm.asm ./chip8/v9958.inc
 ./chip8/instr_v9958_output.o: ./chip8/instr_v9958_output.asm
@@ -144,9 +143,12 @@
 ./chip8asm/assembler.o: ./chip8asm/assembler.asm
 ./chip8asm/data.o: ./chip8asm/data.asm
 ./chip8asm/emitters.o: ./chip8asm/emitters.asm
+./chip8asm/error.o: ./chip8asm/error.asm
 ./chip8asm/error_reports.o: ./chip8asm/error_reports.asm
+./chip8asm/exit.o: ./chip8asm/exit.asm
 ./chip8asm/expr.o: ./chip8asm/expr.asm
 ./chip8asm/labels.o: ./chip8asm/labels.asm
+./chip8asm/main.o: ./chip8asm/main.asm
 ./chip8asm/systemstate.o: ./chip8asm/systemstate.asm
 ./chip8asm/test_assembler.o: ./chip8asm/test_assembler.asm
 ./chip8asm/tokenreader.o: ./chip8asm/tokenreader.asm
@@ -167,6 +169,8 @@
 ./token.o: ./token.asm
 ./xstdio.o: ./xstdio.asm
 ./xstrtol.o: ./xstrtol.asm
+./chip8/instr_v9958_output/draw_segmentasm.o: ./chip8/instr_v9958_output/draw_segmentasm.asm.m4 ./chip8/macros.inc.m4 ./chip8/v9958.inc
 ./chip8/instr_v9958_output/scrl_downasm.o: ./chip8/instr_v9958_output/scrl_downasm.asm.m4 ./chip8/macros.inc.m4 ./chip8/v9958.inc
 ./chip8/instr_v9958_output/scrl_leftasm.o: ./chip8/instr_v9958_output/scrl_leftasm.asm.m4 ./chip8/macros.inc.m4 ./chip8/v9958.inc
+./chip8/instr_v9958_output/scrl_rightasm.o: ./chip8/instr_v9958_output/scrl_rightasm.asm.m4 ./chip8/macros.inc.m4 ./chip8/v9958.inc
 ./chip8/instr_v9958_output/scrl_upasm.o: ./chip8/instr_v9958_output/scrl_upasm.asm.m4 ./chip8/macros.inc.m4 ./chip8/v9958.inc
