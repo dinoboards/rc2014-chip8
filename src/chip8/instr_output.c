@@ -87,3 +87,9 @@ void scrlLeft() {
     v9958ScrollLeft();
   }
 }
+
+void scrlRight() {
+  if (videoResMode != VideoResModeLow) {
+    v9958ScrollRight();
+  }
+}

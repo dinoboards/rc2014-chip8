@@ -83,6 +83,10 @@ bool executeSingleInstruction() {
           return false;
         break;
 
+      case 0xFB:
+        scrlRight();
+        break;
+
       case 0xFC:
         scrlLeft();
         break;

@@ -8,5 +8,6 @@ extern void v9958VideoInit();
 extern void v9958ScrollDown();
 extern void v9958ScrollUp();
 extern void v9958ScrollLeft();
+extern void v9958ScrollRight();
 
 #endif

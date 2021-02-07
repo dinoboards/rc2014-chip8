@@ -12,6 +12,7 @@ extern void videoHigh();
 extern void scrlDown();
 extern void scrlUp();
 extern void scrlLeft();
+extern void scrlRight();
 
 extern void drawFrame();
 
