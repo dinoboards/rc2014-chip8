@@ -14,6 +14,7 @@ typedef enum {
   TokenDown,
   TokenUp,
   TokenLeft,
+  TokenRight,
 
   RegisterV0,
   RegisterV1,

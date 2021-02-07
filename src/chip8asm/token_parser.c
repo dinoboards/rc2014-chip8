@@ -140,3 +140,8 @@ void expectToBeLeft() {
   if (!currentIsLeft())
     expectedError("one of DOWN, UP, LEFT or RIGHT");
 }
+
+void expectToBeRight() {
+  if (!currentIsRight())
+    expectedError("one of DOWN, UP, LEFT or RIGHT");
+}

@@ -55,3 +55,4 @@
 #define SCRL_DOWN_5 0x00C5
 #define SCRL_UP_5   0x00D5
 #define SCRL_LEFT   0x00FC
+#define SCRL_RIGHT  0x00FB
