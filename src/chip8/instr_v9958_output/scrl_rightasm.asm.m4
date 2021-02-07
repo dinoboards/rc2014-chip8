@@ -17,7 +17,7 @@ _v9958ScrollRight:
 
 	M_STORE_COLOR_MASK_FROM_A()
 
-	ld	d, HIRES_HEIGHT - 1
+	LD	D,  HIRES_HEIGHT - 1
 
 	; for each line
 	;  readLineFromVdp to LINESRC
@@ -39,72 +39,82 @@ _v9958ScrollRight:
 	OUT	(VDP_ADDR), A
 	EI
 
-nextRow:
+NXT_ROW:
 	LD	HL, LINESRC
 	CALL	readLineFromVdp
 
-	XOR	a
+	EXX				; PROTECT D (LINE INDEX)
 
-	DI
-	OUT	(VDP_REGS), A
-	OUT	(VDP_ADDR), A
-	ld	a, D
-	or	0x40	; WRITE MODE
-	OUT	(VDP_ADDR), A
-
-	exx
-
-	LD	HL, LINESRC
-	LD	DE, LINESRC + 4
-
+	LD	HL, LINESRC + HIRES_WIDTH - 1
+	LD	DE, LINESRC + HIRES_WIDTH - 4 - 1
 	LD	A, (COLOR_MASK)
 	LD	C, A
+	LD	B, 124
 
-	ld	b, 124
-
-wrLoop1:
+SFT_RGT_DOTS:
 	M_APPLY_COLOR_MASK_TRANSFORM()
+	DEC	HL
+	DEC	DE
+	DJNZ	SFT_RGT_DOTS
 
-	INC	HL
-	INC	DE
-	out	(VDP_DATA), a
-	djnz	wrLoop1
-
-
+	; CLEAR THE LEFT MOST 4 DOTS FOR THE SPECIFIC COLOR
 	LD	A, C
 	CPL
 	AND	$33
 	LD	C, A
+	LD	B, 4
+CLR_LFT:
+	LD	A, (HL)
+	AND	C
+	LD	(HL), A
+	DEC	HL
+	OUT	(VDP_DATA), A
+	DJNZ	CLR_LFT
 
-	ld	b, 4
+	EXX				; RESTORE D (LINE INDEX)
 
-clearRightColumn:
-	ld	a, (hl)
-	and	c
-	ld	(hl), a
-	inc	hl
-	out	(VDP_DATA), a
-	djnz	clearRightColumn
-
-	; repeat for 2nd line
+	; WRITE OUT THE 2 LINES (SINGLE DOT)
+	XOR	A
 	LD	HL, LINESRC
-	ld	b, 128
-wrLoop2:
-	LD	a, (HL)
+	LD	B, 128
+
+	DI
+	; SET VDP VRAM ADDRESS TO FIRST LINE START
+	OUT	(VDP_REGS), A
+	OUT	(VDP_ADDR), A
+	LD	A, D
+	OR	$40	; WRITE MODE
+	OUT	(VDP_ADDR), A
+
+	; WRITE OUT LINE FROM LINESRC
+LP_LINE1:
+	LD	A, (HL)
 	INC	HL
-	nop
-	nop
-	nop
-	nop
-	out	(VDP_DATA), a
-	djnz	wrLoop2
+	NOP
+	NOP
+	NOP
+	NOP
+	OUT	(VDP_DATA), A
+	DJNZ	LP_LINE1
+
+	; NOW WRITE OUT 2ND LINE
+	LD	HL, LINESRC
+	LD	B, 128
+LP_LINE2:
+	LD	A, (HL)
+	INC	HL
+	NOP
+	NOP
+	NOP
+	NOP
+	OUT	(VDP_DATA), A
+	DJNZ	LP_LINE2
 
 	M_RESET_V9958_DEFAULT_REGISTER()
 	EI
 
-	exx
 	DEC	D
-	JP	P, nextRow
+	JP	P, NXT_ROW
 
 	RET
 
