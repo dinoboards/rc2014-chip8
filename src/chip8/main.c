@@ -76,6 +76,12 @@ void main(MainArguments *pargs) __z88dk_fastcall {
 
   applyConfiguration(pargs->argv[0]);
 
+  if (defaultFCB->type[0] == ' ' && defaultFCB->type[1] == ' ' && defaultFCB->type[2] == ' ') {
+    defaultFCB->type[0] = 'c';
+    defaultFCB->type[1] = 'h';
+    defaultFCB->type[2] = '8';
+  }
+
   chkMsg(fOpen(defaultFCB), "Unable to open file");
 
   xprintf("Total available memory: %u\r\n", (uint16_t)&himem - 0x200);
@@ -97,7 +103,7 @@ void main(MainArguments *pargs) __z88dk_fastcall {
     ptr += 64;
     noMoreData = fRead(defaultFCB);
   }
-  chkMsg(fClose(defaultFCB), "unable to close");
+  chkMsg(fClose(defaultFCB), "Unable to close");
 
   while (executeSingleInstruction())
     ;
