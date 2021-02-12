@@ -22,7 +22,8 @@ function exec(command) {
 
 
 async function test(sampleName) {
-  fs.unlinkSync(`./bin/${sampleName}.ch8`)
+  if (fs.existsSync(`./bin/${sampleName}.ch8`))
+    fs.unlinkSync(`./bin/${sampleName}.ch8`)
   await exec(`cpm chip8asm ${sampleName}.cas`)
 
   const compiledFile = fs.readFileSync(`./bin/${sampleName}.ch8`);
@@ -32,6 +33,9 @@ async function test(sampleName) {
   if (result != 0) {
     console.log(`\u001b[31mAssembly failed to produce correct output for ${sampleName}\u001b[0m`);
     process.nextTick(() => process.exit(-1));
+  } else {
+    fs.unlinkSync(`./bin/${sampleName}.ch8`)
+    fs.unlinkSync(`./bin/${sampleName}.cas`)
   }
 }
 

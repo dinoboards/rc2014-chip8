@@ -8,9 +8,9 @@ git:
   submodules: false
   depth: 3
 install:
-- wget https://github.com/vipoo/z88dk-linux-builder/releases/download/v3.0.0-dino.2/z88dk-v3.0.0-dino.2.tar.gz
+- wget https://github.com/vipoo/z88dk-linux-builder/releases/download/v3.0.0-dino.3/z88dk-v3.0.0-dino.3.tar.gz
 - mkdir -p z88dk
-- tar -xzf z88dk-v3.0.0-dino.2.tar.gz -C ./z88dk/
+- tar -xzf z88dk-v3.0.0-dino.3.tar.gz -C ./z88dk/
 - wget https://github.com/vipoo/cpm/releases/download/v0.0.7/cpm-v0.0.7.tar.gz
 - mkdir -p cpm
 - tar -xzf cpm-v0.0.7.tar.gz -C ./cpm
@@ -22,7 +22,7 @@ script:
 - make all VERSION=$TRAVIS_TAG
 - make test VERSION=$TRAVIS_TAG
 before_deploy:
-- tar -czvf chip-8-${TRAVIS_TAG}.tar.gz bin
+- make package VERSION=$TRAVIS_TAG
 deploy:
   provider: releases
   api_key:
