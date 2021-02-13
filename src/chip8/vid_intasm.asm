@@ -8,9 +8,7 @@ include "hbios_sys.inc"
 include	"v9958.inc"
 
 intHandler:
-	LD	A, VDP_ADDR
- 	LD	C, A
-	IN	A, (C)			; TEST FOR INT FLAG
+	IN	A, (VDP_ADDR)			; TEST FOR INT FLAG
 	AND	$80
 	JR	NZ, vsyncInt
 
@@ -40,6 +38,15 @@ _vsyncInstallInterruptHandler:
 	RET
 
 _vsyncRemoveInterruptHandler:
+	; DISABLE INTERRUPTS GENERATION FROM VIDEO CHIP
+	DI
+	IN	A, (VDP_ADDR)
+	XOR	A			; /* 16K,Disable Display, Disable Int.,8x8 Sprites,Mag.Off */
+	OUT	(VDP_ADDR), A
+	LD	A, 0x81 		; SELECT R#1
+	OUT	(VDP_ADDR), A
+	EI
+
 	PUSH	IX
 
 	LD	BC, BF_SYSINT * 256 + BF_SYSINT_SET
