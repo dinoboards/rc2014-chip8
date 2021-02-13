@@ -66,13 +66,13 @@ void main(MainArguments *pargs) __z88dk_fastcall {
   //   oldb2 = b2;
   // }
 
-  // mainArguments = pargs;
-  // parseCommandLine();
+  mainArguments = pargs;
+  parseCommandLine();
 
-  // if (CommandSwitches.isHelp) {
-  //   print("Usage:\r\n   chip8 <filename> [-X <delay>]\r\n\r\n");
-  //   return;
-  // }
+  if (CommandSwitches.isHelp) {
+    print("Usage:\r\n   chip8 <filename> [-X <delay>]\r\n\r\n");
+    return;
+  }
 
   applyConfiguration(pargs->argv[0]);
 
