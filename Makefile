@@ -65,5 +65,8 @@ package: chip8 chip8asm
 	cp ./bin/chip8.com ./package/
 	cp ./bin/chip8asm.com ./package/
 	cp ./test-samples/chick.* ./package/
+	cp ./test-samples/f8z.* ./package/
 	cp ./test-samples/super.* ./package/
+	cp ./test-samples/invaders.* ./package/
+	cp ./test-samples/garlic.* ./package/
 	tar -czvf chip-8-$${VERSION}.tar.gz package

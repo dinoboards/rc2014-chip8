@@ -9,12 +9,10 @@
 9. add missing opcode support
 10. add support for super-chip/octo instructions
 11. Create seperate MSX/HBIOS builds
-13. serial input/controller needs to be made more faster
+13. serial input/controller needs to be made faster
 14. colour mapping needs to be completed (for standard 16 palette mode)
 15. more refined colour palette map to rgb values for v9958
 16. Documentation/samples for configuration file
-18. Default game file extension of ch8
-19. Retest with TMS9918 chip
 20. Any sound mapping improvements?
 
 Issues:
@@ -44,6 +42,8 @@ Done:
   ./ de-dup the filereader.* code
   ./ look for other potential deduping re the tokening processing
 17. ./Add support for dual controller mapping
+18. ./ Default game file extension of ch8
+19. ./ Retest with TMS9918 chip
 
 
 # Remaining Instructions:
