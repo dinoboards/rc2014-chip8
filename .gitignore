@@ -2,6 +2,7 @@
 
 package
 
+*.tar.gz
 *.lis
 *.o
 *.img
