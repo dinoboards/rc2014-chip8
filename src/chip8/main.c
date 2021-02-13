@@ -77,8 +77,8 @@ void main(MainArguments *pargs) __z88dk_fastcall {
   applyConfiguration(pargs->argv[0]);
 
   if (defaultFCB->type[0] == ' ' && defaultFCB->type[1] == ' ' && defaultFCB->type[2] == ' ') {
-    defaultFCB->type[0] = 'c';
-    defaultFCB->type[1] = 'h';
+    defaultFCB->type[0] = 'C';
+    defaultFCB->type[1] = 'H';
     defaultFCB->type[2] = '8';
   }
 
