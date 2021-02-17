@@ -69,4 +69,4 @@ package: chip8 chip8asm
 	cp ./test-samples/super.* ./package/
 	cp ./test-samples/invaders.* ./package/
 	cp ./test-samples/garlic.* ./package/
-	tar -czvf chip-8-$${VERSION}.tar.gz package
+	zip -Dj chip-8-$${VERSION}.zip package/*
