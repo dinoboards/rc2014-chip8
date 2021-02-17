@@ -19,10 +19,10 @@ before_script:
 - export PATH=`pwd`/z88dk/bin:$PATH
 - export ZCCCFG=`pwd`/z88dk/lib/config
 script:
-- make all VERSION=$TRAVIS_TAG
-- make test VERSION=$TRAVIS_TAG
+- make all VERSION=$TRAVIS_TAG RELEASE=true
+- make test VERSION=$TRAVIS_TAG RELEASE=true
 before_deploy:
-- make package VERSION=$TRAVIS_TAG
+- make package VERSION=$TRAVIS_TAG RELEASE=true
 deploy:
   provider: releases
   api_key:
