@@ -51,6 +51,8 @@ chip8 <gamefile> [-X <number>]
 
 ```
 
+CTRL+Z to exit the game.
+
 Example:
 
 `chip8 mygame`
@@ -107,7 +109,7 @@ See the test-samples for some examples of colour and key mappings.
 
 ### See Also
 
-https://github.com/mattmikolay/chip-8/wiki/CHIP%E2%80%908-Instruction-Set
+https://github.com/mattmikolay/chip-8/wiki/CHIP%E2%80%908-Instruction-Set     a  sdddddddddddddddddd
 
 http://devernay.free.fr/hacks/chip8/C8TECH10.HTM
 
