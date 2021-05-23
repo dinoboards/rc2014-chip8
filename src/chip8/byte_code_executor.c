@@ -343,7 +343,7 @@ bool executeSingleInstruction() {
   }
 
   if ((uint16_t)chip8PC < 0x200) {
-    xprintf("PC counter below 0x200 -  %04X\r\n", chip8PC);
+    xprintf("PC counter below 0x200 - %p\r\n", chip8PC);
     return false;
   }
 

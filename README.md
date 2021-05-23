@@ -20,8 +20,20 @@ To run a prebuilt ROM, on your RC2014:
 
 ## Prerequisites
 
-For building, you need the z88dk cross compiler.  You can manual install as per the instruction at [z88dk](https://github.com/z88dk/z88dk/wiki).
-Or as per the `.travis.yml`, grab the compiler binaries.
+* z88dk: You can manual install as per the instruction at [z88dk](https://github.com/z88dk/z88dk/wiki). Or as per the `.travis.yml`, grab the compiler binaries.
+* nodejs: see `.nvmrc` for specific version required.
+* gpp
+
+> **z88dk Issue**
+
+> At the moment, the latest release of z88dk includes and patches a version of SDCC that has a bug.  You need to adjust the SDCC version number before building z88dk.
+> In the Makefile within the z88dk project, adjust the SDCC_VERSION as below:
+
+> `SDCC_VERSION    = 12085 # 4.1.0 Release`
+
+To run the tests, you also need:
+* cpm (https://github.com/jhallen/cpm or see travel.yml for pre-built linux binary)
+
 
 For running, you need a RC2014 compatible Z80 based kit, with a Video output module.
 

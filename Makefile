@@ -4,6 +4,8 @@ SHELL := bash
 MAKEFLAGS += --warn-undefined-variables
 MAKEFLAGS += --no-builtin-rules
 
+export PATH := $(PWD)/cpm/bin:$(PATH)
+
 .PHONY: all
 all:
 	@mkdir -p ./bin
