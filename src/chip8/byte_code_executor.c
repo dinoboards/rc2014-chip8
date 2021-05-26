@@ -338,12 +338,12 @@ bool executeSingleInstruction() {
 
   default:
   badInstruction:
-    xprintf("Bad instruction %04X at %p\r\n", invertByteOrder(currentInstruction), chip8PC - 1);
+    printf("Bad instruction %04X at %p\r\n", invertByteOrder(currentInstruction), chip8PC - 1);
     return false;
   }
 
   if ((uint16_t)chip8PC < 0x200) {
-    xprintf("PC counter below 0x200 - %p\r\n", chip8PC);
+    printf("PC counter below 0x200 - %p\r\n", chip8PC);
     return false;
   }
 

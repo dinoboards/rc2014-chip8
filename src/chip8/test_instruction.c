@@ -1,4 +1,3 @@
-
 #include "byte_code_executor.h"
 #include "datatypes.h"
 #include "fontsets.h"
@@ -8,7 +7,7 @@
 #include "test_expectations.h"
 #include "test_opcodes.h"
 #include "test_system.h"
-#include "xstdio.h"
+#include <stdio.h>
 
 void setup_ld_v1_10() { programStorage[0] = invertByteOrder(LD_V1_10); }
 
@@ -729,5 +728,5 @@ void main() {
 
   // assert(bad_jump);
 
-  xprintf(testFailure ? RED "Tests Failed\r\n" RESET : BRIGHT_WHITE "All Passed\r\n" RESET);
+  printf(testFailure ? RED "Tests Failed\r\n" RESET : BRIGHT_WHITE "All Passed\r\n" RESET);
 }

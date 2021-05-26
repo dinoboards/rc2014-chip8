@@ -6,6 +6,7 @@
 #include "tokenreader.h"
 #include "xstdio.h"
 #include <string.h>
+#include <stdio.h>
 
 static inline byte getRegisterIndex(TokenType c) { return (byte)c - RegisterV0; }
 
@@ -114,7 +115,7 @@ byte expectToBeNibble() {
   int x = evaluate(token.value);
 
   if (x < 0 || x > 15) {
-    xprintf("Expected a nibble.  Number out of range\r\n");
+    printf("Expected a nibble.  Number out of range\r\n");
     exit(1);
   }
 

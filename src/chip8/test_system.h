@@ -7,7 +7,7 @@ extern bool appRunning;
 
 #define assert(a)                                  \
   {                                                \
-    xprintf(#a "\r\n");                            \
+    printf(#a "\r\n");                            \
     soundTimer = 0;                                \
     resetCaptureCommands();                        \
     resetKeySimulator();                           \
@@ -16,12 +16,12 @@ extern bool appRunning;
     appRunning = executeSingleInstruction();       \
     expectEqualBytes(appRunning, 1, "appRunning"); \
     verify_##a();                                  \
-    xprintf("\r\n");                               \
+    printf("\r\n");                               \
   }
 
 #define assertTerminates(a)                  \
   {                                          \
-    xprintf(#a "\r\n");                      \
+    printf(#a "\r\n");                      \
     soundTimer = 0;                          \
     resetCaptureCommands();                  \
     resetKeySimulator();                     \
@@ -29,7 +29,7 @@ extern bool appRunning;
     setup_##a();                             \
     appRunning = executeSingleInstruction(); \
     verify_##a();                            \
-    xprintf("\r\n");                         \
+    printf("\r\n");                         \
   }
 
 #define MAX_CAPTURE_TEXT 128

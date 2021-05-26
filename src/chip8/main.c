@@ -59,7 +59,7 @@ void main(MainArguments *pargs) __z88dk_fastcall {
   //   const uint8_t b2 = getControllerButton(4);
 
   //   if(oldd != d || oldb1 != b1 || oldb2 != b2)
-  //     xprintf("Direction %02X, buttons: %02X %02X\r\n", d, b1, b2);
+  //     printf("Direction %02X, buttons: %02X %02X\r\n", d, b1, b2);
 
   //   oldd = d;
   //   oldb1 = b1;
@@ -84,7 +84,7 @@ void main(MainArguments *pargs) __z88dk_fastcall {
 
   chkMsg(fOpen(defaultFCB), "Unable to open file");
 
-  xprintf("Total available memory: %u\r\n", (uint16_t)&himem - 0x200);
+  printf("Total available memory: %u\r\n", (uint16_t)&himem - 0x200);
 
   if (!videoInit())
     return;

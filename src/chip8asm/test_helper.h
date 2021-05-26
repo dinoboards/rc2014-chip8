@@ -45,17 +45,17 @@ void shouldAssemble(const char *source, uint16_t expectedWord) {
   content = (char *)source;
   assemble(2);
 
-  xprintf("%04X should be assembled from:\r\n  %s\r\n\r\n", expectedWord, source);
+  printf("%04X should be assembled from:\r\n  %s\r\n\r\n", expectedWord, source);
 
   //?????
   if (testErrored) {
-    xprintf(RED "  Failed.  %s\r\n" RESET, logBuffer);
+    printf(RED "  Failed.  %s\r\n" RESET, logBuffer);
     testFailure = true;
     return;
   }
 
   if (instructionEquals(0, expectedWord)) {
-    xprintf(RED "  Failure: translated to %02X%02X\r\n\r\n" RESET, (int)programStorage[0], (int)programStorage[1]);
+    printf(RED "  Failure: translated to %02X%02X\r\n\r\n" RESET, (int)programStorage[0], (int)programStorage[1]);
     testFailure = true;
   }
 }
@@ -73,17 +73,17 @@ void shouldAssembleDblWidth(const char *source, uint16_t expectedWord1, uint16_t
   content = (char *)source;
   assemble(2);
 
-  xprintf("%04X, %04X should be assembled from:\r\n  %s\r\n\r\n", expectedWord1, expectedWord2, source);
+  printf("%04X, %04X should be assembled from:\r\n  %s\r\n\r\n", expectedWord1, expectedWord2, source);
 
   //?????
   if (testErrored) {
-    xprintf(RED "  Failed.  %s\r\n" RESET, logBuffer);
+    printf(RED "  Failed.  %s\r\n" RESET, logBuffer);
     testFailure = true;
     return;
   }
 
   if (instructionEquals(0, expectedWord1) && instructionEquals(2, expectedWord2)) {
-    xprintf(RED "  Failure: translated to %02X%02X%02X%02X\r\n\r\n" RESET, (int)programStorage[0], (int)programStorage[1], (int)programStorage[2], (int)programStorage[3]);
+    printf(RED "  Failure: translated to %02X%02X%02X%02X\r\n\r\n" RESET, (int)programStorage[0], (int)programStorage[1], (int)programStorage[2], (int)programStorage[3]);
     testFailure = true;
   }
 }
@@ -101,16 +101,16 @@ void shouldAssembleDS(const char *source, uint16_t expectedPCCount) {
   content = (char *)source;
   assemble(2);
 
-  xprintf("%s should reserve %d bytes\r\n\r\n", source, expectedPCCount);
+  printf("%s should reserve %d bytes\r\n\r\n", source, expectedPCCount);
 
   if (testErrored) {
-    xprintf(RED "  Failed.  %s\r\n" RESET, logBuffer);
+    printf(RED "  Failed.  %s\r\n" RESET, logBuffer);
     testFailure = true;
     return;
   }
 
   if (programPtr != (programStorage + expectedPCCount)) {
-    xprintf(RED "  Failure: expected PC to be increment by %d - got %d\r\n\r\n" RESET, expectedPCCount, programPtr - programStorage);
+    printf(RED "  Failure: expected PC to be increment by %d - got %d\r\n\r\n" RESET, expectedPCCount, programPtr - programStorage);
     testFailure = true;
   }
 }
@@ -128,18 +128,18 @@ void shouldError(const char *source, const char *errorMessage) {
   content = (char *)source;
   assemble(2);
 
-  xprintf("'%s' should be reported from:\r\n%s\r\n\r\n", errorMessage, source);
+  printf("'%s' should be reported from:\r\n%s\r\n\r\n", errorMessage, source);
 
   if (testErrored) {
     if (strstr(logBuffer, errorMessage) != NULL)
       return;
 
-    xprintf(RED "  Failed: incorrect error message of %s\r\n\r\n" RESET, logBuffer);
+    printf(RED "  Failed: incorrect error message of %s\r\n\r\n" RESET, logBuffer);
     testFailure = true;
     return;
   }
 
-  xprintf(RED "  Failed.  no error message reported.\r\n" RESET);
+  printf(RED "  Failed.  no error message reported.\r\n" RESET);
 }
 
 void shouldEvaluate(const char *expression, int expectedValue) {
@@ -147,11 +147,11 @@ void shouldEvaluate(const char *expression, int expectedValue) {
   xbuffer[0] = '\0';
   logBuffer[0] = '\0';
 
-  xprintf("%s should evaluate to %d\r\n", expression, expectedValue);
+  printf("%s should evaluate to %d\r\n", expression, expectedValue);
   int r = evaluate(expression);
 
   if (testErrored) {
-    xprintf(RED "  Failed.  %s\r\n" RESET, logBuffer);
+    printf(RED "  Failed.  %s\r\n" RESET, logBuffer);
     testFailure = true;
     return;
   }
@@ -164,7 +164,7 @@ void shouldEvaluateError(const char *expression, const char *expectedErrorMessag
   xbuffer[0] = '\0';
   logBuffer[0] = '\0';
 
-  xprintf("%s should generate error of %s\r\n", expression, expectedErrorMessage);
+  printf("%s should generate error of %s\r\n", expression, expectedErrorMessage);
   int r = evaluate(expression);
   expectEqualInts(r, 0, "evaluation");
 
@@ -172,12 +172,12 @@ void shouldEvaluateError(const char *expression, const char *expectedErrorMessag
     if (strstr(logBuffer, expectedErrorMessage) != NULL)
       return;
 
-    xprintf(RED "  Failed: incorrect error message of %s\r\n\r\n" RESET, logBuffer);
+    printf(RED "  Failed: incorrect error message of %s\r\n\r\n" RESET, logBuffer);
     testFailure = true;
     return;
   }
 
-  xprintf(RED "  Failed.  no error message reported.\r\n" RESET);
+  printf(RED "  Failed.  no error message reported.\r\n" RESET);
 }
 
 void setFileStream() {}

@@ -6,7 +6,7 @@
 
 	PUBLIC	_fOpen, _fDmaOff, _fRead, _fSize, _fClose, _fRead, _chk, _fMake, _fWrite
 	; PUBLIC _drvAllReset, _drvReset, _drvFree
-	EXTERN	__Exit
+	EXTERN	_exit
 
 RESTART	EQU	$0000		; CP/M RESTART VECTOR
 BDOS	EQU	$0005		; BDOS INVOCATION VECTOR
@@ -28,7 +28,7 @@ _chk:
 	or	a, l
 	ret	Z
 	ld	hl,0x0001
-	jp	__Exit
+	jp	_exit
 
 ; int fOpen(const char* fcb) __z88dk_fastcall
 _fMake:

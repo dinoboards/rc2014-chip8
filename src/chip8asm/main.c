@@ -32,7 +32,7 @@ void main() {
   defaultFCB->dr = 0;
   defaultFCB->ex = 0;
 
-  xprintf("Total Byte Count %d\r\n", currentAddress);
+  printf("Total Byte Count %d\r\n", currentAddress);
 
   chk(fMake(defaultFCB));
 
@@ -41,5 +41,5 @@ void main() {
     chk(fWrite(defaultFCB));
   }
   chk(fClose(defaultFCB));
-  xprintf("File written\r\n");
+  printf("File written\r\n");
 }

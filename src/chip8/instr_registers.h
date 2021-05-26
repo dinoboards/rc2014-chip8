@@ -6,7 +6,7 @@
 #include "timers.h"
 
 #define ldVxByte()     (registers[nibble2nd] = lowByte)
-#define ldIAddr()      (registerI = addr)
+#define ldIAddr()      (registerI = addr12Bit)
 #define ldILargeAddr() (registerI = invertByteOrder(*chip8PC++))
 
 #define addVxByte() (registers[nibble2nd] += lowByte)

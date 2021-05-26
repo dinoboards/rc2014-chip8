@@ -12,53 +12,9 @@ package
 bin
 *.sym
 
-hbios.asm
-main.asm
-xstdio.asm
-filereader.asm
-tokenreader.asm
-expr.asm
-labels.asm
-chartesters.asm
-systemstate.asm
-stack.asm
-instr_tms_output.asm
-token_parser.asm
-emitters.asm
-assembler.asm
-test_assembler.asm
-error_reports.asm
-error.asm
-byte_code_executor.asm
-test_instruction.asm
-tty.asm
 
 node_modules
 package-log.json
 package.json
-key_monitor.asm
-keys.asm
-random.asm
-tms.asm
-timers.asm
-exit.asm
-fontsets.asm
-cpm.asm
-instr_output.asm
-configreader.asm
-configuration_loader.asm
-token.asm
-instr_v9958_output.asm
-instr_sound.asm
-src/chip8/v9958.asm
-src/chip8/hires_mirror.asm
-src/chip8/test_configuration.asm
-src/test_expectations.asm
-src/chip8/instr_sound_hbios.asm
-src/chip8/instr_sound_msx.asm
-src/chip8/audio.asm
 
-src/chip8/hbios_audio.asm
-src/chip8/ym2149.asm
-src/chip8/test_system.asm
 

@@ -105,5 +105,5 @@ void main() {
   shouldError("LD BADREG, 123", "Expected one of Vx, I, [I], ST or DT but found BADREG");
   shouldError("JP NOWHERE", "Unknown label 'NOWHERE' referenced at line number 1");
 
-  xprintf(testFailure ? RED "Tests Failed\r\n" RESET : BRIGHT_WHITE "All Passed\r\n" RESET);
+  printf(testFailure ? RED "Tests Failed\r\n" RESET : BRIGHT_WHITE "All Passed\r\n" RESET);
 }

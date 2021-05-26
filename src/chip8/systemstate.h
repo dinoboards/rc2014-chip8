@@ -18,7 +18,7 @@ extern uint8_t   fourthNibble;
 #define nibble2nd   (highByte & 0xF)
 #define nibble3rd   (lowByte >> 4)
 
-#define addr (lowByte + (((uint16_t)nibble2nd) << 8))
+#define addr12Bit (lowByte + (((uint16_t)nibble2nd) << 8))
 
 extern byte     currentPressedKey;
 extern uint16_t currentKeyTimeout;

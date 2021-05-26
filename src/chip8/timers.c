@@ -26,7 +26,7 @@ void reportPerformance() {
   instructionCount++;
 
   if (timerTick >= performanceMeasureTick) {
-    xprintf("Count: '%d'\r\n", (instructionCount / 2));
+    printf("Count: '%d'\r\n", (instructionCount / 2));
     instructionCount = 0;
     performanceMeasureTick = timerTick + 120;
   }

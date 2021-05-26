@@ -7,7 +7,7 @@
 #include "tms.h"
 #include "v9958.h"
 
-#include "xstdio.h"
+#include <stdio.h>
 
 bool unexpectedTokenInvoked;
 bool expectedErrorInvoked;
@@ -15,12 +15,12 @@ bool expectedErrorInvoked;
 void unexpectedEntry() {}
 void expectedEqualSign() {}
 void unexpectedToken() {
-  xprintf("unexpected token type: %d, value: %s\r\n", token.type, token.value);
+  printf("unexpected token type: %d, value: %s\r\n", token.type, token.value);
   unexpectedTokenInvoked = true;
 }
 void expectedError(const char *p) __z88dk_fastcall {
   (void)p;
-  xprintf("expected error %s. type: %d, value: %s\r\n", p, token.type, token.value);
+  printf("expected error %s. type: %d, value: %s\r\n", p, token.type, token.value);
   expectedErrorInvoked = true;
 }
 
@@ -40,7 +40,7 @@ extern bool haveAppliedAKeyConfig;
     pConfigurationUnderTest = (char *)testConfig##config; \
     unexpectedTokenInvoked = false;                       \
     expectedErrorInvoked = false;                         \
-    xprintf(#config ": \r\n");                            \
+    printf(#config ": \r\n");                            \
     parseConfiguration(&fcb);                             \
     assert##config();                                     \
   }
@@ -254,7 +254,7 @@ void assertInvadersConfiguration() {
 
 void testConfigurtionParser() {
   FCB fcb;
-  xprintf("Configuration Processing:\r\n");
+  printf("Configuration Processing:\r\n");
 
   assert(Colours);
   assert(RGBColours);
@@ -272,5 +272,5 @@ void testConfigurtionParser() {
   assert(ControllerButtons);
   assert(InvadersConfiguration);
 
-  xprintf(testFailure ? RED "Tests Failed\r\n\n" RESET : BRIGHT_WHITE "All Passed\r\n\n" RESET);
+  printf(testFailure ? RED "Tests Failed\r\n\n" RESET : BRIGHT_WHITE "All Passed\r\n\n" RESET);
 }
