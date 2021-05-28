@@ -13,13 +13,14 @@ MEASURE=
 #-D_MEASURE_PERFORMANCE
 
 # -Ca="${MEASURE}" -Ca="-opt-speed" -c -Ca="-I./chip8/" -Cm="-I./chip8/"  -Ca="-opt-speed"
-ZCC := zcc +msx -subtype=msxdos2 -compiler=sdcc -lmath32 -Cc-D__MATH_MATH32 -D__MATH_MATH32 -pragma-define:CLIB_32BIT_FLOAT=1 -Ca="-I./chip8/" -Cm="-I./chip8/" -Ca="-opt-speed"
+ZCC := zcc +msx -subtype=msxdos2 -compiler=sdcc -lmath32 -Cc-D__MATH_MATH32 -D__MATH_MATH32 -pragma-define:CLIB_32BIT_FLOAT=1 -Ca="-I./chip8/" -Cm="-I./chip8/"
+ #-Ca="-opt-speed"
 
 chip8_sources = $(wildcard ./chip8/*.c) $(wildcard ./chip8/*.asm) $(wildcard ./chip8/*.asm.m4) $(wildcard ./chip8/instr_v9958_output/*.asm) $(wildcard ./chip8/instr_v9958_output/*.asm.m4)
 chip8asm_sources = $(wildcard ./chip8asm/*.c) $(wildcard ./chip8asm/*.asm)
 exclude_from_tests = %main.c.o %filereader.c.o %exit.c.o %error.c.o %tty.c.o %keys.c.o %random.c.o %ym2149.c.o %ym2149asm.o
 exclude_from_tstinstr = $(exclude_from_tests) %error_reports.c.o
-chip8_objects = hbios.c.o hbios_cio.o hbios_snd.o cpm.c.o cpmasm.o xstdio.c.o chartesters.c.o token.c.o filereader.c.o xstrtol.o $(patsubst %.asm.m4,%.m4.o,$(patsubst %.asm,%.o,$(patsubst %.c,%.c.o,$(chip8_sources))))
+chip8_objects = debug.o hbios.c.o hbios_cio.o hbios_snd.o cpm.c.o cpmasm.o xstdio.c.o chartesters.c.o token.c.o filereader.c.o xstrtol.o $(patsubst %.asm.m4,%.m4.o,$(patsubst %.asm,%.o,$(patsubst %.c,%.c.o,$(chip8_sources))))
 
 .PHONY: all
 all: $(TARGETS)
@@ -73,7 +74,7 @@ $(BIN)hello100.bin: $(addprefix $(BIN),hello.c.o chip8/hello2.c.o hello.m4.o)
 
 $(BIN)hello200.bin: $(addprefix $(BIN),hello.c.o chip8/hello2.c.o hello.m4.o)
 	@mkdir -p $(dir $@)
-	$(ZCC) -zorg 256  $^ -o $(BIN)hello200.bin
+	$(ZCC) -zorg 512  $^ -o $(BIN)hello200.bin
 	echo "Compiled $(notdir $@) from $(notdir $^)"
 
 bin/hello.loader.asm: loader.asm.m4

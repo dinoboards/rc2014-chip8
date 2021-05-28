@@ -4,9 +4,6 @@ const childProcess = require('child_process')
 const path = require('path')
 const os = require('os')
 
-// const _fileAt100 = "bin/base100.bin"
-// const _fileAt200 = "bin/base200.bin"
-
 function convertBitmapByte(hits, index) {
   let byte = 0
   for(let i = 0; i < 8; i++) {
@@ -40,11 +37,10 @@ async function main(fileAt100, fileAt200) {
   if (data1.length != data2.length)
     throw new Error("File length are different")
 
-
   const hits = []
   for(let i=0; i < data1.length; i++) {
     if (data1[i] !== data2[i])
-      hits.push(i - 1)
+      hits.push(i)
   }
 
   const relocationFileName = 'bin/relocation-map.bin'

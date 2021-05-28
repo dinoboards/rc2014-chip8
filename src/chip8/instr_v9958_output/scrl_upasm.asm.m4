@@ -30,7 +30,7 @@
 _v9958ScrollUp:
 	LD	A, (__color)
 	CP	3
-	JR	Z, scrollDownAllPlanes
+	JP	Z, scrollDownAllPlanes
 
 	M_STORE_COLOR_MASK_FROM_A()
 

@@ -29,7 +29,7 @@ _drawSegment:
 
 	ld	a, d
 	sub	c
-	jr	NC, l_drawSegment_00102
+	jP	NC, l_drawSegment_00102
 
 ;   drawLine(xx, yy, PIXEL_WIDTH_MASK, yy, 15, CMD_LOGIC_XOR);
 ;    DRAW TOP LINE TO SCREEN RIGHT

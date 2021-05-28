@@ -120,7 +120,7 @@
 ./bin/hbios_snd.o: ./hbios_snd.asm
 ./bin/relocmem.o: ./relocmem.asm
 ./bin/memap.o: ./memap.asm
-./bin/hello.o: ./hello.asm ./chip8/v9958.inc
+./bin/debug.o: ./debug.asm
 ./bin/reloccrt.o: ./reloccrt.asm
 ./bin/nonreloccrt.o: ./nonreloccrt.asm
 ./bin/xstrtol.o: ./xstrtol.asm
@@ -131,4 +131,5 @@
 ./bin/chip8/instr_v9958_output/scrl_leftasm.o: ./chip8/instr_v9958_output/scrl_leftasm.asm.m4 ./chip8/macros.inc.m4 ./chip8/v9958.inc
 ./bin/chip8/instr_v9958_output/draw_segmentasm.o: ./chip8/instr_v9958_output/draw_segmentasm.asm.m4 ./chip8/macros.inc.m4 ./chip8/v9958.inc
 ./bin/chip8/instr_v9958_output/scrl_downasm.o: ./chip8/instr_v9958_output/scrl_downasm.asm.m4 ./chip8/macros.inc.m4 ./chip8/v9958.inc
+./bin/hello.o: ./hello.asm.m4 ./chip8/v9958.inc
 ./bin/loader.o: ./loader.asm.m4

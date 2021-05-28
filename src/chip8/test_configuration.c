@@ -40,7 +40,7 @@ extern bool haveAppliedAKeyConfig;
     pConfigurationUnderTest = (char *)testConfig##config; \
     unexpectedTokenInvoked = false;                       \
     expectedErrorInvoked = false;                         \
-    printf(#config ": \r\n");                            \
+    printf(#config ": \r\n");                             \
     parseConfiguration(&fcb);                             \
     assert##config();                                     \
   }
@@ -251,6 +251,8 @@ void assertInvadersConfiguration() {
   expectFalse(unexpectedTokenInvoked, "unexpectedToken");
   expectFalse(expectedErrorInvoked, "expectedError");
 }
+
+extern void debug();
 
 void testConfigurtionParser() {
   FCB fcb;
