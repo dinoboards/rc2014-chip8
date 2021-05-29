@@ -5,9 +5,10 @@
 #include "timers.h"
 #include "ym2149.h"
 #include <string.h>
+#include <stdio.h>
 
 static uint16_t lastCheckTime = 0;
-inline uint8_t  toLower(uint8_t c) { return ((c >= 'A' && c <= 'Z')) ? c + ('a' - 'A') : c; }
+inline uint8_t toLower(uint8_t c) { return ((c >= 'A' && c <= 'Z')) ? c + ('a' - 'A') : c; }
 
 bool checkForKeyPresses() {
   if (timerTick % 0x2)

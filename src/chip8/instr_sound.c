@@ -4,6 +4,8 @@
 #include "systemstate.h"
 #include "timers.h"
 
+#include <stdio.h>
+
 void ldStVx() {
   initTimers();
   soundTimer = registers[nibble2nd];

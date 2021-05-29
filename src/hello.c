@@ -1,3 +1,5 @@
+#pragma output noprotectmsdos
+
 #include <string.h>
 #include <stdio.h>
 #include <stdarg.h>

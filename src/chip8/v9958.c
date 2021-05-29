@@ -4,13 +4,9 @@
 #include <stdlib.h>
 
 // clang-format off
-#define DI __asm \
-  DI \
-  __endasm;
+#define DI __asm__("DI")
 
-#define EI __asm \
-  EI \
-  __endasm;
+#define EI __asm__("EI")
 // clang-format on
 
 void outPal(uint8_t b) __z88dk_fastcall {

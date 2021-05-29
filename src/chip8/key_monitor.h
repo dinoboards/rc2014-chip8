@@ -4,7 +4,7 @@
 #include "datatypes.h"
 
 extern bool    checkForKeyPresses();
-extern uint8_t isKeyDown(uint8_t c) __z88dk_fastcall;
+extern uint8_t isKeyDown(const uint8_t c) __z88dk_fastcall;
 extern uint8_t currentKey();
 
 #endif

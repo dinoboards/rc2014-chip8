@@ -30,9 +30,12 @@ void resetKeySimulator() {
   currentPressedKey = '\0';
   keyPressed = false;
   currentKeyTimeout = 0;
+  timerTick = 0;
 }
 
-byte keyReady() { return simulateKeyReady; }
+byte keyReady() {
+  return simulateKeyReady;
+}
 
 char getKey() { return simulatedKeyValue; }
 

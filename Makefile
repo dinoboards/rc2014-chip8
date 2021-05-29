@@ -4,7 +4,7 @@ SHELL := bash
 MAKEFLAGS += --warn-undefined-variables
 MAKEFLAGS += --no-builtin-rules
 
-export PATH := $(PWD)/cpm/bin:$(PATH)
+export PATH := $(PWD)/tools/prereq/cpm/:$(PATH)
 
 .PHONY: all
 all:
@@ -26,7 +26,8 @@ test: tstinstr tstasmbl
 
 tstinstr:
 	@mkdir -p ./bin
-	$(MAKE) -C ./src ../bin/tstinstr.com -s -j 4 -O
+	TARGET=cpm $(MAKE) -C ./src ./bin/cpm/tstinstr.com -s -j 4 -O
+	cp -u ./src/bin/cpm/tstinstr.com ./bin
 	(cd bin && cpm tstinstr)
 
 tstasmbl:
@@ -72,3 +73,10 @@ package: chip8 chip8asm
 	cp ./test-samples/invaders.* ./package/
 	cp ./test-samples/garlic.* ./package/
 	zip -Dj chip-8-$${VERSION}.zip package/*
+
+./tools/cpm/cpm:
+	@mkdir -p ./tools/prereq/
+	cd ./tools/prereq
+	git clone --depth 1 git@github.com:jhallen/cpm.git
+	cd cpm
+	OS=linux MAKEFLAGS= make -B

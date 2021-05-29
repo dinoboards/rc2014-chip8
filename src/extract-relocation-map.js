@@ -30,7 +30,7 @@ function convertToBitmap(hits, dataLength) {
   return data
 }
 
-async function main(fileAt100, fileAt200) {
+async function main(fileAt100, fileAt200, relocationFileName) {
   const data1 = fs.readFileSync(fileAt100)
   const data2 = fs.readFileSync(fileAt200)
 
@@ -43,7 +43,7 @@ async function main(fileAt100, fileAt200) {
       hits.push(i)
   }
 
-  const relocationFileName = 'bin/relocation-map.bin'
+  // const relocationFileName = 'bin/relocation-map.bin'
 
   const data = convertToBitmap(hits, data2.length)
 

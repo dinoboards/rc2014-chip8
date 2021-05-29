@@ -1,5 +1,5 @@
-#ifndef __CPM
-#define __CPM
+#ifndef __CPMXX
+#define __CPMXX
 
 #include <stdint.h>
 #include <stdlib.h>
@@ -41,7 +41,7 @@ extern void    resetFCB(const char *filename, const char *type, FCB *fcb);
 extern void    chkMsg(uint16_t result, const char *msg);
 
 #define defaultFCB      ((FCB *)0x5C)
-#define commandLineTail ((const CommandLineTail *)0x80)
+#define commandLineTail  ((const CommandLineTail *)0x80)
 
 typedef struct {
   uint16_t argc;

@@ -8,7 +8,7 @@
 static void applyConfigColour();
 static void applyConfigKey();
 
-inline void applySingleConfig() {
+void applySingleConfig() {
   switch (token.type) {
   case TokenColour:
     applyConfigColour();

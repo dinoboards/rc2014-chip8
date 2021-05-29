@@ -6,12 +6,13 @@
 
 // char xbuffer[MAX_MESSAGE_TEXT];
 
-// void printf(const char *msg, ...) {
+// void xprintf(const char *msg, ...) {
 //   va_list arg;
 //   va_start(arg, msg);
-//   vsnprintf(xbuffer, MAX_MESSAGE_TEXT - 1, (char *)msg, arg);
+//   printf(msg, arg);
+//   // vsnprintf(xbuffer, MAX_MESSAGE_TEXT - 1, (char *)msg, arg);
 //   va_end(arg);
-//   printf(xbuffer);
+//   // printf(xbuffer);
 // }
 
 #ifdef XTRACE

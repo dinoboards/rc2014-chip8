@@ -4,6 +4,7 @@
 #include "systemstate.h"
 #include "timers.h"
 
+#include <stdio.h>
 static hbSndParams sndParams;
 
 void hbiosAudioPlay(uint16_t period) __z88dk_fastcall {

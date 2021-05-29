@@ -2,12 +2,13 @@
 #define __TEST_SYSTEM
 
 #include "datatypes.h"
+#include "xstdio.h"
 
 extern bool appRunning;
 
 #define assert(a)                                  \
   {                                                \
-    printf(#a "\r\n");                            \
+    xprintf(#a "\r\n");                            \
     soundTimer = 0;                                \
     resetCaptureCommands();                        \
     resetKeySimulator();                           \
@@ -16,7 +17,7 @@ extern bool appRunning;
     appRunning = executeSingleInstruction();       \
     expectEqualBytes(appRunning, 1, "appRunning"); \
     verify_##a();                                  \
-    printf("\r\n");                               \
+    xprintf("\r\n");                               \
   }
 
 #define assertTerminates(a)                  \
