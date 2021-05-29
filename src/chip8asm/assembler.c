@@ -1,5 +1,4 @@
 #include "assembler.h"
-#include "cpm.h"
 #include "datatypes.h"
 #include "emitters.h"
 #include "error_reports.h"
@@ -735,7 +734,7 @@ void assemble(byte pc) __z88dk_fastcall {
   currentAddress = 0x200;
   programPtr = programStorage;
 
-  setFileStream(defaultFCB);
+  // setFileStream(defaultFCB);
   openTokenStream();
 
   getNextToken();

@@ -5,6 +5,7 @@ MAKEFLAGS += --warn-undefined-variables
 MAKEFLAGS += --no-builtin-rules
 
 TARGET ?= msx
+CPMBIN := ./bin/cpm/
 BIN := ./bin/$(TARGET)/
 SRC := ./
 APPS := hello tstinstr
@@ -21,16 +22,16 @@ endif
 ifeq ($(TARGET),msx)
 ZCC := zcc +msx -subtype=msxdos2 -compiler=sdcc -list -lmath32 -Cc-D__MATH_MATH32 -D__MATH_MATH32 -pragma-define:CLIB_32BIT_FLOAT=1 -Ca="-I./chip8/" -Cm="-I./chip8/" $(ZCCRELFLAGS)
 else
-ZCC := zcc +cpm  -compiler=sdcc $(ZCCRELFLAGS) --list -pragma-redirect:fputc_cons=fputc_cons_native  -Ca="-I./chip8/" -Cm="-I./chip8/" -pragma-define:noprotectmsdos -pragma-define:CRT_ENABLE_COMMANDLINE=0 -pragma-define:CRT_COMMANDLINE_REDIRECTION=0 -pragma-define:CRT_OPEN_MAX=0 -lndos
+ZCC := zcc +cpm  -compiler=sdcc $(ZCCRELFLAGS) --list -pragma-redirect:fputc_cons=fputc_cons_native  -Ca="-I./chip8/" -Cm="-I./chip8/" -pragma-define:noprotectmsdos -pragma-define:CRT_ENABLE_COMMANDLINE=1 -pragma-define:CRT_COMMANDLINE_REDIRECTION=0 -pragma-define:CRT_OPEN_MAX=1
 endif
  #-Ca="-opt-speed"
 
 chip8_sources = $(wildcard chip8/*.c) $(wildcard chip8/*.asm) $(wildcard chip8/*.asm.m4) $(wildcard chip8/instr_v9958_output/*.asm) $(wildcard chip8/instr_v9958_output/*.asm.m4)
 chip8asm_sources = $(wildcard chip8asm/*.c) $(wildcard chip8asm/*.asm)
-exclude_from_tests = %main.c.o %filereader.c.o %exit.c.o %error.c.o %tty.c.o %keys.c.o %random.c.o %ym2149.c.o %ym2149asm.o
+exclude_from_tests = %main.c.o %filereader.c.o %exit.c.o %error.o %tty.c.o %keys.c.o %random.c.o %ym2149.c.o %ym2149asm.o
 exclude_from_tstinstr = $(exclude_from_tests) %error_reports.c.o
-chip8_objects = debug.o hbios.c.o hbios_cio.o hbios_snd.o cpm.c.o cpmasm.o xstdio.o xstdio.c.o chartesters.c.o token.c.o filereader.c.o xstrtol.o $(patsubst %.asm.m4,%.m4.o,$(patsubst %.asm,%.o,$(patsubst %.c,%.c.o,$(chip8_sources))))
-chip8asm_objects = xstdio.o chartesters.c.o token.c.o filereader.c.o xstrtol.o $(patsubst %.asm,%.o,$(patsubst %.c,%.c.o,$(chip8asm_sources)))
+chip8_objects = filenames.c.o debug.o hbios.c.o hbios_cio.o hbios_snd.o xstdio.o xstdio.c.o chartesters.c.o token.c.o filereader.c.o xstrtol.o $(patsubst %.asm.m4,%.m4.o,$(patsubst %.asm,%.o,$(patsubst %.c,%.c.o,$(chip8_sources))))
+chip8asm_objects = filenames.c.o xstdio.o chartesters.c.o token.c.o filereader.c.o xstrtol.o $(patsubst %.asm,%.o,$(patsubst %.c,%.c.o,$(chip8asm_sources)))
 
 
 .PHONY: all
@@ -76,6 +77,7 @@ $(BIN)chip8/instr_v9958_output/%.c.asm: chip8/instr_v9958_output/%.c; $(compile)
 
 $(BIN)%.o: $(BIN)%.asm; $(assemble)
 $(BIN)chip8/%.o: $(BIN)chip8/%.asm; $(assemble)
+$(BIN)chip8asm/%.o: $(BIN)chip8asm/%.asm; $(assemble)
 $(BIN)%.o: %.asm; $(assemble)
 $(BIN)%.m4.o: %.asm.m4; $(assemble)
 $(BIN)chip8/instr_v9958_output/%.o: $(BIN)chip8/instr_v9958_output/%.asm; $(assemble)
@@ -84,6 +86,17 @@ $(BIN)chip8/instr_v9958_output/%.o: $(BIN)chip8/instr_v9958_output/%.asm; $(asse
 $(BIN)tstasmbl.com: $(addprefix $(BIN),test_expectations.c.o $(filter-out $(exclude_from_tests),$(chip8asm_objects)))
 	mkdir -p $(dir $@)
 	$(ZCC) -zorg 256 --list  $^ -o $(BIN)tstasmbl.com
+	echo "Compiled $(notdir $@) from $(notdir $^)"
+
+$(BIN)chip8asm.com: $(filter-out %test_assembler.c.o, $(addprefix $(BIN),$(chip8asm_objects)))
+	mkdir -p $(dir $@)
+	$(ZCC) -zorg 256 --list  $^ -o $(BIN)chip8asm.com
+	echo "Compiled $(notdir $@) from $(notdir $^)"
+
+
+$(BIN)test.com: $(addprefix $(BIN),test.c.o)
+	@mkdir -p $(dir $@)
+	$(ZCC) -zorg 256  $^ -o $(BIN)test.com
 	echo "Compiled $(notdir $@) from $(notdir $^)"
 
 

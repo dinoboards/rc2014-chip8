@@ -65,9 +65,7 @@ void addLabel(const char *label, uint16_t address, bool allowDuplicates) {
   nextEmptyPtr->address = address;
   strcpy(nextEmptyPtr->value, label);
 
-  printf("Next ptr from %p", nextEmptyPtr);
   nextEmptyPtr = next(nextEmptyPtr);
-  printf(" to %p\r\n", nextEmptyPtr);
 }
 
 void initLabelStorage() { nextEmptyPtr = (labelAddresses *)&labelStorage; }

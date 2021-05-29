@@ -1,7 +1,6 @@
 #include "assembler.h"
 #include "chip8asm/labels.h"
 #include "chip8asm/systemstate.h"
-#include "cpm.h"
 #include "expr.h"
 #include "test_opcodes.h"
 #include "xstdio.h"

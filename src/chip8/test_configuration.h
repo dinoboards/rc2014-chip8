@@ -3,8 +3,7 @@
 
 #include "configreader.h"
 #include "configuration_loader.h"
-#include "cpm.h"
 
-extern void parseConfiguration(FCB *configFCB);
+extern void parseConfiguration(const char *pConfigFileName);
 
 #endif

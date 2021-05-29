@@ -1,7 +1,6 @@
 #include "test_configuration.h"
 #include "configreader.h"
 #include "configuration_loader.h"
-#include "cpm.h"
 #include "systemstate.h"
 #include "test_expectations.h"
 #include "tms.h"
@@ -27,7 +26,7 @@ void expectedError(const char *p) __z88dk_fastcall {
 char *pNextChar;
 char *pConfigurationUnderTest;
 
-void setFileStream(FCB *_fcb) { (void)_fcb; }
+void setFileName(const char *fileName) { (void)fileName; }
 void openFileStream() { pNextChar = pConfigurationUnderTest; }
 void closeFileStream() {}
 char getNextCharRaw() { return *pNextChar++; }
@@ -41,7 +40,7 @@ extern bool haveAppliedAKeyConfig;
     unexpectedTokenInvoked = false;                       \
     expectedErrorInvoked = false;                         \
     printf(#config ": \r\n");                             \
-    parseConfiguration(&fcb);                             \
+    parseConfiguration("");                               \
     assert##config();                                     \
   }
 
@@ -255,7 +254,6 @@ void assertInvadersConfiguration() {
 extern void debug();
 
 void testConfigurtionParser() {
-  FCB fcb;
   printf("Configuration Processing:\r\n");
 
   assert(Colours);

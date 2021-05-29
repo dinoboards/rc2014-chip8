@@ -16,7 +16,8 @@ header_files = $(wildcard ./chip8asm/*.h) $(wildcard ./chip8/*.h) $(wildcard ./*
 .PHONY: chip8asm
 chip8asm:
 	@mkdir -p ./bin
-	$(MAKE) -C ./src ../bin/chip8asm.com -s -j 4 -O
+	TARGET=cpm $(MAKE) -C ./src ./bin/cpm/chip8asm.com -s -j 6 -O
+	cp -u ./src/bin/cpm/chip8asm.com ./bin
 
 test: tstinstr tstasmbl
 
@@ -26,13 +27,13 @@ tstinstr:
 	cp -u ./src/bin/cpm/tstinstr.com ./bin
 	(cd bin && cpm tstinstr)
 
-tstasmbl:
+tstasmbl: chip8asm
 	@mkdir -p ./bin
 	TARGET=cpm $(MAKE) -C ./src ./bin/cpm/tstasmbl.com -s #-j 4 -O
 	cp -u ./src/bin/cpm/tstasmbl.com ./bin
 	(cd bin && cpm tstasmbl)
 	cp ./test-samples/draw.cas ./bin/
-	# ./assembler.tests.js
+	./assembler.tests.js
 
 .PHONY: chip8
 chip8:

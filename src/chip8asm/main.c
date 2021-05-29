@@ -1,45 +1,46 @@
 #include "assembler.h"
 #include "chip8asm/labels.h"
 #include "chip8asm/systemstate.h"
-#include "cpm.h"
-#include "xstdio.h"
+#include "filenames.h"
+#include "filereader.h"
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
 
-void main() {
+static char newFileName[MAX_FILE_NAME];
+
+void main(int argc, char *argv[]) {
+
+  if (argc != 2) {
+    puts("Invalid arguments.  Usage: \r\n    chip8asm <filename>.cas\r\n");
+    exit(1);
+  }
+
+  const char *fileName = argv[1];
+
+  setFileName(fileName);
+
   initLabelStorage();
 
   assemble(1);
 
-  defaultFCB->r = 0;
-  defaultFCB->r2 = 0;
-  defaultFCB->cr = 0;
-  defaultFCB->rc = 0;
-  defaultFCB->s1 = 0;
-  defaultFCB->s2 = 0;
-  defaultFCB->dr = 0;
-  defaultFCB->ex = 0;
-
   assemble(2);
-
-  defaultFCB->type[0] = 'c';
-  defaultFCB->type[1] = 'h';
-  defaultFCB->type[2] = '8';
-  defaultFCB->r = 0;
-  defaultFCB->r2 = 0;
-  defaultFCB->cr = 0;
-  defaultFCB->rc = 0;
-  defaultFCB->s1 = 0;
-  defaultFCB->s2 = 0;
-  defaultFCB->dr = 0;
-  defaultFCB->ex = 0;
 
   printf("Total Byte Count %d\r\n", currentAddress);
 
-  chk(fMake(defaultFCB));
+  replaceExtension(newFileName, fileName, ".CH8");
+  FILE *pFile = fopen(newFileName, "w");
 
-  for (uint16_t addr = 0; addr < currentAddress; addr += 128) {
-    chk(fDmaOff(addr + programStorage));
-    chk(fWrite(defaultFCB));
-  }
-  chk(fClose(defaultFCB));
+  char *pBuffer = (char *)programStorage;
+  char *pBufferEnd = pBuffer + currentAddress;
+
+  for (char *p = pBuffer; p < pBufferEnd; p++)
+    putc(*p, pFile);
+
+  const uint8_t cpmPage = 128 - ((uint8_t)(currentAddress % 128));
+
+  for (uint8_t i = 0; i < cpmPage; i++)
+    putc(0, pFile);
+
   printf("File written\r\n");
 }

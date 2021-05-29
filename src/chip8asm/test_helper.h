@@ -172,4 +172,4 @@ void shouldEvaluateError(const char *expression, const char *expectedErrorMessag
   printf(RED "  Failed.  no error message reported.\r\n" RESET);
 }
 
-void setFileStream() {}
+// void setFileName(const char* p) {(void)p}

@@ -1,9 +1,10 @@
 #include "configreader.h"
-#include "cpm.h"
 #include "error_reports.h"
+#include "filenames.h"
 #include "filereader.h"
 #include "systemstate.h"
 #include "v9958.h"
+#include <stdio.h>
 
 static void applyConfigColour();
 static void applyConfigKey();
@@ -25,8 +26,8 @@ void applySingleConfig() {
   }
 }
 
-void parseConfiguration(FCB *configFCB) __z88dk_fastcall {
-  setFileStream(configFCB);
+void parseConfiguration(const char *pConfigFileName) __z88dk_fastcall {
+  setFileName(pConfigFileName);
   openTokenStream();
   getNextToken();
 
@@ -39,18 +40,18 @@ void parseConfiguration(FCB *configFCB) __z88dk_fastcall {
 }
 
 void applyConfiguration(const char *pName) __z88dk_fastcall {
-  FCB configFCB;
+  char configFileName[MAX_FILE_NAME];
 
-  resetFCB(pName, "CFG", &configFCB);
+  replaceExtension(configFileName, pName, ".CFG");
 
-  uint8_t exists = fOpen(&configFCB);
+  FILE *pFile = fopen(configFileName, "r");
 
-  if (exists == 0xFF)
+  if (pFile == NULL)
     return;
 
-  fClose(&configFCB);
+  fclose(pFile);
 
-  parseConfiguration(&configFCB);
+  parseConfiguration(configFileName);
 }
 
 uint8_t expectToBeHexCharIdentifier() {
