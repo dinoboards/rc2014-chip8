@@ -4,7 +4,6 @@
 #include "systemstate.h"
 #include "systimer.h"
 #include "timers.h"
-#include "tty.h"
 #include "xstdio.h"
 #include <stdarg.h>
 #include <stdio.h>

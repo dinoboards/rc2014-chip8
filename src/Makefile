@@ -20,7 +20,7 @@ ZCCRELFLAGS=-SO3 --max-allocs-per-node200000 -Cs"--opt-code-speed" --allow-unsaf
 endif
 
 ifeq ($(TARGET),msx)
-ZCC := zcc +msx -subtype=msxdos2 -compiler=sdcc -list -lmath32 -Cc-D__MATH_MATH32 -D__MATH_MATH32 -pragma-define:CLIB_32BIT_FLOAT=1 -Ca="-I./chip8/" -Cm="-I./chip8/" $(ZCCRELFLAGS)
+ZCC := zcc +msx -subtype=msxdos2 -compiler=sdcc --list -lmath32 -Cc-D__MATH_MATH32 -D__MATH_MATH32 -pragma-define:CLIB_32BIT_FLOAT=1 -Ca="-I./chip8/" -Cm="-I./chip8/" $(ZCCRELFLAGS)
 else
 ZCC := zcc +cpm  -compiler=sdcc $(ZCCRELFLAGS) --list -pragma-redirect:fputc_cons=fputc_cons_native  -Ca="-I./chip8/" -Cm="-I./chip8/" -pragma-define:noprotectmsdos -pragma-define:CRT_ENABLE_COMMANDLINE=1 -pragma-define:CRT_COMMANDLINE_REDIRECTION=0 -pragma-define:CRT_OPEN_MAX=1
 endif
@@ -62,6 +62,9 @@ $(BIN)tstinstr200.bin: $(addprefix $(BIN),test_expectations.c.o $(filter-out $(e
 $(BIN)tstinstrrelocation-map.bin: $(addprefix $(BIN),tstinstr100.bin tstinstr200.bin)
 	@node ./extract-relocation-map.js $^ $(BIN)tstinstrrelocation-map.bin
 
+$(BIN)tstinstr.loader.asm: loader.asm.m4
+	@m4 -D SRC=$(TARGET)/tstinstr $^ > $@
+
 $(BIN)tstinstr.com: $(addprefix $(BIN),tstinstr100.bin tstinstr200.bin tstinstr.loader.asm tstinstrrelocation-map.bin)
 	z80asm -r=256 -o"$@" -b "$(BIN)tstinstr.loader.asm"
 	echo "Compiled $(notdir $@) from $(filter-out %.h,$^)"
@@ -94,11 +97,47 @@ $(BIN)chip8asm.com: $(filter-out %test_assembler.c.o, $(addprefix $(BIN),$(chip8
 	echo "Compiled $(notdir $@) from $(notdir $^)"
 
 
+
+
+
+
+# $(BIN)chip8.com: $(filter-out ./bin/msx/chip8/test_%.c.o, $(addprefix $(BIN),$(chip8_objects)))
+# 	mkdir -p $(dir $@)
+# 	$(ZCC) -zorg 256 --list  $^ -o $(BIN)chip8.com
+# 	echo "Compiled $(notdir $@) from $(notdir $^)"
+
+$(BIN)chip8100.bin:$(filter-out ./bin/msx/chip8/test_%.c.o, $(addprefix $(BIN),$(chip8_objects)))
+	@mkdir -p $(dir $@)
+	$(ZCC) -zorg 256  $^ -o $(BIN)chip8100.bin
+	echo "Compiled $(notdir $@) from $(notdir $^)"
+
+$(BIN)chip8200.bin: $(filter-out ./bin/msx/chip8/test_%.c.o, $(addprefix $(BIN),$(chip8_objects)))
+	@mkdir -p $(dir $@)
+	$(ZCC) -zorg 512  $^ -o $(BIN)chip8200.bin
+	echo "Compiled $(notdir $@) from $(notdir $^)"
+
+$(BIN)chip8relocation-map.bin: $(addprefix $(BIN),chip8100.bin chip8200.bin)
+	@node ./extract-relocation-map.js $^ $(BIN)chip8relocation-map.bin
+
+$(BIN)chip8.loader.asm: loader.asm.m4
+	@m4 -D SRC=$(TARGET)/chip8 $^ > $@
+
+$(BIN)chip8.com: $(addprefix $(BIN),chip8100.bin chip8200.bin chip8.loader.asm chip8relocation-map.bin)
+	z80asm -r=256 -o"$@" -b "$(BIN)chip8.loader.asm"
+	echo "Compiled $(notdir $@) from $(filter-out %.h,$^)"
+
+
+
+
+
+
+
+
+
 $(BIN)test.com: $(addprefix $(BIN),test.c.o)
 	@mkdir -p $(dir $@)
 	$(ZCC) -zorg 256  $^ -o $(BIN)test.com
 	echo "Compiled $(notdir $@) from $(notdir $^)"
-
 
 $(BIN)hello100.bin: $(addprefix $(BIN),hello.c.o chip8/hello2.c.o hello.m4.o)
 	@mkdir -p $(dir $@)
@@ -112,9 +151,6 @@ $(BIN)hello200.bin: $(addprefix $(BIN),hello.c.o chip8/hello2.c.o hello.m4.o)
 
 $(BIN)hello.loader.asm: loader.asm.m4
 	@m4 -D SRC=$(TARGET)/hello $^ > $@
-
-$(BIN)tstinstr.loader.asm: loader.asm.m4
-	@m4 -D SRC=$(TARGET)/tstinstr $^ > $@
 
 $(BIN)hello.com: $(addprefix $(BIN),hello100.bin hello200.bin hello.loader.asm)
 	@node ./extract-relocation-map.js $^

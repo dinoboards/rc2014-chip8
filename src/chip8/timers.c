@@ -1,5 +1,4 @@
 #include "timers.h"
-#include "chip8/tty.h"
 #include "hbios.h"
 #include "instr_sound.h"
 #include "systemstate.h"

@@ -19,6 +19,12 @@ chip8asm:
 	TARGET=cpm $(MAKE) -C ./src ./bin/cpm/chip8asm.com -s -j 6 -O
 	cp -u ./src/bin/cpm/chip8asm.com ./bin
 
+.PHONY: chip8
+chip8:
+	@mkdir -p ./bin
+	TARGET=msx $(MAKE) -C ./src ./bin/msx/chip8.com -s -j 6 -O
+	cp -u ./src/bin/msx/chip8.com ./bin
+
 test: tstinstr tstasmbl
 
 tstinstr:
@@ -34,11 +40,6 @@ tstasmbl: chip8asm
 	(cd bin && cpm tstasmbl)
 	cp ./test-samples/draw.cas ./bin/
 	./assembler.tests.js
-
-.PHONY: chip8
-chip8:
-	@mkdir -p ./bin
-	$(MAKE) -C ./src ../bin/chip8.com -s -j 4 -O
 
 .PHONY: clean
 clean:
