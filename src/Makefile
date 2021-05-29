@@ -274,4 +274,4 @@ deps:
 
 clean:
 	@rm -rf bin
-
+	rm *.asm.lis
