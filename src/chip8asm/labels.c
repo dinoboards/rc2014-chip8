@@ -4,6 +4,7 @@
 #include "systemstate.h"
 #include "xstdio.h"
 #include <string.h>
+#include <stdio.h>
 
 #define MAX_LABEL_STORAGE 4096
 
@@ -64,7 +65,11 @@ void addLabel(const char *label, uint16_t address, bool allowDuplicates) {
   nextEmptyPtr->address = address;
   strcpy(nextEmptyPtr->value, label);
 
+  printf("Next ptr from %p", nextEmptyPtr);
   nextEmptyPtr = next(nextEmptyPtr);
+  printf(" to %p\r\n", nextEmptyPtr);
 }
 
-void initLabelStorage() { nextEmptyPtr = (labelAddresses *)&labelStorage; }
+void initLabelStorage() {
+  nextEmptyPtr = (labelAddresses *)&labelStorage;
+}

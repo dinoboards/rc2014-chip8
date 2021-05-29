@@ -10,6 +10,8 @@
 #include "xstdlib.h"
 #include <stdio.h>
 
+
+
 #define MAX_WORKING_BUFFER 64
 static char        token[MAX_WORKING_BUFFER];
 static int         tokenIndex = 0;
@@ -21,7 +23,7 @@ typedef enum { UNKNOWN, ADD_SUB_OP, MUL_DIV_REM_OP, OP_OR, AND_OP, LEFT_PAREN, R
 static LookAheadTokens lookAhead;
 
 void   scan();
-number expr(void);
+int16_t expr(void);
 
 inline void reset() {
   tokenIndex = 0;
@@ -30,14 +32,14 @@ inline void reset() {
 
 inline void ignore() { currentChar = *expressionPtr++; }
 
-number evaluate(const char *myexpression) {
+int16_t evaluate(const char *myexpression) {
   expressionPtr = (char *)myexpression;
 
   reset();
   ignore();
   scan();
 
-  number val = expr();
+  int16_t val = expr();
 
   if (lookAhead != END_INPUT && lookAhead != '\0') {
     errorUnexpectedContent();
@@ -156,8 +158,8 @@ IN_LEADING_ALPHA:
   }
 }
 
-number unsigned_factor() {
-  number result = 0;
+int16_t unsigned_factor() {
+  int16_t result = 0;
   switch (lookAhead) {
   case NUMBER:
     result = xstrtol(token, (char *)0, 10);
@@ -188,7 +190,7 @@ number unsigned_factor() {
   return result;
 }
 
-number factor() {
+int16_t factor() {
   if (lookAhead == ADD_SUB_OP && token[0] == '-') {
     scan();
     return -unsigned_factor();
@@ -196,8 +198,8 @@ number factor() {
   return unsigned_factor();
 }
 
-number operatorMulDivRem() {
-  number result = factor();
+int16_t operatorMulDivRem() {
+  int16_t result = factor();
   while (lookAhead == MUL_DIV_REM_OP) {
     switch (token[0]) {
     case '*':
@@ -219,8 +221,8 @@ number operatorMulDivRem() {
   return result;
 }
 
-number operatorAddSub() {
-  number result = operatorMulDivRem();
+int16_t operatorAddSub() {
+  int16_t result = operatorMulDivRem();
   while (lookAhead == ADD_SUB_OP) {
     switch (token[0]) {
     case '+':
@@ -237,8 +239,8 @@ number operatorAddSub() {
   return result;
 }
 
-number operatorAnd() {
-  number result = operatorAddSub();
+int16_t operatorAnd() {
+  int16_t result = operatorAddSub();
   while (lookAhead == AND_OP) {
     switch (token[0]) {
     case '&':
@@ -250,8 +252,8 @@ number operatorAnd() {
   return result;
 }
 
-number expr() { // Operator |
-  number result = operatorAnd();
+int16_t expr() { // Operator |
+  int16_t result = operatorAnd();
   while (lookAhead == OP_OR) {
     switch (token[0]) {
     case '|':

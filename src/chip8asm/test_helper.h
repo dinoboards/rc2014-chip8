@@ -37,7 +37,6 @@ void shouldAssemble(const char *source, uint16_t expectedWord) {
   programStorage[0] = 0;
   programStorage[1] = 0;
   testErrored = false;
-  xbuffer[0] = '\0';
   logBuffer[0] = '\0';
 
   initLabelStorage();
@@ -47,7 +46,6 @@ void shouldAssemble(const char *source, uint16_t expectedWord) {
 
   printf("%04X should be assembled from:\r\n  %s\r\n\r\n", expectedWord, source);
 
-  //?????
   if (testErrored) {
     printf(RED "  Failed.  %s\r\n" RESET, logBuffer);
     testFailure = true;
@@ -65,7 +63,6 @@ void shouldAssembleDblWidth(const char *source, uint16_t expectedWord1, uint16_t
   programStorage[0] = 0;
   programStorage[1] = 0;
   testErrored = false;
-  xbuffer[0] = '\0';
   logBuffer[0] = '\0';
 
   initLabelStorage();
@@ -75,7 +72,6 @@ void shouldAssembleDblWidth(const char *source, uint16_t expectedWord1, uint16_t
 
   printf("%04X, %04X should be assembled from:\r\n  %s\r\n\r\n", expectedWord1, expectedWord2, source);
 
-  //?????
   if (testErrored) {
     printf(RED "  Failed.  %s\r\n" RESET, logBuffer);
     testFailure = true;
@@ -93,7 +89,6 @@ void shouldAssembleDS(const char *source, uint16_t expectedPCCount) {
   programStorage[0] = 0;
   programStorage[1] = 0;
   testErrored = false;
-  xbuffer[0] = '\0';
   logBuffer[0] = '\0';
 
   initLabelStorage();
@@ -121,7 +116,6 @@ void shouldError(const char *source, const char *errorMessage) {
   programStorage[1] = 0;
   testErrored = false;
   logBuffer[0] = '\0';
-  xbuffer[0] = '\0';
 
   initLabelStorage();
   assemble(1);
@@ -144,7 +138,6 @@ void shouldError(const char *source, const char *errorMessage) {
 
 void shouldEvaluate(const char *expression, int expectedValue) {
   testErrored = false;
-  xbuffer[0] = '\0';
   logBuffer[0] = '\0';
 
   printf("%s should evaluate to %d\r\n", expression, expectedValue);
@@ -161,7 +154,6 @@ void shouldEvaluate(const char *expression, int expectedValue) {
 
 void shouldEvaluateError(const char *expression, const char *expectedErrorMessage) {
   testErrored = false;
-  xbuffer[0] = '\0';
   logBuffer[0] = '\0';
 
   printf("%s should generate error of %s\r\n", expression, expectedErrorMessage);

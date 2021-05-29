@@ -71,7 +71,7 @@
  chip8asm/expr.h test_opcodes.h xstdio.h test_expectations.h datatypes.h \
  terminal_codes.h chip8asm/test_helper.h terminal_codes.h \
  chip8asm/tokenreader.h token.h
-./bin/cpm/chip8asm/expr.c.asm: chip8asm/expr.c chip8asm/expr.h chartesters.h datatypes.h \
+./bin/cpm/chip8asm/expr.c.asm: chip8asm/expr.c chip8asm/expr.h datatypes.h chartesters.h \
  chip8asm/error.h chip8asm/error_reports.h chip8asm/exit.h \
  chip8asm/labels.h xstdlib.h
 ./bin/cpm/chip8asm/exit.c.asm: chip8asm/exit.c
@@ -84,8 +84,8 @@
  datatypes.h chartesters.h cpm.h datatypes.h chip8asm/error.h \
  chip8asm/exit.h filereader.h cpm.h
 ./bin/cpm/chip8asm/token_parser.c.asm: chip8asm/token_parser.c chip8asm/token_parser.h \
- datatypes.h chip8asm/error_reports.h chip8asm/expr.h hbios.h \
- chip8asm/tokenreader.h token.h datatypes.h xstdio.h
+ datatypes.h chip8asm/error_reports.h chip8asm/tokenreader.h token.h \
+ datatypes.h chip8asm/expr.h
 ./bin/cpm/chip8asm/systemstate.c.asm: chip8asm/systemstate.c chip8asm/systemstate.h \
  datatypes.h
 ./bin/cpm/chip8asm/emitters.c.asm: chip8asm/emitters.c chip8asm/emitters.h datatypes.h \

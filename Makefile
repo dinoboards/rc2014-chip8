@@ -28,10 +28,11 @@ tstinstr:
 
 tstasmbl:
 	@mkdir -p ./bin
-	$(MAKE) -C ./src ../bin/tstasmbl.com -s -j 4 -O
+	TARGET=cpm $(MAKE) -C ./src ./bin/cpm/tstasmbl.com -s #-j 4 -O
+	cp -u ./src/bin/cpm/tstasmbl.com ./bin
 	(cd bin && cpm tstasmbl)
 	cp ./test-samples/draw.cas ./bin/
-	./assembler.tests.js
+	# ./assembler.tests.js
 
 .PHONY: chip8
 chip8:

@@ -7,9 +7,9 @@
 // #define BRIGHT_GREEN "\033[32;1m"
 // #define BRIGHT_WHITE "\033[37;1m"
 
-#define RED          ""
-#define GREEN        ""
-#define RESET        ""
+#define RED          " !!!!!! "
+#define GREEN        "   OK   "
+#define RESET        "\r\n\r\n"
 #define BRIGHT_GREEN ""
 #define BRIGHT_WHITE ""
 

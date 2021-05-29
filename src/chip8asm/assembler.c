@@ -8,10 +8,11 @@
 #include "systemstate.h"
 #include "token_parser.h"
 #include "tokenreader.h"
+#include <stdio.h>
 
 #define getNext() getNextToken()
 
-inline void assLabel(int parseCount) { addLabel(token.value, currentAddress, parseCount != 1); }
+inline void assLabel(uint8_t parseCount) { addLabel(token.value, currentAddress, parseCount != 1); }
 
 inline void assRet() { emit(0x00EE); }
 
@@ -730,7 +731,7 @@ inline void assScroll() {
 }
 
 void assemble(byte pc) __z88dk_fastcall {
-  parseCount = pc;
+  parseCount = pc;    // WARNING - SDCC can sometimes optimise this to cause a 16bit write to a 8 bit storage variable
   currentAddress = 0x200;
   programPtr = programStorage;
 
@@ -741,9 +742,10 @@ void assemble(byte pc) __z88dk_fastcall {
 
   while (token.type != TokenEnd) {
     switch (token.type) {
-    case TokenLabel:
-      assLabel(parseCount);
+    case TokenLabel: {
+      assLabel(pc); //TODO WARNING SDCC BUG if we change this to parseCount - the assigned above for parseCount will assign a 16bit value - to an 8 bit storage variable!
       break;
+    }
 
     case InstructionCls:
       assCls();
