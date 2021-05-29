@@ -22,7 +22,7 @@ test: tstinstr tstasmbl
 
 tstinstr:
 	@mkdir -p ./bin
-	TARGET=cpm $(MAKE) -C ./src ./bin/cpm/tstinstr.com -s -j 4 -O
+	TARGET=cpm $(MAKE) -C ./src ./bin/cpm/tstinstr.com -s -j 6 -O
 	cp -u ./src/bin/cpm/tstinstr.com ./bin
 	(cd bin && cpm tstinstr)
 

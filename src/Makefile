@@ -15,10 +15,14 @@ MEASURE=
 
 # -Ca="${MEASURE}" -Ca="-opt-speed" -c -Ca="-I./chip8/" -Cm="-I./chip8/"  -Ca="-opt-speed"
 
+ifdef RELEASE
+ZCCRELFLAGS=-SO3 --max-allocs-per-node200000 -Cs"--opt-code-speed" --allow-unsafe-read --opt-code-speed
+endif
+
 ifeq ($(TARGET),msx)
-ZCC := zcc +msx -subtype=msxdos2 -compiler=sdcc -lmath32 -Cc-D__MATH_MATH32 -D__MATH_MATH32 -pragma-define:CLIB_32BIT_FLOAT=1 -Ca="-I./chip8/" -Cm="-I./chip8/"
+ZCC := zcc +msx -subtype=msxdos2 -compiler=sdcc -lmath32 -Cc-D__MATH_MATH32 -D__MATH_MATH32 -pragma-define:CLIB_32BIT_FLOAT=1 -Ca="-I./chip8/" -Cm="-I./chip8/" $(ZCCRELFLAGS)
 else
-ZCC := zcc +cpm  -compiler=sdcc -pragma-redirect:fputc_cons=fputc_cons_native  -Ca="-I./chip8/" -Cm="-I./chip8/" -pragma-define:noprotectmsdos -pragma-define:CRT_ENABLE_COMMANDLINE=0 -pragma-define:CRT_COMMANDLINE_REDIRECTION=0 -pragma-define:CRT_OPEN_MAX=0 -lndos
+ZCC := zcc +cpm  -compiler=sdcc $(ZCCRELFLAGS) -pragma-redirect:fputc_cons=fputc_cons_native  -Ca="-I./chip8/" -Cm="-I./chip8/" -pragma-define:noprotectmsdos -pragma-define:CRT_ENABLE_COMMANDLINE=0 -pragma-define:CRT_COMMANDLINE_REDIRECTION=0 -pragma-define:CRT_OPEN_MAX=0 -lndos
 endif
  #-Ca="-opt-speed"
 
@@ -155,9 +159,6 @@ $(BIN)hello.com: $(addprefix $(BIN),hello100.bin hello200.bin hello.loader.asm)
 
 # ZCCRELFLAGS=
 
-# ifdef RELEASE
-# ZCCRELFLAGS=" -SO3 --max-allocs-per-node200000 -Cs\"--opt-code-speed\" --allow-unsafe-read"
-# endif
 
 # ZCCFLAGS="${MEASURE} ${ZCCRELFLAGS} "
 
