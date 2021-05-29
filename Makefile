@@ -13,10 +13,6 @@ all:
 
 header_files = $(wildcard ./chip8asm/*.h) $(wildcard ./chip8/*.h) $(wildcard ./*.h)
 
-.PHONY: deps
-deps:
-	@$(MAKE) -C ./src deps -s -j 4 -O
-
 .PHONY: chip8asm
 chip8asm:
 	@mkdir -p ./bin
@@ -80,3 +76,8 @@ package: chip8 chip8asm
 	git clone --depth 1 git@github.com:jhallen/cpm.git
 	cd cpm
 	OS=linux MAKEFLAGS= make -B
+
+.PHONY: deps
+deps:
+	TARGET=cpm $(MAKE) -s -C ./src deps
+	TARGET=msx $(MAKE) -s -C ./src deps

@@ -2,7 +2,7 @@
 ./bin/msx/chip8/test_instruction.c.asm: chip8/test_instruction.c chip8/byte_code_executor.h \
  datatypes.h chip8/fontsets.h chip8/stack.h chip8/systemstate.h \
  terminal_codes.h test_expectations.h datatypes.h terminal_codes.h \
- test_opcodes.h chip8/test_system.h
+ test_opcodes.h chip8/test_system.h xstdio.h
 ./bin/msx/chip8/tty.c.asm: chip8/tty.c chip8/tty.h hbios.h xstdio.h
 ./bin/msx/chip8/keys.c.asm: chip8/keys.c chip8/keys.h datatypes.h hbios.h
 ./bin/msx/chip8/tms.c.asm: chip8/tms.c chip8/tms.h datatypes.h hbios.h chip8/keys.h \
@@ -18,7 +18,7 @@
 ./bin/msx/chip8/instr_tms_output.c.asm: chip8/instr_tms_output.c chip8/instr_tms_output.h \
  datatypes.h chip8/vid_int.h chip8/systemstate.h chip8/tms.h
 ./bin/msx/chip8/test_system.c.asm: chip8/test_system.c chip8/test_system.h datatypes.h \
- chip8/systemstate.h chip8/timers.h chip8/ym2149.h chip8/audio.h
+ xstdio.h chip8/systemstate.h chip8/timers.h chip8/ym2149.h chip8/audio.h
 ./bin/msx/chip8/configuration_loader.c.asm: chip8/configuration_loader.c \
  chip8/configreader.h token.h datatypes.h cpm.h chip8/error_reports.h \
  datatypes.h filereader.h cpm.h chip8/systemstate.h chip8/v9958.h
@@ -116,6 +116,7 @@
 ./bin/msx/chip8/sub_vx_vy_asm.o: ./chip8/sub_vx_vy_asm.asm
 ./bin/msx/chip8/v9958asm.o: ./chip8/v9958asm.asm ./chip8/v9958.inc
 ./bin/msx/chip8/instr_registerasm.o: ./chip8/instr_registerasm.asm
+./bin/msx/xstdio.o: ./xstdio.asm
 ./bin/msx/chip8asm/data.o: ./chip8asm/data.asm
 ./bin/msx/hbios_snd.o: ./hbios_snd.asm
 ./bin/msx/relocmem.o: ./relocmem.asm

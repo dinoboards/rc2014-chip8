@@ -22,8 +22,8 @@ ZCC := zcc +cpm  -compiler=sdcc -pragma-redirect:fputc_cons=fputc_cons_native  -
 endif
  #-Ca="-opt-speed"
 
-chip8_sources = $(wildcard ./chip8/*.c) $(wildcard ./chip8/*.asm) $(wildcard ./chip8/*.asm.m4) $(wildcard ./chip8/instr_v9958_output/*.asm) $(wildcard ./chip8/instr_v9958_output/*.asm.m4)
-chip8asm_sources = $(wildcard ./chip8asm/*.c) $(wildcard ./chip8asm/*.asm)
+chip8_sources = $(wildcard chip8/*.c) $(wildcard chip8/*.asm) $(wildcard chip8/*.asm.m4) $(wildcard chip8/instr_v9958_output/*.asm) $(wildcard chip8/instr_v9958_output/*.asm.m4)
+chip8asm_sources = $(wildcard chip8asm/*.c) $(wildcard chip8asm/*.asm)
 exclude_from_tests = %main.c.o %filereader.c.o %exit.c.o %error.c.o %tty.c.o %keys.c.o %random.c.o %ym2149.c.o %ym2149asm.o
 exclude_from_tstinstr = $(exclude_from_tests) %error_reports.c.o
 chip8_objects = debug.o hbios.c.o hbios_cio.o hbios_snd.o cpm.c.o cpmasm.o xstdio.o xstdio.c.o chartesters.c.o token.c.o filereader.c.o xstrtol.o $(patsubst %.asm.m4,%.m4.o,$(patsubst %.asm,%.o,$(patsubst %.c,%.c.o,$(chip8_sources))))
@@ -152,12 +152,6 @@ $(BIN)hello.com: $(addprefix $(BIN),hello100.bin hello200.bin hello.loader.asm)
 # 	-mz80 \
 # 	-opt-speed
 
-ZSDCPP_FLAGS=-iquote"." \
-	-D__Z88DK -D__EMBEDDED -DEMBEDDED -D__EMBEDDED_Z80 -D__Z80 -DZ80 \
-	${MEASURE} \
-	-D__SDCC -D__SDCC_IY \
-	-D__SDCC 						\
-	-isystem"${ZCCCFG}/../../include/_DEVELOPMENT/sdcc"
 
 # ZCCRELFLAGS=
 
@@ -172,7 +166,8 @@ ZSDCPP_FLAGS=-iquote"." \
 # LINK_WITH_RELOCATOR=node ./apploader.js --page-align
 # LINKER=z80asm
 
-include ./depends.d
+include ./cpm-depends.d
+include ./msx-depends.d
 
 # chip8asm_sources = $(wildcard ./chip8asm/*.c) $(wildcard ./chip8asm/*.asm)
 # chip8asm_objects = crt.o memap.o cpm.o cpmasm.o hbios_cio.o hbios.o memap.o nonreloccrt.o xstdio.o chartesters.o token.o filereader.o xstrtol.o $(patsubst %.asm,%.o,$(patsubst %.c,%.o,$(chip8asm_sources)))
@@ -219,8 +214,10 @@ include ./depends.d
 # 	@$(ASSEMBLER) $<
 # 	echo "Assembled $< to $@"
 
+ZSDCPP_FLAGS=-iquote"." -isystem"${ZCCCFG}/../../include/_DEVELOPMENT/sdcc"
+
 deps:
-	@echo "" > ./depends.d
+	@echo "" > ./$(TARGET)-depends.d
 	# C Dependencies
 	find -name "*.c" | while read -r file; do
 		file_no_ext="$${file%.*}"
@@ -229,20 +226,20 @@ deps:
 		from="$$filename.rel"
 		to="$(BIN)$$file_no_ext.c.asm"
 		zsdcpp ${ZSDCPP_FLAGS} -MM -MF /tmp/deps.deps $$file
-		sed "s+$$from+$$to+g" /tmp/deps.deps >> ./depends.d
+		sed "s+$$from+$$to+g" /tmp/deps.deps >> ./$(TARGET)-depends.d
 	done
 
 	# ASM include dependencies
 	find -name "*.asm" -not -path "./bin/*" | while read -r file; do
 		file_no_ext="$${file%.*}"
 	 	file_no_ext=$${file_no_ext#./}
-		printf "$(BIN)$$file_no_ext.o:" >> ./depends.d
-		printf " $$file" >> ./depends.d
+		printf "$(BIN)$$file_no_ext.o:" >> ./$(TARGET)-depends.d
+		printf " $$file" >> ./$(TARGET)-depends.d
 		sed -n '/include/s/^[\t ]*include[\t ]*"\{0,1\}\(.*\)".*$$/\1/p' < $$file | while read -r depfile; do
 			depfilepath=$$(find -iname $$depfile)
-			printf " $$depfilepath" >> ./depends.d
+			printf " $$depfilepath" >> ./$(TARGET)-depends.d
 		done
-		echo "" >> ./depends.d
+		echo "" >> ./$(TARGET)-depends.d
 	done
 
 	# ASM include dependencies
@@ -250,20 +247,20 @@ deps:
 		file_no_ext="$${file%.*}"
 	 	file_no_ext=$${file_no_ext#./}
 		file_no_ext="$(BIN)$${file_no_ext%.*}"
-		printf "$$file_no_ext.o:" >> ./depends.d
-		printf " $$file" >> ./depends.d
+		printf "$$file_no_ext.o:" >> ./$(TARGET)-depends.d
+		printf " $$file" >> ./$(TARGET)-depends.d
 		sed  -n '/include/s/^[\t ]*include(.\(.*\)'\'')/\1/p' < $$file | while read -r depfile; do
 			depfilepath=$$(find -iname $$depfile)
-			printf " $$depfilepath" >> ./depends.d
+			printf " $$depfilepath" >> ./$(TARGET)-depends.d
 		done
 		sed -n '/include/s/^[\t ]*include[\t ]*"\{0,1\}\(.*\)".*$$/\1/p' < $$file | while read -r depfile; do
 			depfilepath=$$(find -iname $$depfile)
-			printf " $$depfilepath" >> ./depends.d
+			printf " $$depfilepath" >> ./$(TARGET)-depends.d
 		done
-		echo "" >> ./depends.d
+		echo "" >> ./$(TARGET)-depends.d
 	done
 
-	echo "./depends.d created"
+	echo "./$(TARGET)-depends.d created"
 
 
 clean:
