@@ -1,8 +1,8 @@
 #include "token_parser.h"
-#include "error_reports.h"
-#include "tokenreader.h"
-#include "expr.h"
 #include "datatypes.h"
+#include "error_reports.h"
+#include "expr.h"
+#include "tokenreader.h"
 #include <stdio.h>
 
 static inline byte getRegisterIndex(TokenType c) { return (byte)c - RegisterV0; }

@@ -33,9 +33,7 @@ void resetKeySimulator() {
   timerTick = 0;
 }
 
-byte keyReady() {
-  return simulateKeyReady;
-}
+byte keyReady() { return simulateKeyReady; }
 
 char getKey() { return simulatedKeyValue; }
 

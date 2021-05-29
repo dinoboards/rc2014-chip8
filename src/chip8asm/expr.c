@@ -10,8 +10,6 @@
 #include "xstdlib.h"
 #include <stdio.h>
 
-
-
 #define MAX_WORKING_BUFFER 64
 static char        token[MAX_WORKING_BUFFER];
 static int         tokenIndex = 0;
@@ -22,7 +20,7 @@ typedef enum { UNKNOWN, ADD_SUB_OP, MUL_DIV_REM_OP, OP_OR, AND_OP, LEFT_PAREN, R
 
 static LookAheadTokens lookAhead;
 
-void   scan();
+void    scan();
 int16_t expr(void);
 
 inline void reset() {

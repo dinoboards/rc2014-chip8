@@ -1,7 +1,7 @@
 #include "test_expectations.h"
 #include "terminal_codes.h"
-#include <string.h>
 #include <stdio.h>
+#include <string.h>
 
 bool testFailure = false;
 

@@ -1,16 +1,14 @@
 #pragma output noprotectmsdos
 
-#include <string.h>
-#include <stdio.h>
 #include <stdarg.h>
+#include <stdio.h>
+#include <string.h>
 
 #include "hello.h"
 
 uint8_t data;
 
-void assemble(uint8_t pc) __z88dk_fastcall {
-  data = pc;
-}
+void assemble(uint8_t pc) __z88dk_fastcall { data = pc; }
 
 void main() {
   assemble(2);
