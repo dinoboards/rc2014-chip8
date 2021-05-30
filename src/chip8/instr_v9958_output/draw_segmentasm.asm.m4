@@ -218,6 +218,15 @@ l_drawSegment_00102:
 
 ;    drawLine(xx, yAddOne, xxTo, yAddOne, 15, CMD_LOGIC_XOR);
 ;	DROP BOTTOM LINE
+
+ifdef(`EMULATOR_WORKAROUNDS', `
+; 	;R36 = x
+	ld	a, c			; (_xx)
+	OUT	(VDP_ADDR), A
+	LD	A, 0x80 | 36
+	OUT	(VDP_ADDR), A
+')
+
 	ld	a, (_yAddOne)
 	OUT	(VDP_ADDR), A
 	LD	A, 0x80 | 38
@@ -230,5 +239,7 @@ l_drawSegment_00102:
 	OUT	(VDP_ADDR), A
 
 	M_RESET_V9958_DEFAULT_REGISTER()
+
+spike:
 	EI
 	RET

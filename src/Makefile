@@ -37,9 +37,14 @@ chip8asm_objects = filenames.c.o xstdio.o chartesters.c.o token.c.o filereader.c
 .PHONY: all
 all: $(TARGETS)
 
+M4DEFINES=""
+ifdef EMULATOR_WORKAROUNDS
+	M4DEFINES = "-Cm\"-DEMULATOR_WORKAROUNDS\""
+endif
+
 define assemble
 	@mkdir -p $(dir $@)
-	$(ZCC) --compile-only $< -o $@
+	$(ZCC) $(M4DEFINES) --compile-only $< -o $@
 	echo "Assembled $(notdir $@) from $(notdir $<)"
 endef
 
