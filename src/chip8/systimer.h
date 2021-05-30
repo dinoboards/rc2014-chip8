@@ -3,7 +3,6 @@
 #define __SYSTIMER
 
 #include "datatypes.h"
-#include "hbios.h"
 #include "systemstate.h"
 #include "systimer.h"
 

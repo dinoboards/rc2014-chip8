@@ -4,7 +4,6 @@
 #include "datatypes.h"
 #include "error_reports.h"
 #include "filenames.h"
-#include "hbios.h"
 #include "instr_output.h"
 #include "instr_sound.h"
 #include "random.h"
@@ -48,7 +47,7 @@ void main(int argc, char *argv[]) {
   parseCommandLine(argc, argv);
 
   if (CommandSwitches.isHelp) {
-    print("Usage:\r\n   chip8 <filename> [-X <delay>]\r\n\r\n");
+    printf("Usage:\r\n   chip8 <filename> [-X <delay>]\r\n\r\n");
     return;
   }
 
@@ -73,7 +72,6 @@ void main(int argc, char *argv[]) {
 
   initSystemState();
   seedRandom();
-  hbSndReset(0);
 
   uint16_t *ptr = programStorage;
   int       noMoreData = 0;

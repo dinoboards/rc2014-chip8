@@ -2,7 +2,6 @@
 #include "instr_tms_output.h"
 #include "systemstate.h"
 #include "tms.h"
-#include "vid_int.h"
 #include <string.h>
 
 typedef struct {
@@ -304,8 +303,6 @@ void tmsDraw() {
 static tmsClearParams colourParams = {TMS_MD1_COLOUR_TABLE, 32, (COL_DRKGREEN << 4) + COL_BLACK};
 
 void tmsVideoInit() {
-  vsyncInstallInterruptHandler();
-
   tmsInit();
   tmsRegisterColours(gameColours[0], gameColours[1]);
   colourParams.data = (gameColours[1] << 4) + gameColours[0];

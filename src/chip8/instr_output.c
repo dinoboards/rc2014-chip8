@@ -1,11 +1,11 @@
 #include "instr_output.h"
 #include "error_reports.h"
-#include "hbios.h"
 #include "instr_tms_output.h"
 #include "instr_v9958_output.h"
 #include "systemstate.h"
 #include "tms.h"
 #include "vdp.h"
+#include <stdio.h>
 
 void draw() {
   if (videoResMode == VideoResModeLow)
@@ -26,20 +26,20 @@ bool videoInit() {
 
   switch (vdpType) {
   case VDP_NONE:
-    print("Error: No VDP detected.\r\n");
+    printf("Error: No VDP detected.\r\n");
     return false;
     break;
 
   case VDP_TMS:
-    print("TMS9918 VDP Detected.  Only lores supported.\r\n");
+    printf("TMS9918 VDP Detected.  Only lores supported.\r\n");
     break;
 
   case VDP_V9938:
-    print("V9938 VDP Detected.\r\n");
+    printf("V9938 VDP Detected.\r\n");
     break;
 
   case VDP_V9958:
-    print("V9958 VDP Detected.\r\n");
+    printf("V9958 VDP Detected.\r\n");
   }
 
   videoResMode = VideoResModeLow;

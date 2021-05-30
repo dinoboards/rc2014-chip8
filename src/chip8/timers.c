@@ -1,5 +1,4 @@
 #include "timers.h"
-#include "hbios.h"
 #include "instr_sound.h"
 #include "systemstate.h"
 #include "systimer.h"
