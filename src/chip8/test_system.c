@@ -1,4 +1,5 @@
 #include "test_system.h"
+#include "msx.h"
 #include "systemstate.h"
 #include "timers.h"
 #include "ym2149.h"
@@ -30,7 +31,7 @@ void resetKeySimulator() {
   currentPressedKey = '\0';
   keyPressed = false;
   currentKeyTimeout = 0;
-  timerTick = 0;
+  JIFFY = 0;
 }
 
 byte keyReady() { return simulateKeyReady; }
@@ -40,13 +41,13 @@ char getKey() { return simulatedKeyValue; }
 void simulateKey(const char k) {
   simulateKeyReady = true;
   simulatedKeyValue = k;
-  timerTick += 4;
+  JIFFY += 4;
 }
 
-uint16_t getSysTimer() { return timerTick; }
+uint16_t getSysTimer() { return JIFFY; }
 
 void simulateTimerTick() {
-  timerTick++;
+  JIFFY++;
   manageTimers();
 }
 

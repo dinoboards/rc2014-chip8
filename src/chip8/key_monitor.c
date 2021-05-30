@@ -1,6 +1,7 @@
 #include "key_monitor.h"
 #include "charconstants.h"
 #include "keys.h"
+#include "msx.h"
 #include "systemstate.h"
 #include "timers.h"
 #include "ym2149.h"
@@ -11,19 +12,19 @@ static uint16_t lastCheckTime = 0;
 inline uint8_t  toLower(uint8_t c) { return ((c >= 'A' && c <= 'Z')) ? c + ('a' - 'A') : c; }
 
 bool checkForKeyPresses() {
-  if (timerTick % 0x2)
+  if (JIFFY % 0x2)
     return true;
 
-  if (timerTick == lastCheckTime)
+  if (JIFFY == lastCheckTime)
     return true;
 
-  lastCheckTime = timerTick;
+  lastCheckTime = JIFFY;
 
   if (!keyReady()) {
     if (!keyPressed)
       return true;
 
-    if (timerTick < currentKeyTimeout)
+    if (JIFFY < currentKeyTimeout)
       return true;
 
     currentPressedKey = '\0';
@@ -37,7 +38,7 @@ bool checkForKeyPresses() {
     return false;
   }
 
-  currentKeyTimeout = timerTick + 5;
+  currentKeyTimeout = JIFFY + 5;
   keyPressed = true;
 
   return true;

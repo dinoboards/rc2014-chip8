@@ -24,7 +24,6 @@ void audioPlay(uint16_t p) __z88dk_fastcall {
     ym2149Play(p);
     return;
   }
-
 }
 
 void audioStop() {

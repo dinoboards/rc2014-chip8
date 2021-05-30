@@ -134,7 +134,7 @@ $(BIN)chip8.com: $(addprefix $(BIN),chip8100.bin chip8200.bin chip8.loader.asm c
 
 
 
-$(BIN)test.com: $(addprefix $(BIN),test.c.o)
+$(BIN)test.com: $(addprefix $(BIN),test.c.o chip8/msx.c.o)
 	@mkdir -p $(dir $@)
 	$(ZCC) -zorg 256  $^ -o $(BIN)test.com
 	echo "Compiled $(notdir $@) from $(notdir $^)"

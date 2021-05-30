@@ -1,5 +1,6 @@
 #pragma output noprotectmsdos
 
+#include "chip8/msx.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -14,38 +15,40 @@
 
 // void assemble(uint8_t pc) __z88dk_fastcall { data = pc; }
 
-#define MAX_FILE_NAME 32
+// #define MAX_FILE_NAME 32
 
-char newFileName[MAX_FILE_NAME];
+// char newFileName[MAX_FILE_NAME];
 
-void replaceExtension(const char *pFileName, const char *newExtension, char *pResult) {
-  char *p = strchr(pFileName, '.');
+// void replaceExtension(const char *pFileName, const char *newExtension, char *pResult) {
+//   char *p = strchr(pFileName, '.');
 
-  if (!p) {
-    strncpy(pResult, pFileName, MAX_FILE_NAME);
-    strncat(pResult, newExtension, 4);
-    return;
-  }
+//   if (!p) {
+//     strncpy(pResult, pFileName, MAX_FILE_NAME);
+//     strncat(pResult, newExtension, 4);
+//     return;
+//   }
 
-  const int index = p - pFileName;
-  strncpy(pResult, pFileName, index);
-  strncpy(pResult + index, newExtension, 4);
-}
+//   const int index = p - pFileName;
+//   strncpy(pResult, pFileName, index);
+//   strncpy(pResult + index, newExtension, 4);
+// }
 
 void main(int argc, char *argv[]) {
   // assemble(2);
   printf("Hello World I am at location: %p\r\n", &main);
 
-  if (argc != 2) {
-    puts("Invalid arguments.  Usage: \r\n    chip8asm <filename>.ch8\r\n");
-    exit(1);
-  }
+  printf("TIME: %d\r\n", JIFFY);
 
-  const char *fileName = argv[1];
+  // if (argc != 2) {
+  //   puts("Invalid arguments.  Usage: \r\n    chip8asm <filename>.ch8\r\n");
+  //   exit(1);
+  // }
 
-  replaceExtension(fileName, ".BOB", newFileName);
+  // const char *fileName = argv[1];
 
-  printf("new name: %d, %s\r\n", index, newFileName);
+  // replaceExtension(fileName, ".BOB", newFileName);
+
+  // printf("new name: %d, %s\r\n", index, newFileName);
 
   // const char* p = strchr(fileName, '.');
 

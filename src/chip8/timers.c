@@ -1,5 +1,6 @@
 #include "timers.h"
 #include "instr_sound.h"
+#include "msx.h"
 #include "systemstate.h"
 #include "systimer.h"
 
@@ -23,10 +24,10 @@ void initTimers() {
 void reportPerformance() {
   instructionCount++;
 
-  if (timerTick >= performanceMeasureTick) {
+  if (JIFFY >= performanceMeasureTick) {
     printf("Count: '%d'\r\n", (instructionCount / 2));
     instructionCount = 0;
-    performanceMeasureTick = timerTick + 120;
+    performanceMeasureTick = JIFFY + 120;
   }
 }
 #endif

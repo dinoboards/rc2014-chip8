@@ -3,8 +3,9 @@
 #define __SYSTIMER
 
 #include "datatypes.h"
+#include "msx.h"
 #include "systemstate.h"
 #include "systimer.h"
 
-#define getSysTimer() timerTick
+#define getSysTimer() JIFFY
 #endif

@@ -1,7 +1,7 @@
 	PUBLIC  _tmsSetMode1, _tmsWriteData, _tmsReadData, _tmsClearData, _tmsReadByte
 	PUBLIC _tmsWriteByte, _tmsSetReadAddr, _tmsSetWriteAddr
 	EXTERN	_tmsRegisters, _tmsColour
-	EXTERN _timerTick
+	EXTERN _JIFFY
 
 	SECTION CODE
 

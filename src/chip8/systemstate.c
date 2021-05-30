@@ -11,9 +11,8 @@ byte     currentPressedKey;
 uint16_t currentKeyTimeout;
 bool     keyPressed;
 
-byte     soundTimer;
-byte     delayTimer;
-uint16_t timerTick = 0;
+byte soundTimer;
+byte delayTimer;
 
 CliSwitches CommandSwitches;
 

@@ -3,6 +3,4 @@
 
 byte keyReady() { return false; }
 
-char getKey() {
-
-}
+char getKey() {}

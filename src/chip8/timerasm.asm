@@ -1,5 +1,5 @@
 	PUBLIC	_manageTimers
-	EXTERN	_timerMode, _timerTick, _timerTick, _instructionCostCounter, __divuint_callee, _soundTimer
+	EXTERN	_timerMode, _JIFFY, _instructionCostCounter, __divuint_callee, _soundTimer
 	EXTERN _audioStop, _delayTimer, _lastTimerTick, _reportPerformance
 
 	SECTION CODE
@@ -20,8 +20,8 @@ endif
 	ret	Z
 
 l_manageTimers_00108:
-;chip8/timers.c:73: const byte diff = (byte)(timerTick - lastTimerTick);
-	ld	a, (_timerTick)
+;chip8/timers.c:73: const byte diff = (byte)(JIFFY - lastTimerTick);
+	ld	a, (_JIFFY)
 	ld	hl, _lastTimerTick
 	ld	c, (hl)
 	sub	a, c
@@ -61,8 +61,8 @@ l_manageTimers_00116:
 ;chip8/timers.c:79: tickDelayTimer();
 
 l_manageTimers_00119:
-;chip8/timers.c:81: lastTimerTick = timerTick;
-	ld	hl, (_timerTick)
+;chip8/timers.c:81: lastTimerTick = JIFFY;
+	ld	hl, (_JIFFY)
 	ld	(_lastTimerTick), hl
 
 l_manageTimers_00120:

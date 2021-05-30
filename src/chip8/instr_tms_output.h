@@ -8,6 +8,7 @@ extern void tmsDraw();
 extern void tmsCls();
 extern void tmsVideoInit();
 
-#define tmsVideoClose() {}
+#define tmsVideoClose() \
+  {}
 
 #endif

@@ -79,8 +79,6 @@ extern byte videoPixelHeight;
 extern byte videoPixelWidthMask;
 extern byte videoPixelHeightMask;
 
-extern uint16_t timerTick;
-
 extern bool     audioActive;
 extern uint16_t audioPeriod;
 typedef enum _audioSystem { AS_NONE, AS_YM2149, AS_HBIOS } audioSystem;

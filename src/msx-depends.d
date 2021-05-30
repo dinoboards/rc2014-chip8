@@ -9,15 +9,16 @@
 ./bin/msx/chip8/ym2149.c.asm: chip8/ym2149.c chip8/ym2149.h chip8/audio.h datatypes.h \
  chip8/systemstate.h chip8/timers.h
 ./bin/msx/chip8/key_monitor.c.asm: chip8/key_monitor.c chip8/key_monitor.h datatypes.h \
- charconstants.h chip8/keys.h chip8/systemstate.h chip8/timers.h \
- chip8/ym2149.h chip8/audio.h
+ charconstants.h chip8/keys.h chip8/msx.h chip8/systemstate.h \
+ chip8/timers.h chip8/ym2149.h chip8/audio.h
 ./bin/msx/chip8/instr_sound.c.asm: chip8/instr_sound.c chip8/instr_sound.h datatypes.h \
  chip8/audio.h chip8/systemstate.h chip8/timers.h
 ./bin/msx/chip8/v9958.c.asm: chip8/v9958.c chip8/v9958.h datatypes.h chip8/systemstate.h
 ./bin/msx/chip8/instr_tms_output.c.asm: chip8/instr_tms_output.c chip8/instr_tms_output.h \
  datatypes.h chip8/systemstate.h chip8/tms.h
 ./bin/msx/chip8/test_system.c.asm: chip8/test_system.c chip8/test_system.h datatypes.h \
- xstdio.h chip8/systemstate.h chip8/timers.h chip8/ym2149.h chip8/audio.h
+ xstdio.h chip8/msx.h chip8/systemstate.h chip8/timers.h chip8/ym2149.h \
+ chip8/audio.h
 ./bin/msx/chip8/configuration_loader.c.asm: chip8/configuration_loader.c \
  chip8/configreader.h token.h datatypes.h chip8/error_reports.h \
  datatypes.h filenames.h filereader.h chip8/systemstate.h chip8/v9958.h
@@ -29,7 +30,7 @@
  datatypes.h chip8/configreader.h token.h datatypes.h xstdio.h
 ./bin/msx/chip8/stack.c.asm: chip8/stack.c chip8/stack.h datatypes.h chip8/systemstate.h
 ./bin/msx/chip8/random.c.asm: chip8/random.c chip8/random.h datatypes.h chip8/systimer.h \
- chip8/systemstate.h
+ chip8/msx.h chip8/systemstate.h
 ./bin/msx/chip8/test_configuration.c.asm: chip8/test_configuration.c \
  chip8/test_configuration.h chip8/configreader.h token.h datatypes.h \
  chip8/configuration_loader.h chip8/systemstate.h datatypes.h \
@@ -39,12 +40,13 @@
  filereader.h chip8/systemstate.h chip8/tms.h xstdlib.h
 ./bin/msx/chip8/byte_code_executor.c.asm: chip8/byte_code_executor.c datatypes.h \
  chip8/key_monitor.h chip8/stack.h chip8/systemstate.h chip8/systimer.h \
- chip8/timers.h xstdio.h chip8/instr_output.h chip8/v9958.h \
+ chip8/msx.h chip8/timers.h xstdio.h chip8/instr_output.h chip8/v9958.h \
  chip8/instr_pc.h chip8/instr_random.h chip8/random.h \
  chip8/instr_registers.h chip8/fontsets.h chip8/instr_sound.h
 ./bin/msx/chip8/fontsets.c.asm: chip8/fontsets.c chip8/fontsets.h datatypes.h
+./bin/msx/chip8/msx.c.asm: chip8/msx.c chip8/msx.h
 ./bin/msx/chip8/timers.c.asm: chip8/timers.c chip8/timers.h datatypes.h chip8/instr_sound.h \
- chip8/systemstate.h chip8/systimer.h
+ chip8/msx.h chip8/systemstate.h chip8/systimer.h
 ./bin/msx/chip8/instr_output.c.asm: chip8/instr_output.c chip8/instr_output.h chip8/v9958.h \
  datatypes.h chip8/error_reports.h chip8/instr_tms_output.h \
  chip8/instr_v9958_output.h chip8/systemstate.h chip8/tms.h chip8/vdp.h \
@@ -57,7 +59,7 @@
  chip8/byte_code_executor.h chip8/configuration_loader.h \
  chip8/error_reports.h filenames.h chip8/instr_output.h chip8/v9958.h \
  chip8/instr_sound.h chip8/random.h chip8/systemstate.h chip8/systimer.h \
- chip8/timers.h chip8/tms.h xstdio.h xstdlib.h
+ chip8/msx.h chip8/timers.h chip8/tms.h xstdio.h xstdlib.h
 ./bin/msx/chip8asm/assembler.c.asm: chip8asm/assembler.c chip8asm/assembler.h datatypes.h \
  chip8asm/emitters.h chip8asm/error_reports.h filereader.h \
  chip8asm/labels.h chip8asm/systemstate.h chip8asm/token_parser.h \
@@ -91,8 +93,8 @@
  filereader.h
 ./bin/msx/test_expectations.c.asm: test_expectations.c test_expectations.h \
  datatypes.h terminal_codes.h
-./bin/msx/test.c.asm: test.c
-./bin/msx/hello.c.asm: hello.c
+./bin/msx/test.c.asm: test.c chip8/msx.h
+./bin/msx/hello.c.asm: hello.c chip8/msx.h
 ./bin/msx/filenames.c.asm: filenames.c filenames.h
 ./bin/msx/filereader.c.asm: filereader.c filereader.h charconstants.h datatypes.h
 ./bin/msx/chartesters.c.asm: chartesters.c chartesters.h
