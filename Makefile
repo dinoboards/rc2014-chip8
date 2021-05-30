@@ -52,14 +52,23 @@ format:
 	@find \( -name "*.c" -o -name "*.h" \) -exec echo "formating {}" \; -exec clang-format -i {} \;
 
 .PHONY: testxor
-testxor:
+testxor: chip8asm
 	@cp ./test-samples/testxor.cas ./bin/
 	cd bin && cpm chip8asm testxor.cas
 
 .PHONY: testscrl
-testscrl:
+testscrl: chip8asm
 	@cp ./test-samples/testscrl.cas ./bin/
 	cd bin && cpm chip8asm testscrl.cas
+
+.PHONY1: test1
+test1: chip8asm
+	@cp ./test-samples/test1.cas ./bin/
+	cd bin && cpm chip8asm test1.cas
+.PHONY1: test2
+test2: chip8asm
+	@cp ./test-samples/test2.cas ./bin/
+	cd bin && cpm chip8asm test2.cas
 
 .PHONY: package
 package: chip8 chip8asm

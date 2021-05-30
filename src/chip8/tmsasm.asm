@@ -118,6 +118,12 @@ _tmsReadData1:
 
 ;extern void tmsClearData(tmsClearParams* p) __z88dk_fastcall;
 _tmsClearData:
+	LD	A, 0			; RESET V9958 upper address lines to 0
+	OUT	(VDP_ADDR), A
+	LD	A, 0x80 | 14
+	OUT	(VDP_ADDR), A
+
+
 	LD	C, VDP_ADDR
 	LD	A, (HL)
 	INC	HL

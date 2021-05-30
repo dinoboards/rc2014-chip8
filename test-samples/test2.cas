@@ -1,0 +1,19 @@
+
+  LD I, MYSPRITE
+
+  LD  V0, 0
+  LD  V1, 2
+
+LOOP:
+  DRW v0, v1, 9
+
+  ; WAIT A BIT
+  LD  V2, 1
+
+  DRW v0, v1, 9
+
+  ADD V0, 1
+  JP LOOP
+
+MYSPRITE:
+  DB 255, 128, 128, 128, 128, 128, 128, 128, 255
