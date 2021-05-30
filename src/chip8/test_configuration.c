@@ -105,7 +105,7 @@ void assertTwoMappedKeys() {
   expectEqualBytes(gameKeys[0].type, KC_ASCII, "gameKeys[0].type");
 
   expectEqualBytes(gameKeys[1].matrixRow, 5, "gameKeys[1].matrixRow");
-  expectEqualBytes(gameKeys[1].matrixMask, 1 << 7, "gameKeys[1].matrixMask");
+  expectEqualBytes(gameKeys[1].matrixMask, ((uint8_t)1 << 7), "gameKeys[1].matrixMask");
   expectEqualBytes(gameKeys[1].hexCode, 10, "gameKeys[1].hexCode");
   expectEqualBytes(gameKeys[1].type, KC_ASCII, "gameKeys[1].type");
 
@@ -157,7 +157,7 @@ const char *testConfigMultipleKeyMapping = "KEY-1 = {RET},CTRL-1-DOWN\r\n"
 
 void assertMultipleKeyMapping() {
   expectEqualBytes(gameKeys[0].matrixRow, 7, "gameKeys[0].matrixRow");
-  expectEqualBytes(gameKeys[0].matrixMask, 1 << 7, "gameKeys[0].matrixMask");
+  expectEqualBytes(gameKeys[0].matrixMask, ((uint8_t)1 << 7), "gameKeys[0].matrixMask");
   expectEqualBytes(gameKeys[0].hexCode, 1, "gameKeys[0].hexCode");
   expectEqualBytes(gameKeys[0].type, KC_ASCII, "gameKeys[0].type");
 
