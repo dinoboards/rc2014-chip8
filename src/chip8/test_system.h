@@ -10,7 +10,6 @@ extern bool appRunning;
   {                                                \
     xprintf(#a "\r\n");                            \
     soundTimer = 0;                                \
-    resetCaptureCommands();                        \
     resetKeySimulator();                           \
     initSystemState();                             \
     setup_##a();                                   \
@@ -24,7 +23,6 @@ extern bool appRunning;
   {                                          \
     printf(#a "\r\n");                       \
     soundTimer = 0;                          \
-    resetCaptureCommands();                  \
     resetKeySimulator();                     \
     initSystemState();                       \
     setup_##a();                             \
@@ -42,7 +40,6 @@ extern bool appRunning;
 #define KEY_ROW_2  0
 #define KEY_MASK_2 ((uint8_t)(1 << 2))
 
-extern void resetCaptureCommands();
 extern void resetKeySimulator();
 extern void simulateKey(const uint8_t, const uint8_t);
 extern void simulateTimerTick();

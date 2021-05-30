@@ -9,19 +9,6 @@
 
 bool appRunning = false;
 
-char buffer[MAX_CAPTURE_TEXT];
-
-void resetCaptureCommands() { buffer[0] = '\0'; }
-
-void sendDrawCommands(const char *msg, ...) {
-  va_list arg;
-  va_start(arg, msg);
-  char *pBuffer = buffer + strlen(buffer);
-  int   max = MAX_CAPTURE_TEXT - strlen(buffer);
-  vsnprintf(pBuffer, max - 1, (char *)msg, arg);
-  va_end(arg);
-}
-
 void resetKeySimulator() {
   for (uint8_t i = 0; i < sizeof(msxNewKey); i++)
     msxNewKey[i] = 0xFF;
