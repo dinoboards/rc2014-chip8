@@ -22,23 +22,13 @@ void sendDrawCommands(const char *msg, ...) {
   va_end(arg);
 }
 
-bool simulateKeyReady;
-char simulatedKeyValue;
-
 void resetKeySimulator() {
-  simulateKeyReady = false;
-  simulatedKeyValue = 0;
   for (uint8_t i = 0; i < sizeof(msxNewKey); i++)
     msxNewKey[i] = 0xFF;
   JIFFY = 0;
 }
 
-byte keyReady() { return simulateKeyReady; }
-
-char getKey() { return simulatedKeyValue; }
-
 void simulateKey(const uint8_t rowIndex, const uint8_t bitMask) {
-  simulateKeyReady = true;
   msxNewKey[rowIndex] &= ~bitMask;
   msxJiffy += 4;
 }

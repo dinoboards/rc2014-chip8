@@ -1,6 +1,5 @@
 #include "tms.h"
 #include "datatypes.h"
-#include "keys.h"
 #include "systemstate.h"
 
 byte tmsRegisters[8] = {

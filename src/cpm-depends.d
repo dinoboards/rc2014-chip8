@@ -1,16 +1,14 @@
 
 ./bin/cpm/chip8/test_instruction.c.asm: chip8/test_instruction.c chip8/byte_code_executor.h \
- datatypes.h chip8/fontsets.h chip8/stack.h chip8/systemstate.h \
- terminal_codes.h test_expectations.h datatypes.h terminal_codes.h \
- test_opcodes.h chip8/test_system.h xstdio.h
-./bin/cpm/chip8/keys.c.asm: chip8/keys.c chip8/keys.h datatypes.h
-./bin/cpm/chip8/tms.c.asm: chip8/tms.c chip8/tms.h datatypes.h chip8/keys.h \
- chip8/systemstate.h
+ datatypes.h chip8/fontsets.h chip8/msx_keyboard.h chip8/stack.h \
+ chip8/systemstate.h terminal_codes.h test_expectations.h datatypes.h \
+ terminal_codes.h test_opcodes.h chip8/test_system.h xstdio.h
+./bin/cpm/chip8/tms.c.asm: chip8/tms.c chip8/tms.h datatypes.h chip8/systemstate.h
 ./bin/cpm/chip8/ym2149.c.asm: chip8/ym2149.c chip8/ym2149.h chip8/audio.h datatypes.h \
  chip8/systemstate.h chip8/timers.h
 ./bin/cpm/chip8/key_monitor.c.asm: chip8/key_monitor.c chip8/key_monitor.h datatypes.h \
- charconstants.h chip8/keys.h chip8/msx.h chip8/systemstate.h \
- chip8/timers.h chip8/ym2149.h chip8/audio.h chip8/msx_keyboard.h
+ charconstants.h chip8/msx.h chip8/msx_keyboard.h chip8/systemstate.h \
+ chip8/timers.h chip8/ym2149.h chip8/audio.h
 ./bin/cpm/chip8/msx_keyboard.c.asm: chip8/msx_keyboard.c chip8/msx_keyboard.h
 ./bin/cpm/chip8/instr_sound.c.asm: chip8/instr_sound.c chip8/instr_sound.h datatypes.h \
  chip8/audio.h chip8/systemstate.h chip8/timers.h
@@ -22,7 +20,8 @@
  chip8/audio.h
 ./bin/cpm/chip8/configuration_loader.c.asm: chip8/configuration_loader.c \
  chip8/configreader.h token.h datatypes.h chip8/error_reports.h \
- datatypes.h filenames.h filereader.h chip8/systemstate.h chip8/v9958.h
+ datatypes.h filenames.h filereader.h chip8/msx_keyboard.h \
+ chip8/systemstate.h chip8/v9958.h
 ./bin/cpm/chip8/instr_v9958_output.c.asm: chip8/instr_v9958_output.c \
  chip8/instr_v9958_output.h datatypes.h chip8/instr_output.h \
  chip8/v9958.h chip8/systemstate.h

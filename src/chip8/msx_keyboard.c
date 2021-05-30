@@ -23,7 +23,7 @@ MatrixMapping MatrixMappings[] = {{"7", 0, 1 << 7},     {"6", 0, 1 << 6},      {
 
                                   {"NUM.", 10, 1 << 7}, {"NUM,", 10, 1 << 6},  {"NUM-", 10, 1 << 5},     {"NUM9", 10, 1 << 4}, {"NUM8", 10, 1 << 3}, {"NUM7", 10, 1 << 2},  {"NUM6", 10, 1 << 1}, {"NUM5", 10, 1 << 0}, {0, 0, 0}};
 
-MatrixMapping *codeToMatrix(const char *keyCode) __z88dk_fastcall {
+const MatrixMapping *codeToMatrix(const char *keyCode) __z88dk_fastcall {
   const MatrixMapping *p = MatrixMappings;
   while (1) {
     const char *code = p->code;

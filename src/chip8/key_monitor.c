@@ -1,6 +1,5 @@
 #include "key_monitor.h"
 #include "charconstants.h"
-#include "keys.h"
 #include "msx.h"
 #include "msx_keyboard.h"
 #include "systemstate.h"
