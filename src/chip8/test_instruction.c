@@ -1,6 +1,7 @@
 #include "byte_code_executor.h"
 #include "datatypes.h"
 #include "fontsets.h"
+#include "msx_keyboard.h"
 #include "stack.h"
 #include "systemstate.h"
 #include "terminal_codes.h"
@@ -362,7 +363,7 @@ void verify_jp_v0_1024() { expectEqualPtrs(chip8PC, (uint16_t *)0x403, "PC"); }
 
 void setup_skp_v3_skips() {
   registers[3] = 0xA;
-  simulateKey('A');
+  simulateKey(KEY_ROW_A, KEY_MASK_A);
   programStorage[0] = invertByteOrder(SKP_V3);
 }
 
@@ -370,7 +371,7 @@ void verify_skp_v3_skips() { expectEqualPtrs(chip8PC, (uint16_t *)0x204, "PC"); 
 
 void setup_skp_v3_no_skips() {
   registers[3] = 0xA;
-  // simulateKey('A');
+  // simulateKey(KEY_ROW_A, KEY_MASK_A);
   programStorage[0] = invertByteOrder(SKP_V3);
 }
 
@@ -378,7 +379,7 @@ void verify_skp_v3_no_skips() { expectEqualPtrs(chip8PC, (uint16_t *)0x202, "PC"
 
 void setup_skp_v3_wrong_key() {
   registers[3] = 0xA;
-  simulateKey('B');
+  simulateKey(KEY_ROW_B, KEY_MASK_B);
   programStorage[0] = invertByteOrder(SKP_V3);
 }
 
@@ -386,7 +387,7 @@ void verify_skp_v3_wrong_key() { expectEqualPtrs(chip8PC, (uint16_t *)0x202, "PC
 
 void setup_sknp_vd_skips() {
   registers[0xD] = 0xB;
-  simulateKey('A');
+  simulateKey(KEY_ROW_A, KEY_MASK_A);
   programStorage[0] = invertByteOrder(SKNP_VD);
 }
 
@@ -394,7 +395,7 @@ void verify_sknp_vd_skips() { expectEqualPtrs(chip8PC, (uint16_t *)0x204, "PC");
 
 void setup_sknp_vd_no_skips() {
   registers[0xD] = 0xB;
-  simulateKey('B');
+  simulateKey(KEY_ROW_B, KEY_MASK_B);
   programStorage[0] = invertByteOrder(SKNP_VD);
 }
 
@@ -402,7 +403,7 @@ void verify_sknp_vd_no_skips() { expectEqualPtrs(chip8PC, (uint16_t *)0x202, "PC
 
 void setup_sknp_vd_no_keys_pressed() {
   registers[0xD] = 0xB;
-  // simulateKey('B');
+  // simulateKey(KEY_ROW_B, KEY_MASK_B);
   programStorage[0] = invertByteOrder(SKNP_VD);
 }
 
@@ -410,7 +411,7 @@ void verify_sknp_vd_no_keys_pressed() { expectEqualPtrs(chip8PC, (uint16_t *)0x2
 
 void setup_key_v5() {
   registers[5] = 2;
-  simulateKey('2');
+  simulateKey(KEY_ROW_2, KEY_MASK_2);
   programStorage[0] = invertByteOrder(KEY_V5);
 }
 
@@ -647,14 +648,22 @@ extern void testConfigurtionParser();
 void resetKeyConfiguration() {
   gameKeyCount = 15;
 
+  char *str = "0";
+
   for (int i = 0; i <= 9; i++) {
-    gameKeys[i].asciiKeyChar = i + '0';
+    *str = i + '0';
+    const MatrixMapping *p = codeToMatrix(str);
+    gameKeys[i].matrixRow = p->rowIndex;
+    gameKeys[i].matrixMask = p->bitMask;
     gameKeys[i].type = KC_ASCII;
     gameKeys[i].hexCode = i;
   }
 
   for (int i = 10; i <= 15; i++) {
-    gameKeys[i].asciiKeyChar = i + 'a' - 10;
+    *str = i + 'a' - 10;
+    const MatrixMapping *p = codeToMatrix(str);
+    gameKeys[i].matrixRow = p->rowIndex;
+    gameKeys[i].matrixMask = p->bitMask;
     gameKeys[i].type = KC_ASCII;
     gameKeys[i].hexCode = i;
   }
@@ -732,7 +741,7 @@ void main() {
 
   assert(skips_dbl_word_instruction);
 
-  // // assert(bad_jump);
+  // assert(bad_jump);
 
   printf(testFailure ? RED "Tests Failed\r\n" RESET : BRIGHT_WHITE "All Passed\r\n" RESET);
 }

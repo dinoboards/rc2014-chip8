@@ -28,9 +28,8 @@ char simulatedKeyValue;
 void resetKeySimulator() {
   simulateKeyReady = false;
   simulatedKeyValue = 0;
-  currentPressedKey = '\0';
-  keyPressed = false;
-  currentKeyTimeout = 0;
+  for (uint8_t i = 0; i < sizeof(msxNewKey); i++)
+    msxNewKey[i] = 0xFF;
   JIFFY = 0;
 }
 
@@ -38,16 +37,16 @@ byte keyReady() { return simulateKeyReady; }
 
 char getKey() { return simulatedKeyValue; }
 
-void simulateKey(const char k) {
+void simulateKey(const uint8_t rowIndex, const uint8_t bitMask) {
   simulateKeyReady = true;
-  simulatedKeyValue = k;
-  JIFFY += 4;
+  msxNewKey[rowIndex] &= ~bitMask;
+  msxJiffy += 4;
 }
 
 uint16_t getSysTimer() { return JIFFY; }
 
 void simulateTimerTick() {
-  JIFFY++;
+  msxJiffy++;
   manageTimers();
 }
 

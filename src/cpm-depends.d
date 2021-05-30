@@ -10,7 +10,8 @@
  chip8/systemstate.h chip8/timers.h
 ./bin/cpm/chip8/key_monitor.c.asm: chip8/key_monitor.c chip8/key_monitor.h datatypes.h \
  charconstants.h chip8/keys.h chip8/msx.h chip8/systemstate.h \
- chip8/timers.h chip8/ym2149.h chip8/audio.h
+ chip8/timers.h chip8/ym2149.h chip8/audio.h chip8/msx_keyboard.h
+./bin/cpm/chip8/msx_keyboard.c.asm: chip8/msx_keyboard.c chip8/msx_keyboard.h
 ./bin/cpm/chip8/instr_sound.c.asm: chip8/instr_sound.c chip8/instr_sound.h datatypes.h \
  chip8/audio.h chip8/systemstate.h chip8/timers.h
 ./bin/cpm/chip8/v9958.c.asm: chip8/v9958.c chip8/v9958.h datatypes.h chip8/systemstate.h

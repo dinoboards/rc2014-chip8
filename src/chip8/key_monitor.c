@@ -2,6 +2,7 @@
 #include "charconstants.h"
 #include "keys.h"
 #include "msx.h"
+#include "msx_keyboard.h"
 #include "systemstate.h"
 #include "timers.h"
 #include "ym2149.h"
@@ -19,27 +20,6 @@ bool checkForKeyPresses() {
     return true;
 
   lastCheckTime = JIFFY;
-
-  if (!keyReady()) {
-    if (!keyPressed)
-      return true;
-
-    if (JIFFY < currentKeyTimeout)
-      return true;
-
-    currentPressedKey = '\0';
-    keyPressed = false;
-    return true;
-  }
-
-  currentPressedKey = toLower(getKey());
-
-  if (currentPressedKey == CTRL_Z) {
-    return false;
-  }
-
-  currentKeyTimeout = JIFFY + 5;
-  keyPressed = true;
 
   return true;
 }
@@ -59,7 +39,7 @@ void loadControllerStates() {
   currentButtons2 = getControllerButton(2) | (getControllerButton(4) << 1);
 }
 
-#define matchingSerialChar() (keyPressed && config.asciiKeyChar == currentPressedKey)
+#define matchingSerialChar() (IS_KEY_PRESSED(config.matrixRow, config.matrixMask))
 #define matchingDirection(n) (isYm2149 && config.controllerId == (n - 1) && config.controllerDirection == currentDirection##n)
 #define matchingButtons(n)   (isYm2149 && config.controllerId == (n - 1) && ((currentButtons##n & config.controllerButtons) == config.controllerButtons))
 

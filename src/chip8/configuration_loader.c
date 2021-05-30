@@ -2,6 +2,7 @@
 #include "error_reports.h"
 #include "filenames.h"
 #include "filereader.h"
+#include "msx_keyboard.h"
 #include "systemstate.h"
 #include "v9958.h"
 #include <stdio.h>
@@ -27,6 +28,7 @@ void applySingleConfig() {
 }
 
 void parseConfiguration(const char *pConfigFileName) __z88dk_fastcall {
+
   setFileName(pConfigFileName);
   openTokenStream();
   getNextToken();
@@ -95,6 +97,16 @@ void expectToBeEquals() {
     expectedError("=");
 }
 
+void expectToBeOpenCurly() {
+  if (token.type != TokenOpenCurly)
+    expectedError("keycode within {}");
+}
+
+void expectToBeCloseCurly() {
+  if (token.type != TokenCloseCurly)
+    expectedError("Missing }");
+}
+
 void expectToBeKey() {
   if (token.type != TokenKey)
     expectedError("one of KEY-, CTRL- or BTN-");
@@ -108,6 +120,16 @@ void expectToBeDash() {
 void expectToBeComma() {
   if (token.type != TokenComma)
     expectedError(",");
+}
+
+void expectToBeAlphanumeric() {
+  if (token.type != TokenAlphanumeric)
+    expectedError("key code");
+}
+
+void expectToBeAlphanumericOrIdentifier() {
+  if (token.type != TokenAlphanumeric && token.type != TokenIdentifier)
+    expectedError("key code");
 }
 
 const ControllerDirection expectToBeDirection() {
@@ -253,18 +275,23 @@ loop:
       gameKeyCount++;
     }
   } else {
-    expectToBeKey();
+    expectToBeOpenCurly();
 
     getNextToken();
-    expectToBeDash();
-
-    getNextToken();
-    const char *c = expectToBeKeyIdentifier();
+    expectToBeAlphanumericOrIdentifier();
 
     gameKeys[gameKeyCount].hexCode = pSourceKey;
-    gameKeys[gameKeyCount].asciiKeyChar = c[0];
+
+    MatrixMapping *mapping = codeToMatrix(token.value);
+
+    gameKeys[gameKeyCount].matrixRow = mapping->rowIndex;
+    gameKeys[gameKeyCount].matrixMask = mapping->bitMask;
+
     gameKeys[gameKeyCount].type = KC_ASCII;
     gameKeyCount++;
+
+    getNextToken();
+    expectToBeCloseCurly();
   }
 
   if (tokenTerminatorChar == ',') {

@@ -70,27 +70,42 @@ void assertRGBColours() {
   expectEqualBytes(palette[1].blue, 6, "COLOR-1 = 4, 5, 6");
 }
 
-const char *testConfigSingleKey = "KEY-1 = KEY-a\r\n"
+const char *testConfigSingleKey = "KEY-1 = {A}\r\n"
                                   "\x1a";
 
 void assertSingleKey() {
-  expectEqualChars(gameKeys[0].asciiKeyChar, 'a', "gameKeys[0].asciiKeyChar");
+  expectEqualBytes(gameKeys[0].matrixRow, 2, "gameKeys[0].matrixRow");
+  expectEqualBytes(gameKeys[0].matrixMask, 1 << 6, "gameKeys[0].matrixMask");
   expectEqualBytes(gameKeys[0].hexCode, 1, "gameKeys[0].hexCode");
   expectEqualBytes(gameKeys[0].type, KC_ASCII, "gameKeys[0].type");
   expectFalse(unexpectedTokenInvoked, "unexpectedToken");
   expectFalse(expectedErrorInvoked, "expectedError");
 }
 
-const char *testConfigTwoMappedKeys = "KEY-1 = KEY-a\r\n"
-                                      "KEY-a = KEY-z\r\n"
+const char *testConfigSingleKeyA = "KEY-a = {A}\r\n"
+                                   "\x1a";
+
+void assertSingleKeyA() {
+  expectEqualBytes(gameKeys[0].matrixRow, 2, "gameKeys[0].matrixRow");
+  expectEqualBytes(gameKeys[0].matrixMask, 1 << 6, "gameKeys[0].matrixMask");
+  expectEqualBytes(gameKeys[0].hexCode, 10, "gameKeys[0].hexCode");
+  expectEqualBytes(gameKeys[0].type, KC_ASCII, "gameKeys[0].type");
+  expectFalse(unexpectedTokenInvoked, "unexpectedToken");
+  expectFalse(expectedErrorInvoked, "expectedError");
+}
+
+const char *testConfigTwoMappedKeys = "KEY-1 = {A}\r\n"
+                                      "KEY-a = {Z}\r\n"
                                       "\x1a";
 
 void assertTwoMappedKeys() {
-  expectEqualChars(gameKeys[0].asciiKeyChar, 'a', "gameKeys[0].asciiKeyChar");
+  expectEqualBytes(gameKeys[0].matrixRow, 2, "gameKeys[0].matrixRow");
+  expectEqualBytes(gameKeys[0].matrixMask, 1 << 6, "gameKeys[0].matrixMask");
   expectEqualBytes(gameKeys[0].hexCode, 1, "gameKeys[0].hexCode");
   expectEqualBytes(gameKeys[0].type, KC_ASCII, "gameKeys[0].type");
 
-  expectEqualChars(gameKeys[1].asciiKeyChar, 'z', "gameKeys[1].asciiKeyChar");
+  expectEqualBytes(gameKeys[1].matrixRow, 5, "gameKeys[1].matrixRow");
+  expectEqualBytes(gameKeys[1].matrixMask, 1 << 7, "gameKeys[1].matrixMask");
   expectEqualBytes(gameKeys[1].hexCode, 10, "gameKeys[1].hexCode");
   expectEqualBytes(gameKeys[1].type, KC_ASCII, "gameKeys[1].type");
 
@@ -136,12 +151,13 @@ void assertController2Direction() {
   expectFalse(expectedErrorInvoked, "expectedError");
 }
 
-const char *testConfigMultipleKeyMapping = "KEY-1 = KEY-CR,CTRL-1-DOWN\r\n"
-                                           "KEY-2 = KEY-SPACE\r\n"
+const char *testConfigMultipleKeyMapping = "KEY-1 = {RET},CTRL-1-DOWN\r\n"
+                                           "KEY-2 = {tab}\r\n"
                                            "\x1a";
 
 void assertMultipleKeyMapping() {
-  expectEqualBytes(gameKeys[0].asciiKeyChar, 13, "gameKeys[0].asciiKeyChar");
+  expectEqualBytes(gameKeys[0].matrixRow, 7, "gameKeys[0].matrixRow");
+  expectEqualBytes(gameKeys[0].matrixMask, 1 << 7, "gameKeys[0].matrixMask");
   expectEqualBytes(gameKeys[0].hexCode, 1, "gameKeys[0].hexCode");
   expectEqualBytes(gameKeys[0].type, KC_ASCII, "gameKeys[0].type");
 
@@ -149,7 +165,8 @@ void assertMultipleKeyMapping() {
   expectEqualBytes(gameKeys[1].hexCode, 1, "gameKeys[1].hexCode");
   expectEqualBytes(gameKeys[1].type, KC_CTRL_DIR, "gameKeys[1].type");
 
-  expectEqualBytes(gameKeys[2].asciiKeyChar, ' ', "gameKeys[0].asciiKeyChar");
+  expectEqualBytes(gameKeys[2].matrixRow, 7, "gameKeys[2].matrixRow");
+  expectEqualBytes(gameKeys[2].matrixMask, 1 << 3, "gameKeys[2].matrixMask");
   expectEqualBytes(gameKeys[2].hexCode, 2, "gameKeys[0].hexCode");
   expectEqualBytes(gameKeys[2].type, KC_ASCII, "gameKeys[0].type");
 
@@ -169,11 +186,12 @@ void assertControllerMultipleDirection() {
   expectFalse(expectedErrorInvoked, "expectedError");
 }
 
-const char *testConfigKeySpace = "KEy-f = KEY-SPACE\r\n"
+const char *testConfigKeySpace = "KEy-f = {SPaCE}\r\n"
                                  "\x1a";
 
 void assertKeySpace() {
-  expectEqualChars(gameKeys[0].asciiKeyChar, ' ', "gameKeys[0].asciiKeyChar");
+  expectEqualBytes(gameKeys[0].matrixRow, 8, "gameKeys[0].matrixRow");
+  expectEqualBytes(gameKeys[0].matrixMask, 1 << 0, "gameKeys[0].matrixMask");
   expectEqualBytes(gameKeys[0].hexCode, 15, "gameKeys[0].hexCode");
   expectEqualBytes(gameKeys[0].type, KC_ASCII, "gameKeys[0].type");
   expectFalse(unexpectedTokenInvoked, "unexpectedToken");
@@ -209,13 +227,14 @@ void assertControllerButtons() {
   expectFalse(expectedErrorInvoked, "expectedError");
 }
 
-const char *testConfigInvadersConfiguration = "KEY-4 = KEY-A,CTRL-2-LEFT\r\n"
-                                              "KEY-5 = KEY-SPACE,CTRL-2-BTN-1,CTRL-2-BTN-2\r\n"
-                                              "KEY-6 = KEY-D,CTRL-2-RIGHT\r\n"
+const char *testConfigInvadersConfiguration = "KEY-4 = {a},CTRL-2-LEFT\r\n"
+                                              "KEY-5 = {space},CTRL-2-BTN-1,CTRL-2-BTN-2\r\n"
+                                              "KEY-6 = {D},CTRL-2-RIGHT\r\n"
                                               "\x1a";
 
 void assertInvadersConfiguration() {
-  expectEqualChars(gameKeys[0].asciiKeyChar, 'a', "gameKeys[0].asciiKeyChar");
+  expectEqualBytes(gameKeys[0].matrixRow, 2, "gameKeys[0].matrixRow");
+  expectEqualBytes(gameKeys[0].matrixMask, 1 << 6, "gameKeys[0].matrixMask");
   expectEqualBytes(gameKeys[0].hexCode, 4, "gameKeys[0].hexCode");
   expectEqualBytes(gameKeys[0].type, KC_ASCII, "gameKeys[0].type");
 
@@ -224,7 +243,8 @@ void assertInvadersConfiguration() {
   expectEqualBytes(gameKeys[1].type, KC_CTRL_DIR, "gameKeys[1].type");
   expectEqualBytes(gameKeys[1].controllerId, 1, "gameKeys[1].controllerId");
 
-  expectEqualChars(gameKeys[2].asciiKeyChar, ' ', "gameKeys[2].asciiKeyChar");
+  expectEqualBytes(gameKeys[2].matrixRow, 8, "gameKeys[2].matrixRow");
+  expectEqualBytes(gameKeys[2].matrixMask, 1 << 0, "gameKeys[2].matrixMask");
   expectEqualBytes(gameKeys[2].hexCode, 5, "gameKeys[2].hexCode");
   expectEqualBytes(gameKeys[2].type, KC_ASCII, "gameKeys[2].type");
 
@@ -238,7 +258,8 @@ void assertInvadersConfiguration() {
   expectEqualBytes(gameKeys[4].type, KC_CTRL_BTNS, "gameKeys[4].type");
   expectEqualBytes(gameKeys[4].controllerId, 1, "gameKeys[4].controllerId");
 
-  expectEqualChars(gameKeys[5].asciiKeyChar, 'd', "gameKeys[5].asciiKeyChar");
+  expectEqualBytes(gameKeys[5].matrixRow, 3, "gameKeys[5].matrixRow");
+  expectEqualBytes(gameKeys[5].matrixMask, 1 << 1, "gameKeys[5].matrixMask");
   expectEqualBytes(gameKeys[5].hexCode, 6, "gameKeys[5].hexCode");
   expectEqualBytes(gameKeys[5].type, KC_ASCII, "gameKeys[5].type");
 
@@ -261,6 +282,7 @@ void testConfigurtionParser() {
   assert(ColoursBadIndex);
 
   assert(SingleKey);
+  assert(SingleKeyA);
   assert(TwoMappedKeys);
   assert(ControllerDirection);
   assert(Controller1Direction);

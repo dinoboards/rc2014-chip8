@@ -6,6 +6,7 @@
 #include "systemstate.h"
 #include "tms.h"
 #include "xstdlib.h"
+#include <stdio.h>
 
 Token      token;
 const char commentChar = '#';
@@ -65,27 +66,13 @@ void tokeniseAlphaNumericString() {
   tokenDirectionMap("left", CONTROLLER_DIRECTION_LEFT);
   tokenDirectionMap("right", CONTROLLER_DIRECTION_RIGHT);
 
-  if (tokenEquals("space")) {
-    token.type = TokenIdentifier;
-    token.value[0] = ' ';
-    token.value[1] = 0;
-    return;
-  }
-
-  if (tokenEquals("cr")) {
-    token.type = TokenIdentifier;
-    token.value[0] = 13;
-    token.value[1] = 0;
-    return;
-  }
-
   if (isOnlyDigits) {
     token.type = TokenNumber;
     token.number = xstrtol(token.value, (char *)0, 10);
     return;
   }
 
-  token.type = TokenUnknown;
+  token.type = TokenAlphanumeric;
 }
 
 static bool isEqual() {
@@ -130,6 +117,33 @@ static bool isComma() {
   return true;
 }
 
+static bool isOpenCurly() {
+  if (tokenCurrentChar != '{')
+    return false;
+
+  tokenCurrentChar = getNext();
+
+  token.value[0] = '{';
+  token.value[1] = '\0';
+  tokenTerminatorChar = tokenCurrentChar;
+  token.type = TokenOpenCurly;
+
+  return true;
+}
+
+static bool isCloseCurly() {
+  if (tokenCurrentChar != '}')
+    return false;
+
+  tokenCurrentChar = getNext();
+
+  token.value[0] = '{';
+  token.value[1] = '\0';
+  tokenTerminatorChar = tokenCurrentChar;
+  token.type = TokenCloseCurly;
+
+  return true;
+}
 void getNextToken() {
   tokenCurrentChar = skipWhiteSpace(tokenCurrentChar);
   tokenCurrentChar = skipComment(tokenCurrentChar);
@@ -151,6 +165,12 @@ void getNextToken() {
     return;
 
   if (isComma())
+    return;
+
+  if (isOpenCurly())
+    return;
+
+  if (isCloseCurly())
     return;
 
   if (isAlphaNumeric(token.value))

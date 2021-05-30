@@ -7,12 +7,14 @@
 typedef enum {
   /* first 15 are colour values as per tms.h */
   TokenEquals = 32,
-  TokenAlphanumeric,
-  TokenUnknown,
-  TokenEnd,
-  TokenColour,
-  TokenKey,
-  TokenIdentifier,
+  TokenAlphanumeric, // 33
+  TokenUnknown,      // 34
+  TokenEnd,          // 35
+  TokenColour,       // 36
+  TokenKey,          // 37
+  TokenOpenCurly,    // 38
+  TokenCloseCurly,   // 39
+  TokenIdentifier,   // 40
   TokenDash,
   TokenComma,
   TokenNumber,

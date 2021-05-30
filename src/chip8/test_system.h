@@ -35,9 +35,16 @@ extern bool appRunning;
 
 #define MAX_CAPTURE_TEXT 128
 
+#define KEY_ROW_A  2
+#define KEY_MASK_A ((uint8_t)(1 << 6))
+#define KEY_ROW_B  2
+#define KEY_MASK_B ((uint8_t)(1 << 7))
+#define KEY_ROW_2  0
+#define KEY_MASK_2 ((uint8_t)(1 << 2))
+
 extern void resetCaptureCommands();
 extern void resetKeySimulator();
-extern void simulateKey(const char k);
+extern void simulateKey(const uint8_t, const uint8_t);
 extern void simulateTimerTick();
 extern void simulateRandomNumber(byte b);
 
