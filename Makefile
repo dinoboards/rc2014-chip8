@@ -25,6 +25,11 @@ chip8:
 	TARGET=msx $(MAKE) -C ./src ./bin/msx/chip8.com -s -j 6 -O
 	cp -u ./src/bin/msx/chip8.com ./bin
 
+cpmchip8:
+	@mkdir -p ./bin
+	TARGET=cpm $(MAKE) -C ./src ./bin/cpm/chip8.com -s -j 6 -O
+	cp -u ./src/bin/cpm/chip8.com ./bin/cpmchip8.com
+
 test: tstinstr tstasmbl
 
 tstinstr:
@@ -67,6 +72,11 @@ test2: chip8asm
 testscrl: chip8asm
 	@cp ./test-samples/testscrl.cas ./bin/
 	cd bin && cpm chip8asm testscrl.cas
+
+test-super: cpmchip8
+	@cp ./test-samples/super.ch8 ./bin/
+	cd bin && cpm cpmchip8 super.ch8s
+
 
 .PHONY: package
 package: chip8 chip8asm

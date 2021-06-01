@@ -30,7 +30,7 @@ chip8_sources = $(wildcard chip8/*.c) $(wildcard chip8/*.asm) $(wildcard chip8/*
 chip8asm_sources = $(wildcard chip8asm/*.c) $(wildcard chip8asm/*.asm)
 exclude_from_tests = %main.c.o %filereader.c.o %exit.c.o %error.o %tty.c.o %keys.c.o %random.c.o %ym2149.c.o %ym2149asm.o
 exclude_from_tstinstr = $(exclude_from_tests) %error_reports.c.o
-chip8_objects = filenames.c.o debug.o xstdio.o chartesters.c.o token.c.o filereader.c.o xstrtol.o $(patsubst %.asm.m4,%.m4.o,$(patsubst %.asm,%.o,$(patsubst %.c,%.c.o,$(chip8_sources))))
+chip8_objects = cpm.c.o cpm.o filenames.c.o debug.o xstdio.o chartesters.c.o token.c.o filereader.c.o xstrtol.o $(patsubst %.asm.m4,%.m4.o,$(patsubst %.asm,%.o,$(patsubst %.c,%.c.o,$(chip8_sources))))
 chip8asm_objects = filenames.c.o xstdio.o chartesters.c.o token.c.o filereader.c.o xstrtol.o $(patsubst %.asm,%.o,$(patsubst %.c,%.c.o,$(chip8asm_sources)))
 
 
@@ -111,12 +111,12 @@ $(BIN)chip8asm.com: $(filter-out %test_assembler.c.o, $(addprefix $(BIN),$(chip8
 # 	$(ZCC) -zorg 256 --list  $^ -o $(BIN)chip8.com
 # 	echo "Compiled $(notdir $@) from $(notdir $^)"
 
-$(BIN)chip8100.bin:$(filter-out ./bin/msx/chip8/test_%.c.o, $(addprefix $(BIN),$(chip8_objects)))
+$(BIN)chip8100.bin:$(filter-out ./bin/$(TARGET)/chip8/test_%.c.o, $(addprefix $(BIN),$(chip8_objects)))
 	@mkdir -p $(dir $@)
 	$(ZCC) -zorg 256  $^ -o $(BIN)chip8100.bin
 	echo "Compiled $(notdir $@) from $(notdir $^)"
 
-$(BIN)chip8200.bin: $(filter-out ./bin/msx/chip8/test_%.c.o, $(addprefix $(BIN),$(chip8_objects)))
+$(BIN)chip8200.bin: $(filter-out ./bin/$(TARGET)/chip8/test_%.c.o, $(addprefix $(BIN),$(chip8_objects)))
 	@mkdir -p $(dir $@)
 	$(ZCC) -zorg 512  $^ -o $(BIN)chip8200.bin
 	echo "Compiled $(notdir $@) from $(notdir $^)"

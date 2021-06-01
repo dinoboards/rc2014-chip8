@@ -23,6 +23,7 @@ inline uint8_t call() {
   }
 
 inline void seVxByte() {
+  // printf("  seVxByte(%d, %d) R[x]=%d", nibble2nd, lowByte, registers[nibble2nd]);
   if (registers[nibble2nd] == lowByte)
     skipNextInstruction();
 }

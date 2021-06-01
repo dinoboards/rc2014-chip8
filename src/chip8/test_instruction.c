@@ -649,7 +649,7 @@ void resetKeyConfiguration() {
   gameKeyCount = 15;
 
   const char *str1 = "0";
-  char* str = (char*)str1;
+  char *      str = (char *)str1;
 
   for (int i = 0; i <= 9; i++) {
     *str = i + '0';

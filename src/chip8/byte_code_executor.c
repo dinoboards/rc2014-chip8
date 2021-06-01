@@ -64,6 +64,8 @@ bool executeSingleInstruction() {
 
   fourthNibble = lowByte & 0xF;
 
+  // printf("\n%04X: %04X V0=%02X V1=%02X I=%04X", chip8PC-1, invertByteOrder(currentInstruction), registers[0], registers[1], registerI);
+
   switch (firstNibble) {
   case 0x0: {
     switch (highByte) {
@@ -227,6 +229,8 @@ bool executeSingleInstruction() {
 
   case 0xA:
     ldIAddr();
+    // {(registerI = addr12Bit);
+    //  printf("LoadI (12bit) %p\r\n", registerI);}
     break;
 
   case 0xB:
@@ -267,6 +271,7 @@ bool executeSingleInstruction() {
 
     case 0x00:
       if (highByte == 0xF0)
+        // {(registerI = invertByteOrder(*chip8PC++)); printf("LoadILarge %p\r\n", registerI);}
         ldILargeAddr();
       else
         goto badInstruction;

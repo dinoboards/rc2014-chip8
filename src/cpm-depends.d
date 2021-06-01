@@ -49,14 +49,13 @@
  chip8/msx.h chip8/systemstate.h chip8/systimer.h
 ./bin/cpm/chip8/instr_output.c.asm: chip8/instr_output.c chip8/instr_output.h chip8/v9958.h \
  datatypes.h chip8/error_reports.h chip8/instr_tms_output.h \
- chip8/instr_v9958_output.h chip8/systemstate.h chip8/tms.h chip8/vdp.h \
- xstdio.h
+ chip8/instr_v9958_output.h chip8/systemstate.h chip8/tms.h chip8/vdp.h
 ./bin/cpm/chip8/audio.c.asm: chip8/audio.c chip8/audio.h datatypes.h chip8/systemstate.h \
  chip8/ym2149.h
 ./bin/cpm/chip8/systemstate.c.asm: chip8/systemstate.c chip8/systemstate.h datatypes.h \
  chip8/tms.h
 ./bin/cpm/chip8/main.c.asm: chip8/main.c chip8/audio.h datatypes.h \
- chip8/byte_code_executor.h chip8/configuration_loader.h \
+ chip8/byte_code_executor.h chip8/configuration_loader.h cpm.h \
  chip8/error_reports.h filenames.h chip8/instr_output.h chip8/v9958.h \
  chip8/instr_sound.h chip8/random.h chip8/systemstate.h chip8/systimer.h \
  chip8/msx.h chip8/timers.h chip8/tms.h xstdio.h xstdlib.h
@@ -91,6 +90,7 @@
  chip8asm/labels.h chip8asm/systemstate.h filenames.h filereader.h
 ./bin/cpm/token.c.asm: token.c token.h datatypes.h charconstants.h chartesters.h \
  filereader.h
+./bin/cpm/cpm.c.asm: cpm.c cpm.h
 ./bin/cpm/test_expectations.c.asm: test_expectations.c test_expectations.h \
  datatypes.h terminal_codes.h
 ./bin/cpm/test.c.asm: test.c chip8/msx.h
@@ -119,6 +119,7 @@
 ./bin/cpm/reloccrt.o: ./reloccrt.asm
 ./bin/cpm/nonreloccrt.o: ./nonreloccrt.asm
 ./bin/cpm/xstrtol.o: ./xstrtol.asm
+./bin/cpm/cpm.o: ./cpm.asm
 ./bin/cpm/chip8/instr_v9958_output/scrl_rightasm.o: ./chip8/instr_v9958_output/scrl_rightasm.asm.m4 ./chip8/macros.inc.m4 ./chip8/v9958.inc
 ./bin/cpm/chip8/instr_v9958_output/scrl_upasm.o: ./chip8/instr_v9958_output/scrl_upasm.asm.m4 ./chip8/macros.inc.m4 ./chip8/v9958.inc
 ./bin/cpm/chip8/instr_v9958_output/scrl_leftasm.o: ./chip8/instr_v9958_output/scrl_leftasm.asm.m4 ./chip8/macros.inc.m4 ./chip8/v9958.inc

@@ -8,6 +8,10 @@
 #include <stdio.h>
 
 void draw() {
+  // int xx = (registers[nibble2nd] * 2) & 255; //PIXEL_WIDTH_MASK;
+  // int yy = (registers[nibble3rd] * 2) & 127 ;//PIXEL_HEIGHT_MASK;
+
+  // printf("  Draw(%d, %d, %d), PLANE: %d, I: %04X", xx, yy, fourthNibble, _color, registerI);
   if (videoResMode == VideoResModeLow)
     tmsDraw();
   else
@@ -15,6 +19,7 @@ void draw() {
 }
 
 void cls() {
+  // printf("cls\r\n");
   if (videoResMode == VideoResModeLow)
     tmsCls();
   else
@@ -79,8 +84,6 @@ void scrlUp() {
   if (videoResMode != VideoResModeLow)
     v9958ScrollUp();
 }
-
-#include "xstdio.h"
 
 void scrlLeft() {
   if (videoResMode != VideoResModeLow) {

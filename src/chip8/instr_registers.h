@@ -66,6 +66,7 @@ inline void ldVxI() {
 }
 
 inline void ldIVx() {
+  // printf("LdIVX %p\r\n", currentInstruction);
   // clang-format off
   __asm
     ld	    de, (_registerI)
