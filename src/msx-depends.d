@@ -39,11 +39,10 @@
  datatypes.h charconstants.h datatypes.h chip8/error_reports.h \
  filereader.h chip8/systemstate.h chip8/tms.h xstdlib.h
 ./bin/msx/chip8/byte_code_executor.c.asm: chip8/byte_code_executor.c datatypes.h \
- chip8/key_monitor.h chip8/stack.h chip8/systemstate.h chip8/systimer.h \
- chip8/msx.h chip8/timers.h xstdio.h chip8/msx_keyboard.h \
- chip8/instr_output.h chip8/v9958.h chip8/instr_pc.h chip8/instr_random.h \
- chip8/random.h chip8/instr_registers.h chip8/fontsets.h \
- chip8/instr_sound.h
+ chip8/key_monitor.h chip8/msx_keyboard.h chip8/stack.h \
+ chip8/systemstate.h chip8/systimer.h chip8/msx.h chip8/timers.h xstdio.h \
+ chip8/instr_output.h chip8/v9958.h chip8/instr_registers.h \
+ chip8/fontsets.h chip8/instr_sound.h chip8/byte_code_executor.h
 ./bin/msx/chip8/fontsets.c.asm: chip8/fontsets.c chip8/fontsets.h datatypes.h
 ./bin/msx/chip8/msx.c.asm: chip8/msx.c chip8/msx.h
 ./bin/msx/chip8/timers.c.asm: chip8/timers.c chip8/timers.h datatypes.h chip8/instr_sound.h \
@@ -58,9 +57,9 @@
 ./bin/msx/chip8/main.c.asm: chip8/main.c chip8/audio.h datatypes.h \
  chip8/byte_code_executor.h chip8/configuration_loader.h cpm.h \
  chip8/error_reports.h filenames.h chip8/instr_output.h chip8/v9958.h \
- chip8/instr_sound.h chip8/random.h chip8/systemstate.h chip8/systimer.h \
- chip8/msx.h chip8/timers.h chip8/tms.h xstdio.h xstdlib.h \
- chip8/msx_keyboard.h msxdos.h
+ chip8/instr_sound.h chip8/msx_keyboard.h msxdos.h chip8/random.h \
+ chip8/systemstate.h chip8/systimer.h chip8/msx.h chip8/timers.h \
+ chip8/tms.h xstdio.h xstdlib.h
 ./bin/msx/chip8asm/assembler.c.asm: chip8asm/assembler.c chip8asm/assembler.h datatypes.h \
  chip8asm/emitters.h chip8asm/error_reports.h filereader.h \
  chip8asm/labels.h chip8asm/systemstate.h chip8asm/token_parser.h \
@@ -111,6 +110,7 @@
 ./bin/msx/chip8/timerasm.o: ./chip8/timerasm.asm
 ./bin/msx/chip8/sub_vx_vy_asm.o: ./chip8/sub_vx_vy_asm.asm
 ./bin/msx/chip8/v9958asm.o: ./chip8/v9958asm.asm ./chip8/v9958.inc
+./bin/msx/chip8/byte_code_executor.o: ./chip8/byte_code_executor.asm
 ./bin/msx/chip8/instr_registerasm.o: ./chip8/instr_registerasm.asm
 ./bin/msx/xstdio.o: ./xstdio.asm
 ./bin/msx/chip8asm/error.o: ./chip8asm/error.asm
