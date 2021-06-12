@@ -51,7 +51,6 @@ _setChip8PC:
 	EXX
 	RET
 
-
 	PUBLIC _invertByteOrder
 ; extern uint16_t invertByteOrder(uint16_t word) __naked __z88dk_fastcall {
 _invertByteOrder:
@@ -80,66 +79,80 @@ _executeSingleInstruction:
 	inc	hl
 	exx
 
-;chip8/byte_code_executor.c:53: manageTimers();
 	call	_manageTimers
-;chip8/byte_code_executor.c:55: if (CTRL_STOP_PRESSED())
-	ld	a, ((_NEWKEY + 0x0006) + 0)
+
+; if (CTRL_STOP_PRESSED())
+	ld	a, (_NEWKEY + 0x0006)
 	bit	1, a
-	jr	NZ,l_executeSingleInstruction_00102
-	ld	a, ((_NEWKEY + 0x0007) + 0)
+	jr	NZ, BCE_1
+	ld	a, (_NEWKEY + 0x0007)
 	bit	4, a
-	jr	NZ,l_executeSingleInstruction_00102
-;chip8/byte_code_executor.c:56: return false;
-	ld	l,0x00
-	jp	l_executeSingleInstruction_00243
-l_executeSingleInstruction_00102:
+	jr	NZ, BCE_1
+;   return false;
+	ld	l, 0x00
+	jp	BCE_EXIT
+
+BCE_1:
 ;chip8/byte_code_executor.c:58: fourthNibble = readFourthNibble;
-	ld	bc,_currentInstruction+0
+	ld	bc, _currentInstruction
 	ld	a, (_currentInstruction + 1)
-	and	a,0x0f
-	ld	(_fourthNibble+0), a
+	and	a, 0x0f
+	ld	(_fourthNibble), a
+
 ;chip8/byte_code_executor.c:64: switch (firstNibble) {
-	ld	e, c
-	ld	d, b
-	ld	a, (de)
+	ld	a, (bc)
+
 	rlca
 	rlca
 	rlca
 	rlca
 	and	a,0x0f
-	ld	e, a
-	ld	a,0x0f
-	sub	a, e
-	jp	C, l_executeSingleInstruction_00182
-	ld	d,0x00
-	ld	hl,l_executeSingleInstruction_00539
-	add	hl, de
-	add	hl, de
+
+	ld	l, a
+	ld	h, 0
+	add	hl, hl
+	add	hl, hl
+	ld	de, BCE_FIRST_NIBBLE_TABLE
 	add	hl, de
 	jp	(hl)
-l_executeSingleInstruction_00539:
-	jp	l_executeSingleInstruction_00104
+
+BCE_FIRST_NIBBLE_TABLE:
+	jp	BCE_0XXX
+	db	0
 	jp	l_executeSingleInstruction_00121
+	db	0
 	jp	l_executeSingleInstruction_00124
+	db	0
 	jp	l_executeSingleInstruction_00125
+	db	0
 	jp	l_executeSingleInstruction_00126
+	db	0
 	jp	l_executeSingleInstruction_00127
+	db	0
 	jp	l_executeSingleInstruction_00133
+	db	0
 	jp	l_executeSingleInstruction_00134
+	db	0
 	jp	l_executeSingleInstruction_00135
+	db	0
 	jp	l_executeSingleInstruction_00147
+	db	0
 	jp	l_executeSingleInstruction_00151
+	db	0
 	jp	l_executeSingleInstruction_00152
+	db	0
 	jp	l_executeSingleInstruction_00153
+	db	0
 	jp	l_executeSingleInstruction_00154
+	db	0
 	jp	l_executeSingleInstruction_00155
+	db	0
 	jp	l_executeSingleInstruction_00160
+
 ;chip8/byte_code_executor.c:65: case 0x0: {
-l_executeSingleInstruction_00104:
+BCE_0XXX:
 ;chip8/byte_code_executor.c:66: switch (highByte) {
-	ld	e, c
-	ld	d, b
-	ld	a, (de)
+	ld	a, (bc)
 	or	a, a
 	jp	NZ,l_executeSingleInstruction_00182
 ;chip8/byte_code_executor.c:68: switch (lowByte) {
@@ -173,7 +186,7 @@ l_executeSingleInstruction_00108:
 	jp	Z, l_executeSingleInstruction_00183
 ;chip8/byte_code_executor.c:79: return false;
 	ld	l,0x00
-	jp	l_executeSingleInstruction_00243
+	jp	BCE_EXIT
 ;chip8/byte_code_executor.c:82: case 0xFB:
 l_executeSingleInstruction_00111:
 ;chip8/byte_code_executor.c:83: scrlRight();
@@ -257,7 +270,7 @@ l_executeSingleInstruction_00188:
 l_executeSingleInstruction_00122:
 ;chip8/byte_code_executor.c:115: return false;
 	ld	l,0x00
-	jp	l_executeSingleInstruction_00243
+	jp	BCE_EXIT
 ;chip8/byte_code_executor.c:119: case 0x2: {
 l_executeSingleInstruction_00124:
 ;chip8/instr_pc.h:2: const uint16_t a = addr12Bit;
@@ -1181,7 +1194,7 @@ l_executeSingleInstruction_00182:
 	ld	sp, hl
 ;chip8/byte_code_executor.c:341: return false;
 	ld	l,0x00
-	jr	l_executeSingleInstruction_00243
+	jr	BCE_EXIT
 ;chip8/byte_code_executor.c:342: }
 l_executeSingleInstruction_00183:
 ;chip8/byte_code_executor.c:344: if ((uint16_t)chip8PC < 0x200) {
@@ -1203,11 +1216,11 @@ l_executeSingleInstruction_00183:
 	pop	af
 ;chip8/byte_code_executor.c:346: return false;
 	ld	l,0x00
-	jr	l_executeSingleInstruction_00243
+	jr	BCE_EXIT
 l_executeSingleInstruction_00185:
 ;chip8/byte_code_executor.c:349: return true;
 	ld	l, 1
-l_executeSingleInstruction_00243:
+BCE_EXIT:
 ;chip8/byte_code_executor.c:350: }
 	inc	sp
 	pop	ix
