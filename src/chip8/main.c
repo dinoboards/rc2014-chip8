@@ -44,6 +44,16 @@ void parseCommandLine(int argc, char *argv[]) {
 
 char gameFileName[MAX_FILE_NAME];
 
+void restoreSystemHardware() {
+  videoClose();
+  soundOff();
+
+#ifndef CPM
+  msxbiosInitxt();
+  msxbiosInitPalette();
+#endif
+}
+
 void main(int argc, char *argv[]) {
   parseCommandLine(argc, argv);
 
@@ -88,11 +98,5 @@ void main(int argc, char *argv[]) {
 
   executeROM();
 
-  videoClose();
-  soundOff();
-
-#ifndef CPM
-  msxbiosInitxt();
-  msxbiosInitPalette();
-#endif
+  restoreSystemHardware();
 }

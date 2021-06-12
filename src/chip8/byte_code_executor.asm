@@ -1,5 +1,4 @@
 
-	EXTERN	_printf
 	EXTERN	_invertByteOrder
 	EXTERN	_currentInstruction
 	EXTERN	_registerI
@@ -30,6 +29,7 @@
 	EXTERN	_NEWKEY
 	EXTERN	_manageTimers
 	EXTERN	_addVxVy
+	EXTERN	_applicationExit
 
 	SECTION code_compiler
 
@@ -127,7 +127,7 @@ BCE_FIRST_NIBBLE_TABLE:
 	db	0
 	jp	l_executeSingleInstruction_00126
 	db	0
-	jp	l_executeSingleInstruction_00127
+	jp	BCE_5XXX
 	db	0
 	jp	l_executeSingleInstruction_00133
 	db	0
@@ -154,11 +154,13 @@ BCE_0XXX:
 ;chip8/byte_code_executor.c:66: switch (highByte) {
 	ld	a, (bc)
 	or	a, a
-	jp	NZ,l_executeSingleInstruction_00182
+	jp	NZ, BCE_BAD_INSTRUCTION
+
+; BCE_00XX (PART 1):
 ;chip8/byte_code_executor.c:68: switch (lowByte) {
 	ld	a, (_currentInstruction + 1)
-	cp	a,0xe0
-	jr	Z,l_executeSingleInstruction_00107
+	cp	a, 0xe0
+	jr	Z, BCE_00E0
 	cp	a,0xee
 	jr	Z,l_executeSingleInstruction_00108
 	cp	a,0xfb
@@ -166,24 +168,25 @@ BCE_0XXX:
 	cp	a,0xfc
 	jr	Z,l_executeSingleInstruction_00112
 	inc	a
-	jr	NZ,l_executeSingleInstruction_00113
+	jr	nz, BCE_00XX
+BCE_00FF:
 ;chip8/byte_code_executor.c:70: videoHigh();
 	call	_videoHigh
 ;chip8/byte_code_executor.c:71: break;
-	jp	l_executeSingleInstruction_00183
+	jp	BCE_POST_PROCESS
 ;chip8/byte_code_executor.c:73: case 0xE0:
-l_executeSingleInstruction_00107:
+BCE_00E0:
 ;chip8/byte_code_executor.c:74: cls();
 	call	_cls
 ;chip8/byte_code_executor.c:75: break;
-	jp	l_executeSingleInstruction_00183
+	jp	BCE_POST_PROCESS
 ;chip8/byte_code_executor.c:77: case 0xEE:
 l_executeSingleInstruction_00108:
 ;chip8/byte_code_executor.c:78: if (ret())
 	call	_popPc
 	ld	a, l
 	or	a, a
-	jp	Z, l_executeSingleInstruction_00183
+	jp	Z, BCE_POST_PROCESS
 ;chip8/byte_code_executor.c:79: return false;
 	ld	l,0x00
 	jp	BCE_EXIT
@@ -192,40 +195,36 @@ l_executeSingleInstruction_00111:
 ;chip8/byte_code_executor.c:83: scrlRight();
 	call	_scrlRight
 ;chip8/byte_code_executor.c:84: break;
-	jp	l_executeSingleInstruction_00183
+	jp	BCE_POST_PROCESS
 ;chip8/byte_code_executor.c:86: case 0xFC:
 l_executeSingleInstruction_00112:
 ;chip8/byte_code_executor.c:87: scrlLeft();
 	call	_scrlLeft
 ;chip8/byte_code_executor.c:88: break;
-	jp	l_executeSingleInstruction_00183
+	jp	BCE_POST_PROCESS
 ;chip8/byte_code_executor.c:90: default:
-l_executeSingleInstruction_00113:
+BCE_00XX:
 ;chip8/byte_code_executor.c:91: switch (nibble3rd) {
 	inc	bc
 	ld	a, (bc)
-	rlca
-	rlca
-	rlca
-	rlca
-	and	a,0x0f
-	cp	a,0x0c
-	jr	Z,l_executeSingleInstruction_00114
-	sub	a,0x0d
-	jr	Z,l_executeSingleInstruction_00115
-	jp	l_executeSingleInstruction_00182
-;chip8/byte_code_executor.c:92: case 0xC:
-l_executeSingleInstruction_00114:
-;chip8/byte_code_executor.c:93: scrlDown();
+	AND	A, 0xF0
+
+	CP	A, 0xC0
+	jr	Z, BCE_00CX
+
+	CP	A, 0xD0
+	jr	Z, BCE_00DX
+
+	jp	BCE_BAD_INSTRUCTION
+
+BCE_00CX:
 	call	_scrlDown
-;chip8/byte_code_executor.c:94: break;
-	jp	l_executeSingleInstruction_00183
-;chip8/byte_code_executor.c:96: case 0xD:
-l_executeSingleInstruction_00115:
-;chip8/byte_code_executor.c:97: scrlUp();
+	jp	BCE_POST_PROCESS
+
+BCE_00DX:
 	call	_scrlUp
-;chip8/byte_code_executor.c:104: break;
-	jp	l_executeSingleInstruction_00183
+	jp	BCE_POST_PROCESS
+
 ;chip8/byte_code_executor.c:113: case 0x1: {
 l_executeSingleInstruction_00121:
 ;chip8/instr_pc.h:47: const uint16_t a = addr12Bit;
@@ -253,7 +252,7 @@ l_executeSingleInstruction_00121:
 	push	de
 	ld	hl,___str_1
 	push	hl
-	call	_printf
+	call	_applicationExit
 	ld	hl,6
 	add	hl, sp
 	ld	sp, hl
@@ -266,7 +265,7 @@ l_executeSingleInstruction_00188:
 	pop	hl
 	exx
 ;chip8/byte_code_executor.c:114: if (jp())
-	jp	l_executeSingleInstruction_00183
+	jp	BCE_POST_PROCESS
 l_executeSingleInstruction_00122:
 ;chip8/byte_code_executor.c:115: return false;
 	ld	l,0x00
@@ -298,12 +297,12 @@ l_executeSingleInstruction_00124:
 	push	de		; Address to jump to
 	ld	hl,___str_1
 	push	hl
-	call	_printf
+	call	_applicationExit
 	ld	hl,6
 	add	hl, sp
 	ld	sp, hl
 ;chip8/byte_code_executor.c:6: #include "systimer.h"
-	jp	l_executeSingleInstruction_00183
+	jp	BCE_POST_PROCESS
 l_executeSingleInstruction_00191:
 ;chip8/instr_pc.h:9: pushPc();
 	push	de
@@ -313,7 +312,7 @@ l_executeSingleInstruction_00191:
 	pop	hl
 	exx
 ;chip8/byte_code_executor.c:121: break;
-	jp	l_executeSingleInstruction_00183
+	jp	BCE_POST_PROCESS
 ;chip8/byte_code_executor.c:124: case 0x3: {
 l_executeSingleInstruction_00125:
 ;chip8/instr_pc.h:27: if (registers[nibble2nd] == lowByte)
@@ -329,7 +328,7 @@ l_executeSingleInstruction_00125:
 	inc	bc
 	ld	a, (bc)
 	sub	a, e
-	jp	NZ,l_executeSingleInstruction_00183
+	jp	NZ,BCE_POST_PROCESS
 ;chip8/instr_pc.h:28: skipNextInstruction();
 	exx
 	push	hl
@@ -348,14 +347,14 @@ l_executeSingleInstruction_00125:
 	inc	hl
 	inc	hl
 	exx
-	jp	l_executeSingleInstruction_00183
+	jp	BCE_POST_PROCESS
 l_executeSingleInstruction_00194:
 	exx
 	inc	hl
 	inc	hl
 	exx
 ;chip8/byte_code_executor.c:126: break;
-	jp	l_executeSingleInstruction_00183
+	jp	BCE_POST_PROCESS
 ;chip8/byte_code_executor.c:129: case 0x4: {
 l_executeSingleInstruction_00126:
 ;chip8/instr_pc.h:37: if (registers[nibble2nd] != lowByte)
@@ -371,7 +370,7 @@ l_executeSingleInstruction_00126:
 	inc	bc
 	ld	a, (bc)
 	sub	a, e
-	jp	Z,l_executeSingleInstruction_00183
+	jp	Z,BCE_POST_PROCESS
 ;chip8/instr_pc.h:38: skipNextInstruction();
 	exx
 	push	hl
@@ -391,36 +390,45 @@ l_executeSingleInstruction_00126:
 	inc	hl
 	exx
 
-	jp	l_executeSingleInstruction_00183
+	jp	BCE_POST_PROCESS
 l_executeSingleInstruction_00200:
 	exx
 	inc	hl
 	inc	hl
 	exx
 ;chip8/byte_code_executor.c:131: break;
-	jp	l_executeSingleInstruction_00183
+	jp	BCE_POST_PROCESS
 ;chip8/byte_code_executor.c:134: case 0x5: {
-l_executeSingleInstruction_00127:
+
+BCE_5XXX:
 ;chip8/byte_code_executor.c:136: switch (readFourthNibble) {
 	ld	a, (_currentInstruction + 1)
 	and	a,0x0f
+	; or	a
+	; jr	Z, BCE_5XX0
+	; cp	2
+	; jr	Z, BCE_5XX2
+	; cp	3
+	; jr	Z, BCE_5XX3
+	; jp	BCE_BAD_INSTRUCTION
+
 	ld	e, a
 	ld	d,0x00
 	ld	a, e
 	or	a, a
 	or	a, d
-	jr	Z,l_executeSingleInstruction_00128
+	jr	Z, BCE_5XX0
 	ld	a, e
 	sub	a,0x02
 	or	a, d
-	jr	Z,l_executeSingleInstruction_00129
+	jr	Z, BCE_5XX2
 	ld	a, e
 	sub	a,0x03
 	or	a, d
-	jr	Z,l_executeSingleInstruction_00130
-	jp	l_executeSingleInstruction_00182
+	jr	Z, BCE_5XX3
+	jp	BCE_BAD_INSTRUCTION
 ;chip8/byte_code_executor.c:137: case 0x0:
-l_executeSingleInstruction_00128:
+BCE_5XX0:
 ;chip8/instr_pc.h:32: if (registers[nibble2nd] == registers[nibble3rd])
 	ld	e, c
 	ld	d, b
@@ -444,7 +452,7 @@ l_executeSingleInstruction_00128:
 	ld	b, a
 	ld	a, (bc)
 	sub	a, e
-	jp	NZ,l_executeSingleInstruction_00183
+	jp	NZ,BCE_POST_PROCESS
 ;chip8/instr_pc.h:33: skipNextInstruction();
 	exx
 	push	hl
@@ -463,26 +471,26 @@ l_executeSingleInstruction_00128:
 	inc	hl
 	inc	hl
 	exx
-	jp	l_executeSingleInstruction_00183
+	jp	BCE_POST_PROCESS
 l_executeSingleInstruction_00206:
 	exx
 	inc	hl
 	inc	hl
 	exx
 ;chip8/byte_code_executor.c:139: break;
-	jp	l_executeSingleInstruction_00183
+	jp	BCE_POST_PROCESS
 ;chip8/byte_code_executor.c:141: case 0x2:
-l_executeSingleInstruction_00129:
+ BCE_5XX2:
 ;chip8/byte_code_executor.c:142: ldIVxVy();
 	call	_ldIVxVy
 ;chip8/byte_code_executor.c:143: break;
-	jp	l_executeSingleInstruction_00183
+	jp	BCE_POST_PROCESS
 ;chip8/byte_code_executor.c:145: case 0x3:
-l_executeSingleInstruction_00130:
+ BCE_5XX3:
 ;chip8/byte_code_executor.c:146: ldVxVyI();
 	call	_ldVxVyI
 ;chip8/byte_code_executor.c:147: break;
-	jp	l_executeSingleInstruction_00183
+	jp	BCE_POST_PROCESS
 ;chip8/byte_code_executor.c:155: case 0x6:
 l_executeSingleInstruction_00133:
 ;chip8/byte_code_executor.c:156: ldVxByte();
@@ -499,7 +507,7 @@ l_executeSingleInstruction_00133:
 	ld	a, (bc)
 	ld	(de), a
 ;chip8/byte_code_executor.c:157: break;
-	jp	l_executeSingleInstruction_00183
+	jp	BCE_POST_PROCESS
 ;chip8/byte_code_executor.c:159: case 0x7: {
 l_executeSingleInstruction_00134:
 ;chip8/byte_code_executor.c:160: addVxByte();
@@ -528,7 +536,7 @@ l_executeSingleInstruction_00134:
 	add	a, c
 	ld	(de), a
 ;chip8/byte_code_executor.c:161: break;
-	jp	l_executeSingleInstruction_00183
+	jp	BCE_POST_PROCESS
 ;chip8/byte_code_executor.c:164: case 0x8: {
 l_executeSingleInstruction_00135:
 ;chip8/byte_code_executor.c:166: switch (readFourthNibble) {
@@ -572,7 +580,7 @@ l_executeSingleInstruction_00135:
 	sub	a,0x0e
 	or	a, d
 	jp	Z,l_executeSingleInstruction_00144
-	jp	l_executeSingleInstruction_00182
+	jp	BCE_BAD_INSTRUCTION
 ;chip8/byte_code_executor.c:167: case 0x0: {
 l_executeSingleInstruction_00136:
 ;chip8/instr_registers.h:46: __endasm;
@@ -592,7 +600,7 @@ l_executeSingleInstruction_00136:
 	ld	a, (bc)
 	ld	(de), a
 ;chip8/byte_code_executor.c:169: break;
-	jp	l_executeSingleInstruction_00183
+	jp	BCE_POST_PROCESS
 ;chip8/byte_code_executor.c:172: case 0x1: {
 l_executeSingleInstruction_00137:
 ;chip8/instr_registers.h:138: __endasm;
@@ -614,7 +622,7 @@ l_executeSingleInstruction_00137:
 	or	a, (hl)
 	ld	(de), a
 ;chip8/byte_code_executor.c:174: break;
-	jp	l_executeSingleInstruction_00183
+	jp	BCE_POST_PROCESS
 ;chip8/byte_code_executor.c:177: case 0x2: {
 l_executeSingleInstruction_00138:
 ;chip8/instr_registers.h:111: __endasm;
@@ -636,7 +644,7 @@ l_executeSingleInstruction_00138:
 	and	a, (hl)
 	ld	(de), a
 ;chip8/byte_code_executor.c:179: break;
-	jp	l_executeSingleInstruction_00183
+	jp	BCE_POST_PROCESS
 ;chip8/byte_code_executor.c:182: case 0x3: {
 l_executeSingleInstruction_00139:
 ;chip8/instr_registers.h:211: inline void xorVxVy() { registers[nibble2nd] ^= registers[nibble3rd]; }
@@ -674,19 +682,19 @@ l_executeSingleInstruction_00139:
 	xor	a,(ix-1)
 	ld	(de), a
 ;chip8/byte_code_executor.c:184: break;
-	jp	l_executeSingleInstruction_00183
+	jp	BCE_POST_PROCESS
 ;chip8/byte_code_executor.c:187: case 0x4: {
 l_executeSingleInstruction_00140:
 ;chip8/byte_code_executor.c:188: addVxVy();
 	call	_addVxVy
 ;chip8/byte_code_executor.c:189: break;
-	jp	l_executeSingleInstruction_00183
+	jp	BCE_POST_PROCESS
 ;chip8/byte_code_executor.c:192: case 0x5: {
 l_executeSingleInstruction_00141:
 ;chip8/byte_code_executor.c:193: subVxVy();
 	call	_subVxVy
 ;chip8/byte_code_executor.c:194: break;
-	jp	l_executeSingleInstruction_00183
+	jp	BCE_POST_PROCESS
 ;chip8/byte_code_executor.c:197: case 0x6: {
 l_executeSingleInstruction_00142:
 ;chip8/instr_registers.h:143: uint8_t *register2ndNibble = &registers[nibble2nd];
@@ -706,13 +714,13 @@ l_executeSingleInstruction_00142:
 	srl	a
 	ld	(bc), a
 ;chip8/byte_code_executor.c:199: break;
-	jp	l_executeSingleInstruction_00183
+	jp	BCE_POST_PROCESS
 ;chip8/byte_code_executor.c:202: case 0x7:
 l_executeSingleInstruction_00143:
 ;chip8/byte_code_executor.c:203: subnVxVy();
 	call	_subnVxVy
 ;chip8/byte_code_executor.c:204: break;
-	jp	l_executeSingleInstruction_00183
+	jp	BCE_POST_PROCESS
 ;chip8/byte_code_executor.c:206: case 0xE: {
 l_executeSingleInstruction_00144:
 ;chip8/instr_registers.h:149: uint8_t *register2ndNibble = &registers[nibble2nd];
@@ -735,13 +743,13 @@ l_executeSingleInstruction_00144:
 	add	a, a
 	ld	(bc), a
 ;chip8/byte_code_executor.c:208: break;
-	jp	l_executeSingleInstruction_00183
+	jp	BCE_POST_PROCESS
 ;chip8/byte_code_executor.c:217: case 0x9: {
 l_executeSingleInstruction_00147:
 ;chip8/byte_code_executor.c:218: if (readFourthNibble == 0)
 	ld	a, (_currentInstruction + 1)
 	and	a,0x0f
-	jp	NZ,l_executeSingleInstruction_00182
+	jp	NZ,BCE_BAD_INSTRUCTION
 ;chip8/instr_pc.h:42: if (registers[nibble2nd] != registers[nibble3rd])
 	ld	e, c
 	ld	d, b
@@ -765,7 +773,7 @@ l_executeSingleInstruction_00147:
 	ld	b, a
 	ld	a, (bc)
 	sub	a, e
-	jp	Z,l_executeSingleInstruction_00183
+	jp	Z,BCE_POST_PROCESS
 ;chip8/instr_pc.h:43: skipNextInstruction();
 	exx
 	push	hl
@@ -784,14 +792,14 @@ l_executeSingleInstruction_00147:
 	inc	hl
 	inc	hl
 	exx
-	jp	l_executeSingleInstruction_00183
+	jp	BCE_POST_PROCESS
 l_executeSingleInstruction_00218:
 	exx
 	inc	hl
 	inc	hl
 	exx
 ;chip8/byte_code_executor.c:219: sneVxVy();
-	jp	l_executeSingleInstruction_00183
+	jp	BCE_POST_PROCESS
 ;chip8/byte_code_executor.c:225: case 0xA:
 l_executeSingleInstruction_00151:
 ;chip8/byte_code_executor.c:226: ldIAddr();
@@ -811,7 +819,7 @@ l_executeSingleInstruction_00151:
 	inc	hl
 	ld	(hl), a
 ;chip8/byte_code_executor.c:229: break;
-	jp	l_executeSingleInstruction_00183
+	jp	BCE_POST_PROCESS
 ;chip8/byte_code_executor.c:231: case 0xB:
 l_executeSingleInstruction_00152:
 ;chip8/instr_pc.h:58: chip8PC = (uint16_t *)(addr12Bit + registers[0]);
@@ -839,7 +847,7 @@ l_executeSingleInstruction_00152:
 	ld	a, h
 	exx
 	sub	a,0x02
-	jp	NC, l_executeSingleInstruction_00183
+	jp	NC, BCE_POST_PROCESS
 ;chip8/instr_pc.h:61: printf("Illegal jump to %04X at %p\r\n", addr12Bit, chip8PC - 1);
 	exx
 	push	hl
@@ -861,12 +869,12 @@ l_executeSingleInstruction_00152:
 	push	de
 	push	hl
 	push	bc
-	call	_printf
+	call	_applicationExit
 	ld	hl,6
 	add	hl, sp
 	ld	sp, hl
 ;chip8/byte_code_executor.c:62: #endif
-	jp	l_executeSingleInstruction_00183
+	jp	BCE_POST_PROCESS
 ;chip8/byte_code_executor.c:235: case 0xC: {
 l_executeSingleInstruction_00153:
 ;chip8/byte_code_executor.c:236: rnd();
@@ -890,13 +898,13 @@ l_executeSingleInstruction_00153:
 	and	a, c
 	ld	(de), a
 ;chip8/byte_code_executor.c:237: break;
-	jp	l_executeSingleInstruction_00183
+	jp	BCE_POST_PROCESS
 ;chip8/byte_code_executor.c:240: case 0xD: {
 l_executeSingleInstruction_00154:
 ;chip8/byte_code_executor.c:241: draw();
 	call	_draw
 ;chip8/byte_code_executor.c:242: break;
-	jp	l_executeSingleInstruction_00183
+	jp	BCE_POST_PROCESS
 ;chip8/byte_code_executor.c:245: case 0xE: {
 l_executeSingleInstruction_00155:
 ;chip8/byte_code_executor.c:246: switch (lowByte) {
@@ -905,7 +913,7 @@ l_executeSingleInstruction_00155:
 	jr	Z,l_executeSingleInstruction_00156
 	sub	a,0xa1
 	jr	Z,l_executeSingleInstruction_00157
-	jp	l_executeSingleInstruction_00182
+	jp	BCE_BAD_INSTRUCTION
 ;chip8/byte_code_executor.c:247: case 0x9E: {
 l_executeSingleInstruction_00156:
 ;chip8/instr_pc.h:69: if (isKeyDown(registers[nibble2nd]))
@@ -919,7 +927,7 @@ l_executeSingleInstruction_00156:
 	call	_isKeyDown
 	ld	a, l
 	or	a, a
-	jp	Z, l_executeSingleInstruction_00183
+	jp	Z, BCE_POST_PROCESS
 ;chip8/instr_pc.h:70: skipNextInstruction();
 	exx
 	push	hl
@@ -939,14 +947,14 @@ l_executeSingleInstruction_00156:
 	inc	hl
 	exx
 
-	jp	l_executeSingleInstruction_00183
+	jp	BCE_POST_PROCESS
 l_executeSingleInstruction_00227:
 	exx
 	inc	hl
 	inc	hl
 	exx
 ;chip8/byte_code_executor.c:249: break;
-	jp	l_executeSingleInstruction_00183
+	jp	BCE_POST_PROCESS
 ;chip8/byte_code_executor.c:252: case 0xA1: {
 l_executeSingleInstruction_00157:
 ;chip8/instr_pc.h:74: if (!isKeyDown(registers[nibble2nd]))
@@ -960,7 +968,7 @@ l_executeSingleInstruction_00157:
 	call	_isKeyDown
 	ld	a, l
 	or	a, a
-	jp	NZ, l_executeSingleInstruction_00183
+	jp	NZ, BCE_POST_PROCESS
 ;chip8/instr_pc.h:75: skipNextInstruction();
 	exx
 	push	hl
@@ -979,14 +987,14 @@ l_executeSingleInstruction_00157:
 	inc	hl
 	inc	hl
 	exx
-	jp	l_executeSingleInstruction_00183
+	jp	BCE_POST_PROCESS
 l_executeSingleInstruction_00233:
 	exx
 	inc	hl
 	inc	hl
 	exx
 ;chip8/byte_code_executor.c:254: break;
-	jp	l_executeSingleInstruction_00183
+	jp	BCE_POST_PROCESS
 ;chip8/byte_code_executor.c:264: case 0xF: {
 l_executeSingleInstruction_00160:
 ;chip8/byte_code_executor.c:265: switch (lowByte) {
@@ -1015,13 +1023,13 @@ l_executeSingleInstruction_00160:
 	jp	Z,l_executeSingleInstruction_00177
 	sub	a,0x65
 	jp	Z,l_executeSingleInstruction_00178
-	jp	l_executeSingleInstruction_00182
+	jp	BCE_BAD_INSTRUCTION
 ;chip8/byte_code_executor.c:267: case 0x00:
 l_executeSingleInstruction_00161:
 ;chip8/byte_code_executor.c:268: if (highByte == 0xF0)
 	ld	a, (bc)
 	sub	a,0xf0
-	jp	NZ,l_executeSingleInstruction_00182
+	jp	NZ,BCE_BAD_INSTRUCTION
 ;chip8/byte_code_executor.c:270: ldILargeAddr();
 	exx
 	ld	d, (hl)
@@ -1030,7 +1038,7 @@ l_executeSingleInstruction_00161:
 	inc	hl
 	ld	(_registerI), de
 	exx
-	jp	l_executeSingleInstruction_00183
+	jp	BCE_POST_PROCESS
 ;chip8/byte_code_executor.c:275: case 0x01: {
 l_executeSingleInstruction_00165:
 ;chip8/byte_code_executor.c:276: videoPlane();
@@ -1038,16 +1046,16 @@ l_executeSingleInstruction_00165:
 	and	a,0x0f
 	ld	(__color+0), a
 ;chip8/byte_code_executor.c:277: break;
-	jp	l_executeSingleInstruction_00183
+	jp	BCE_POST_PROCESS
 ;chip8/byte_code_executor.c:280: case 0x02:
 l_executeSingleInstruction_00166:
 ;chip8/byte_code_executor.c:281: if (highByte == 0xF0)
 	ld	a, (bc)
 	sub	a,0xf0
-	jp	NZ,l_executeSingleInstruction_00182
+	jp	NZ,BCE_BAD_INSTRUCTION
 ;chip8/byte_code_executor.c:282: audio();
 	call	_audio
-	jp	l_executeSingleInstruction_00183
+	jp	BCE_POST_PROCESS
 ;chip8/byte_code_executor.c:287: case 0x07: {
 l_executeSingleInstruction_00170:
 ;chip8/byte_code_executor.c:288: ldVxDt();
@@ -1060,7 +1068,7 @@ l_executeSingleInstruction_00170:
 	ld	a,(_delayTimer + 0)
 	ld	(hl), a
 ;chip8/byte_code_executor.c:289: break;
-	jp	l_executeSingleInstruction_00183
+	jp	BCE_POST_PROCESS
 ;chip8/byte_code_executor.c:292: case 0x0A: {
 l_executeSingleInstruction_00171:
 ;chip8/instr_pc.h:79: const uint8_t b = currentKey();
@@ -1081,7 +1089,7 @@ l_executeSingleInstruction_00171:
 	ld	h, a
 	ld	(hl), e
 ;chip8/byte_code_executor.c:82: case 0xFB:
-	jp	l_executeSingleInstruction_00183
+	jp	BCE_POST_PROCESS
 l_executeSingleInstruction_00239:
 ;chip8/instr_pc.h:84: chip8PC -= 1;
 	exx
@@ -1089,7 +1097,7 @@ l_executeSingleInstruction_00239:
 	dec	hl
 	exx
 ;chip8/byte_code_executor.c:294: break;
-	jp	l_executeSingleInstruction_00183
+	jp	BCE_POST_PROCESS
 ;chip8/byte_code_executor.c:297: case 0x15: {
 l_executeSingleInstruction_00172:
 ;chip8/byte_code_executor.c:298: ldDtVx();
@@ -1105,13 +1113,13 @@ l_executeSingleInstruction_00172:
 	ld	a, (hl)
 	ld	(_delayTimer+0), a
 ;chip8/byte_code_executor.c:299: break;
-	jr	l_executeSingleInstruction_00183
+	jr	BCE_POST_PROCESS
 ;chip8/byte_code_executor.c:302: case 0x18: {
 l_executeSingleInstruction_00173:
 ;chip8/byte_code_executor.c:303: ldStVx();
 	call	_ldStVx
 ;chip8/byte_code_executor.c:304: break;
-	jr	l_executeSingleInstruction_00183
+	jr	BCE_POST_PROCESS
 ;chip8/byte_code_executor.c:307: case 0x1E: {
 l_executeSingleInstruction_00174:
 ;chip8/byte_code_executor.c:308: addIVx();
@@ -1132,19 +1140,19 @@ l_executeSingleInstruction_00174:
 	adc	a, b
 	ld	(hl), a
 ;chip8/byte_code_executor.c:309: break;
-	jr	l_executeSingleInstruction_00183
+	jr	BCE_POST_PROCESS
 ;chip8/byte_code_executor.c:312: case 0x29: {
 l_executeSingleInstruction_00175:
 ;chip8/byte_code_executor.c:313: ldfIVx();
 	call	_ldfIVx
 ;chip8/byte_code_executor.c:314: break;
-	jr	l_executeSingleInstruction_00183
+	jr	BCE_POST_PROCESS
 ;chip8/byte_code_executor.c:317: case 0x33: {
 l_executeSingleInstruction_00176:
 ;chip8/byte_code_executor.c:318: bcdIVx();
 	call	_bcdIVx
 ;chip8/byte_code_executor.c:319: break;
-	jr	l_executeSingleInstruction_00183
+	jr	BCE_POST_PROCESS
 ;chip8/byte_code_executor.c:322: case 0x55: {
 l_executeSingleInstruction_00177:
 ;chip8/instr_registers.h:82: __endasm;
@@ -1157,7 +1165,7 @@ l_executeSingleInstruction_00177:
 	ld	b, 0
 	ldir
 ;chip8/byte_code_executor.c:324: break;
-	jr	l_executeSingleInstruction_00183
+	jr	BCE_POST_PROCESS
 ;chip8/byte_code_executor.c:327: case 0x65: {
 l_executeSingleInstruction_00178:
 ;chip8/instr_registers.h:64: __endasm;
@@ -1170,9 +1178,9 @@ l_executeSingleInstruction_00178:
 	ld	b, 0
 	ldir
 ;chip8/byte_code_executor.c:329: break;
-	jr	l_executeSingleInstruction_00183
+	jr	BCE_POST_PROCESS
 ;chip8/byte_code_executor.c:339: badInstruction:
-l_executeSingleInstruction_00182:
+BCE_BAD_INSTRUCTION:
 ;chip8/byte_code_executor.c:340: printf("Bad instruction %04X at %p\r\n", invertByteOrder(currentInstruction), chip8PC - 1);
 	exx
 	push	hl
@@ -1188,7 +1196,7 @@ l_executeSingleInstruction_00182:
 	push	de
 	push	hl
 	push	bc
-	call	_printf
+	call	_applicationExit		; ONLY RETURNS WHEN RUNNING UNDER TESTS
 	ld	hl,6
 	add	hl, sp
 	ld	sp, hl
@@ -1196,13 +1204,14 @@ l_executeSingleInstruction_00182:
 	ld	l,0x00
 	jr	BCE_EXIT
 ;chip8/byte_code_executor.c:342: }
-l_executeSingleInstruction_00183:
+
+BCE_POST_PROCESS:
 ;chip8/byte_code_executor.c:344: if ((uint16_t)chip8PC < 0x200) {
 	exx
 	ld	a, h
 	exx
-	sub	a,0x02
-	jr	NC,l_executeSingleInstruction_00185
+	sub	a, 0x02
+	jr	NC, BCE_EXIT_ERROR
 ;chip8/byte_code_executor.c:345: printf("PC counter below 0x200 - %p\r\n", chip8PC);
 	exx
 	push	hl
@@ -1211,13 +1220,13 @@ l_executeSingleInstruction_00183:
 	push	hl
 	ld	hl,___str_3
 	push	hl
-	call	_printf
+	call	_applicationExit
 	pop	af
 	pop	af
 ;chip8/byte_code_executor.c:346: return false;
 	ld	l,0x00
 	jr	BCE_EXIT
-l_executeSingleInstruction_00185:
+BCE_EXIT_ERROR:
 ;chip8/byte_code_executor.c:349: return true;
 	ld	l, 1
 BCE_EXIT:

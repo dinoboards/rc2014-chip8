@@ -51,4 +51,6 @@ uint8_t getControllerButton(uint8_t b) __z88dk_fastcall { return b; }
 
 bool ym2149Probe() { return false; }
 
+void restoreSystemHardware() { }
+
 audioCommand command;
