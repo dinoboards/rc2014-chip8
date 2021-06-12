@@ -4,6 +4,7 @@
 #include "msx_keyboard.h"
 #include "systemstate.h"
 #include "timers.h"
+#include "xstdio.h"
 #include "ym2149.h"
 #include <stdio.h>
 #include <string.h>

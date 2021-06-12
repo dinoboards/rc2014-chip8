@@ -8,6 +8,10 @@
 
 
 _v9958DrawPlane:
+	exx
+	push	hl
+	exx
+
 	ex	de, hl
 ; for(byte row = fourthNibble; row > 0; row--) {
 	ld	hl, _fourthNibble
@@ -39,5 +43,8 @@ l_v9958DrawPlane_00103:
 ; for(byte row = fourthNibble; row > 0; row--) {
 	djnz	l_v9958DrawPlane_00103
 
+	exx
+	pop	hl
+	exx
 	ret
 

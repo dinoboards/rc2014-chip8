@@ -1,6 +1,7 @@
 #include "chip8/stack.h"
 #include "chip8/systemstate.h"
 #include "datatypes.h"
+#include "xstdio.h"
 #include <stdio.h>
 
 uint16_t stack[MAX_STACK];
@@ -16,7 +17,7 @@ void pushPc() {
     exit(1);
   }
 
-  stack[stackIndex++] = (uint16_t)chip8PC;
+  stack[stackIndex++] = getChip8PC();
 }
 
 /**
@@ -27,7 +28,7 @@ bool popPc() {
   if (stackIndex <= 0)
     return true;
 
-  chip8PC = (uint16_t *)stack[--stackIndex];
+  setChip8PC(stack[--stackIndex]);
 
   return false;
 }

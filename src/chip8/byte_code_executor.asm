@@ -1,6 +1,5 @@
 
 	EXTERN	_printf
-	EXTERN	_chip8PC
 	EXTERN	_invertByteOrder
 	EXTERN	_currentInstruction
 	EXTERN	_registerI
@@ -34,6 +33,25 @@
 
 	SECTION code_compiler
 
+; uint16_t getChip8PC();
+	PUBLIC	_getChip8PC
+_getChip8PC:
+	EXX
+	PUSH	HL
+	EXX
+	POP	HL
+	RET
+
+; void setChip8PC(uint16_t pc) __z88dk_fastcall
+	PUBLIC	_setChip8PC
+_setChip8PC:
+	PUSH	HL
+	EXX
+	POP	HL
+	EXX
+	RET
+
+
 	PUBLIC _invertByteOrder
 ; extern uint16_t invertByteOrder(uint16_t word) __naked __z88dk_fastcall {
 _invertByteOrder:
@@ -53,17 +71,15 @@ _executeSingleInstruction:
 	add	ix,sp
 	dec	sp
 ;chip8/byte_code_executor.c:36: const uint16_t r = *chip8PC;
-	ld	hl, (_chip8PC)
+	exx
 	ld	a, (hl)
 	ld	(_currentInstruction+0), a
 	inc	hl
 	ld	a, (hl)
 	ld	(_currentInstruction+1), a
-;chip8/byte_code_executor.c:40: chip8PC++;
-	ld	hl, (_chip8PC)
 	inc	hl
-	inc	hl
-	ld	(_chip8PC), hl
+	exx
+
 ;chip8/byte_code_executor.c:53: manageTimers();
 	call	_manageTimers
 ;chip8/byte_code_executor.c:55: if (CTRL_STOP_PRESSED())
@@ -214,7 +230,10 @@ l_executeSingleInstruction_00121:
 	sub	a,0x02
 	jr	NC,l_executeSingleInstruction_00188
 ;chip8/instr_pc.h:49: printf("Illegal jump to %04X at %p\r\n", a, chip8PC - 1);
-	ld	bc, (_chip8PC)
+	exx
+	push	hl
+	exx
+	pop	bc
 	dec	bc
 	dec	bc
 	push	bc
@@ -229,7 +248,10 @@ l_executeSingleInstruction_00121:
 	jr	l_executeSingleInstruction_00122
 l_executeSingleInstruction_00188:
 ;chip8/instr_pc.h:53: chip8PC = (uint16_t *)a;
-	ld	(_chip8PC), de
+	push	de
+	exx
+	pop	hl
+	exx
 ;chip8/byte_code_executor.c:114: if (jp())
 	jp	l_executeSingleInstruction_00183
 l_executeSingleInstruction_00122:
@@ -253,11 +275,14 @@ l_executeSingleInstruction_00124:
 	sub	a,0x02
 	jr	NC,l_executeSingleInstruction_00191
 ;chip8/instr_pc.h:5: printf("Illegal jump to %04X at %p\r\n", a, chip8PC - 1);
-	ld	bc, (_chip8PC)
+	exx
+	push	hl
+	exx
+	pop	bc
 	dec	bc
 	dec	bc
 	push	bc
-	push	de
+	push	de		; Address to jump to
 	ld	hl,___str_1
 	push	hl
 	call	_printf
@@ -270,9 +295,10 @@ l_executeSingleInstruction_00191:
 ;chip8/instr_pc.h:9: pushPc();
 	push	de
 	call	_pushPc
-	pop	de
 ;chip8/instr_pc.h:10: chip8PC = (uint16_t *)a;
-	ld	(_chip8PC), de
+	exx
+	pop	hl
+	exx
 ;chip8/byte_code_executor.c:121: break;
 	jp	l_executeSingleInstruction_00183
 ;chip8/byte_code_executor.c:124: case 0x3: {
@@ -292,7 +318,10 @@ l_executeSingleInstruction_00125:
 	sub	a, e
 	jp	NZ,l_executeSingleInstruction_00183
 ;chip8/instr_pc.h:28: skipNextInstruction();
-	ld	hl, (_chip8PC)
+	exx
+	push	hl
+	exx
+	pop	hl
 	ld	c, (hl)
 	inc	hl
 	ld	b, (hl)
@@ -300,19 +329,18 @@ l_executeSingleInstruction_00125:
 	sub	a,0xf0
 	or	a, b
 	jr	NZ,l_executeSingleInstruction_00194
-	ld	hl,_chip8PC
-	ld	a, (hl)
-	add	a,0x04
-	ld	(hl), a
-	jp	NC,l_executeSingleInstruction_00183
+	exx
 	inc	hl
-	inc	(hl)
+	inc	hl
+	inc	hl
+	inc	hl
+	exx
 	jp	l_executeSingleInstruction_00183
 l_executeSingleInstruction_00194:
-	ld	hl, (_chip8PC)
+	exx
 	inc	hl
 	inc	hl
-	ld	(_chip8PC), hl
+	exx
 ;chip8/byte_code_executor.c:126: break;
 	jp	l_executeSingleInstruction_00183
 ;chip8/byte_code_executor.c:129: case 0x4: {
@@ -332,7 +360,10 @@ l_executeSingleInstruction_00126:
 	sub	a, e
 	jp	Z,l_executeSingleInstruction_00183
 ;chip8/instr_pc.h:38: skipNextInstruction();
-	ld	hl, (_chip8PC)
+	exx
+	push	hl
+	exx
+	pop	hl
 	ld	c, (hl)
 	inc	hl
 	ld	b, (hl)
@@ -340,19 +371,19 @@ l_executeSingleInstruction_00126:
 	sub	a,0xf0
 	or	a, b
 	jr	NZ,l_executeSingleInstruction_00200
-	ld	hl,_chip8PC
-	ld	a, (hl)
-	add	a,0x04
-	ld	(hl), a
-	jp	NC,l_executeSingleInstruction_00183
+	exx
 	inc	hl
-	inc	(hl)
+	inc	hl
+	inc	hl
+	inc	hl
+	exx
+
 	jp	l_executeSingleInstruction_00183
 l_executeSingleInstruction_00200:
-	ld	hl, (_chip8PC)
+	exx
 	inc	hl
 	inc	hl
-	ld	(_chip8PC), hl
+	exx
 ;chip8/byte_code_executor.c:131: break;
 	jp	l_executeSingleInstruction_00183
 ;chip8/byte_code_executor.c:134: case 0x5: {
@@ -402,7 +433,10 @@ l_executeSingleInstruction_00128:
 	sub	a, e
 	jp	NZ,l_executeSingleInstruction_00183
 ;chip8/instr_pc.h:33: skipNextInstruction();
-	ld	hl, (_chip8PC)
+	exx
+	push	hl
+	exx
+	pop	hl
 	ld	c, (hl)
 	inc	hl
 	ld	b, (hl)
@@ -410,19 +444,18 @@ l_executeSingleInstruction_00128:
 	sub	a,0xf0
 	or	a, b
 	jr	NZ,l_executeSingleInstruction_00206
-	ld	hl,_chip8PC
-	ld	a, (hl)
-	add	a,0x04
-	ld	(hl), a
-	jp	NC,l_executeSingleInstruction_00183
+	exx
 	inc	hl
-	inc	(hl)
+	inc	hl
+	inc	hl
+	inc	hl
+	exx
 	jp	l_executeSingleInstruction_00183
 l_executeSingleInstruction_00206:
-	ld	hl, (_chip8PC)
+	exx
 	inc	hl
 	inc	hl
-	ld	(_chip8PC), hl
+	exx
 ;chip8/byte_code_executor.c:139: break;
 	jp	l_executeSingleInstruction_00183
 ;chip8/byte_code_executor.c:141: case 0x2:
@@ -721,7 +754,10 @@ l_executeSingleInstruction_00147:
 	sub	a, e
 	jp	Z,l_executeSingleInstruction_00183
 ;chip8/instr_pc.h:43: skipNextInstruction();
-	ld	hl, (_chip8PC)
+	exx
+	push	hl
+	exx
+	pop	hl
 	ld	c, (hl)
 	inc	hl
 	ld	b, (hl)
@@ -729,19 +765,18 @@ l_executeSingleInstruction_00147:
 	sub	a,0xf0
 	or	a, b
 	jr	NZ,l_executeSingleInstruction_00218
-	ld	hl,_chip8PC
-	ld	a, (hl)
-	add	a,0x04
-	ld	(hl), a
-	jp	NC,l_executeSingleInstruction_00183
+	exx
 	inc	hl
-	inc	(hl)
+	inc	hl
+	inc	hl
+	inc	hl
+	exx
 	jp	l_executeSingleInstruction_00183
 l_executeSingleInstruction_00218:
-	ld	hl, (_chip8PC)
+	exx
 	inc	hl
 	inc	hl
-	ld	(_chip8PC), hl
+	exx
 ;chip8/byte_code_executor.c:219: sneVxVy();
 	jp	l_executeSingleInstruction_00183
 ;chip8/byte_code_executor.c:225: case 0xA:
@@ -782,14 +817,21 @@ l_executeSingleInstruction_00152:
 	ld	l, (hl)
 	ld	h,0x00
 	add	hl, de
-	ld	(_chip8PC), hl
+	push	hl
+	exx
+	pop	hl
+	exx
 ;chip8/instr_pc.h:60: if ((uint16_t)chip8PC < 0x200) {
-	ld	hl, (_chip8PC)
+	exx
 	ld	a, h
+	exx
 	sub	a,0x02
 	jp	NC, l_executeSingleInstruction_00183
 ;chip8/instr_pc.h:61: printf("Illegal jump to %04X at %p\r\n", addr12Bit, chip8PC - 1);
-	ld	de, (_chip8PC)
+	exx
+	push	hl
+	exx
+	pop	de
 	dec	de
 	dec	de
 	ld	a, (_currentInstruction + 1)
@@ -866,7 +908,10 @@ l_executeSingleInstruction_00156:
 	or	a, a
 	jp	Z, l_executeSingleInstruction_00183
 ;chip8/instr_pc.h:70: skipNextInstruction();
-	ld	hl, (_chip8PC)
+	exx
+	push	hl
+	exx
+	pop	hl
 	ld	c, (hl)
 	inc	hl
 	ld	b, (hl)
@@ -874,19 +919,19 @@ l_executeSingleInstruction_00156:
 	sub	a,0xf0
 	or	a, b
 	jr	NZ,l_executeSingleInstruction_00227
-	ld	hl,_chip8PC
-	ld	a, (hl)
-	add	a,0x04
-	ld	(hl), a
-	jp	NC,l_executeSingleInstruction_00183
+	exx
 	inc	hl
-	inc	(hl)
+	inc	hl
+	inc	hl
+	inc	hl
+	exx
+
 	jp	l_executeSingleInstruction_00183
 l_executeSingleInstruction_00227:
-	ld	hl, (_chip8PC)
+	exx
 	inc	hl
 	inc	hl
-	ld	(_chip8PC), hl
+	exx
 ;chip8/byte_code_executor.c:249: break;
 	jp	l_executeSingleInstruction_00183
 ;chip8/byte_code_executor.c:252: case 0xA1: {
@@ -904,7 +949,10 @@ l_executeSingleInstruction_00157:
 	or	a, a
 	jp	NZ, l_executeSingleInstruction_00183
 ;chip8/instr_pc.h:75: skipNextInstruction();
-	ld	hl, (_chip8PC)
+	exx
+	push	hl
+	exx
+	pop	hl
 	ld	c, (hl)
 	inc	hl
 	ld	b, (hl)
@@ -912,19 +960,18 @@ l_executeSingleInstruction_00157:
 	sub	a,0xf0
 	or	a, b
 	jr	NZ,l_executeSingleInstruction_00233
-	ld	hl,_chip8PC
-	ld	a, (hl)
-	add	a,0x04
-	ld	(hl), a
-	jp	NC,l_executeSingleInstruction_00183
+	exx
 	inc	hl
-	inc	(hl)
+	inc	hl
+	inc	hl
+	inc	hl
+	exx
 	jp	l_executeSingleInstruction_00183
 l_executeSingleInstruction_00233:
-	ld	hl, (_chip8PC)
+	exx
 	inc	hl
 	inc	hl
-	ld	(_chip8PC), hl
+	exx
 ;chip8/byte_code_executor.c:254: break;
 	jp	l_executeSingleInstruction_00183
 ;chip8/byte_code_executor.c:264: case 0xF: {
@@ -963,17 +1010,13 @@ l_executeSingleInstruction_00161:
 	sub	a,0xf0
 	jp	NZ,l_executeSingleInstruction_00182
 ;chip8/byte_code_executor.c:270: ldILargeAddr();
-	ld	hl, (_chip8PC)
+	exx
+	ld	d, (hl)
+	inc	hl
 	ld	e, (hl)
 	inc	hl
-	ld	d, (hl)
-	ld	hl, (_chip8PC)
-	inc	hl
-	inc	hl
-	ld	(_chip8PC), hl
-	ex	de, hl
-	call	_invertByteOrder
-	ld	(_registerI), hl
+	ld	(_registerI), de
+	exx
 	jp	l_executeSingleInstruction_00183
 ;chip8/byte_code_executor.c:275: case 0x01: {
 l_executeSingleInstruction_00165:
@@ -1028,10 +1071,10 @@ l_executeSingleInstruction_00171:
 	jp	l_executeSingleInstruction_00183
 l_executeSingleInstruction_00239:
 ;chip8/instr_pc.h:84: chip8PC -= 1;
-	ld	hl, (_chip8PC)
+	exx
 	dec	hl
 	dec	hl
-	ld	(_chip8PC), hl
+	exx
 ;chip8/byte_code_executor.c:294: break;
 	jp	l_executeSingleInstruction_00183
 ;chip8/byte_code_executor.c:297: case 0x15: {
@@ -1118,7 +1161,10 @@ l_executeSingleInstruction_00178:
 ;chip8/byte_code_executor.c:339: badInstruction:
 l_executeSingleInstruction_00182:
 ;chip8/byte_code_executor.c:340: printf("Bad instruction %04X at %p\r\n", invertByteOrder(currentInstruction), chip8PC - 1);
-	ld	de, (_chip8PC)
+	exx
+	push	hl
+	exx
+	pop	de
 	dec	de
 	dec	de
 	push	de
@@ -1139,12 +1185,16 @@ l_executeSingleInstruction_00182:
 ;chip8/byte_code_executor.c:342: }
 l_executeSingleInstruction_00183:
 ;chip8/byte_code_executor.c:344: if ((uint16_t)chip8PC < 0x200) {
-	ld	hl, (_chip8PC)
+	exx
 	ld	a, h
+	exx
 	sub	a,0x02
 	jr	NC,l_executeSingleInstruction_00185
 ;chip8/byte_code_executor.c:345: printf("PC counter below 0x200 - %p\r\n", chip8PC);
-	ld	hl, (_chip8PC)
+	exx
+	push	hl
+	exx
+	pop	hl
 	push	hl
 	ld	hl,___str_3
 	push	hl
@@ -1156,7 +1206,7 @@ l_executeSingleInstruction_00183:
 	jr	l_executeSingleInstruction_00243
 l_executeSingleInstruction_00185:
 ;chip8/byte_code_executor.c:349: return true;
-	ld	l,0x01
+	ld	l, 1
 l_executeSingleInstruction_00243:
 ;chip8/byte_code_executor.c:350: }
 	inc	sp

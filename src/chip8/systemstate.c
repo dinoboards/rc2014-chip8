@@ -3,9 +3,8 @@
 #include "tms.h"
 #include <stdbool.h>
 
-uint16_t *chip8PC;
-uint16_t  registerI;
-uint8_t   fourthNibble;
+uint16_t registerI;
+uint8_t  fourthNibble;
 
 byte soundTimer;
 byte delayTimer;

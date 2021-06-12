@@ -47,7 +47,6 @@ addVxVyClrF:
 
 uint8_t *register2ndNibble;
 
-
 void subnVxVy() {
   register2ndNibble = &registers[nibble2nd];
   const uint8_t *register3rdNibble = &registers[nibble3rd];
@@ -59,7 +58,6 @@ void subnVxVy() {
 
   registers[0xF] = f;
 }
-
 
 static byte units;
 static byte hundreds;

@@ -44,8 +44,6 @@ void parseCommandLine(int argc, char *argv[]) {
 
 char gameFileName[MAX_FILE_NAME];
 
-uint16_t txtNamBackup;
-
 void main(int argc, char *argv[]) {
   parseCommandLine(argc, argv);
 
@@ -59,8 +57,6 @@ void main(int argc, char *argv[]) {
   applyConfiguration(pFileName);
 
   replaceExtension(gameFileName, pFileName, ".CH8");
-
-  txtNamBackup = TXTNAM;
 
   if (!videoInit())
     return;
@@ -95,6 +91,8 @@ void main(int argc, char *argv[]) {
   videoClose();
   soundOff();
 
+#ifndef CPM
   msxbiosInitxt();
   msxbiosInitPalette();
+#endif
 }

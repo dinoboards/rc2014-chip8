@@ -9,7 +9,6 @@
 #include <stdarg.h>
 #include <stdio.h>
 #include <string.h>
-#include "datatypes.h"
 
 #define LOAD_I_LARGE_INSTRUCTION 0x00F0
 
@@ -24,10 +23,19 @@ const uint16_t *programStorage = (uint16_t *)0x200;
 void initSystemState() {
   memset(registers, 0, 16);
   registerI = 0;
-  chip8PC = (uint16_t *)programStorage;
+
+  // clang-format off
+  __asm
+  exx
+  ld hl, 0x200
+  exx
+  __endasm;
+  // clang-format on
 }
 
 void executeROM() {
   while (executeSingleInstruction())
     ;
+
+  xprintf("99");
 }

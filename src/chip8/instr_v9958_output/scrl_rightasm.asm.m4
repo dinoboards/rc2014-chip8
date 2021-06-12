@@ -11,6 +11,10 @@
 
 
 _v9958ScrollRight:
+	exx
+	push	hl
+	exx
+
 	LD	A, (__color)
 	CP	3
 	JR	Z, scrollDownAllPlanes
@@ -115,6 +119,9 @@ LP_LINE2:
 	DEC	D
 	JP	P, NXT_ROW
 
+	exx
+	pop	hl
+	exx
 	RET
 
 
@@ -201,4 +208,8 @@ scrollDownAllPlanes:
 
 	M_RESET_V9958_DEFAULT_REGISTER()
 	EI
+
+	exx
+	pop	hl
+	exx
 	RET

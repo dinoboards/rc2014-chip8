@@ -1,4 +1,3 @@
-
 #ifndef __SYSTEMSTATE
 #define __SYSTEMSTATE
 
@@ -7,9 +6,11 @@
 #define registers  ((byte *)(0x100))
 #define _registers 0x100
 
-extern uint16_t *chip8PC;
-extern uint16_t  registerI;
-extern uint8_t   fourthNibble;
+extern uint16_t getChip8PC();
+extern void     setChip8PC(uint16_t pc) __z88dk_fastcall;
+
+extern uint16_t registerI;
+extern uint8_t  fourthNibble;
 
 #define lowByte          (*(((uint8_t *)&currentInstruction) + 1))
 #define highByte         (*(((uint8_t *)&currentInstruction)))
@@ -47,7 +48,6 @@ typedef struct KeyConfigurationStruct {
       uint8_t controllerDirection : 5; // 1 to 8 to indicate a controller direction flag
       uint8_t controllerButtons : 2;
     };
-    // };
   };
 } KeyConfiguration;
 
