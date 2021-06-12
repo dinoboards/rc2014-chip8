@@ -40,9 +40,10 @@
  filereader.h chip8/systemstate.h chip8/tms.h xstdlib.h
 ./bin/msx/chip8/byte_code_executor.c.asm: chip8/byte_code_executor.c datatypes.h \
  chip8/key_monitor.h chip8/stack.h chip8/systemstate.h chip8/systimer.h \
- chip8/msx.h chip8/timers.h xstdio.h chip8/instr_output.h chip8/v9958.h \
- chip8/instr_pc.h chip8/instr_random.h chip8/random.h \
- chip8/instr_registers.h chip8/fontsets.h chip8/instr_sound.h
+ chip8/msx.h chip8/timers.h xstdio.h chip8/msx_keyboard.h \
+ chip8/instr_output.h chip8/v9958.h chip8/instr_pc.h chip8/instr_random.h \
+ chip8/random.h chip8/instr_registers.h chip8/fontsets.h \
+ chip8/instr_sound.h
 ./bin/msx/chip8/fontsets.c.asm: chip8/fontsets.c chip8/fontsets.h datatypes.h
 ./bin/msx/chip8/msx.c.asm: chip8/msx.c chip8/msx.h
 ./bin/msx/chip8/timers.c.asm: chip8/timers.c chip8/timers.h datatypes.h chip8/instr_sound.h \
@@ -58,7 +59,8 @@
  chip8/byte_code_executor.h chip8/configuration_loader.h cpm.h \
  chip8/error_reports.h filenames.h chip8/instr_output.h chip8/v9958.h \
  chip8/instr_sound.h chip8/random.h chip8/systemstate.h chip8/systimer.h \
- chip8/msx.h chip8/timers.h chip8/tms.h xstdio.h xstdlib.h
+ chip8/msx.h chip8/timers.h chip8/tms.h xstdio.h xstdlib.h \
+ chip8/msx_keyboard.h msxdos.h
 ./bin/msx/chip8asm/assembler.c.asm: chip8asm/assembler.c chip8asm/assembler.h datatypes.h \
  chip8asm/emitters.h chip8asm/error_reports.h filereader.h \
  chip8asm/labels.h chip8asm/systemstate.h chip8asm/token_parser.h \
@@ -115,6 +117,7 @@
 ./bin/msx/chip8asm/data.o: ./chip8asm/data.asm
 ./bin/msx/relocmem.o: ./relocmem.asm
 ./bin/msx/memap.o: ./memap.asm
+./bin/msx/msxdos.o: ./msxdos.asm
 ./bin/msx/debug.o: ./debug.asm
 ./bin/msx/reloccrt.o: ./reloccrt.asm
 ./bin/msx/nonreloccrt.o: ./nonreloccrt.asm

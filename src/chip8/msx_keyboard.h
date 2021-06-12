@@ -15,4 +15,6 @@ extern MatrixMapping *codeToMatrix(const char *keyCode) __z88dk_fastcall;
 
 #define IS_KEY_PRESSED(i, m) (!((m)&msxNewKey[(i)]))
 
+#define CTRL_STOP_PRESSED() (IS_KEY_PRESSED(6, 1 << 1) && IS_KEY_PRESSED(7, 1 << 4))
+
 #endif

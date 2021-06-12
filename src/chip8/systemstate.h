@@ -11,9 +11,8 @@ extern uint16_t *chip8PC;
 extern uint16_t  registerI;
 extern uint8_t   fourthNibble;
 
-
-#define lowByte  (*(((uint8_t *)&currentInstruction) + 1))
-#define highByte (*(((uint8_t *)&currentInstruction)))
+#define lowByte          (*(((uint8_t *)&currentInstruction) + 1))
+#define highByte         (*(((uint8_t *)&currentInstruction)))
 #define readFourthNibble (lowByte & 0xF)
 
 #define firstNibble (highByte >> 4)

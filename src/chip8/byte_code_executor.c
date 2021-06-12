@@ -1,5 +1,6 @@
 #include "datatypes.h"
 #include "key_monitor.h"
+#include "msx_keyboard.h"
 #include "stack.h"
 #include "systemstate.h"
 #include "systimer.h"
@@ -51,12 +52,13 @@ bool executeSingleInstruction() {
 
   manageTimers();
 
-  //TODO: Check for app exit
+  if (CTRL_STOP_PRESSED())
+    return false;
 
   fourthNibble = readFourthNibble;
 
 #ifdef CPM
-  printf("\n%04X: %04X V0=%02X V1=%02X I=%04X", chip8PC-1, invertByteOrder(currentInstruction), registers[0], registers[1], registerI);
+  printf("\n%04X: %04X V0=%02X V1=%02X I=%04X", chip8PC - 1, invertByteOrder(currentInstruction), registers[0], registers[1], registerI);
 #endif
 
   switch (firstNibble) {

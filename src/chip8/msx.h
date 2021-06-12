@@ -8,11 +8,13 @@
 #define NEWKEY_ADDR __at 0xFBE5
 #define PUTPNT_ADDR __at 0xF3F8
 #define GETPNT_ADDR __at 0xF3FA
+#define TXTNAM_ADDR __at 0xF3B3
 #else
 #define JIFFY_ADDR
 #define NEWKEY_ADDR
 #define PUTPNT_ADDR
 #define GETPNT_ADDR
+#define TXTNAM_ADDR
 #endif
 
 // FC9E-FC9F: software clock, updated at each VDP interrupt
@@ -31,6 +33,10 @@ extern char *PUTPNT_ADDR PUTPNT;
 // everytime a key is read from the buffer it is incremented
 // the buffer is located at KEYBUF
 extern char *GETPNT_ADDR GETPNT;
+
+// F3B3-F3B4: BASE(0): name table address for SCREEN 0 (ini:$0000)
+// used to initialize NAMBAS when SCREEN 0 is activated
+extern uint16_t TXTNAM_ADDR TXTNAM;
 
 #define msxJiffy  JIFFY
 #define msxNewKey NEWKEY

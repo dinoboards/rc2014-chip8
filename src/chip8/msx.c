@@ -16,3 +16,7 @@ char *PUTPNT_ADDR PUTPNT;
 // everytime a key is read from the buffer it is incremented
 // the buffer is located at KEYBUF
 char *GETPNT_ADDR GETPNT;
+
+// F3B3-F3B4: BASE(0): name table address for SCREEN 0 (ini:$0000)
+// used to initialize NAMBAS when SCREEN 0 is activated
+uint16_t TXTNAM_ADDR TXTNAM;

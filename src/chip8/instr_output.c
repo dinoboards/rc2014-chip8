@@ -18,7 +18,6 @@ void draw() {
   else
     v9958Draw();
 #endif
-
 }
 
 void cls() {

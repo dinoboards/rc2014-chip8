@@ -7,6 +7,8 @@
 #include "filenames.h"
 #include "instr_output.h"
 #include "instr_sound.h"
+#include "msx_keyboard.h"
+#include "msxdos.h"
 #include "random.h"
 #include "systemstate.h"
 #include "systimer.h"
@@ -17,8 +19,6 @@
 #include <stdarg.h>
 #include <stdio.h>
 #include <string.h>
-
-// extern void *himem;
 
 bool strFind(int argc, char *argv[], const char *searchString) {
   char **p = argv;
@@ -44,9 +44,7 @@ void parseCommandLine(int argc, char *argv[]) {
 
 char gameFileName[MAX_FILE_NAME];
 
-// uint8_t __at 0x27F9 spike1;
-// uint8_t __at 0x27FA spike2;
-// uint8_t __at 0x27FB spike3;
+uint16_t txtNamBackup;
 
 void main(int argc, char *argv[]) {
   parseCommandLine(argc, argv);
@@ -62,13 +60,7 @@ void main(int argc, char *argv[]) {
 
   replaceExtension(gameFileName, pFileName, ".CH8");
 
-  // FILE *pFile = fopen(gameFileName, "r");
-  // if (pFile == NULL) {
-  //   printf("Unable to open file %s\r\n", gameFileName);
-  //   exit(1);
-  // }
-
-  // printf("Total available memory: %u\r\n", (uint16_t)&himem - 0x200);
+  txtNamBackup = TXTNAM;
 
   if (!videoInit())
     return;
@@ -82,10 +74,6 @@ void main(int argc, char *argv[]) {
   int       noMoreData = 0;
 
   uint16_t total = 0;
-
-  // spike1 = 0;
-  // spike2 = 1;
-  // spike3 = 2;
 
   if (defaultFCB->type[0] == ' ' && defaultFCB->type[1] == ' ' && defaultFCB->type[2] == ' ') {
     defaultFCB->type[0] = 'C';
@@ -102,18 +90,12 @@ void main(int argc, char *argv[]) {
   }
   chkMsg(fClose(defaultFCB), "Unable to close");
 
-  // while( numRead = fread(ptr, 2, 1, pFile) ) {
-  //   printf("Read %d bytes\r\n", numRead);
-  //   ptr += numRead;
-  //   total += numRead*2;
-  // }
-  // fclose(pFile);
-
-  // printf("??? %02X %02X %02X, %d\r\n", spike1, spike2, spike3, total);
-
   while (executeSingleInstruction())
     ;
 
   videoClose();
   soundOff();
+
+  msxbiosInitxt();
+  msxbiosInitPalette();
 }
