@@ -90,8 +90,7 @@ void main(int argc, char *argv[]) {
   }
   chkMsg(fClose(defaultFCB), "Unable to close");
 
-  while (executeSingleInstruction())
-    ;
+  executeROM();
 
   videoClose();
   soundOff();

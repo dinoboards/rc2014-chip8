@@ -348,3 +348,8 @@ bool executeSingleInstruction() {
 
   return true;
 }
+
+void executeROM() {
+  while (executeSingleInstruction())
+    ;
+}
