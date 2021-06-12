@@ -8,7 +8,7 @@
 #include "xstdio.h"
 #endif
 
-uint16_t lastTimerTick;
+uint8_t lastTimerTick;
 
 #ifdef _MEASURE_PERFORMANCE
 uint16_t performanceMeasureTick = 0;
@@ -17,7 +17,7 @@ uint16_t instructionCount = 0;
 
 void initTimers() {
   manageTimers();
-  lastTimerTick = getSysTimer();
+  lastTimerTick = (uint8_t)getSysTimer();
 }
 
 #ifdef _MEASURE_PERFORMANCE

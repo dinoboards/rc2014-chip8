@@ -15,22 +15,19 @@ endif
 	jr	NZ, l_manageTimers_00108
 	ld	a, (_delayTimer)
 	or	a
-
-;chip8/timers.c:71: return;
 	ret	Z
 
+;chip8/timers.c:71: return;
+
 l_manageTimers_00108:
-;chip8/timers.c:73: const byte diff = (byte)(JIFFY - lastTimerTick);
+	; IF _lastTimerTick == JIFFY - return (low byte only)
 	ld	a, (_JIFFY)
-	ld	hl, _lastTimerTick
-	ld	c, (hl)
+	LD	D, A
+	LD	hl, _lastTimerTick
+	ld	C, (hl)
 	sub	a, c
-
-;chip8/timers.c:75: if (diff == 0)
-	; or	a, a
-
-;chip8/timers.c:76: return;
-	RET	Z
+	ret	z
+	ld	(hl), d
 
 ;chip8/timers.c:28: if (soundTimer == 0)
 	ld	hl, _soundTimer
@@ -41,7 +38,7 @@ l_manageTimers_00108:
 ;chip8/timers.c:31: soundTimer--;
 ;chip8/timers.c:33: if (soundTimer == 0)
 	dec 	(hl)
-	jr	NZ, l_manageTimers_00116
+	jr	NZ , l_manageTimers_00116
 
 ;chip8/timers.c:34: soundOff();
 	call	_audioStop
@@ -49,23 +46,23 @@ l_manageTimers_00108:
 ;chip8/timers.c:78: tickSoundTimer();
 
 l_manageTimers_00116:
-;chip8/timers.c:38: if (delayTimer == 0)
+; ;chip8/timers.c:38: if (delayTimer == 0)
 	ld	hl, _delayTimer
 	ld	a, (hl)
 	or	a
-	jr	Z, l_manageTimers_00119
+	ret	Z  ;, l_manageTimers_00119
 
-;chip8/timers.c:41: delayTimer--;
+; ;chip8/timers.c:41: delayTimer--;
 	dec	(hl)
 
 ;chip8/timers.c:79: tickDelayTimer();
 
-l_manageTimers_00119:
-;chip8/timers.c:81: lastTimerTick = JIFFY;
-	ld	hl, (_JIFFY)
-	ld	(_lastTimerTick), hl
+; l_manageTimers_00119:
+; ;chip8/timers.c:81: lastTimerTick = JIFFY;
+; 	ld	hl, (_JIFFY)
+; 	ld	(_lastTimerTick), hl
 
-l_manageTimers_00120:
+; l_manageTimers_00120:
 ;chip8/timers.c:82: }
 	ret
 

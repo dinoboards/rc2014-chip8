@@ -12,21 +12,27 @@ void draw() {
   // int yy = (registers[nibble3rd] * 2) & 127 ;//PIXEL_HEIGHT_MASK;
 
   // printf("  Draw(%d, %d, %d), PLANE: %d, I: %04X", xx, yy, fourthNibble, _color, registerI);
+#ifndef CPM
   if (videoResMode == VideoResModeLow)
     tmsDraw();
   else
     v9958Draw();
+#endif
+
 }
 
 void cls() {
   // printf("cls\r\n");
+#ifndef CPM
   if (videoResMode == VideoResModeLow)
     tmsCls();
   else
     v9958Cls();
+#endif
 }
 
 bool videoInit() {
+#ifndef CPM
   const uint8_t vdpType = videoChipProbe();
 
   switch (vdpType) {
@@ -46,6 +52,9 @@ bool videoInit() {
   case VDP_V9958:
     printf("V9958 VDP Detected.\r\n");
   }
+#else
+  const uint8_t vdpType = VDP_V9958;
+#endif
 
   videoResMode = VideoResModeLow;
   videoPixelWidth = 64;
@@ -53,7 +62,9 @@ bool videoInit() {
   videoPixelWidthMask = 63;
   videoPixelHeightMask = 31;
 
+#ifndef CPM
   tmsVideoInit();
+#endif
   return true;
 }
 
@@ -66,33 +77,43 @@ void videoHigh() {
   videoPixelWidthMask = 127;
   videoPixelHeightMask = 63;
 
+#ifndef CPM
   v9958VideoInit();
+#endif
 }
 
 void scrlDown() {
+#ifndef CPM
   if (fourthNibble == 0)
     return;
 
   if (videoResMode != VideoResModeLow)
     v9958ScrollDown();
+#endif
 }
 
 void scrlUp() {
+#ifndef CPM
   if (fourthNibble == 0)
     return;
 
   if (videoResMode != VideoResModeLow)
     v9958ScrollUp();
+#endif
 }
 
 void scrlLeft() {
+#ifndef CPM
   if (videoResMode != VideoResModeLow) {
     v9958ScrollLeft();
   }
+#endif
 }
 
 void scrlRight() {
+#ifndef CPM
   if (videoResMode != VideoResModeLow) {
     v9958ScrollRight();
   }
+#endif
 }

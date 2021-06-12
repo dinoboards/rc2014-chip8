@@ -10,7 +10,6 @@ static byte spriteHeight;
 
 #define PIXEL_WIDTH_MASK  255
 #define PIXEL_HEIGHT_MASK 127
-
 byte yAddOne;
 byte xxTo;
 
@@ -21,8 +20,6 @@ extern void v9958DrawDblPlane(byte *pSpriteData) __z88dk_fastcall;
 
 void v9958Draw() {
   registers[15] = 0;
-
-  waitAndClearCommandRegisters();
 
   xx = (registers[nibble2nd] * 2) & PIXEL_WIDTH_MASK;
   yy = (registers[nibble3rd] * 2) & PIXEL_HEIGHT_MASK;

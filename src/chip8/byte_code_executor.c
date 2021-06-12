@@ -46,25 +46,18 @@ void initSystemState() {
   chip8PC = (uint16_t *)programStorage;
 }
 
-void delay(uint16_t d) __z88dk_fastcall {
-
-  while (d > 0) {
-    d--;
-  }
-}
-
 bool executeSingleInstruction() {
   currentInstruction = readInstruction(); // high/low bytes in inverted order
 
-  if (CommandSwitches.delayFactor > 0)
-    delay(CommandSwitches.delayFactor);
   manageTimers();
-  if (!checkForKeyPresses())
-    return false;
 
-  fourthNibble = lowByte & 0xF;
+  //TODO: Check for app exit
 
-  // printf("\n%04X: %04X V0=%02X V1=%02X I=%04X", chip8PC-1, invertByteOrder(currentInstruction), registers[0], registers[1], registerI);
+  fourthNibble = readFourthNibble;
+
+#ifdef CPM
+  printf("\n%04X: %04X V0=%02X V1=%02X I=%04X", chip8PC-1, invertByteOrder(currentInstruction), registers[0], registers[1], registerI);
+#endif
 
   switch (firstNibble) {
   case 0x0: {
@@ -137,8 +130,8 @@ bool executeSingleInstruction() {
   }
 
   case 0x5: {
-    const uint8_t x = fourthNibble;
-    switch (x) {
+    // const uint8_t x = fourthNibble;
+    switch (readFourthNibble) {
     case 0x0:
       seVxVy();
       break;
@@ -167,8 +160,8 @@ bool executeSingleInstruction() {
   }
 
   case 0x8: {
-    const uint8_t x = fourthNibble;
-    switch (x) {
+    // const uint8_t x = fourthNibble;
+    switch (readFourthNibble) {
     case 0x0: {
       ldVxVy();
       break;
@@ -220,7 +213,7 @@ bool executeSingleInstruction() {
   }
 
   case 0x9: {
-    if (fourthNibble == 0)
+    if (readFourthNibble == 0)
       sneVxVy();
     else
       goto badInstruction;
