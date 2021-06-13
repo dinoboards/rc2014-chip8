@@ -404,29 +404,14 @@ BCE_5XXX:
 ;chip8/byte_code_executor.c:136: switch (readFourthNibble) {
 	ld	a, (_currentInstruction + 1)
 	and	a,0x0f
-	; or	a
-	; jr	Z, BCE_5XX0
-	; cp	2
-	; jr	Z, BCE_5XX2
-	; cp	3
-	; jr	Z, BCE_5XX3
-	; jp	BCE_BAD_INSTRUCTION
-
-	ld	e, a
-	ld	d,0x00
-	ld	a, e
-	or	a, a
-	or	a, d
+	or	a
 	jr	Z, BCE_5XX0
-	ld	a, e
-	sub	a,0x02
-	or	a, d
+	cp	2
 	jr	Z, BCE_5XX2
-	ld	a, e
-	sub	a,0x03
-	or	a, d
+	cp	3
 	jr	Z, BCE_5XX3
 	jp	BCE_BAD_INSTRUCTION
+
 ;chip8/byte_code_executor.c:137: case 0x0:
 BCE_5XX0:
 ;chip8/instr_pc.h:32: if (registers[nibble2nd] == registers[nibble3rd])
