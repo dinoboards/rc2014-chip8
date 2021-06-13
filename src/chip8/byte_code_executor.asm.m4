@@ -227,7 +227,7 @@ BCE_00EE:	; RET
 	JP	BCE_POST_PROCESS
 
 BCE_STACK_EMPTY:
-	JP	BCE_EXIT	; return exit signal
+	JP	BCE_EXIT_ERROR	; return exit signal
 
 BCE_00FB:	; SCRL RIGHT
 	CALL	_scrlRight
@@ -259,51 +259,40 @@ BCE_00DX:
 	CALL	_scrlUp
 	JP	BCE_POST_PROCESS
 
-;chip8/byte_code_executor.c:113: case 0x1: {
-BCE_1XXX:
-;chip8/instr_pc.h:47: const uint16_t a = addr12Bit;
-	LD	a, (_currentInstruction + 1)
-	LD	l, a
-	LD	a, (bc)
-	and	a,0x0f
-	LD	h, a
-	ex	de, hl
-;chip8/instr_pc.h:48: if (a < 0x200) {
-	LD	a, d
-	sub	a,0x02
-	jr	NC,l_executeSingleInstruction_00188
-;chip8/instr_pc.h:49: printf("Illegal jump to %04X at %p\r\n", a, chip8PC - 1);
-	exx
-	push	hl
-	exx
-	pop	bc
-	dec	bc
-	dec	bc
-	push	bc
-	push	de
-	LD	hl,___str_1
-	push	hl
-	CALL	_applicationExit
-	LD	hl,6
-	add	hl, sp
-	LD	sp, hl
-;chip8/byte_code_executor.c:50: bool executeSingleInstruction() {
-	jr	l_executeSingleInstruction_00122
-l_executeSingleInstruction_00188:
-;chip8/instr_pc.h:53: chip8PC = (uint16_t *)a;
-	push	de
-	exx
-	pop	hl
-	exx
-;chip8/byte_code_executor.c:114: if (JP())
-	JP	BCE_POST_PROCESS
-l_executeSingleInstruction_00122:
-;chip8/byte_code_executor.c:115: return false;
-	LD	l,0x00
-	JP	BCE_EXIT
-;chip8/byte_code_executor.c:119: case 0x2: {
-BCE_2XXX: 	; CALL XXX
+BCE_1XXX:	; JP XXX
+	; READ 12bit address from instruction into HL'
+	EXX
+	EX	DE, HL			; TRANSFER CURRENT CHIP8 TO DE'
+	LD	A, (_currentInstruction + 1)
+	LD	L, A
+	LD	A, (_currentInstruction)
+	AND	$0F
+	LD	H, A			; HL' NOW CONTAINS NEW CHIP8 PC
 
+	CP	$02			; IS IT LESS THAN $0200
+	jr	C, BCE_1XXX_INVALID_ADDR
+
+	EXX
+	JP	BCE_POST_PROCESS
+
+BCE_1XXX_INVALID_ADDR:
+;  printf("Illegal jump to %04X at %p\r\n", a, chip8PC - 1);
+	DEC	DE
+	DEC	DE
+	EX	DE, HL
+	PUSH	HL
+	PUSH	DE
+	EXX
+	LD	hl, ___str_1
+	PUSH	HL
+	CALL	_applicationExit
+	LD	HL, 6
+	ADD	HL, SP
+	LD	SP, HL
+	JP	BCE_EXIT_ERROR
+
+
+BCE_2XXX: 	; CALL XXX
 	; SAVE CURRENT PC ONTO STACK
 	LD	a, (_stackIndex)	; IS THERE ROOOM ON THE STACK?
 	CP	0x10
@@ -1062,7 +1051,7 @@ BCE_POST_PROCESS:
 	LD	a, h
 	exx
 	sub	a, 0x02
-	jr	NC, BCE_EXIT_ERROR
+	jr	NC, BCE_EXIT_OK
 ;chip8/byte_code_executor.c:345: printf("PC counter below 0x200 - %p\r\n", chip8PC);
 	exx
 	push	hl
@@ -1075,13 +1064,14 @@ BCE_POST_PROCESS:
 	pop	af
 	pop	af
 ;chip8/byte_code_executor.c:346: return false;
+BCE_EXIT_ERROR:
 	LD	l,0x00
 	jr	BCE_EXIT
-BCE_EXIT_ERROR:
 ;chip8/byte_code_executor.c:349: return true;
+;chip8/byte_code_executor.c:350: }
+BCE_EXIT_OK:
 	LD	l, 1
 BCE_EXIT:
-;chip8/byte_code_executor.c:350: }
 	inc	sp
 	pop	ix
 	ret

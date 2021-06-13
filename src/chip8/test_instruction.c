@@ -233,7 +233,7 @@ void verify_call_1025() {
 
 void setup_bad_jump() { programStorage[0] = invertByteOrder(JP_0002); }
 
-void verify_bad_jump() { expectEqualPtrs((uint16_t *)getChip8PC(), (uint16_t *)0x202, "PC"); }
+void verify_bad_jump() { expectEqualPtrs((uint16_t *)getChip8PC(), (uint16_t *)0x200, "PC"); }
 
 void setup_ret_from_subroutine() {
   stack[0] = 0xF000;

@@ -36,6 +36,4 @@ void initSystemState() {
 void executeROM() {
   while (executeSingleInstruction())
     ;
-
-  xprintf("99");
 }
