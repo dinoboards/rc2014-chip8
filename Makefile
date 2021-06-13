@@ -77,7 +77,6 @@ test-super: cpmchip8
 	@cp ./test-samples/super.ch8 ./bin/
 	cd bin && cpm cpmchip8 super.ch8s
 
-
 .PHONY: package
 package: chip8 chip8asm
 	@mkdir -p package
