@@ -28,10 +28,6 @@
 	; then lastly clear all line 0 for color plane
 
 _v9958ScrollUp:
-	exx
-	push	hl
-	exx
-
 	LD	A, (__color)
 	CP	3
 	JP	Z, scrollDownAllPlanes
@@ -136,10 +132,6 @@ clearNextRow:
 	LD	A, 64
 	CP	D
 	JR	NZ, clearNextRow
-
-	exx
-	pop	hl
-	exx
 
 	RET
 
@@ -254,9 +246,4 @@ scrollDownAllPlanes:
 
 	M_RESET_V9958_DEFAULT_REGISTER()
 	EI
-
-	exx
-	pop	hl
-	exx
-
 	RET

@@ -1,0 +1,12 @@
+
+	SECTION	CODE
+	EXTERN	_v9958DrawX
+
+	PUBLIC	_v9958Draw
+
+_v9958Draw:
+ifndef CPM
+	CALL	_v9958DrawX
+	RET
+
+endif

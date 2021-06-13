@@ -115,10 +115,6 @@ _invertByteOrder:
 ; ---------------------------------
 	PUBLIC	_executeSingleInstruction
 _executeSingleInstruction:
-	push	ix
-	LD	ix,0
-	add	ix,sp
-	dec	sp
 ;chip8/byte_code_executor.c:36: const uint16_t r = *chip8PC;
 	exx
 	LD	a, (hl)
@@ -257,11 +253,23 @@ BCE_STACK_EMPTY:
 	JP	BCE_EXIT_ERROR	; return exit signal
 
 BCE_00FB:	; SCRL RIGHT
+	EXX
+	PUSH	HL
+	EXX
 	CALL	_scrlRight
+	EXX
+	POP	HL
+	EXX
 	JP	BCE_POST_PROCESS
 
 BCE_00FC:	; SCRL LEFT
+	EXX
+	PUSH	HL
+	EXX
 	CALL	_scrlLeft
+	EXX
+	POP	HL
+	EXX
 	JP	BCE_POST_PROCESS
 
 BCE_00XX:
@@ -279,11 +287,23 @@ BCE_00XX:
 	JP	BCE_BAD_INSTRUCTION
 
 BCE_00CX:
+	EXX
+	PUSH	HL
+	EXX
 	CALL	_scrlDown
+	EXX
+	POP	HL
+	EXX
 	JP	BCE_POST_PROCESS
 
 BCE_00DX:
+	EXX
+	PUSH	HL
+	EXX
 	CALL	_scrlUp
+	EXX
+	POP	HL
+	EXX
 	JP	BCE_POST_PROCESS
 
 BCE_1XXX:	; JP XXX
@@ -988,8 +1008,6 @@ BCE_EXIT_ERROR:
 BCE_EXIT_OK:
 	LD	l, 1
 BCE_EXIT:
-	inc	sp
-	pop	ix
 	ret
 	SECTION rodata_compiler
 ___str_1:

@@ -28,10 +28,6 @@
 	; then lastly clear all line 0 for color plane
 
 _v9958ScrollDown:
-	exx
-	push	hl
-	exx
-
 	LD	A, (__color)
 	CP	3
 	JP	Z, scrollDownAllPlanes
@@ -245,7 +241,4 @@ scrollDownAllPlanes:
 	M_RESET_V9958_DEFAULT_REGISTER()
 	EI
 
-	exx
-	pop	hl
-	exx
 	RET
