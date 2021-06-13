@@ -93,7 +93,7 @@ package: chip8 chip8asm
 ./tools/cpm/cpm:
 	@mkdir -p ./tools/prereq/
 	cd ./tools/prereq
-	git clone --depth 1 git@github.com:jhallen/cpm.git
+	git clone --branch dean/z80-undoc-instr --depth 1 git@github.com:vipoo/cpm.git
 	cd cpm
 	OS=linux MAKEFLAGS= make -B
 

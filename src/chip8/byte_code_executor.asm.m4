@@ -109,8 +109,10 @@ _executeSingleInstruction:
 	exx
 	LD	a, (hl)
 	LD	(_currentInstruction+0), a
+	LD	IYH, A
 	inc	hl
 	LD	a, (hl)
+	LD	IYL, A
 	LD	(_currentInstruction+1), a
 	inc	hl
 	exx
@@ -131,12 +133,12 @@ _executeSingleInstruction:
 BCE_1:
 ;chip8/byte_code_executor.c:58: fourthNibble = readFourthNibble;
 	LD	bc, _currentInstruction
-	LD	a, (_currentInstruction + 1)
+	ld	a, iyl
 	and	a, 0x0f
 	LD	(_fourthNibble), a
 
 ;chip8/byte_code_executor.c:64: switch (firstNibble) {
-	LD	a, (bc)
+	LD	A, IYH
 
 	rlca
 	rlca
@@ -273,12 +275,11 @@ BCE_00DX:
 BCE_1XXX:	; JP XXX
 	; READ 12bit address from instruction into HL'
 	EXX
-	EX	DE, HL			; TRANSFER CURRENT CHIP8 TO DE'
-	LD	A, (_currentInstruction + 1)
-	LD	L, A
-	LD	A, (_currentInstruction)
+	LD	E, IYL
+	LD	A, IYH
 	AND	$0F
-	LD	H, A			; HL' NOW CONTAINS NEW CHIP8 PC
+	LD	D, A
+	EX	DE, HL
 
 	CP	$02			; IS IT LESS THAN $0200
 	jr	C, BCE_1XXX_INVALID_ADDR
