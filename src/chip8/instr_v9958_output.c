@@ -18,40 +18,6 @@ extern void drawRow(byte pSpriteData) __z88dk_fastcall;
 extern void v9958DrawPlane(byte *pSpriteData) __z88dk_fastcall;
 extern void v9958DrawDblPlane(byte *pSpriteData) __z88dk_fastcall;
 
-void v9958DrawX() {
-  registers[15] = 0;
-
-  xx = (registers[nibble2nd] * 2) & PIXEL_WIDTH_MASK;
-  yy = (registers[nibble3rd] * 2) & PIXEL_HEIGHT_MASK;
-
-  if (fourthNibble == 0) {
-    fourthNibble = 16;
-    if (_color == 3) {
-      _color = 1;
-      const uint8_t originalYY = yy;
-      v9958DrawDblPlane((byte *)registerI);
-      yy = originalYY;
-      _color = 2;
-      v9958DrawDblPlane((byte *)(registerI + 32));
-      _color = 3;
-    } else
-      v9958DrawDblPlane((byte *)registerI);
-
-    return;
-  }
-
-  if (_color == 3) {
-    _color = 1;
-    const uint8_t originalYY = yy;
-    v9958DrawPlane((byte *)registerI);
-    yy = originalYY;
-    _color = 2;
-    v9958DrawPlane((byte *)(registerI + fourthNibble));
-    _color = 3;
-  } else
-    v9958DrawPlane((byte *)registerI);
-}
-
 void v9958DrawDblPlane(byte *pSpriteData) __z88dk_fastcall {
   for (byte row = 16; row > 0; row--) {
     yAddOne = (yy + 1) & PIXEL_HEIGHT_MASK;
