@@ -60,7 +60,7 @@ lab(skip1byte, uniq()):
 ')
 
 ; LOAD HL TO ADDRESS OF REGISTER AS PER 2ND NIBBLE
-; ASSUME BC IS _currentInstruction
+; ASSUME IYH HAS INSTRUCTION HIGH
 define(`SET_HL_REG_2nd', `
 	LD	A, IYH
 	AND	0x0F
@@ -68,6 +68,18 @@ define(`SET_HL_REG_2nd', `
 	LD	H, REGISTERS / 256		; HL => REGISTERS[NIBBLE2ND]
 ')
 
+; LOAD SW TO ADDRESS OF REGISTER AS PER 3RD NIBBLE
+; ASSUME IYL HAS INSTRUCTION LOW & H is 1
+define(`SET_DE_REG_3rd', `
+	LD	A, IYL
+	RLCA
+	RLCA
+	RLCA
+	RLCA
+	AND	A, 0x0F
+	LD	D, H ; REGISTERS / 256
+	LD	E, A
+')
 	SECTION code_compiler
 ; uint16_t getChip8PC();
 	PUBLIC	_getChip8PC
@@ -462,88 +474,39 @@ BCE_8XXX:
 
 BCE_8XX0:	; LD Vx, Vy
 	SET_HL_REG_2nd()
+	SET_DE_REG_3rd()
 
-	LD	A, IYL
-	RLCA
-	RLCA
-	RLCA
-	RLCA
-	AND	A, $0F
-	LD	D, REGISTERS / 256
-	LD	E, A
 	LD	A, (DE)
 	LD	(HL), A
-
 	JP	BCE_POST_PROCESS
 
-BCE_8XX1:
-	LD	d, 0x100 / 256
-	LD	a, IYH
-	and	a, 0x0F
-	LD	e, a
-	LD	h, d
-	LD	a, IYL
-	rlca
-	rlca
-	rlca
-	rlca
-	and	a, 0x0f
-	LD	l, a
-	LD	a, (de)
-	or	a, (hl)
-	LD	(de), a
+BCE_8XX1:	; OR Vx, Vy
+	SET_HL_REG_2nd()
+	SET_DE_REG_3rd()
+
+	LD	A, (DE)
+	OR	(HL)
+	LD	(HL), A
 	JP	BCE_POST_PROCESS
 
- BCE_8XX2:
-	LD	d, 0x100 / 256
-	LD	a, IYH
-	and	a, 0x0F
-	LD	e, a
-;
-	LD	h, d
-	LD	a, IYL
-	rlca
-	rlca
-	rlca
-	rlca
-	and	a, 0x0f
-	LD	l, a
-	LD	a, (de)
-	and	a, (hl)
-	LD	(de), a
+ BCE_8XX2:	; AND Vx, Vy
+	SET_HL_REG_2nd()
+	SET_DE_REG_3rd()
+
+	LD	A, (DE)
+	AND	(HL)
+	LD	(HL), A
 	JP	BCE_POST_PROCESS
 
-BCE_8XX3:
-;chip8/instr_registers.h:211: inline void xorVxVy() { registers[nibble2nd] ^= registers[nibble3rd]; }
-	LD	a, IYH
-	and	a,0x0f
-	LD	d,0x00
-	LD	e, a
-	LD	a, d
-	inc	a
-	LD	d, a
-	LD	a, IYH
-	and	a,0x0f
-	LD	l, a
-	LD	a,0x00
-	inc	a
-	LD	h, a
-	LD	a, (hl)
-	LD	(ix-1),a
-	LD	a, IYL
-	rlca
-	rlca
-	rlca
-	rlca
-	and	a,0x0f
-	LD	c, a
-	LD	a,0x00
-	inc	a
-	LD	b, a
-	LD	a, (bc)
-	xor	a,(ix-1)
-	LD	(de), a
+BCE_8XX3: 	; XOR Vx, Vy
+	SET_HL_REG_2nd()
+	SET_DE_REG_3rd()
+
+	LD	A, (DE)
+	XOR	(HL)
+	LD	(HL), A
 	JP	BCE_POST_PROCESS
+
 BCE_8XX4:
 	CALL	_addVxVy
 	JP	BCE_POST_PROCESS
