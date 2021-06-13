@@ -31,8 +31,32 @@
 	EXTERN	_addVxVy
 	EXTERN	_applicationExit
 
-	SECTION code_compiler
+define(uniq,0)
+define(lab, label$1$2$3$4$5$6$7$8$9)
 
+define(`SKIP_NEXT_INSTRUCTION', `
+define(`uniq', incr(uniq))
+	exx
+
+	ld	a, (hl)
+	cp	0xF0
+	jr	nz, lab(skip2bytes, uniq())
+	inc	hl
+	ld	a, (hl)
+	or	a
+	jr	nz, lab(skip1byte, uniq())
+
+	inc	hl
+
+lab(skip2bytes, uniq()):
+	inc	hl
+lab(skip1byte, uniq()):
+	inc	hl
+
+	exx
+')
+
+	SECTION code_compiler
 ; uint16_t getChip8PC();
 	PUBLIC	_getChip8PC
 _getChip8PC:
@@ -125,7 +149,7 @@ BCE_FIRST_NIBBLE_TABLE:
 	db	0
 	jp	BCE_3XXX
 	db	0
-	jp	l_executeSingleInstruction_00126
+	jp	BCE_4XXX
 	db	0
 	jp	BCE_5XXX
 	db	0
@@ -135,7 +159,7 @@ BCE_FIRST_NIBBLE_TABLE:
 	db	0
 	jp	BCE_8XXX
 	db	0
-	jp	l_executeSingleInstruction_00147
+	jp	BCE_9XXX
 	db	0
 	jp	l_executeSingleInstruction_00151
 	db	0
@@ -145,7 +169,7 @@ BCE_FIRST_NIBBLE_TABLE:
 	db	0
 	jp	l_executeSingleInstruction_00154
 	db	0
-	jp	l_executeSingleInstruction_00155
+	jp	BCE_EXXX
 	db	0
 	jp	BCE_FXXX
 
@@ -326,28 +350,12 @@ BCE_3XXX:	; SE Vx, byte
 	ld	a, (bc)		; A => LOWBYTE (XX)
 	CP	e		; DO COMPARISON
 	jp	NZ, BCE_POST_PROCESS
-; skipNextInstruction()
-	exx
 
-	ld	a, (hl)
-	cp	0xF0
-	jr	nz, l_executeSingleInstruction_00194
-	inc	hl
-	ld	a, (hl)
-	or	a
-	jr	nz, l_executeSingleInstruction_00194a
-
-	inc	hl
-
-l_executeSingleInstruction_00194:
-	inc	hl
-l_executeSingleInstruction_00194a:
-	inc	hl
-	exx
-;chip8/byte_code_executor.c:126: break;
+	SKIP_NEXT_INSTRUCTION()
 	jp	BCE_POST_PROCESS
+
 ;chip8/byte_code_executor.c:129: case 0x4: {
-l_executeSingleInstruction_00126:
+BCE_4XXX:
 ;chip8/instr_pc.h:37: if (registers[nibble2nd] != lowByte)
 	ld	e, c
 	ld	d, b
@@ -362,33 +370,10 @@ l_executeSingleInstruction_00126:
 	ld	a, (bc)
 	sub	a, e
 	jp	Z,BCE_POST_PROCESS
-;chip8/instr_pc.h:38: skipNextInstruction();
-	exx
-	push	hl
-	exx
-	pop	hl
-	ld	c, (hl)
-	inc	hl
-	ld	b, (hl)
-	ld	a, c
-	sub	a,0xf0
-	or	a, b
-	jr	NZ,l_executeSingleInstruction_00200
-	exx
-	inc	hl
-	inc	hl
-	inc	hl
-	inc	hl
-	exx
 
+	SKIP_NEXT_INSTRUCTION()
 	jp	BCE_POST_PROCESS
-l_executeSingleInstruction_00200:
-	exx
-	inc	hl
-	inc	hl
-	exx
-;chip8/byte_code_executor.c:131: break;
-	jp	BCE_POST_PROCESS
+
 ;chip8/byte_code_executor.c:134: case 0x5: {
 
 BCE_5XXX:
@@ -429,32 +414,9 @@ BCE_5XX0:
 	ld	a, (bc)
 	sub	a, e
 	jp	NZ,BCE_POST_PROCESS
-;chip8/instr_pc.h:33: skipNextInstruction();
-	exx
-	push	hl
-	exx
-	pop	hl
-	ld	c, (hl)
-	inc	hl
-	ld	b, (hl)
-	ld	a, c
-	sub	a,0xf0
-	or	a, b
-	jr	NZ,l_executeSingleInstruction_00206
-	exx
-	inc	hl
-	inc	hl
-	inc	hl
-	inc	hl
-	exx
+	SKIP_NEXT_INSTRUCTION()
 	jp	BCE_POST_PROCESS
-l_executeSingleInstruction_00206:
-	exx
-	inc	hl
-	inc	hl
-	exx
-;chip8/byte_code_executor.c:139: break;
-	jp	BCE_POST_PROCESS
+
 ;chip8/byte_code_executor.c:141: case 0x2:
  BCE_5XX2:
 ;chip8/byte_code_executor.c:142: ldIVxVy();
@@ -683,7 +645,7 @@ BCE_8XXE:
 ;chip8/byte_code_executor.c:208: break;
 	jp	BCE_POST_PROCESS
 
-l_executeSingleInstruction_00147:
+BCE_9XXX:
 ;chip8/byte_code_executor.c:218: if (readFourthNibble == 0)
 	ld	a, (_currentInstruction + 1)
 	and	a,0x0f
@@ -712,32 +674,9 @@ l_executeSingleInstruction_00147:
 	ld	a, (bc)
 	sub	a, e
 	jp	Z,BCE_POST_PROCESS
-;chip8/instr_pc.h:43: skipNextInstruction();
-	exx
-	push	hl
-	exx
-	pop	hl
-	ld	c, (hl)
-	inc	hl
-	ld	b, (hl)
-	ld	a, c
-	sub	a,0xf0
-	or	a, b
-	jr	NZ,l_executeSingleInstruction_00218
-	exx
-	inc	hl
-	inc	hl
-	inc	hl
-	inc	hl
-	exx
+	SKIP_NEXT_INSTRUCTION()
 	jp	BCE_POST_PROCESS
-l_executeSingleInstruction_00218:
-	exx
-	inc	hl
-	inc	hl
-	exx
-;chip8/byte_code_executor.c:219: sneVxVy();
-	jp	BCE_POST_PROCESS
+
 ;chip8/byte_code_executor.c:225: case 0xA:
 l_executeSingleInstruction_00151:
 ;chip8/byte_code_executor.c:226: ldIAddr();
@@ -844,19 +783,19 @@ l_executeSingleInstruction_00154:
 ;chip8/byte_code_executor.c:242: break;
 	jp	BCE_POST_PROCESS
 ;chip8/byte_code_executor.c:245: case 0xE: {
-l_executeSingleInstruction_00155:
+BCE_EXXX:
 ;chip8/byte_code_executor.c:246: switch (lowByte) {
 	ld	a, (_currentInstruction + 1)
-	cp	a,0x9e
-	jr	Z,l_executeSingleInstruction_00156
+	cp	0x9e
+	jr	Z, BCE_EX9E
 	sub	a,0xa1
-	jr	Z,l_executeSingleInstruction_00157
+	jr	Z, BCE_EXA1
 	jp	BCE_BAD_INSTRUCTION
-;chip8/byte_code_executor.c:247: case 0x9E: {
-l_executeSingleInstruction_00156:
-;chip8/instr_pc.h:69: if (isKeyDown(registers[nibble2nd]))
+
+BCE_EX9E:
+; if (isKeyDown(registers[nibble2nd]))
 	ld	a, (bc)
-	and	a,0x0f
+	and	0x0f
 	ld	l, a
 	ld	h, 0x01
 	ld	l, (hl)
@@ -864,35 +803,12 @@ l_executeSingleInstruction_00156:
 	ld	a, l
 	or	a, a
 	jp	Z, BCE_POST_PROCESS
-;chip8/instr_pc.h:70: skipNextInstruction();
-	exx
-	push	hl
-	exx
-	pop	hl
-	ld	c, (hl)
-	inc	hl
-	ld	b, (hl)
-	ld	a, c
-	sub	a,0xf0
-	or	a, b
-	jr	NZ,l_executeSingleInstruction_00227
-	exx
-	inc	hl
-	inc	hl
-	inc	hl
-	inc	hl
-	exx
 
+	SKIP_NEXT_INSTRUCTION()
 	jp	BCE_POST_PROCESS
-l_executeSingleInstruction_00227:
-	exx
-	inc	hl
-	inc	hl
-	exx
-;chip8/byte_code_executor.c:249: break;
-	jp	BCE_POST_PROCESS
+
 ;chip8/byte_code_executor.c:252: case 0xA1: {
-l_executeSingleInstruction_00157:
+BCE_EXA1:
 ;chip8/instr_pc.h:74: if (!isKeyDown(registers[nibble2nd]))
 	ld	a, (bc)
 	and	a,0x0f
@@ -905,32 +821,10 @@ l_executeSingleInstruction_00157:
 	ld	a, l
 	or	a, a
 	jp	NZ, BCE_POST_PROCESS
-;chip8/instr_pc.h:75: skipNextInstruction();
-	exx
-	push	hl
-	exx
-	pop	hl
-	ld	c, (hl)
-	inc	hl
-	ld	b, (hl)
-	ld	a, c
-	sub	a,0xf0
-	or	a, b
-	jr	NZ,l_executeSingleInstruction_00233
-	exx
-	inc	hl
-	inc	hl
-	inc	hl
-	inc	hl
-	exx
+
+	SKIP_NEXT_INSTRUCTION()
 	jp	BCE_POST_PROCESS
-l_executeSingleInstruction_00233:
-	exx
-	inc	hl
-	inc	hl
-	exx
-;chip8/byte_code_executor.c:254: break;
-	jp	BCE_POST_PROCESS
+
 ;chip8/byte_code_executor.c:264: case 0xF: {
 BCE_FXXX:
 ;chip8/byte_code_executor.c:265: switch (lowByte) {
