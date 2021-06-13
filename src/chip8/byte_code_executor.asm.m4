@@ -169,7 +169,7 @@ BCE_FIRST_NIBBLE_TABLE:
 	db	0
 	JP	BCE_6XXX
 	db	0
-	JP	l_executeSingleInstruction_00134
+	JP	BCE_7XXX
 	db	0
 	JP	BCE_8XXX
 	db	0
@@ -429,36 +429,13 @@ BCE_6XXX:	; LD Vx, byte
 	JP	BCE_POST_PROCESS
 
 
-;chip8/byte_code_executor.c:159: case 0x7: {
-l_executeSingleInstruction_00134:
-;chip8/byte_code_executor.c:160: addVxByte();
-	LD	l, c
-	LD	h, b
-	LD	a, (hl)
-	and	a,0x0f
-	LD	d,0x00
-	LD	e, a
-	LD	a, d
-	inc	a
-	LD	d, a
-	LD	l, c
-	LD	h, b
-	LD	a, (hl)
-	and	a,0x0f
-	LD	l, a
-	LD	a,0x00
-	inc	a
-	LD	h, a
-	LD	a, (hl)
-	LD	l, c
-	LD	h, b
-	inc	hl
-	LD	c, (hl)
-	add	a, c
-	LD	(de), a
-;chip8/byte_code_executor.c:161: break;
+BCE_7XXX:	; ADD Vx, byte
+	SET_HL_REG_2nd()
+	LD	A, IYL
+	ADD	(HL)
+	LD	(HL), A
 	JP	BCE_POST_PROCESS
-;chip8/byte_code_executor.c:164: case 0x8: {
+
 BCE_8XXX:
 ;chip8/byte_code_executor.c:166: switch (readFourthNibble) {
 	LD	a, IYL
