@@ -410,41 +410,28 @@ BCE_5XX0:	; SE Vx, Vy
 	LD	H, REGISTERS / 256
 	LD	A, (HL)		; A = VY
 
-	cp	e
+	CP	E
 	JP	NZ, BCE_POST_PROCESS
 
 	SKIP_NEXT_INSTRUCTION()
 	JP	BCE_POST_PROCESS
 
-;chip8/byte_code_executor.c:141: case 0x2:
  BCE_5XX2:
-;chip8/byte_code_executor.c:142: ldIVxVy();
 	CALL	_ldIVxVy
-;chip8/byte_code_executor.c:143: break;
 	JP	BCE_POST_PROCESS
-;chip8/byte_code_executor.c:145: case 0x3:
+
  BCE_5XX3:
-;chip8/byte_code_executor.c:146: ldVxVyI();
 	CALL	_ldVxVyI
-;chip8/byte_code_executor.c:147: break;
 	JP	BCE_POST_PROCESS
-;chip8/byte_code_executor.c:155: case 0x6:
-BCE_6XXX:
-;chip8/byte_code_executor.c:156: ldVxByte();
-	LD	l, c
-	LD	h, b
-	LD	a, (hl)
-	and	a,0x0f
-	LD	d,0x00
-	LD	e, a
-	LD	a, d
-	inc	a
-	LD	d, a
-	inc	bc
-	LD	a, (bc)
-	LD	(de), a
-;chip8/byte_code_executor.c:157: break;
+
+BCE_6XXX:	; LD Vx, byte
+	SET_HL_REG_2nd()
+	INC	BC
+	LD	A, (BC)
+	LD	(HL), A
 	JP	BCE_POST_PROCESS
+
+
 ;chip8/byte_code_executor.c:159: case 0x7: {
 l_executeSingleInstruction_00134:
 ;chip8/byte_code_executor.c:160: addVxByte();
