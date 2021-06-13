@@ -395,21 +395,22 @@ BCE_5XXX:
 BCE_5XX0:	; SE Vx, Vy
 ; : if (registers[nibble2nd] == registers[nibble3rd])
 	SET_HL_REG_2nd()
-	LD	e, (hl)
-	inc	bc
-	LD	a, (bc)
-	rlca
-	rlca
-	rlca
-	rlca
-	and	a,0x0f
-	LD	c, a
-	LD	a,0x00
-	inc	a
-	LD	b, a
-	LD	a, (bc)
-	sub	a, e
-	JP	NZ,BCE_POST_PROCESS
+	LD	E, (HL)		; E = VX
+
+	INC	BC
+	LD	A, (BC)
+	RLCA
+	RLCA
+	RLCA
+	RLCA
+	AND	$0F
+	LD	L, A
+	LD	H, 1
+	LD	A, (HL)		; A = VY
+
+	cp	e
+	JP	NZ, BCE_POST_PROCESS
+
 	SKIP_NEXT_INSTRUCTION()
 	JP	BCE_POST_PROCESS
 
