@@ -133,7 +133,7 @@ BCE_FIRST_NIBBLE_TABLE:
 	db	0
 	jp	l_executeSingleInstruction_00134
 	db	0
-	jp	l_executeSingleInstruction_00135
+	jp	BCE_8XXX
 	db	0
 	jp	l_executeSingleInstruction_00147
 	db	0
@@ -147,7 +147,7 @@ BCE_FIRST_NIBBLE_TABLE:
 	db	0
 	jp	l_executeSingleInstruction_00155
 	db	0
-	jp	l_executeSingleInstruction_00160
+	jp	BCE_FXXX
 
 ;chip8/byte_code_executor.c:65: case 0x0: {
 BCE_0XXX:
@@ -523,52 +523,30 @@ l_executeSingleInstruction_00134:
 ;chip8/byte_code_executor.c:161: break;
 	jp	BCE_POST_PROCESS
 ;chip8/byte_code_executor.c:164: case 0x8: {
-l_executeSingleInstruction_00135:
+BCE_8XXX:
 ;chip8/byte_code_executor.c:166: switch (readFourthNibble) {
 	ld	a, (_currentInstruction + 1)
 	and	a,0x0f
-	ld	e, a
-	ld	d,0x00
-	ld	a, e
-	or	a, a
-	or	a, d
-	jr	Z,l_executeSingleInstruction_00136
-	ld	a, e
+	jr	Z, BCE_8XX0
 	dec	a
-	or	a, d
-	jr	Z,l_executeSingleInstruction_00137
-	ld	a, e
-	sub	a,0x02
-	or	a, d
-	jr	Z,l_executeSingleInstruction_00138
-	ld	a, e
-	sub	a,0x03
-	or	a, d
-	jr	Z,l_executeSingleInstruction_00139
-	ld	a, e
-	sub	a,0x04
-	or	a, d
-	jp	Z,l_executeSingleInstruction_00140
-	ld	a, e
-	sub	a,0x05
-	or	a, d
-	jp	Z,l_executeSingleInstruction_00141
-	ld	a, e
-	sub	a,0x06
-	or	a, d
-	jp	Z,l_executeSingleInstruction_00142
-	ld	a, e
-	sub	a,0x07
-	or	a, d
-	jp	Z,l_executeSingleInstruction_00143
-	ld	a, e
-	sub	a,0x0e
-	or	a, d
-	jp	Z,l_executeSingleInstruction_00144
+	jr	Z, BCE_8XX1
+	dec	a
+	jr	Z, BCE_8XX2
+	dec	a
+	jr	Z, BCE_8XX3
+	dec	a
+	jp	Z, BCE_8XX4
+	dec	a
+	jp	Z, BCE_8XX5
+	dec	a
+	jp	Z, BCE_8XX6
+	dec	a
+	jp	Z, BCE_8XX7
+	cp	0x07
+	jp	Z, BCE_8XXE
 	jp	BCE_BAD_INSTRUCTION
-;chip8/byte_code_executor.c:167: case 0x0: {
-l_executeSingleInstruction_00136:
-;chip8/instr_registers.h:46: __endasm;
+
+BCE_8XX0:
 	ld	hl, (_currentInstruction)
 	ld	a, l
 	and	a, 0x0f
@@ -584,17 +562,13 @@ l_executeSingleInstruction_00136:
 	ld	b, 0x100 / 256
 	ld	a, (bc)
 	ld	(de), a
-;chip8/byte_code_executor.c:169: break;
 	jp	BCE_POST_PROCESS
-;chip8/byte_code_executor.c:172: case 0x1: {
-l_executeSingleInstruction_00137:
-;chip8/instr_registers.h:138: __endasm;
-;
+
+BCE_8XX1:
 	ld	d, 0x100 / 256
 	ld	a, (_currentInstruction)
 	and	a, 0x0F
 	ld	e, a
-;
 	ld	h, d
 	ld	a, (_currentInstruction + 1)
 	rlca
@@ -606,12 +580,9 @@ l_executeSingleInstruction_00137:
 	ld	a, (de)
 	or	a, (hl)
 	ld	(de), a
-;chip8/byte_code_executor.c:174: break;
 	jp	BCE_POST_PROCESS
-;chip8/byte_code_executor.c:177: case 0x2: {
-l_executeSingleInstruction_00138:
-;chip8/instr_registers.h:111: __endasm;
-;
+
+ BCE_8XX2:
 	ld	d, 0x100 / 256
 	ld	a, (_currentInstruction)
 	and	a, 0x0F
@@ -628,10 +599,9 @@ l_executeSingleInstruction_00138:
 	ld	a, (de)
 	and	a, (hl)
 	ld	(de), a
-;chip8/byte_code_executor.c:179: break;
 	jp	BCE_POST_PROCESS
-;chip8/byte_code_executor.c:182: case 0x3: {
-l_executeSingleInstruction_00139:
+
+BCE_8XX3:
 ;chip8/instr_registers.h:211: inline void xorVxVy() { registers[nibble2nd] ^= registers[nibble3rd]; }
 	ld	l, c
 	ld	h, b
@@ -666,22 +636,16 @@ l_executeSingleInstruction_00139:
 	ld	a, (bc)
 	xor	a,(ix-1)
 	ld	(de), a
-;chip8/byte_code_executor.c:184: break;
 	jp	BCE_POST_PROCESS
-;chip8/byte_code_executor.c:187: case 0x4: {
-l_executeSingleInstruction_00140:
-;chip8/byte_code_executor.c:188: addVxVy();
+BCE_8XX4:
 	call	_addVxVy
-;chip8/byte_code_executor.c:189: break;
 	jp	BCE_POST_PROCESS
-;chip8/byte_code_executor.c:192: case 0x5: {
-l_executeSingleInstruction_00141:
-;chip8/byte_code_executor.c:193: subVxVy();
+
+BCE_8XX5:
 	call	_subVxVy
-;chip8/byte_code_executor.c:194: break;
 	jp	BCE_POST_PROCESS
-;chip8/byte_code_executor.c:197: case 0x6: {
-l_executeSingleInstruction_00142:
+
+BCE_8XX6:
 ;chip8/instr_registers.h:143: uint8_t *register2ndNibble = &registers[nibble2nd];
 	ld	a, (bc)
 	and	a,0x0f
@@ -700,14 +664,12 @@ l_executeSingleInstruction_00142:
 	ld	(bc), a
 ;chip8/byte_code_executor.c:199: break;
 	jp	BCE_POST_PROCESS
+
 ;chip8/byte_code_executor.c:202: case 0x7:
-l_executeSingleInstruction_00143:
-;chip8/byte_code_executor.c:203: subnVxVy();
+BCE_8XX7:
 	call	_subnVxVy
-;chip8/byte_code_executor.c:204: break;
 	jp	BCE_POST_PROCESS
-;chip8/byte_code_executor.c:206: case 0xE: {
-l_executeSingleInstruction_00144:
+BCE_8XXE:
 ;chip8/instr_registers.h:149: uint8_t *register2ndNibble = &registers[nibble2nd];
 	ld	a, (bc)
 	and	a,0x0f
@@ -729,7 +691,7 @@ l_executeSingleInstruction_00144:
 	ld	(bc), a
 ;chip8/byte_code_executor.c:208: break;
 	jp	BCE_POST_PROCESS
-;chip8/byte_code_executor.c:217: case 0x9: {
+
 l_executeSingleInstruction_00147:
 ;chip8/byte_code_executor.c:218: if (readFourthNibble == 0)
 	ld	a, (_currentInstruction + 1)
@@ -981,7 +943,7 @@ l_executeSingleInstruction_00233:
 ;chip8/byte_code_executor.c:254: break;
 	jp	BCE_POST_PROCESS
 ;chip8/byte_code_executor.c:264: case 0xF: {
-l_executeSingleInstruction_00160:
+BCE_FXXX:
 ;chip8/byte_code_executor.c:265: switch (lowByte) {
 	ld	a, (_currentInstruction + 1)
 	or	a, a
