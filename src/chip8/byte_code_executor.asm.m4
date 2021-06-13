@@ -438,42 +438,42 @@ BCE_7XXX:	; ADD Vx, byte
 
 BCE_8XXX:
 ;chip8/byte_code_executor.c:166: switch (readFourthNibble) {
-	LD	a, IYL
-	and	a,0x0f
-	jr	Z, BCE_8XX0
-	dec	a
-	jr	Z, BCE_8XX1
-	dec	a
-	jr	Z, BCE_8XX2
-	dec	a
-	jr	Z, BCE_8XX3
-	dec	a
+	LD	A, IYL
+	AND	A, $0F
+	JR	Z, BCE_8XX0
+	DEC	A
+	JR	Z, BCE_8XX1
+	DEC	A
+	JR	Z, BCE_8XX2
+	DEC	A
+	JR	Z, BCE_8XX3
+	DEC	A
 	JP	Z, BCE_8XX4
-	dec	a
+	DEC	A
 	JP	Z, BCE_8XX5
-	dec	a
+	DEC	A
 	JP	Z, BCE_8XX6
-	dec	a
+	DEC	A
 	JP	Z, BCE_8XX7
-	cp	0x07
+	CP	$07
 	JP	Z, BCE_8XXE
 	JP	BCE_BAD_INSTRUCTION
 
+
 BCE_8XX0:	; LD Vx, Vy
-	LD	a, IYH
-	and	a, 0x0f
-	LD	d,0x100 / 256
-	LD	e, a
-	LD	a, IYL
-	rlca
-	rlca
-	rlca
-	rlca
-	and	a, 0x0f
-	LD	c, a
-	LD	b, 0x100 / 256
-	LD	a, (bc)
-	LD	(de), a
+	SET_HL_REG_2nd()
+
+	LD	A, IYL
+	RLCA
+	RLCA
+	RLCA
+	RLCA
+	AND	A, $0F
+	LD	D, REGISTERS / 256
+	LD	E, A
+	LD	A, (DE)
+	LD	(HL), A
+
 	JP	BCE_POST_PROCESS
 
 BCE_8XX1:
