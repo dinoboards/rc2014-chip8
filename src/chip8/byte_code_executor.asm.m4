@@ -32,6 +32,8 @@
 	EXTERN	_stack
 	EXTERN	_stackIndex
 
+REGISTERS	EQU	$100
+
 define(uniq,0)
 define(lab, label$1$2$3$4$5$6$7$8$9)
 
@@ -63,7 +65,7 @@ define(`SET_HL_REG_2nd', `
 	LD	A, (BC)
 	AND	0x0F
 	LD	L, A
-	LD	H, 0x01		; HL => REGISTERS[NIBBLE2ND]
+	LD	H, REGISTERS / 256		; HL => REGISTERS[NIBBLE2ND]
 ')
 
 	SECTION code_compiler
@@ -405,7 +407,7 @@ BCE_5XX0:	; SE Vx, Vy
 	RLCA
 	AND	$0F
 	LD	L, A
-	LD	H, 1
+	LD	H, REGISTERS / 256
 	LD	A, (HL)		; A = VY
 
 	cp	e
