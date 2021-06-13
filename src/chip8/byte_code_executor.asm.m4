@@ -146,7 +146,7 @@ BCE_FIRST_NIBBLE_TABLE:
 	db	0
 	jp	BCE_1XXX
 	db	0
-	jp	l_executeSingleInstruction_00124
+	jp	BCE_2XXX
 	db	0
 	jp	BCE_3XXX
 	db	0
@@ -272,12 +272,9 @@ BCE_1XXX:
 ;chip8/instr_pc.h:47: const uint16_t a = addr12Bit;
 	ld	a, (_currentInstruction + 1)
 	ld	l, a
-	ld	h,0x00
 	ld	a, (bc)
 	and	a,0x0f
-	ld	b, a
-	ld	c,0x00
-	add	hl, bc
+	ld	h, a
 	ex	de, hl
 ;chip8/instr_pc.h:48: if (a < 0x200) {
 	ld	a, d
@@ -313,48 +310,62 @@ l_executeSingleInstruction_00122:
 	ld	l,0x00
 	jp	BCE_EXIT
 ;chip8/byte_code_executor.c:119: case 0x2: {
-l_executeSingleInstruction_00124:
-;chip8/instr_pc.h:2: const uint16_t a = addr12Bit;
+BCE_2XXX: 	; CALL XXX
+
+	; SAVE CURRENT PC ONTO STACK
+	ld	a, (_stackIndex)	; IS THERE ROOOM ON THE STACK?
+	CP	0x10
+	jr	NC, BCE_STACK_OVERFLOWED
+
+	INC	A			; _stackIndex++
+	LD	(_stackIndex), A
+	DEC	A
+
+	EXX
+	EX	DE, HL			; DE => CURRENT PC
+	LD	HL, _stack
+	ADD	A
+	OR	L
+	LD	L, A			; HL => STACK REFERENCE
+	LD	(HL), E
+	INC	HL
+	LD	(HL), D			; (STACK) = DE
+
+	; RETRIEVE 12 BIT CALL ADDR
 	ld	a, (_currentInstruction + 1)
 	ld	l, a
-	ld	h,0x00
-	ld	a, (bc)
-	and	a,0x0f
-	ld	b, a
-	ld	c,0x00
-	add	hl, bc
-	ex	de, hl
-;chip8/instr_pc.h:4: if (a < 0x200) {
-	ld	a, d
-	sub	a,0x02
-	jr	NC,l_executeSingleInstruction_00191
-;chip8/instr_pc.h:5: printf("Illegal jump to %04X at %p\r\n", a, chip8PC - 1);
-	exx
-	push	hl
-	exx
-	pop	bc
-	dec	bc
-	dec	bc
-	push	bc
-	push	de		; Address to jump to
+	ld	a, (_currentInstruction)
+	and	a, 0x0f
+	ld	h, a
+
+	cp	0x02			; IS IT LESS THAN 0x200
+	jr	C, BCE_2XXX_INVALID_ADDR
+
+	EXX
+	jp	BCE_POST_PROCESS
+
+BCE_2XXX_INVALID_ADDR:
+; printf("Illegal jump to %04X at %p\r\n", a, chip8PC - 1);
+	dec	de		; current chip8 PC is in DE
+	dec	de
+	push	de
+	push	hl		; Address to jump to
 	ld	hl,___str_1
 	push	hl
 	call	_applicationExit
-	ld	hl,6
+	ld	hl, 6
 	add	hl, sp
 	ld	sp, hl
-;chip8/byte_code_executor.c:6: #include "systimer.h"
-	jp	BCE_POST_PROCESS
-l_executeSingleInstruction_00191:
-;chip8/instr_pc.h:9: pushPc();
-	push	de
-	call	_pushPc
-;chip8/instr_pc.h:10: chip8PC = (uint16_t *)a;
-	exx
-	pop	hl
-	exx
-;chip8/byte_code_executor.c:121: break;
-	jp	BCE_POST_PROCESS
+	jp	BCE_EXIT_ERROR
+
+BCE_STACK_OVERFLOWED:
+; printf("Stack overflow\r\n");
+	ld	hl,___str_1
+	push	hl
+	call	_applicationExit
+	pop	af
+	JP	BCE_EXIT_ERROR
+
 ;chip8/byte_code_executor.c:124: case 0x3: {
 BCE_3XXX:	; SE Vx, byte
 
