@@ -123,7 +123,7 @@ BCE_FIRST_NIBBLE_TABLE:
 	db	0
 	jp	l_executeSingleInstruction_00124
 	db	0
-	jp	l_executeSingleInstruction_00125
+	jp	BCE_3XXX
 	db	0
 	jp	l_executeSingleInstruction_00126
 	db	0
@@ -314,22 +314,19 @@ l_executeSingleInstruction_00191:
 ;chip8/byte_code_executor.c:121: break;
 	jp	BCE_POST_PROCESS
 ;chip8/byte_code_executor.c:124: case 0x3: {
-l_executeSingleInstruction_00125:
-;chip8/instr_pc.h:27: if (registers[nibble2nd] == lowByte)
-	ld	e, c
-	ld	d, b
-	ld	a, (de)
-	and	a,0x0f
+BCE_3XXX:	; SE Vx, byte
+
+; if (registers[nibble2nd] == lowByte)
+	ld	a, (BC)
+	and	0x0f
 	ld	l, a
-	ld	a,0x00
-	inc	a
-	ld	h, a
-	ld	e, (hl)
+	ld	h, 0x01		; HL => REGISTERS[NIBBLE2ND]
+	ld	e, (hl)		; E = VX
 	inc	bc
-	ld	a, (bc)
-	sub	a, e
-	jp	NZ,BCE_POST_PROCESS
-;chip8/instr_pc.h:28: skipNextInstruction();
+	ld	a, (bc)		; A => LOWBYTE (XX)
+	CP	e		; DO COMPARISON
+	jp	NZ, BCE_POST_PROCESS
+; skipNextInstruction()
 	exx
 	push	hl
 	exx
@@ -867,9 +864,7 @@ l_executeSingleInstruction_00156:
 	ld	a, (bc)
 	and	a,0x0f
 	ld	l, a
-	ld	a,0x00
-	inc	a
-	ld	h, a
+	ld	h, 0x01
 	ld	l, (hl)
 	call	_isKeyDown
 	ld	a, l
