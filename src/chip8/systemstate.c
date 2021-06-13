@@ -6,6 +6,10 @@
 uint16_t registerI;
 uint8_t  fourthNibble;
 
+byte                 __at 0x100 registers[16];
+byte /*__at 0x01D0*/ stackIndex;
+uint16_t             __at 0x01E0 stack[MAX_STACK];
+
 byte soundTimer;
 byte delayTimer;
 

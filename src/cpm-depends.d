@@ -8,7 +8,7 @@
  chip8/systemstate.h chip8/timers.h
 ./bin/cpm/chip8/key_monitor.c.asm: chip8/key_monitor.c chip8/key_monitor.h datatypes.h \
  charconstants.h chip8/msx.h chip8/msx_keyboard.h chip8/systemstate.h \
- chip8/timers.h chip8/ym2149.h chip8/audio.h
+ chip8/timers.h xstdio.h chip8/ym2149.h chip8/audio.h
 ./bin/cpm/chip8/msx_keyboard.c.asm: chip8/msx_keyboard.c chip8/msx_keyboard.h
 ./bin/cpm/chip8/instr_sound.c.asm: chip8/instr_sound.c chip8/instr_sound.h datatypes.h \
  chip8/audio.h chip8/systemstate.h chip8/timers.h
@@ -28,7 +28,8 @@
 ./bin/cpm/chip8/hello2.c.asm: chip8/hello2.c
 ./bin/cpm/chip8/error_reports.c.asm: chip8/error_reports.c chip8/error_reports.h \
  datatypes.h chip8/configreader.h token.h datatypes.h xstdio.h
-./bin/cpm/chip8/stack.c.asm: chip8/stack.c chip8/stack.h datatypes.h chip8/systemstate.h
+./bin/cpm/chip8/stack.c.asm: chip8/stack.c chip8/stack.h datatypes.h chip8/systemstate.h \
+ chip8/systemstate.h xstdio.h
 ./bin/cpm/chip8/random.c.asm: chip8/random.c chip8/random.h datatypes.h chip8/systimer.h \
  chip8/msx.h chip8/systemstate.h
 ./bin/cpm/chip8/test_configuration.c.asm: chip8/test_configuration.c \
@@ -93,7 +94,7 @@
  filereader.h
 ./bin/cpm/cpm.c.asm: cpm.c cpm.h
 ./bin/cpm/test_expectations.c.asm: test_expectations.c test_expectations.h \
- datatypes.h terminal_codes.h
+ datatypes.h terminal_codes.h xstdio.h
 ./bin/cpm/test.c.asm: test.c chip8/msx.h
 ./bin/cpm/hello.c.asm: hello.c chip8/msx.h
 ./bin/cpm/filenames.c.asm: filenames.c filenames.h
@@ -109,8 +110,9 @@
 ./bin/cpm/chip8/ym2149asm.o: ./chip8/ym2149asm.asm
 ./bin/cpm/chip8/timerasm.o: ./chip8/timerasm.asm
 ./bin/cpm/chip8/sub_vx_vy_asm.o: ./chip8/sub_vx_vy_asm.asm
+./bin/cpm/chip8/test_system.o: ./chip8/test_system.asm
 ./bin/cpm/chip8/v9958asm.o: ./chip8/v9958asm.asm ./chip8/v9958.inc
-./bin/cpm/chip8/byte_code_executor.o: ./chip8/byte_code_executor.asm
+./bin/cpm/chip8/app_management.o: ./chip8/app_management.asm
 ./bin/cpm/chip8/instr_registerasm.o: ./chip8/instr_registerasm.asm
 ./bin/cpm/xstdio.o: ./xstdio.asm
 ./bin/cpm/chip8asm/error.o: ./chip8asm/error.asm
@@ -128,5 +130,6 @@
 ./bin/cpm/chip8/instr_v9958_output/scrl_leftasm.o: ./chip8/instr_v9958_output/scrl_leftasm.asm.m4 ./chip8/macros.inc.m4 ./chip8/v9958.inc
 ./bin/cpm/chip8/instr_v9958_output/draw_segmentasm.o: ./chip8/instr_v9958_output/draw_segmentasm.asm.m4 ./chip8/macros.inc.m4 ./chip8/v9958.inc
 ./bin/cpm/chip8/instr_v9958_output/scrl_downasm.o: ./chip8/instr_v9958_output/scrl_downasm.asm.m4 ./chip8/macros.inc.m4 ./chip8/v9958.inc
+./bin/cpm/chip8/byte_code_executor.o: ./chip8/byte_code_executor.asm.m4
 ./bin/cpm/hello.o: ./hello.asm.m4 ./chip8/v9958.inc
 ./bin/cpm/loader.o: ./loader.asm.m4

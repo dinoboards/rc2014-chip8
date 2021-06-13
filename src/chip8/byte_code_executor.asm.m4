@@ -22,7 +22,6 @@
 	EXTERN	_scrlDown
 	EXTERN	_scrlLeft
 	EXTERN	_scrlRight
-	EXTERN	_popPc
 	EXTERN	_cls
 	EXTERN	_videoHigh
 	EXTERN	_fourthNibble
@@ -30,6 +29,8 @@
 	EXTERN	_manageTimers
 	EXTERN	_addVxVy
 	EXTERN	_applicationExit
+	EXTERN	_stack
+	EXTERN	_stackIndex
 
 define(uniq,0)
 define(lab, label$1$2$3$4$5$6$7$8$9)
@@ -143,7 +144,7 @@ BCE_1:
 BCE_FIRST_NIBBLE_TABLE:
 	jp	BCE_0XXX
 	db	0
-	jp	l_executeSingleInstruction_00121
+	jp	BCE_1XXX
 	db	0
 	jp	l_executeSingleInstruction_00124
 	db	0
@@ -186,7 +187,7 @@ BCE_0XXX:
 	cp	a, 0xe0
 	jr	Z, BCE_00E0
 	cp	a,0xee
-	jr	Z,l_executeSingleInstruction_00108
+	jr	Z, BCE_00EE
 	cp	a,0xfb
 	jr	Z,l_executeSingleInstruction_00111
 	cp	a,0xfc
@@ -205,15 +206,32 @@ BCE_00E0:
 ;chip8/byte_code_executor.c:75: break;
 	jp	BCE_POST_PROCESS
 ;chip8/byte_code_executor.c:77: case 0xEE:
-l_executeSingleInstruction_00108:
-;chip8/byte_code_executor.c:78: if (ret())
-	call	_popPc
-	ld	a, l
-	or	a, a
-	jp	Z, BCE_POST_PROCESS
-;chip8/byte_code_executor.c:79: return false;
-	ld	l,0x00
-	jp	BCE_EXIT
+BCE_00EE:
+;chip8/stack.c:26: if (stackIndex <= 0)
+	ld	l, 0
+	ld	a, (_stackIndex)
+	or	a
+	jr	Z, BCE_STACK_EMPTY
+
+;chip8/stack.c:29: setChip8PC(stack[--stackIndex]);
+	dec	a
+	ld	(_stackIndex), a
+
+	EXX			; PC IS HL'
+	ADD	A
+	LD	HL, _stack
+	OR	L
+	LD	L, A		; HL' => _stack + (_stackIndex * 2)
+	LD	A, (HL)
+	INC	HL		; HL' = (HL')
+	LD	H, (HL)
+	LD	L, A		; HL' now contains new PC
+	EXX
+	jp	BCE_POST_PROCESS
+
+BCE_STACK_EMPTY:
+	jp	BCE_EXIT	; return exit signal
+
 ;chip8/byte_code_executor.c:82: case 0xFB:
 l_executeSingleInstruction_00111:
 ;chip8/byte_code_executor.c:83: scrlRight();
@@ -250,7 +268,7 @@ BCE_00DX:
 	jp	BCE_POST_PROCESS
 
 ;chip8/byte_code_executor.c:113: case 0x1: {
-l_executeSingleInstruction_00121:
+BCE_1XXX:
 ;chip8/instr_pc.h:47: const uint16_t a = addr12Bit;
 	ld	a, (_currentInstruction + 1)
 	ld	l, a

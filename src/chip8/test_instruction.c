@@ -243,6 +243,7 @@ void setup_ret_from_subroutine() {
 
 void verify_ret_from_subroutine() {
   expectEqualPtrs((uint16_t *)getChip8PC(), (uint16_t *)0xF000, "PC");
+  expectEqualBytes(stackIndex, 0, "Stack Index");
   expectTrue(appRunning, "appRunning");
 }
 
@@ -742,7 +743,7 @@ void main() {
 
   assert(skips_dbl_word_instruction);
 
-  // assert(bad_jump);
+  assertTerminates(bad_jump);
 
   printf(testFailure ? RED "Tests Failed\r\n" RESET : BRIGHT_WHITE "All Passed\r\n" RESET);
 }

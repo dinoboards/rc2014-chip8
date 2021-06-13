@@ -4,9 +4,6 @@
 #include "xstdio.h"
 #include <stdio.h>
 
-uint16_t stack[MAX_STACK];
-byte     stackIndex = 0;
-
 /**
  * @brief Push the current value of chip8PC onto the stack
  * @return (void)
@@ -18,17 +15,4 @@ void pushPc() {
   }
 
   stack[stackIndex++] = getChip8PC();
-}
-
-/**
- * @brief pop from stack and update chip8PC pointer
- * @return true if stack is empty, and was unable to pop anything
- */
-bool popPc() {
-  if (stackIndex <= 0)
-    return true;
-
-  setChip8PC(stack[--stackIndex]);
-
-  return false;
 }

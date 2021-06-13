@@ -3,8 +3,11 @@
 
 #include "datatypes.h"
 
-#define registers  ((byte *)(0x100))
-#define _registers 0x100
+#define MAX_STACK 16
+
+extern byte                  __at 0x0100 registers[16];
+extern byte /*__at 0x01D0 */ stackIndex;
+extern uint16_t              __at 0x01E0 stack[MAX_STACK];
 
 extern uint16_t getChip8PC();
 extern void     setChip8PC(uint16_t pc) __z88dk_fastcall;
