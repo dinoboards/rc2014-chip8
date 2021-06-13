@@ -328,26 +328,20 @@ BCE_3XXX:	; SE Vx, byte
 	jp	NZ, BCE_POST_PROCESS
 ; skipNextInstruction()
 	exx
-	push	hl
-	exx
-	pop	hl
-	ld	c, (hl)
+
+	ld	a, (hl)
+	cp	0xF0
+	jr	nz, l_executeSingleInstruction_00194
 	inc	hl
-	ld	b, (hl)
-	ld	a, c
-	sub	a,0xf0
-	or	a, b
-	jr	NZ,l_executeSingleInstruction_00194
-	exx
+	ld	a, (hl)
+	or	a
+	jr	nz, l_executeSingleInstruction_00194a
+
 	inc	hl
-	inc	hl
-	inc	hl
-	inc	hl
-	exx
-	jp	BCE_POST_PROCESS
+
 l_executeSingleInstruction_00194:
-	exx
 	inc	hl
+l_executeSingleInstruction_00194a:
 	inc	hl
 	exx
 ;chip8/byte_code_executor.c:126: break;
