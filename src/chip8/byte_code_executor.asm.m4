@@ -327,67 +327,58 @@ BCE_2XXX: 	; CALL XXX
 
 BCE_2XXX_INVALID_ADDR:
 ; printf("Illegal jump to %04X at %p\r\n", a, chip8PC - 1);
-	dec	de		; current chip8 PC is in DE
-	dec	de
-	push	de
-	push	hl		; Address to jump to
-	LD	hl,___str_1
-	push	hl
+	DEC	DE		; CURRENT CHIP8 PC IS IN DE
+	DEC	DE
+	PUSH	DE
+	PUSH	HL		; ADDRESS TO JUMP TO
+	LD	HL,___str_1
+	PUSH	HL
 	CALL	_applicationExit
-	LD	hl, 6
-	add	hl, sp
-	LD	sp, hl
+	LD	HL, 6
+	ADD	HL, SP
+	LD	SP, HL
 	JP	BCE_EXIT_ERROR
 
 BCE_STACK_OVERFLOWED:
 ; printf("Stack overflow\r\n");
-	LD	hl,___str_1
-	push	hl
+	LD	HL, ___str_1
+	PUSH	HL
 	CALL	_applicationExit
-	pop	af
+	POP	AF
 	JP	BCE_EXIT_ERROR
 
-;chip8/byte_code_executor.c:124: case 0x3: {
 BCE_3XXX:	; SE Vx, byte
-
 ; if (registers[nibble2nd] == lowByte)
-	LD	a, (BC)
-	and	0x0f
-	LD	l, a
-	LD	h, 0x01		; HL => REGISTERS[NIBBLE2ND]
-	LD	e, (hl)		; E = VX
-	inc	bc
-	LD	a, (bc)		; A => LOWBYTE (XX)
-	CP	e		; DO COMPARISON
+	LD	A, (BC)
+	AND	$0F
+	LD	L, A
+	LD	H, $01		; HL => REGISTERS[NIBBLE2ND]
+	LD	E, (HL)		; E = VX
+	INC	BC
+	LD	A, (BC)		; A => LOWBYTE (XX)
+	CP	E		; DO COMPARISON
 	JP	NZ, BCE_POST_PROCESS
 
 	SKIP_NEXT_INSTRUCTION()
 	JP	BCE_POST_PROCESS
 
-;chip8/byte_code_executor.c:129: case 0x4: {
-BCE_4XXX:
-;chip8/instr_pc.h:37: if (registers[nibble2nd] != lowByte)
-	LD	e, c
-	LD	d, b
-	LD	a, (de)
-	and	a,0x0f
-	LD	l, a
-	LD	a,0x00
-	inc	a
-	LD	h, a
-	LD	e, (hl)
-	inc	bc
-	LD	a, (bc)
-	sub	a, e
-	JP	Z,BCE_POST_PROCESS
+BCE_4XXX:	; SNE Vx, byte
+; if (registers[nibble2nd] != lowByte)
+	LD	A, (BC)
+	AND	A, $0F
+	LD	L, A
+	LD	H, $01
+	LD	E, (HL)
+	INC	BC
+	LD	A, (BC)
+	CP	E
+	JP	Z, BCE_POST_PROCESS
 
 	SKIP_NEXT_INSTRUCTION()
 	JP	BCE_POST_PROCESS
 
-;chip8/byte_code_executor.c:134: case 0x5: {
-
 BCE_5XXX:
-;chip8/byte_code_executor.c:136: switch (readFourthNibble) {
+; switch (readFourthNibble) {
 	LD	a, (_currentInstruction + 1)
 	and	a,0x0f
 	or	a
