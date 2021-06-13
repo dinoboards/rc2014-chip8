@@ -62,7 +62,7 @@ lab(skip1byte, uniq()):
 ; LOAD HL TO ADDRESS OF REGISTER AS PER 2ND NIBBLE
 ; ASSUME BC IS _currentInstruction
 define(`SET_HL_REG_2nd', `
-	LD	A, (BC)
+	LD	A, IYH
 	AND	0x0F
 	LD	L, A
 	LD	H, REGISTERS / 256		; HL => REGISTERS[NIBBLE2ND]
@@ -190,13 +190,13 @@ BCE_FIRST_NIBBLE_TABLE:
 ;chip8/byte_code_executor.c:65: case 0x0: {
 BCE_0XXX:
 ;chip8/byte_code_executor.c:66: switch (highByte) {
-	LD	a, (bc)
+	LD	a, IYH
 	or	a, a
 	JP	NZ, BCE_BAD_INSTRUCTION
 
 ; BCE_00XX (PART 1):
 ; switch (lowByte) {
-	LD	A, (_currentInstruction + 1)
+	LD	A, IYL
 	CP	A, $E0
 	JR	Z, BCE_00E0
 	CP	A, $EE
@@ -252,8 +252,8 @@ BCE_00FC:	; SCRL LEFT
 
 BCE_00XX:
 ; (nibble3rd) {
-	INC	BC
-	LD	A, (BC)
+	; INC	BC
+	LD	A, IYL
 	AND	A, $F0
 
 	CP	A, $C0
@@ -325,9 +325,9 @@ BCE_2XXX: 	; CALL XXX
 	LD	(HL), D			; (STACK) = DE
 
 	; RETRIEVE 12 BIT CALL ADDR
-	LD	a, (_currentInstruction + 1)
+	LD	a, IYL
 	LD	l, a
-	LD	a, (_currentInstruction)
+	LD	a, IYH
 	and	a, 0x0f
 	LD	h, a
 
@@ -363,8 +363,7 @@ BCE_3XXX:	; SE Vx, byte
 ; if (registers[nibble2nd] == lowByte)
 	SET_HL_REG_2nd()
 	LD	E, (HL)		; E = VX
-	INC	BC
-	LD	A, (BC)		; A => LOWBYTE (XX)
+	LD	A, IYL		; A => LOWBYTE (XX)
 	CP	E		; DO COMPARISON
 	JP	NZ, BCE_POST_PROCESS
 
@@ -375,8 +374,7 @@ BCE_4XXX:	; SNE Vx, byte
 ; if (registers[nibble2nd] != lowByte)
 	SET_HL_REG_2nd()
 	LD	E, (HL)
-	INC	BC
-	LD	A, (BC)
+	LD	A, IYL
 	CP	E
 	JP	Z, BCE_POST_PROCESS
 
@@ -385,7 +383,7 @@ BCE_4XXX:	; SNE Vx, byte
 
 BCE_5XXX:
 ; switch (readFourthNibble) {
-	LD	A, (_currentInstruction + 1)
+	LD	A, IYL
 	AND	A, $0F
 	OR	A
 	JR	Z, BCE_5XX0
@@ -400,8 +398,7 @@ BCE_5XX0:	; SE Vx, Vy
 	SET_HL_REG_2nd()
 	LD	E, (HL)		; E = VX
 
-	INC	BC
-	LD	A, (BC)
+	LD	A, IYL
 	RLCA
 	RLCA
 	RLCA
@@ -427,8 +424,7 @@ BCE_5XX0:	; SE Vx, Vy
 
 BCE_6XXX:	; LD Vx, byte
 	SET_HL_REG_2nd()
-	INC	BC
-	LD	A, (BC)
+	LD	A, IYL
 	LD	(HL), A
 	JP	BCE_POST_PROCESS
 
@@ -465,7 +461,7 @@ l_executeSingleInstruction_00134:
 ;chip8/byte_code_executor.c:164: case 0x8: {
 BCE_8XXX:
 ;chip8/byte_code_executor.c:166: switch (readFourthNibble) {
-	LD	a, (_currentInstruction + 1)
+	LD	a, IYL
 	and	a,0x0f
 	jr	Z, BCE_8XX0
 	dec	a
@@ -486,13 +482,12 @@ BCE_8XXX:
 	JP	Z, BCE_8XXE
 	JP	BCE_BAD_INSTRUCTION
 
-BCE_8XX0:
-	LD	hl, (_currentInstruction)
-	LD	a, l
+BCE_8XX0:	; LD Vx, Vy
+	LD	a, IYH
 	and	a, 0x0f
 	LD	d,0x100 / 256
 	LD	e, a
-	LD	a, h
+	LD	a, IYL
 	rlca
 	rlca
 	rlca
@@ -506,11 +501,11 @@ BCE_8XX0:
 
 BCE_8XX1:
 	LD	d, 0x100 / 256
-	LD	a, (_currentInstruction)
+	LD	a, IYH
 	and	a, 0x0F
 	LD	e, a
 	LD	h, d
-	LD	a, (_currentInstruction + 1)
+	LD	a, IYL
 	rlca
 	rlca
 	rlca
@@ -524,12 +519,12 @@ BCE_8XX1:
 
  BCE_8XX2:
 	LD	d, 0x100 / 256
-	LD	a, (_currentInstruction)
+	LD	a, IYH
 	and	a, 0x0F
 	LD	e, a
 ;
 	LD	h, d
-	LD	a, (_currentInstruction + 1)
+	LD	a, IYL
 	rlca
 	rlca
 	rlca
@@ -543,18 +538,14 @@ BCE_8XX1:
 
 BCE_8XX3:
 ;chip8/instr_registers.h:211: inline void xorVxVy() { registers[nibble2nd] ^= registers[nibble3rd]; }
-	LD	l, c
-	LD	h, b
-	LD	a, (hl)
+	LD	a, IYH
 	and	a,0x0f
 	LD	d,0x00
 	LD	e, a
 	LD	a, d
 	inc	a
 	LD	d, a
-	LD	l, c
-	LD	h, b
-	LD	a, (hl)
+	LD	a, IYH
 	and	a,0x0f
 	LD	l, a
 	LD	a,0x00
@@ -562,8 +553,7 @@ BCE_8XX3:
 	LD	h, a
 	LD	a, (hl)
 	LD	(ix-1),a
-	inc	bc
-	LD	a, (bc)
+	LD	a, IYL
 	rlca
 	rlca
 	rlca
@@ -587,7 +577,7 @@ BCE_8XX5:
 
 BCE_8XX6:
 ;chip8/instr_registers.h:143: uint8_t *register2ndNibble = &registers[nibble2nd];
-	LD	a, (bc)
+	LD	a, IYH
 	and	a,0x0f
 	LD	b,0x00
 	LD	c, a
@@ -611,7 +601,7 @@ BCE_8XX7:
 	JP	BCE_POST_PROCESS
 BCE_8XXE:
 ;chip8/instr_registers.h:149: uint8_t *register2ndNibble = &registers[nibble2nd];
-	LD	a, (bc)
+	LD	a, IYH
 	and	a,0x0f
 	LD	b,0x00
 	LD	c, a
@@ -634,7 +624,7 @@ BCE_8XXE:
 
 BCE_9XXX:
 ;chip8/byte_code_executor.c:218: if (readFourthNibble == 0)
-	LD	a, (_currentInstruction + 1)
+	LD	a, IYL
 	and	a,0x0f
 	JP	NZ,BCE_BAD_INSTRUCTION
 ;chip8/instr_pc.h:42: if (registers[nibble2nd] != registers[nibble3rd])
@@ -647,8 +637,7 @@ BCE_9XXX:
 	inc	a
 	LD	h, a
 	LD	e, (hl)
-	inc	bc
-	LD	a, (bc)
+	LD	a, IYL
 	rlca
 	rlca
 	rlca
@@ -667,10 +656,10 @@ BCE_9XXX:
 ;chip8/byte_code_executor.c:225: case 0xA:
 l_executeSingleInstruction_00151:
 ;chip8/byte_code_executor.c:226: ldIAddr();
-	LD	a, (_currentInstruction + 1)
+	LD	a, IYL
 	LD	e, a
 	LD	d,0x00
-	LD	a, (bc)
+	LD	a, IYH
 	and	a,0x0f
 	LD	b, a
 	LD	c,0x00
@@ -687,7 +676,7 @@ l_executeSingleInstruction_00151:
 ;chip8/byte_code_executor.c:231: case 0xB:
 l_executeSingleInstruction_00152:
 ;chip8/instr_pc.h:58: chip8PC = (uint16_t *)(addr12Bit + registers[0]);
-	LD	a, (_currentInstruction + 1)
+	LD	a, IYL
 	LD	l, a
 	LD	h,0x00
 	LD	e, c
@@ -719,7 +708,7 @@ l_executeSingleInstruction_00152:
 	pop	de
 	dec	de
 	dec	de
-	LD	a, (_currentInstruction + 1)
+	LD	a, IYL
 	LD	l, a
 	LD	h,0x00
 	LD	a, (bc)
@@ -742,23 +731,20 @@ l_executeSingleInstruction_00152:
 ;chip8/byte_code_executor.c:235: case 0xC: {
 l_executeSingleInstruction_00153:
 ;chip8/byte_code_executor.c:236: rnd();
-	LD	l, c
-	LD	h, b
-	LD	a, (hl)
+	LD	a, IYH
 	and	a,0x0f
 	LD	d,0x00
 	LD	e, a
 	LD	a, d
 	inc	a
 	LD	d, a
-	push	bc
+	push	iy
 	push	de
 	CALL	_chip8Rand
 	LD	a, l
 	pop	de
-	pop	hl
-	inc	hl
-	LD	c, (hl)
+	pop	iy
+	LD	c, IYL
 	and	a, c
 	LD	(de), a
 ;chip8/byte_code_executor.c:237: break;
@@ -772,7 +758,7 @@ l_executeSingleInstruction_00154:
 ;chip8/byte_code_executor.c:245: case 0xE: {
 BCE_EXXX:
 ;chip8/byte_code_executor.c:246: switch (lowByte) {
-	LD	a, (_currentInstruction + 1)
+	LD	a, IYL
 	cp	0x9e
 	jr	Z, BCE_EX9E
 	sub	a,0xa1
@@ -807,7 +793,7 @@ BCE_EXA1:
 ;chip8/byte_code_executor.c:264: case 0xF: {
 BCE_FXXX:
 ;chip8/byte_code_executor.c:265: switch (lowByte) {
-	LD	a, (_currentInstruction + 1)
+	LD	a, IYL
 	or	a, a
 	jr	Z,l_executeSingleInstruction_00161
 	cp	a,0x01
@@ -836,7 +822,7 @@ BCE_FXXX:
 ;chip8/byte_code_executor.c:267: case 0x00:
 l_executeSingleInstruction_00161:
 ;chip8/byte_code_executor.c:268: if (highByte == 0xF0)
-	LD	a, (bc)
+	LD	a, IYH
 	sub	a,0xf0
 	JP	NZ,BCE_BAD_INSTRUCTION
 ;chip8/byte_code_executor.c:270: ldILargeAddr();
@@ -967,7 +953,7 @@ l_executeSingleInstruction_00177:
 ;chip8/instr_registers.h:82: __endasm;
 	LD	de, (_registerI)
 	LD	hl, 0x100
-	LD	a, (_currentInstruction)
+	LD	a, IYH
 	and	a, 0x0F
 	inc	a
 	LD	c, a
@@ -980,7 +966,7 @@ l_executeSingleInstruction_00178:
 ;chip8/instr_registers.h:64: __endasm;
 	LD	hl, (_registerI)
 	LD	de, 0x100
-	LD	a, (_currentInstruction)
+	LD	a, IYH
 	and	a, 0x0F
 	inc	a
 	LD	c, a
@@ -998,7 +984,8 @@ BCE_BAD_INSTRUCTION:
 	dec	de
 	dec	de
 	push	de
-	LD	hl, (_currentInstruction)
+	push	iy
+	pop	hl
 	CALL	_invertByteOrder
 	pop	de
 	LD	bc,___str_2+0
