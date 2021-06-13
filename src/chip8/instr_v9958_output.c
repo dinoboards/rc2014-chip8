@@ -19,6 +19,7 @@ extern void v9958DrawPlane(byte *pSpriteData) __z88dk_fastcall;
 extern void v9958DrawDblPlane(byte *pSpriteData) __z88dk_fastcall;
 
 void v9958Draw() {
+#ifndef CPM
   registers[15] = 0;
 
   xx = (registers[nibble2nd] * 2) & PIXEL_WIDTH_MASK;
@@ -50,6 +51,7 @@ void v9958Draw() {
     _color = 3;
   } else
     v9958DrawPlane((byte *)registerI);
+#endif
 }
 
 void v9958DrawDblPlane(byte *pSpriteData) __z88dk_fastcall {

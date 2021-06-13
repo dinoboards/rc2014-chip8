@@ -31,6 +31,8 @@
 	EXTERN	_applicationExit
 	EXTERN	_stack
 	EXTERN	_stackIndex
+	EXTERN	_tmsDraw
+	PUBLIC	_drawFunctionPtr
 
 REGISTERS	EQU	$100
 
@@ -193,7 +195,7 @@ BCE_FIRST_NIBBLE_TABLE:
 	db	0
 	JP	l_executeSingleInstruction_00153
 	db	0
-	JP	l_executeSingleInstruction_00154
+	JP	BCE_DXXX
 	db	0
 	JP	BCE_EXXX
 	db	0
@@ -703,14 +705,16 @@ l_executeSingleInstruction_00153:
 	LD	c, IYL
 	and	a, c
 	LD	(de), a
-;chip8/byte_code_executor.c:237: break;
 	JP	BCE_POST_PROCESS
-;chip8/byte_code_executor.c:240: case 0xD: {
-l_executeSingleInstruction_00154:
+
+
+BCE_DXXX:
 ;chip8/byte_code_executor.c:241: draw();
-	CALL	_draw
-;chip8/byte_code_executor.c:242: break;
+	CALL	_tmsDraw
+_drawFunctionPtr	EQU	$-2
+
 	JP	BCE_POST_PROCESS
+
 ;chip8/byte_code_executor.c:245: case 0xE: {
 BCE_EXXX:
 ;chip8/byte_code_executor.c:246: switch (lowByte) {

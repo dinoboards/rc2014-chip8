@@ -14,8 +14,11 @@ extern void scrlUp();
 extern void scrlLeft();
 extern void scrlRight();
 
+typedef void (*drawFunction)();
+
 extern void drawFrame();
 
+extern drawFunction drawFunctionPtr;
 #define videoPlane() _color = nibble2nd
 
 #endif

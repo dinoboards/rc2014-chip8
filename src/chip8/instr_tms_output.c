@@ -277,6 +277,7 @@ static byte xx;
 static byte yy;
 
 void tmsDraw() {
+#ifndef CPM
   drawCommand.length = fourthNibble;
   xx = registers[nibble2nd];
   yy = registers[nibble3rd];
@@ -298,6 +299,7 @@ void tmsDraw() {
     else
       drawSpriteEvenEven();
   }
+#endif
 }
 
 static tmsClearParams colourParams = {TMS_MD1_COLOUR_TABLE, 32, (COL_DRKGREEN << 4) + COL_BLACK};

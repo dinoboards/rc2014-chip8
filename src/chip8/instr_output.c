@@ -7,21 +7,7 @@
 #include "vdp.h"
 #include <stdio.h>
 
-void draw() {
-  // int xx = (registers[nibble2nd] * 2) & 255; //PIXEL_WIDTH_MASK;
-  // int yy = (registers[nibble3rd] * 2) & 127 ;//PIXEL_HEIGHT_MASK;
-
-  // printf("  Draw(%d, %d, %d), PLANE: %d, I: %04X", xx, yy, fourthNibble, _color, registerI);
-#ifndef CPM
-  if (videoResMode == VideoResModeLow)
-    tmsDraw();
-  else
-    v9958Draw();
-#endif
-}
-
 void cls() {
-  // printf("cls\r\n");
 #ifndef CPM
   if (videoResMode == VideoResModeLow)
     tmsCls();
@@ -56,6 +42,8 @@ bool videoInit() {
 #endif
 
   videoResMode = VideoResModeLow;
+  drawFunctionPtr = tmsDraw;
+
   videoPixelWidth = 64;
   videoPixelHeight = 32;
   videoPixelWidthMask = 63;
@@ -71,6 +59,7 @@ void videoClose() { tmsVideoClose(); }
 
 void videoHigh() {
   videoResMode = VideoResModeHigh;
+  drawFunctionPtr = v9958Draw;
   videoPixelWidth = 128;
   videoPixelHeight = 64;
   videoPixelWidthMask = 127;
