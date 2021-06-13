@@ -5,46 +5,6 @@
 #include "fontsets.h"
 #include "timers.h"
 
-void addVxVy() __naked {
-  // clang-format off
-  __asm
-    ; // LOAD VY b (3rdNibble)
-    ld	    a, (_currentInstruction + 1)
-    rlca
-    rlca
-    rlca
-    rlca
-    and	    a, 0x0F
-    ld      l, a
-    ld      h, _registers / 256
-    ld      b, (hl)
-
-    ; // LOAD VX a (2ndNibble)
-    ld	    a, (_currentInstruction)
-    and	    a, 0x0F
-    ld	    l, a
-    ld	    a, (hl)
-
-    add     a, b
-    ld      (hl), a
-    jr     nc, addVxVyClrF
-
-    ld      a, 1
-    ld	    (_registers + 0x0F), a
-    ret
-
-addVxVyClrF:
-    xor     a
-    ld	    (_registers + 0x0F), a
-    ret
-  __endasm;
-  // clang-format on
-
-  // const uint16_t i = registers[nibble2nd] + registers[nibble3rd];
-  // registers[secondNibble] = i;
-  // registers[0xF] = i > 255;
-}
-
 uint8_t *register2ndNibble;
 
 void subnVxVy() {
