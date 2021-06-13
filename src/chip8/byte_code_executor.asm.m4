@@ -57,6 +57,15 @@ lab(skip1byte, uniq()):
 	exx
 ')
 
+; LOAD HL TO ADDRESS OF REGISTER AS PER 2ND NIBBLE
+; ASSUME BC IS _currentInstruction
+define(`SET_HL_REG_2nd', `
+	LD	A, (BC)
+	AND	0x0F
+	LD	L, A
+	LD	H, 0x01		; HL => REGISTERS[NIBBLE2ND]
+')
+
 	SECTION code_compiler
 ; uint16_t getChip8PC();
 	PUBLIC	_getChip8PC
@@ -154,7 +163,7 @@ BCE_FIRST_NIBBLE_TABLE:
 	db	0
 	JP	BCE_5XXX
 	db	0
-	JP	l_executeSingleInstruction_00133
+	JP	BCE_6XXX
 	db	0
 	JP	l_executeSingleInstruction_00134
 	db	0
@@ -349,10 +358,7 @@ BCE_STACK_OVERFLOWED:
 
 BCE_3XXX:	; SE Vx, byte
 ; if (registers[nibble2nd] == lowByte)
-	LD	A, (BC)
-	AND	$0F
-	LD	L, A
-	LD	H, $01		; HL => REGISTERS[NIBBLE2ND]
+	SET_HL_REG_2nd()
 	LD	E, (HL)		; E = VX
 	INC	BC
 	LD	A, (BC)		; A => LOWBYTE (XX)
@@ -364,10 +370,7 @@ BCE_3XXX:	; SE Vx, byte
 
 BCE_4XXX:	; SNE Vx, byte
 ; if (registers[nibble2nd] != lowByte)
-	LD	A, (BC)
-	AND	A, $0F
-	LD	L, A
-	LD	H, $01
+	SET_HL_REG_2nd()
 	LD	E, (HL)
 	INC	BC
 	LD	A, (BC)
@@ -379,27 +382,19 @@ BCE_4XXX:	; SNE Vx, byte
 
 BCE_5XXX:
 ; switch (readFourthNibble) {
-	LD	a, (_currentInstruction + 1)
-	and	a,0x0f
-	or	a
-	jr	Z, BCE_5XX0
-	cp	2
-	jr	Z, BCE_5XX2
-	cp	3
-	jr	Z, BCE_5XX3
+	LD	A, (_currentInstruction + 1)
+	AND	A, $0F
+	OR	A
+	JR	Z, BCE_5XX0
+	CP	2
+	JR	Z, BCE_5XX2
+	CP	3
+	JR	Z, BCE_5XX3
 	JP	BCE_BAD_INSTRUCTION
 
-;chip8/byte_code_executor.c:137: case 0x0:
-BCE_5XX0:
-;chip8/instr_pc.h:32: if (registers[nibble2nd] == registers[nibble3rd])
-	LD	e, c
-	LD	d, b
-	LD	a, (de)
-	and	a,0x0f
-	LD	l, a
-	LD	a,0x00
-	inc	a
-	LD	h, a
+BCE_5XX0:	; SE Vx, Vy
+; : if (registers[nibble2nd] == registers[nibble3rd])
+	SET_HL_REG_2nd()
 	LD	e, (hl)
 	inc	bc
 	LD	a, (bc)
@@ -431,7 +426,7 @@ BCE_5XX0:
 ;chip8/byte_code_executor.c:147: break;
 	JP	BCE_POST_PROCESS
 ;chip8/byte_code_executor.c:155: case 0x6:
-l_executeSingleInstruction_00133:
+BCE_6XXX:
 ;chip8/byte_code_executor.c:156: ldVxByte();
 	LD	l, c
 	LD	h, b
@@ -795,14 +790,11 @@ BCE_EXXX:
 
 BCE_EX9E:
 ; if (isKeyDown(registers[nibble2nd]))
-	LD	a, (bc)
-	and	0x0f
-	LD	l, a
-	LD	h, 0x01
-	LD	l, (hl)
+	SET_HL_REG_2nd()
+	LD	L, (HL)
 	CALL	_isKeyDown
-	LD	a, l
-	or	a, a
+	LD	A, L
+	OR	A, A
 	JP	Z, BCE_POST_PROCESS
 
 	SKIP_NEXT_INSTRUCTION()
@@ -811,16 +803,11 @@ BCE_EX9E:
 ;chip8/byte_code_executor.c:252: case 0xA1: {
 BCE_EXA1:
 ;chip8/instr_pc.h:74: if (!isKeyDown(registers[nibble2nd]))
-	LD	a, (bc)
-	and	a,0x0f
-	LD	l, a
-	LD	a,0x00
-	inc	a
-	LD	h, a
-	LD	l, (hl)
+	SET_HL_REG_2nd()
+	LD	L, (HL)
 	CALL	_isKeyDown
-	LD	a, l
-	or	a, a
+	LD	A, L
+	OR	A
 	JP	NZ, BCE_POST_PROCESS
 
 	SKIP_NEXT_INSTRUCTION()
