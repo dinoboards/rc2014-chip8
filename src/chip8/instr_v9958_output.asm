@@ -10,8 +10,10 @@
 	EXTERN	_fourthNibble
 	EXTERN	__color
 	EXTERN	_registerI
-	EXTERN	_v9958DrawDblPlane
+	; EXTERN	_v9958DrawDblPlane
 	EXTERN	_v9958DrawPlane
+	EXTERN	_yAddOne
+	EXTERN	_drawRow
 
 REGISTERS		EQU	$100
 PIXEL_WIDTH_MASK	EQU 	255
@@ -149,10 +151,63 @@ l_v9958DrawX_00105:
 	ret
 
 l_v9958DrawX_00107:
-;chip8/instr_v9958_output.c:52: v9958DrawPlane((byte *)registerI);
+; v9958DrawPlane((byte *)registerI);
 	ex	de, hl
 	jp	_v9958DrawPlane
 
 else
 	ret
 endif
+
+
+_v9958DrawDblPlane:
+ifndef CPM
+	push	hl
+	pop	ix
+	;ex	de, hl				; registerI - sprite data in IX
+
+	ld	b, 0x10				; LOOP COUNTER FOR 16 ROWS
+
+l_v9958DrawDblPlane_00103:
+; yAddOne = (yy + 1) & PIXEL_HEIGHT_MASK;
+	ld	a, (_yy)
+	inc	a
+	and	PIXEL_HEIGHT_MASK
+	ld	(_yAddOne), a
+
+; drawRow(*pSpriteData++);
+	ld	l, (ix)
+	; ld	l, a
+	inc	ix
+	push	bc
+	; push	de
+	call	_drawRow
+	; pop	de
+	pop	bc
+;chip8/instr_v9958_output.c:27: xx += 16;
+	ld	a,(_xx + 0)
+	add	a,0x10
+	ld	(_xx+0), a
+;chip8/instr_v9958_output.c:29: drawRow(*pSpriteData++);
+	ld	l, (ix)
+	; ld	l, a
+	inc	ix
+	push	bc
+	; push	de
+	call	_drawRow
+	; pop	de
+	pop	bc
+;chip8/instr_v9958_output.c:30: xx -= 16;
+	ld	a,(_xx + 0)
+	ld	hl,_xx
+	add	a,0xf0
+	ld	(hl), a
+;chip8/instr_v9958_output.c:32: yy = (yAddOne + 1) & PIXEL_HEIGHT_MASK;
+	ld	a,(_yAddOne + 0)
+	inc	a
+	and	a,0x7f
+	ld	(_yy+0), a
+
+	djnz	l_v9958DrawDblPlane_00103
+endif
+	ret

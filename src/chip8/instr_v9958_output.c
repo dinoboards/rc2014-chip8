@@ -18,20 +18,20 @@ extern void drawRow(byte pSpriteData) __z88dk_fastcall;
 extern void v9958DrawPlane(byte *pSpriteData) __z88dk_fastcall;
 extern void v9958DrawDblPlane(byte *pSpriteData) __z88dk_fastcall;
 
-void v9958DrawDblPlane(byte *pSpriteData) __z88dk_fastcall {
-  for (byte row = 16; row > 0; row--) {
-    yAddOne = (yy + 1) & PIXEL_HEIGHT_MASK;
+// void v9958DrawDblPlane(byte *pSpriteData) __z88dk_fastcall {
+//   for (byte row = 16; row > 0; row--) {
+//     yAddOne = (yy + 1) & PIXEL_HEIGHT_MASK;
 
-    drawRow(*pSpriteData++);
+//     drawRow(*pSpriteData++);
 
-    xx += 16;
+//     xx += 16;
 
-    drawRow(*pSpriteData++);
-    xx -= 16;
+//     drawRow(*pSpriteData++);
+//     xx -= 16;
 
-    yy = (yAddOne + 1) & PIXEL_HEIGHT_MASK;
-  }
-}
+//     yy = (yAddOne + 1) & PIXEL_HEIGHT_MASK;
+//   }
+// }
 
 void v9958Cls() { clearScreenBank0(0); }
 
