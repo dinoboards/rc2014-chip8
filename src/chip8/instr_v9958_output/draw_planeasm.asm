@@ -8,7 +8,7 @@
 	include	"v9958.inc"
 
 ; INPUTS
-;	HL	=> registerI
+;	IX	=> registerI
 ;	_fourthNibble
 ;	_yAddOn
 ;	__color
@@ -18,11 +18,10 @@
 ;	B	=> counter
 ;	HL	-> _fourthNibble
 ;	_yy	=> incremented
-;	DE	=> registerI incremented
+;	IX	=> registerI incremented
 ;	E'	=> spriteRowData passed to _drawRow
 
 _v9958DrawPlane:
-	ex	de, hl
 ; for(byte row = fourthNibble; row > 0; row--) {
 	ld	hl, _fourthNibble
 	ld	b, (hl)
@@ -35,17 +34,15 @@ _v9958DrawPlane:
 
 l_v9958DrawPlane_00103:
 ; yAddOne = (yy + 1) & PIXEL_HEIGHT_MASK;
-
 	ld	a, (_yy)
 	inc	a
 	and	a,0x7f
 	ld	(hl), a
 
 ; drawRow(*pSpriteData++);
-	ld	a, (de)
-	inc	de
 	exx
-	ld	e, a
+	ld	e, (IX)
+	inc	IX
 	call	_drawRow
 	exx
 

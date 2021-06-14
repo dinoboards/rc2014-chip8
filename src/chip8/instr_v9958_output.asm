@@ -10,7 +10,6 @@
 	EXTERN	_fourthNibble
 	EXTERN	__color
 	EXTERN	_registerI
-	; EXTERN	_v9958DrawDblPlane
 	EXTERN	_v9958DrawPlane
 	EXTERN	_yAddOne
 	EXTERN	_drawRow
@@ -62,7 +61,7 @@ l_v9958DrawX_00127:
 	ld	b, a
 
 ; v9958DrawDblPlane((byte *)registerI);
-	ld	de, (_registerI)
+	ld	ix, (_registerI)
 
 ; if (fourthNibble == 0) {
 	ld	a, IYL
@@ -84,7 +83,6 @@ l_v9958DrawX_00127:
 
 ; v9958DrawDblPlane((byte *)registerI);
 	push	bc
-	ex	de, hl		; HL => *registerI
 	call	_v9958DrawDblPlane
 	pop	bc
 
@@ -97,19 +95,15 @@ l_v9958DrawX_00127:
 	ld	(hl), 0x02
 
 ; v9958DrawDblPlane((byte *)(registerI + 32));
-	ld	hl, (_registerI)
-	ld	de,0x0020
-	add	hl, de
 	call	_v9958DrawDblPlane
 
 ; _color = 3;
-	ld	hl,__color
-	ld	(hl),0x03
+	ld	hl, __color
+	ld	(hl), 0x03
 	RET
 
 l_v9958DrawX_00102:
 ; v9958DrawDblPlane((byte *)registerI);
-	ex	de, hl
 	jp	_v9958DrawDblPlane
 
 
@@ -120,12 +114,11 @@ l_v9958DrawX_00105:
 	jr	Z, l_v9958DrawX_00107
 
 ; _color = 1;
-	ld	hl,__color
-	ld	(hl),0x01
+	ld	hl, __color
+	ld	(hl), 0x01
 
 ; v9958DrawPlane((byte *)registerI);
 	push	bc
-	ex	de, hl
 	call	_v9958DrawPlane
 	pop	bc
 
@@ -138,11 +131,6 @@ l_v9958DrawX_00105:
 	ld	(hl), 0x02
 
 ; v9958DrawPlane((byte *)(registerI + fourthNibble));
-	ld	hl ,_fourthNibble
-	ld	c, (hl)
-	ld	b, 0x00
-	ld	hl, (_registerI)
-	add	hl, bc
 	call	_v9958DrawPlane
 
 ; _color = 3;
@@ -152,7 +140,6 @@ l_v9958DrawX_00105:
 
 l_v9958DrawX_00107:
 ; v9958DrawPlane((byte *)registerI);
-	ex	de, hl
 	jp	_v9958DrawPlane
 
 else
@@ -161,25 +148,24 @@ endif
 
 
 ; INPUTS:
-;	HL	=> registerI
+;	IX	=> registerI
 ;	_yAddOne
 ;	_xx
 ;	_yy
 ;
-; CONSUMES
+; MUTATES
 ;	IX	=> registerI (incremented)
 ;	L'	=> __color
 ;	B	=> counter
 
 _v9958DrawDblPlane:
 ifndef CPM
-	push	hl
-	pop	ix			; registerI - sprite data in IX
-
 	exx
 	ld	a, (__color)
 	ld	l, a			; PRELOAD __color INTO L FOR _drawRow, _drawSegment and _testSegment
 	exx
+
+	ld	hl, _xx
 
 	ld	b, 0x10			; LOOP COUNTER FOR 16 ROWS
 
@@ -196,26 +182,29 @@ l_v9958DrawDblPlane_00103:
 	inc	ix
 	call	_drawRow
 	exx
+
 ; xx += 16;
-	ld	a,(_xx + 0)
-	add	a,0x10
-	ld	(_xx+0), a
+	ld	a, (hl)
+	add	a, 0x10
+	ld	(hl), a
+
 ; drawRow(*pSpriteData++);
 	exx
 	ld	e, (ix)
 	inc	ix
 	call	_drawRow
 	exx
+
 ; xx -= 16;
-	ld	a,(_xx + 0)
-	ld	hl,_xx
+	ld	a,(hl)
 	add	a,0xf0
 	ld	(hl), a
+
 ; yy = (yAddOne + 1) & PIXEL_HEIGHT_MASK;
 	ld	a,(_yAddOne + 0)
 	inc	a
 	and	a,0x7f
-	ld	(_yy+0), a
+	ld	(_yy), a
 
 	djnz	l_v9958DrawDblPlane_00103
 endif
