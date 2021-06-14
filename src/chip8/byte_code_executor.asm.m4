@@ -879,7 +879,7 @@ BCE_FXXX:
 	cp	a,0x29
 	JP	Z,l_executeSingleInstruction_00175
 	cp	a,0x33
-	JP	Z,l_executeSingleInstruction_00176
+	JP	Z,BCE_FX33
 	cp	a,0x55
 	JP	Z,l_executeSingleInstruction_00177
 	sub	a,0x65
@@ -982,13 +982,13 @@ l_executeSingleInstruction_00172:
 	LD	a, (hl)
 	LD	(_delayTimer+0), a
 ;chip8/byte_code_executor.c:299: break;
-	jr	BCE_POST_PROCESS
+	jP	BCE_POST_PROCESS
 ;chip8/byte_code_executor.c:302: case 0x18: {
 l_executeSingleInstruction_00173:
 ;chip8/byte_code_executor.c:303: ldStVx();
 	CALL	_ldStVx
 ;chip8/byte_code_executor.c:304: break;
-	jr	BCE_POST_PROCESS
+	jP	BCE_POST_PROCESS
 ;chip8/byte_code_executor.c:307: case 0x1E: {
 l_executeSingleInstruction_00174:
 ;chip8/byte_code_executor.c:308: addIVx();
@@ -1009,19 +1009,55 @@ l_executeSingleInstruction_00174:
 	adc	a, b
 	LD	(hl), a
 ;chip8/byte_code_executor.c:309: break;
-	jr	BCE_POST_PROCESS
+	jP	BCE_POST_PROCESS
 ;chip8/byte_code_executor.c:312: case 0x29: {
 l_executeSingleInstruction_00175:
 ;chip8/byte_code_executor.c:313: ldfIVx();
 	CALL	_ldfIVx
 ;chip8/byte_code_executor.c:314: break;
-	jr	BCE_POST_PROCESS
-;chip8/byte_code_executor.c:317: case 0x33: {
-l_executeSingleInstruction_00176:
-;chip8/byte_code_executor.c:318: bcdIVx();
-	CALL	_bcdIVx
-;chip8/byte_code_executor.c:319: break;
-	jr	BCE_POST_PROCESS
+	jP	BCE_POST_PROCESS
+
+BCE_FX33:	; LD BCD, Vx
+	SET_HL_REG_2nd()
+	LD	A, (HL)
+
+	LD      D, 0
+	CP      100
+	JR      C, BCE_FX33_SKP1
+	INC     D
+
+BCE_FX33_SKP1:
+	CP      200
+	JR      C, BCE_FX33_SKP2
+	INC     D
+
+BCE_FX33_SKP2:
+	LD      C, A
+	LD      B, 8
+	XOR     A
+LOOP:
+	SLA     C
+	ADC     A, A
+	DAA
+	DJNZ    LOOP
+	LD      E, A
+
+	LD	HL, (_registerI)
+	LD	(HL), D
+
+	AND	$F0
+	RRCA
+	RRCA
+	RRCA
+	RRCA
+	INC	HL
+	LD	(HL), A
+	INC	HL
+	LD	A, E
+	AND	$0F
+	LD	(HL), A
+	JR	BCE_POST_PROCESS
+
 ;chip8/byte_code_executor.c:322: case 0x55: {
 l_executeSingleInstruction_00177:
 ;chip8/instr_registers.h:82: __endasm;
