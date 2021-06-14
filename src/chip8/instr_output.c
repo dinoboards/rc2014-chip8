@@ -59,7 +59,7 @@ void videoClose() { tmsVideoClose(); }
 
 void videoHigh() {
   videoResMode = VideoResModeHigh;
-  drawFunctionPtr = v9958Draw;
+  drawFunctionPtr = _color == 3 ? v9958DrawPlane3 : v9958DrawSinglePlane;
   videoPixelWidth = 128;
   videoPixelHeight = 64;
   videoPixelWidthMask = 127;

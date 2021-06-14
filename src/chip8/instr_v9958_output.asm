@@ -2,7 +2,7 @@
 	SECTION	CODE
 	EXTERN	_v9958DrawX
 
-	PUBLIC	_v9958Draw
+	PUBLIC	_v9958DrawPlane3, _v9958DrawSinglePlane
 
 	EXTERN	_currentInstruction
 	EXTERN	_yy
@@ -18,7 +18,8 @@ REGISTERS		EQU	$100
 PIXEL_WIDTH_MASK	EQU 	255
 PIXEL_HEIGHT_MASK	EQU	127
 
-_v9958Draw:
+_v9958DrawPlane3:
+_v9958DrawSinglePlane:
 ifndef CPM
 	LD	HL, REGISTERS + $0F
 	LD	(HL), $00

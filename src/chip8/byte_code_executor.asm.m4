@@ -33,6 +33,8 @@
 	EXTERN	_stackIndex
 	EXTERN	_tmsDraw
 	PUBLIC	_drawFunctionPtr
+	EXTERN	_v9958DrawSinglePlane
+	EXTERN	_v9958DrawPlane3
 
 REGISTERS	EQU	$100
 
@@ -785,7 +787,7 @@ BCE_FXXX:
 	or	a, a
 	jr	Z,l_executeSingleInstruction_00161
 	cp	a,0x01
-	jr	Z,l_executeSingleInstruction_00165
+	jr	Z, BCE_FX01
 	cp	a,0x02
 	jr	Z,l_executeSingleInstruction_00166
 	cp	a,0x07
@@ -823,13 +825,21 @@ l_executeSingleInstruction_00161:
 	exx
 	JP	BCE_POST_PROCESS
 ;chip8/byte_code_executor.c:275: case 0x01: {
-l_executeSingleInstruction_00165:
-;chip8/byte_code_executor.c:276: videoPlane();
-	LD	a, (bc)
-	and	a,0x0f
-	LD	(__color+0), a
-;chip8/byte_code_executor.c:277: break;
+
+ BCE_FX01:	; PLANE X
+	LD	A, (BC)
+	AND	A, $0F
+	LD	(__color), A
+	CP	3
+	JR	Z, BCE_SET_COLOR3
+	LD	HL, _v9958DrawSinglePlane
+	LD	(_drawFunctionPtr), HL
 	JP	BCE_POST_PROCESS
+BCE_SET_COLOR3:
+	LD	HL, _v9958DrawPlane3
+	LD	(_drawFunctionPtr), HL
+	JP	BCE_POST_PROCESS
+
 ;chip8/byte_code_executor.c:280: case 0x02:
 l_executeSingleInstruction_00166:
 ;chip8/byte_code_executor.c:281: if (highByte == 0xF0)
