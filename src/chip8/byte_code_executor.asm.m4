@@ -187,7 +187,7 @@ BCE_FIRST_NIBBLE_TABLE:
 	db	0
 	JP	BCE_9XXX
 	db	0
-	JP	l_executeSingleInstruction_00151
+	JP	BCE_AXXX
 	db	0
 	JP	l_executeSingleInstruction_00152
 	db	0
@@ -741,26 +741,16 @@ BCE_9XX0:	; SNE Vx, Vy
 	SKIP_NEXT_INSTRUCTION()
 	JP	BCE_POST_PROCESS
 
-;chip8/byte_code_executor.c:225: case 0xA:
-l_executeSingleInstruction_00151:
-;chip8/byte_code_executor.c:226: ldIAddr();
-	LD	a, IYL
-	LD	e, a
-	LD	d,0x00
-	LD	a, IYH
-	and	a,0x0f
-	LD	b, a
-	LD	c,0x00
-	LD	a, e
-	LD	hl,_registerI
-	add	a, c
-	LD	(hl), a
-	LD	a, d
-	adc	a, b
-	inc	hl
-	LD	(hl), a
-;chip8/byte_code_executor.c:229: break;
+BCE_AXXX:	; LD I, addr
+	LD	HL, _registerI
+	LD	A, IYL
+	LD	(HL), A
+	INC	HL
+	LD	A, IYH
+	AND	$0F
+	LD	(HL), A
 	JP	BCE_POST_PROCESS
+
 ;chip8/byte_code_executor.c:231: case 0xB:
 l_executeSingleInstruction_00152:
 ;chip8/instr_pc.h:58: chip8PC = (uint16_t *)(addr12Bit + registers[0]);
