@@ -39,6 +39,7 @@
 	EXTERN	_v9958ScrollUp
 	EXTERN	_v9958ScrollLeft
 	EXTERN	_v9958ScrollRight
+	EXTERN	_fonts
 
 REGISTERS	EQU	$100
 
@@ -877,7 +878,7 @@ BCE_FXXX:
 	cp	a,0x1e
 	JP	Z,l_executeSingleInstruction_00174
 	cp	a,0x29
-	JP	Z,l_executeSingleInstruction_00175
+	JP	Z, BCE_FX29
 	cp	a,0x33
 	JP	Z,BCE_FX33
 	cp	a,0x55
@@ -1008,13 +1009,22 @@ l_executeSingleInstruction_00174:
 	LD	a, (hl)
 	adc	a, b
 	LD	(hl), a
-;chip8/byte_code_executor.c:309: break;
 	jP	BCE_POST_PROCESS
-;chip8/byte_code_executor.c:312: case 0x29: {
-l_executeSingleInstruction_00175:
-;chip8/byte_code_executor.c:313: ldfIVx();
-	CALL	_ldfIVx
-;chip8/byte_code_executor.c:314: break;
+
+BCE_FX29:	; ldfIVx
+	SET_HL_REG_2nd()
+	ld	e, (hl)
+
+; registerI = (uint16_t)&fonts[x * 5];
+	ld	bc, _fonts
+	ld	d, 0x00
+	ld	l, e
+	ld	h, d
+	add	hl, hl
+	add	hl, hl
+	add	hl, de
+	add	hl, bc
+	ld	(_registerI), hl
 	jP	BCE_POST_PROCESS
 
 BCE_FX33:	; LD BCD, Vx
