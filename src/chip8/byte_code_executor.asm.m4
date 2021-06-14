@@ -189,7 +189,7 @@ BCE_FIRST_NIBBLE_TABLE:
 	db	0
 	JP	BCE_AXXX
 	db	0
-	JP	l_executeSingleInstruction_00152
+	JP	BCE_BXXX
 	db	0
 	JP	l_executeSingleInstruction_00153
 	db	0
@@ -751,61 +751,38 @@ BCE_AXXX:	; LD I, addr
 	LD	(HL), A
 	JP	BCE_POST_PROCESS
 
-;chip8/byte_code_executor.c:231: case 0xB:
-l_executeSingleInstruction_00152:
-;chip8/instr_pc.h:58: chip8PC = (uint16_t *)(addr12Bit + registers[0]);
-	LD	a, IYL
-	LD	l, a
-	LD	h,0x00
-	LD	e, c
-	LD	d, b
-	LD	a, (de)
-	and	a,0x0f
-	LD	d, a
-	LD	e,0x00
-	add	hl, de
-	ex	de, hl
-	LD	hl,0x0100
-	LD	l, (hl)
-	LD	h,0x00
-	add	hl, de
-	push	hl
-	exx
-	pop	hl
-	exx
-;chip8/instr_pc.h:60: if ((uint16_t)chip8PC < 0x200) {
-	exx
-	LD	a, h
-	exx
-	sub	a,0x02
+BCE_BXXX:	; JP V0, addr
+	EXX
+	LD	E, IYL
+	LD	A, IYH
+	AND	$0F
+	LD	D, A
+	EX	DE, HL		; CURRENT PC TO DE
+
+	LD	A, ($100)
+	LD	C, A
+	LD	B, 0
+	ADD	HL, BC		; NEW PC IN HL
+
+	LD	A, H
+	EXX
+	CP	$02
 	JP	NC, BCE_POST_PROCESS
-;chip8/instr_pc.h:61: printf("Illegal jump to %04X at %p\r\n", addr12Bit, chip8PC - 1);
-	exx
-	push	hl
-	exx
-	pop	de
-	dec	de
-	dec	de
-	LD	a, IYL
-	LD	l, a
-	LD	h,0x00
-	LD	a, (bc)
-	and	a,0x0f
-	LD	c, a
-	LD	a,0x00
-	LD	b, c
-	LD	c, a
-	add	hl, bc
-	LD	bc,___str_1+0
-	push	de
-	push	hl
-	push	bc
+
+; printf("Illegal jump to %04X at %p\r\n", addr12Bit, chip8PC - 1);
+	EXX
+	DEC	DE
+	DEC	DE
+	LD	BC,___str_1+0
+	PUSH	DE
+	PUSH	HL
+	PUSH	BC
 	CALL	_applicationExit
-	LD	hl,6
-	add	hl, sp
-	LD	sp, hl
-;chip8/byte_code_executor.c:62: #endif
+	LD	HL,6
+	ADD	HL, SP
+	LD	SP, HL
 	JP	BCE_POST_PROCESS
+
 ;chip8/byte_code_executor.c:235: case 0xC: {
 l_executeSingleInstruction_00153:
 ;chip8/byte_code_executor.c:236: rnd();
