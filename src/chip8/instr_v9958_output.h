@@ -6,9 +6,5 @@ extern void v9958DrawPlane3();
 extern void v9958DrawSinglePlane();
 extern void v9958Cls();
 extern void v9958VideoInit();
-extern void v9958ScrollDown();
-extern void v9958ScrollUp();
-extern void v9958ScrollLeft();
-extern void v9958ScrollRight();
 
 #endif

@@ -6,32 +6,10 @@
 
 byte        xx;
 byte        yy;
-static byte spriteHeight;
 
-#define PIXEL_WIDTH_MASK  255
-#define PIXEL_HEIGHT_MASK 127
 byte yAddOne;
-byte xxTo;
 
 extern void waitAndClearCommandRegisters();
-extern void drawRow(byte pSpriteData) __z88dk_fastcall;
-extern void v9958DrawPlane(byte *pSpriteData) __z88dk_fastcall;
-extern void v9958DrawDblPlane(byte *pSpriteData) __z88dk_fastcall;
-
-// void v9958DrawDblPlane(byte *pSpriteData) __z88dk_fastcall {
-//   for (byte row = 16; row > 0; row--) {
-//     yAddOne = (yy + 1) & PIXEL_HEIGHT_MASK;
-
-//     drawRow(*pSpriteData++);
-
-//     xx += 16;
-
-//     drawRow(*pSpriteData++);
-//     xx -= 16;
-
-//     yy = (yAddOne + 1) & PIXEL_HEIGHT_MASK;
-//   }
-// }
 
 void v9958Cls() { clearScreenBank0(0); }
 
