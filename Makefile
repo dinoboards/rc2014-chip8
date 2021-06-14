@@ -72,6 +72,10 @@ test2: chip8asm
 testscrl: chip8asm
 	@cp ./test-samples/testscrl.cas ./bin/
 	cd bin && cpm chip8asm testscrl.cas
+.PHONY1: draw
+draw: chip8asm
+	@cp ./test-samples/draw.cas ./bin/
+	cd bin && cpm chip8asm draw.cas
 
 test-super: cpmchip8
 	@cp ./test-samples/super.ch8 ./bin/

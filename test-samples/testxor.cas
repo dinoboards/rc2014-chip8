@@ -178,7 +178,7 @@ OK:
   LD  V0, 0
   LD  V1, 0
   DRW V0, V1, 5
-  RET
+  JP  WAIT
 
 FAILED0:
   LD  VC, 0
@@ -205,7 +205,9 @@ SHOWERR:
   LD  V0, 0
   LD  V1, 0
   DRW  V0, V1, 5
-  RET
+
+WAIT:
+  JP  WAIT
 
 OK_PATTERN:
   DB  234, 172, 168, 172, 234
