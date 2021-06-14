@@ -9,12 +9,11 @@
 
 ; INPUTS
 ;	IX	=> registerI
+;	L'	=> COLOR
 ;	_fourthNibble
 ;	_yAddOn
-;	__color
 ;
 ; MUTATES
-;	L'	=> COLOR
 ;	B	=> counter
 ;	HL	-> _fourthNibble
 ;	_yy	=> incremented
@@ -27,10 +26,6 @@ _v9958DrawPlane:
 	ld	b, (hl)
 	ld	hl, _yAddOne
 
-	exx
-	ld	a, (__color)
-	ld	l, a			; PRELOAD __color INTO L FOR _drawRow, _drawSegment and _testSegment
-	exx
 
 l_v9958DrawPlane_00103:
 ; yAddOne = (yy + 1) & PIXEL_HEIGHT_MASK;

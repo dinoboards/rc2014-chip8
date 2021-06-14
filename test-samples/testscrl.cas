@@ -324,7 +324,7 @@ OK:
   LD  V0, 0
   LD  V1, 58
   DRW V0, V1, 5
-  RET
+  JP WAIT
 
 FAILED0:
   LD  VC, 0
@@ -376,7 +376,9 @@ SHOWERR:
   LD  V0, 0
   LD  V1, 58
   DRW  V0, V1, 5
-  RET
+
+WAIT:
+  JP  WAIT
 
 SETUP:
   CLS

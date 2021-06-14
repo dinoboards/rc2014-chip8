@@ -19,6 +19,97 @@ PIXEL_WIDTH_MASK	EQU 	255
 PIXEL_HEIGHT_MASK	EQU	127
 
 _v9958DrawPlane3:
+ifndef CPM
+
+	LD	HL, REGISTERS + $0F
+	LD	(HL), $00
+
+	LD	A, IYH
+	AND	$0F
+	LD	L, A
+	LD	A, (HL)
+	ADD	A
+	LD	(_xx), A
+
+; yy = (registers[nibble3rd] * 2) & PIXEL_HEIGHT_MASK;
+	LD	A, IYL
+	RLCA
+	RLCA
+	RLCA
+	RLCA
+	AND	A, $0F
+	LD	L, A
+	LD	A, (HL)
+	ADD	A
+	AND	PIXEL_HEIGHT_MASK
+	LD	(_yy), A
+
+; const uint8_t originalYY = yy;
+	ld	a, (_yy)
+	ld	b, a
+
+; v9958DrawDblPlane((byte *)registerI);
+	ld	ix, (_registerI)
+
+; if (fourthNibble == 0) {
+	ld	a, IYL
+	AND	$0F
+	jr	NZ, l_v9958DrawXPlane3_00105
+
+; fourthNibble = 16;
+	ld	a, $10
+	ld	(_fourthNibble), a
+
+; _color = 1;
+	exx
+	ld	l, 1
+	exx
+
+; v9958DrawDblPlane((byte *)registerI);
+	push	bc
+	call	_v9958DrawDblPlane
+	pop	bc
+
+; yy = originalYY;
+	ld	hl, _yy
+	ld	(hl), b
+
+; _color = 2;
+	exx
+	ld	l, 2
+	exx
+
+; v9958DrawDblPlane((byte *)(registerI + 32));
+	JP	_v9958DrawDblPlane
+
+l_v9958DrawXPlane3_00105:
+; _color = 1;
+	exx
+	ld	L, 1
+	exx
+
+; v9958DrawPlane((byte *)registerI);
+	push	bc
+	call	_v9958DrawPlane
+	pop	bc
+
+; yy = originalYY;
+	ld	hl, _yy
+	ld	(hl), b
+
+; _color = 2;
+	exx
+	ld	l, 2
+	exx
+
+; v9958DrawPlane((byte *)(registerI + fourthNibble));
+	JP	_v9958DrawPlane
+
+else
+	ret
+endif
+
+
 _v9958DrawSinglePlane:
 ifndef CPM
 	LD	HL, REGISTERS + $0F
@@ -44,18 +135,10 @@ ifndef CPM
 	AND	PIXEL_HEIGHT_MASK
 	LD	(_yy), A
 
-; if (_color == 3)
+	EXX
 	LD	A, (__color)
-	sub	a, 0x03
-	jr	NZ, l_v9958DrawX_00126
-	ld	a, 0x01
-	jr	l_v9958DrawX_00127
-
-l_v9958DrawX_00126:
-	xor	a,a
-
-l_v9958DrawX_00127:
-	ld	c, a			; C is 1 if color == 3
+	ld	L, A
+	EXX
 
 ; const uint8_t originalYY = yy;
 	ld	a, (_yy)
@@ -67,81 +150,13 @@ l_v9958DrawX_00127:
 ; if (fourthNibble == 0) {
 	ld	a, IYL
 	AND	$0F
-	jr	NZ, l_v9958DrawX_00105
+	JP	NZ, _v9958DrawPlane
 
 ; fourthNibble = 16;
 	ld	a, $10
 	ld	(_fourthNibble), a
 
-; if (_color == 3)
-	ld	a, c
-	or	a, a
-	jr	Z, l_v9958DrawX_00102
-
-; _color = 1;
-	ld	hl, __color
-	ld	(hl), $01
-
-; v9958DrawDblPlane((byte *)registerI);
-	push	bc
-	call	_v9958DrawDblPlane
-	pop	bc
-
-; yy = originalYY;
-	ld	hl, _yy
-	ld	(hl), b
-
-; _color = 2;
-	ld	hl, __color
-	ld	(hl), 0x02
-
-; v9958DrawDblPlane((byte *)(registerI + 32));
-	call	_v9958DrawDblPlane
-
-; _color = 3;
-	ld	hl, __color
-	ld	(hl), 0x03
-	RET
-
-l_v9958DrawX_00102:
-; v9958DrawDblPlane((byte *)registerI);
 	jp	_v9958DrawDblPlane
-
-
-l_v9958DrawX_00105:
-; if (_color == 3) {
-	ld	a, c
-	or	a, a
-	jr	Z, l_v9958DrawX_00107
-
-; _color = 1;
-	ld	hl, __color
-	ld	(hl), 0x01
-
-; v9958DrawPlane((byte *)registerI);
-	push	bc
-	call	_v9958DrawPlane
-	pop	bc
-
-; yy = originalYY;
-	ld	hl,_yy
-	ld	(hl), b
-
-; _color = 2;
-	ld	hl,__color
-	ld	(hl), 0x02
-
-; v9958DrawPlane((byte *)(registerI + fourthNibble));
-	call	_v9958DrawPlane
-
-; _color = 3;
-	ld	hl, __color
-	ld	(hl), 0x03
-	ret
-
-l_v9958DrawX_00107:
-; v9958DrawPlane((byte *)registerI);
-	jp	_v9958DrawPlane
 
 else
 	ret
@@ -150,22 +165,18 @@ endif
 
 ; INPUTS:
 ;	IX	=> registerI
+;	L'	=> __color
 ;	_yAddOne
 ;	_xx
 ;	_yy
 ;
 ; MUTATES
 ;	IX	=> registerI (incremented)
-;	L'	=> __color
 ;	B	=> counter
+;	E	-> sprite row *registerI
 
 _v9958DrawDblPlane:
 ifndef CPM
-	exx
-	ld	a, (__color)
-	ld	l, a			; PRELOAD __color INTO L FOR _drawRow, _drawSegment and _testSegment
-	exx
-
 	ld	hl, _xx
 
 	ld	b, 0x10			; LOOP COUNTER FOR 16 ROWS
