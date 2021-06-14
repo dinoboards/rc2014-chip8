@@ -2,6 +2,7 @@
 
 	EXTERN	_drawSegment
 	EXTERN	_xx
+	EXTERN	__color
 
 	SECTION CODE
 
@@ -27,6 +28,9 @@ _drawRow:
 
 	; STORE _spriteRowData in E
 	ld	e, l
+
+	ld	a, (__color)
+	ld	l, a			; PRELOAD __color INTO L FOR _drawSegment and _testSegment
 
 ; for(byte t = 8; t > 0; t--) {
 	ld	b,0x08

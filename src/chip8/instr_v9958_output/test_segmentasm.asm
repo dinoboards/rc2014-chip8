@@ -13,6 +13,11 @@ REGISTERS	EQU	0x100
 ; C: X1
 ; D: X2
 ; (_yy): Y OF TOP LINE
+
+; INPUTS:
+;	L -> __color
+;	C -> X1
+;	D -> X2
 _testSegment:
 	ld	a, (REGISTERS+15)
 	or	a
@@ -36,8 +41,8 @@ _testSegmentLoop0:
 	LD	A, 0x80 | 34
 	OUT	(VDP_ADDR), A
 
-	ld	a, (__color)
-	ld	e, a
+	; ld	a, (__color)
+	ld	e, l
 	ld	a, c	; START AT X1
 
 _testSegmentLoop:
