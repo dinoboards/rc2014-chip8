@@ -136,10 +136,10 @@ _executeSingleInstruction:
 	CALL	_manageTimers
 
 ; if (CTRL_STOP_PRESSED())
-	LD	a, (_NEWKEY + 0x0006)
+	LD	a, (_NEWKEY + 6)
 	bit	1, a
 	jr	NZ, BCE_1
-	LD	a, (_NEWKEY + 0x0007)
+	LD	a, (_NEWKEY + 7)
 	bit	4, a
 	jr	NZ, BCE_1
 ;   return false;
@@ -148,9 +148,6 @@ _executeSingleInstruction:
 
 BCE_1:
 	LD	bc, _currentInstruction
-	; ld	a, iyl
-	; and	a, 0x0f
-	; LD	(_fourthNibble), a
 
 ;chip8/byte_code_executor.c:64: switch (firstNibble) {
 	LD	A, IYH
@@ -291,7 +288,6 @@ endif
 
 BCE_00XX:
 ; (nibble3rd) {
-	; INC	BC
 	LD	A, IYL
 	AND	A, $F0
 
@@ -487,12 +483,103 @@ BCE_5XX0:	; SE Vx, Vy
 	SKIP_NEXT_INSTRUCTION()
 	JP	BCE_POST_PROCESS
 
- BCE_5XX2:
-	CALL	_ldIVxVy
+BCE_5XX2:
+	; 2nd nibble?
+	LD	A, IYH
+	AND	A, $0F
+	LD	L, A
+
+	; 3rd nibble
+	LD	A, IYL
+	RLCA
+	RLCA
+	RLCA
+	RLCA
+	AND	A, $0F
+
+	CP	L
+	JR	NC, ldIVxVyNormal
+
+	LD	H, A
+	LD	A, L
+	SUB	H
+	LD	B, A
+
+	INC	B
+
+	LD	DE, (_registerI)
+	LD	H, REGISTERS / 256
+
+ldIVxVyLoop:
+	LD	A, (HL)
+	LD	(DE), A
+	DEC	HL
+	INC	DE
+	DJNZ	B, ldIVxVyLoop
 	JP	BCE_POST_PROCESS
 
- BCE_5XX3:
-	CALL	_ldVxVyI
+ldIVxVyNormal:
+	LD	H, A
+	SUB	L
+
+	LD	C, A
+	INC	C
+
+	LD	B, 0
+	LD	DE, (_registerI)
+	LD	H, REGISTERS / 256
+
+	LDIR
+	JP	BCE_POST_PROCESS
+
+BCE_5XX3:
+	; 2nd nibble?
+	LD	A, IYH
+	AND	A, $0F
+	LD	E, A
+;
+	; 3rd nibble
+	LD	A, IYL
+	RLCA
+	RLCA
+	RLCA
+	RLCA
+	AND	A, $0F
+
+	CP	E
+	JR	NC, ldVxVyINormal
+
+	LD	H, A
+	LD	A, E
+	SUB	H
+	LD	B, A
+
+	INC	B
+
+	LD	HL, (_registerI)
+	LD	D, REGISTERS / 256
+
+ldVxVyILoop:
+	LD	A, (HL)
+	LD	(DE), A
+	INC	HL
+	DEC	DE
+	DJNZ	B, ldVxVyILoop
+	JP	BCE_POST_PROCESS
+
+ldVxVyINormal:
+
+	LD	H, A
+	SUB	E
+
+	LD	C, A
+	INC	C
+
+	LD	B, 0
+	LD	HL, (_registerI)
+	LD	D, REGISTERS / 256
+
+	LDIR
 	JP	BCE_POST_PROCESS
 
 BCE_6XXX:	; LD Vx, byte
