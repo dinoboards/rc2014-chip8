@@ -131,7 +131,7 @@ _drawSegment:
 	call	_waitForCommandCompletion
 
 	;R36 = x
-	ld	a, c
+	ld	a, C
 	OUT	(VDP_ADDR), A
 	LD	A, 0x80 | 36
 	OUT	(VDP_ADDR), A

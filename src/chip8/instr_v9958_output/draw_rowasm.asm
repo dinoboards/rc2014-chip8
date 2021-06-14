@@ -74,11 +74,9 @@ l_drawRow__00108:
 
 ; drawSegment();
 	ex	af, af'
-	push	bc
 	push	de
 	call	_drawSegment
 	pop	de
-	pop	bc
 
 ; pendingDraw = false;
 	xor	a

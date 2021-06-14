@@ -18,6 +18,10 @@ REGISTERS	EQU	0x100
 ;	L -> __color
 ;	C -> X1
 ;	D -> X2
+;
+; MUTATES
+;	E -> __color
+
 _testSegment:
 	ld	a, (REGISTERS+15)
 	or	a
@@ -41,7 +45,6 @@ _testSegmentLoop0:
 	LD	A, 0x80 | 34
 	OUT	(VDP_ADDR), A
 
-	; ld	a, (__color)
 	ld	e, l
 	ld	a, c	; START AT X1
 
