@@ -7,17 +7,6 @@
 
 uint8_t *register2ndNibble;
 
-void subnVxVy() {
-  register2ndNibble = &registers[nibble2nd];
-  const uint8_t *register3rdNibble = &registers[nibble3rd];
-
-  const byte f = *register2ndNibble <= *register3rdNibble;
-  *register2ndNibble = *register3rdNibble - *register2ndNibble;
-
-  // quirks - set flag before subtraction
-
-  registers[0xF] = f;
-}
 
 static byte units;
 static byte hundreds;

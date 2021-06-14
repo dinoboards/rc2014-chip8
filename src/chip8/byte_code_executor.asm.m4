@@ -700,9 +700,19 @@ BCE_8XX6:	; SHR Vx
 	JP	BCE_POST_PROCESS
 
 ;chip8/byte_code_executor.c:202: case 0x7:
-BCE_8XX7:
-	CALL	_subnVxVy
+BCE_8XX7:	; SUBN Vx, Vy
+	SET_HL_REG_2nd()
+	SET_DE_REG_3rd()
+
+	LD	A, (DE)		; A => VY
+	SUB	(HL)		; A = A - (VX)
+	LD	(HL), A
+	JR	C, BCE_CLR_CARRY
+
+	LD      A, 1
+	LD	(REGISTERS + $0F), A
 	JP	BCE_POST_PROCESS
+
 BCE_8XXE:
 ;chip8/instr_registers.h:149: uint8_t *register2ndNibble = &registers[nibble2nd];
 	LD	a, IYH
