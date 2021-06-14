@@ -49,6 +49,7 @@ define(`SKIP_NEXT_INSTRUCTION', `
 define(`uniq', incr(uniq))
 	exx
 
+	; TEST FOR LOAD I LARGE (F000) , to skip skip 4 bytes
 	LD	a, (hl)
 	cp	0xF0
 	jr	nz, lab(skip2bytes, uniq())
@@ -191,7 +192,7 @@ BCE_FIRST_NIBBLE_TABLE:
 	db	0
 	JP	BCE_BXXX
 	db	0
-	JP	l_executeSingleInstruction_00153
+	JP	BCE_CXXX
 	db	0
 	JP	BCE_DXXX
 	db	0
@@ -784,7 +785,7 @@ BCE_BXXX:	; JP V0, addr
 	JP	BCE_POST_PROCESS
 
 ;chip8/byte_code_executor.c:235: case 0xC: {
-l_executeSingleInstruction_00153:
+BCE_CXXX:
 ;chip8/byte_code_executor.c:236: rnd();
 	LD	a, IYH
 	and	a,0x0f
@@ -1056,17 +1057,13 @@ BCE_BAD_INSTRUCTION:
 	pop	de
 	dec	de
 	dec	de
+
 	push	de
 	push	iy
-	pop	hl
-	CALL	_invertByteOrder
-	pop	de
-	LD	bc,___str_2+0
-	push	de
-	push	hl
+	LD	bc, ___str_2
 	push	bc
 	CALL	_applicationExit		; ONLY RETURNS WHEN RUNNING UNDER TESTS
-	LD	hl,6
+	LD	hl, 6
 	add	hl, sp
 	LD	sp, hl
 ;chip8/byte_code_executor.c:341: return false;
