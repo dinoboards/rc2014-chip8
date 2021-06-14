@@ -23,7 +23,6 @@
 
 _v9958DrawPlane:
 ; for(byte row = fourthNibble; row > 0; row--) {
-	; ld	hl, _fourthNibble
 	ld	b, IYL
 	ld	hl, _yAddOne
 

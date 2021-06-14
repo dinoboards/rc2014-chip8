@@ -97,10 +97,6 @@ wrLoop1:
 wrLoop2:
 	LD	a, (HL)
 	INC	HL
-	nop
-	nop
-	nop
-	nop
 	out	(VDP_DATA), a
 	djnz	wrLoop2
 
