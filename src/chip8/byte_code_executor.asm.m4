@@ -713,27 +713,16 @@ BCE_8XX7:	; SUBN Vx, Vy
 	LD	(REGISTERS + $0F), A
 	JP	BCE_POST_PROCESS
 
-BCE_8XXE:
-;chip8/instr_registers.h:149: uint8_t *register2ndNibble = &registers[nibble2nd];
-	LD	a, IYH
-	and	a,0x0f
-	LD	b,0x00
-	LD	c, a
-	LD	a, b
-	inc	a
-	LD	b, a
-;chip8/instr_registers.h:151: registers[0xF] = !!(*register2ndNibble & 0x80);
-	LD	a, (bc)
-	rlca
-	and	a,0x01
-	xor	a,0x01
-	xor	a,0x01
-	LD	(0x010f),a
-;chip8/instr_registers.h:152: *register2ndNibble <<= 1;
-	LD	a, (bc)
-	add	a, a
-	LD	(bc), a
-;chip8/byte_code_executor.c:208: break;
+BCE_8XXE:	;  SHL Vx
+	SET_HL_REG_2nd()
+
+	LD	A, (HL)
+	SLA	A
+	LD	(HL), A
+	JR	NC, BCE_CLR_CARRY
+
+	LD      A, 1
+	LD	(REGISTERS + $0F), A
 	JP	BCE_POST_PROCESS
 
 BCE_9XXX:
