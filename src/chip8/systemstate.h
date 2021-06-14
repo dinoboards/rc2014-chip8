@@ -13,7 +13,6 @@ extern uint16_t getChip8PC();
 extern void     setChip8PC(uint16_t pc) __z88dk_fastcall;
 
 extern uint16_t registerI;
-extern uint8_t  fourthNibble;
 
 #define lowByte          (*(((uint8_t *)&currentInstruction) + 1))
 #define highByte         (*(((uint8_t *)&currentInstruction)))

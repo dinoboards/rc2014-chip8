@@ -69,39 +69,3 @@ void videoHigh() {
   v9958VideoInit();
 #endif
 }
-
-void scrlDown() {
-#ifndef CPM
-  if (fourthNibble == 0)
-    return;
-
-  if (videoResMode != VideoResModeLow)
-    v9958ScrollDown();
-#endif
-}
-
-void scrlUp() {
-#ifndef CPM
-  if (fourthNibble == 0)
-    return;
-
-  if (videoResMode != VideoResModeLow)
-    v9958ScrollUp();
-#endif
-}
-
-void scrlLeft() {
-#ifndef CPM
-  if (videoResMode != VideoResModeLow) {
-    v9958ScrollLeft();
-  }
-#endif
-}
-
-void scrlRight() {
-#ifndef CPM
-  if (videoResMode != VideoResModeLow) {
-    v9958ScrollRight();
-  }
-#endif
-}

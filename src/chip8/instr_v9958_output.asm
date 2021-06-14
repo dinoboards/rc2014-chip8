@@ -7,7 +7,6 @@
 	EXTERN	_currentInstruction
 	EXTERN	_yy
 	EXTERN	_xx
-	EXTERN	_fourthNibble
 	EXTERN	__color
 	EXTERN	_registerI
 	EXTERN	_v9958DrawPlane
@@ -54,11 +53,8 @@ ifndef CPM
 ; if (fourthNibble == 0) {
 	ld	a, IYL
 	AND	$0F
+	ld	IYL, a
 	jr	NZ, l_v9958DrawXPlane3_00105
-
-; fourthNibble = 16;
-	ld	a, $10
-	ld	(_fourthNibble), a
 
 ; _color = 1;
 	exx
@@ -78,7 +74,6 @@ ifndef CPM
 	exx
 	ld	l, 2
 	exx
-
 ; v9958DrawDblPlane((byte *)(registerI + 32));
 	JP	_v9958DrawDblPlane
 
@@ -150,13 +145,10 @@ ifndef CPM
 ; if (fourthNibble == 0) {
 	ld	a, IYL
 	AND	$0F
+	ld	IYL, a
 	JP	NZ, _v9958DrawPlane
 
-; fourthNibble = 16;
-	ld	a, $10
-	ld	(_fourthNibble), a
-
-	jp	_v9958DrawDblPlane
+	JP	_v9958DrawDblPlane
 
 else
 	ret

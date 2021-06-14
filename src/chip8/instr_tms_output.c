@@ -278,7 +278,7 @@ static byte yy;
 
 void tmsDraw() {
 #ifndef CPM
-  drawCommand.length = fourthNibble;
+  drawCommand.length = lowByte & 15;
   xx = registers[nibble2nd];
   yy = registers[nibble3rd];
 

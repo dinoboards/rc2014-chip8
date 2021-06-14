@@ -4,7 +4,6 @@
 #include <stdbool.h>
 
 uint16_t registerI;
-uint8_t  fourthNibble;
 
 byte                 __at 0x100 registers[16];
 byte /*__at 0x01D0*/ stackIndex;

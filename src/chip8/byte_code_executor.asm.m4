@@ -24,7 +24,6 @@
 	EXTERN	_scrlRight
 	EXTERN	_cls
 	EXTERN	_videoHigh
-	EXTERN	_fourthNibble
 	EXTERN	_NEWKEY
 	EXTERN	_manageTimers
 	EXTERN	_addVxVy
@@ -35,6 +34,11 @@
 	PUBLIC	_drawFunctionPtr
 	EXTERN	_v9958DrawSinglePlane
 	EXTERN	_v9958DrawPlane3
+	EXTERN	_videoResMode
+	EXTERN	_v9958ScrollDown
+	EXTERN	_v9958ScrollUp
+	EXTERN	_v9958ScrollLeft
+	EXTERN	_v9958ScrollRight
 
 REGISTERS	EQU	$100
 
@@ -143,11 +147,10 @@ _executeSingleInstruction:
 	JP	BCE_EXIT
 
 BCE_1:
-;chip8/byte_code_executor.c:58: fourthNibble = readFourthNibble;
 	LD	bc, _currentInstruction
-	ld	a, iyl
-	and	a, 0x0f
-	LD	(_fourthNibble), a
+	; ld	a, iyl
+	; and	a, 0x0f
+	; LD	(_fourthNibble), a
 
 ;chip8/byte_code_executor.c:64: switch (firstNibble) {
 	LD	A, IYH
@@ -255,23 +258,35 @@ BCE_STACK_EMPTY:
 	JP	BCE_EXIT_ERROR	; return exit signal
 
 BCE_00FB:	; SCRL RIGHT
+ifndef CPM
+	ld	a, (_videoResMode)
+	or	a
+	JP	Z, BCE_POST_PROCESS
+
 	EXX
 	PUSH	HL
 	EXX
-	CALL	_scrlRight
+	CALL	_v9958ScrollRight
 	EXX
 	POP	HL
 	EXX
+endif
 	JP	BCE_POST_PROCESS
 
 BCE_00FC:	; SCRL LEFT
+ifndef CPM
+	ld	a, (_videoResMode)
+	or	a
+	JP	Z, BCE_POST_PROCESS
+
 	EXX
 	PUSH	HL
 	EXX
-	CALL	_scrlLeft
+	CALL	_v9958ScrollLeft
 	EXX
 	POP	HL
 	EXX
+endif
 	JP	BCE_POST_PROCESS
 
 BCE_00XX:
@@ -288,24 +303,46 @@ BCE_00XX:
 
 	JP	BCE_BAD_INSTRUCTION
 
-BCE_00CX:
+BCE_00CX:	; SCROLL DOWN
+ifndef CPM
+	ld	a, IYL
+	AND	$0F
+	JP	Z, BCE_POST_PROCESS
+	ld	IYL, A
+
+	ld	a, (_videoResMode)
+	or	a
+	JP	Z, BCE_POST_PROCESS
+
 	EXX
 	PUSH	HL
 	EXX
-	CALL	_scrlDown
+	CALL	_v9958ScrollDown
 	EXX
 	POP	HL
 	EXX
+endif
 	JP	BCE_POST_PROCESS
 
-BCE_00DX:
+BCE_00DX:	; SCROLL UP
+ifndef CPM
+	ld	a, IYL
+	AND	$0F
+	JP	Z, BCE_POST_PROCESS
+	ld	IYL, A
+
+	ld	a, (_videoResMode)
+	or	a
+	JP	Z, BCE_POST_PROCESS
+
 	EXX
 	PUSH	HL
 	EXX
-	CALL	_scrlUp
+	CALL	_v9958ScrollUp
 	EXX
 	POP	HL
 	EXX
+endif
 	JP	BCE_POST_PROCESS
 
 BCE_1XXX:	; JP XXX

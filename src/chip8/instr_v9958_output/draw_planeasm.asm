@@ -12,9 +12,10 @@
 ;	L'	=> COLOR
 ;	_fourthNibble
 ;	_yAddOn
+;	IYL	=> fourthNibble
 ;
 ; MUTATES
-;	B	=> counter
+;	B	=> counter (_fourthNibble)
 ;	HL	-> _fourthNibble
 ;	_yy	=> incremented
 ;	IX	=> registerI incremented
@@ -22,8 +23,8 @@
 
 _v9958DrawPlane:
 ; for(byte row = fourthNibble; row > 0; row--) {
-	ld	hl, _fourthNibble
-	ld	b, (hl)
+	; ld	hl, _fourthNibble
+	ld	b, IYL
 	ld	hl, _yAddOne
 
 

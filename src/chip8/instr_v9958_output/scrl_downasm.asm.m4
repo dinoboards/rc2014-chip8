@@ -28,6 +28,10 @@
 	; then lastly clear all line 0 for color plane
 
 _v9958ScrollDown:
+	ld	a, IYL
+	AND	$0F
+	ld	IYL, A			; LOAD fourthNibble into IYL
+
 	LD	A, (__color)
 	CP	3
 	JP	Z, scrollDownAllPlanes
@@ -44,7 +48,9 @@ _v9958ScrollDown:
 	EI
 
 ; READ EACH ROW INTO BUFFER
-	LD	A, (_fourthNibble)
+	ld	a, IYL
+
+	; LD	A, (_fourthNibble)
 	LD	C, A
 	LD	A, HIRES_HEIGHT-1
 	SUB	C			;LOOP FOR Y = 63 - COUNT to 0
@@ -112,7 +118,8 @@ wrLoop2:
 	DEC	D
 	JP	P, nextRow
 
-	LD	A, (_fourthNibble)
+	ld	a, IYL
+	; LD	A, (_fourthNibble)
 	DEC	A
 	LD	D, A
 
@@ -129,7 +136,8 @@ clearNextRow:
 	RET
 
 scrollDownAllPlanes:
-	LD	A, (_fourthNibble)
+	LD	A, IYL
+	; LD	A, (_fourthNibble)
 	ADD	A	; double it
 	LD	D, A
 	LD	E, A
