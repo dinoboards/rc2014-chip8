@@ -18,10 +18,20 @@
 ; (_yAddOne): Y OF BOTTOM LINE
 ; L => __color (passed to _testSegment also)
 
+; INPUTS:
+;	D:	=>	X2
+;	C:	=>	X1
+;	L:	=>	_color (passed to _testSegment also)
+;	_yy
+;	_yAddOne
+;
+; MUTATES:
+;
+; CALLS:
+;	_testSegment
+
 _drawSegment:
 ; if( xxTo < xx) {
-
-
 	xor	a
 
 	DI
@@ -58,7 +68,7 @@ _drawSegment:
 	pop	de
 
 	; reset color - testSegment causes it to be zeroed
-	ld	a, l ;(__color)
+	ld	a, l
 	OUT	(VDP_ADDR), A
 	LD	A, 0x80 | 44
 	OUT	(VDP_ADDR), A
@@ -92,7 +102,7 @@ _drawSegment:
 	pop	bc
 
 	; reset color - testSegment causes it to be zeroed
-	ld	a, l; (__color)
+	ld	a, l
 	OUT	(VDP_ADDR), A
 	LD	A, 0x80 | 44
 	OUT	(VDP_ADDR), A
@@ -200,7 +210,7 @@ l_drawSegment_00102:
 	call	_testSegment
 
 	; reset color - testSegment causes it to be zeroed
-	ld	a, l ;(__color)
+	ld	a, l
 	OUT	(VDP_ADDR), A
 	LD	A, 0x80 | 44
 	OUT	(VDP_ADDR), A

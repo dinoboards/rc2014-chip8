@@ -8,47 +8,44 @@
 
 	include	"v9958.inc"
 
-; Params: _xx, _yy, _spriteRowData
-
-; _xx is C
-; _spriteRowData is E
-; loop counter B
-; spriteRowData in L
+; INPUTS:
+;	L => __color
+;	E => _spriteRowData aka *registerI
+;
+; MUTATES:
+;	C: => _xx
+;	B: => loop counter
+;	D: => xxTo
+;	E: => rotated!
+;
+; CALLS
+;	_drawSegment
+;
 _drawRow:
 ; pendingDraw = false;
 	xor	a
 	ex	af, af'
 
-	; STORE _xx in C
-	ld	a,(_xx)
+	ld	a, (_xx)
 	ld	c, a
 
 ; xxTo = xx;
 	ld	d, a
-
-	; STORE _spriteRowData in E
-	ld	e, l
-
-	ld	a, (__color)
-	ld	l, a			; PRELOAD __color INTO L FOR _drawSegment and _testSegment
 
 ; for(byte t = 8; t > 0; t--) {
 	ld	b,0x08
 
 l_drawRow__00114:
 ; if (spriteRowData & 0x80) {
-	; ld	a,(_spriteRowData)
-
-; if (spriteRowData & 0x80) {
 	rlc	e
-	jr	NC,l_drawRow__00108
+	jr	NC, l_drawRow__00108
 
 ;; PIXEL ON HERE
 
 ; if(!pendingDraw) {
 	ex	af, af'
 	or	a
-	jr	NZ,l_drawRow__00102
+	jr	NZ, l_drawRow__00102
 
 ; pendingDraw = true;
 	cpl	a
@@ -100,7 +97,7 @@ l_drawRow__00105:
 
 ; xx += 2;
 	ld	a, c
-	add	a,0x02
+	add	a ,0x02
 	ld	c, a
 
 l_drawRow__00109:
@@ -112,5 +109,5 @@ l_drawRow__00109:
 	or	a
 	ret	Z
 
-; drawSegment();
+; call drawSegment() and return
 	jp	_drawSegment

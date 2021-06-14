@@ -160,13 +160,28 @@ else
 endif
 
 
+; INPUTS:
+;	HL	=> registerI
+;	_yAddOne
+;	_xx
+;	_yy
+;
+; CONSUMES
+;	IX	=> registerI (incremented)
+;	L'	=> __color
+;	B	=> counter
+
 _v9958DrawDblPlane:
 ifndef CPM
 	push	hl
-	pop	ix
-	;ex	de, hl				; registerI - sprite data in IX
+	pop	ix			; registerI - sprite data in IX
 
-	ld	b, 0x10				; LOOP COUNTER FOR 16 ROWS
+	exx
+	ld	a, (__color)
+	ld	l, a			; PRELOAD __color INTO L FOR _drawRow, _drawSegment and _testSegment
+	exx
+
+	ld	b, 0x10			; LOOP COUNTER FOR 16 ROWS
 
 l_v9958DrawDblPlane_00103:
 ; yAddOne = (yy + 1) & PIXEL_HEIGHT_MASK;
@@ -176,33 +191,27 @@ l_v9958DrawDblPlane_00103:
 	ld	(_yAddOne), a
 
 ; drawRow(*pSpriteData++);
-	ld	l, (ix)
-	; ld	l, a
+	exx
+	ld	e, (ix)
 	inc	ix
-	push	bc
-	; push	de
 	call	_drawRow
-	; pop	de
-	pop	bc
-;chip8/instr_v9958_output.c:27: xx += 16;
+	exx
+; xx += 16;
 	ld	a,(_xx + 0)
 	add	a,0x10
 	ld	(_xx+0), a
-;chip8/instr_v9958_output.c:29: drawRow(*pSpriteData++);
-	ld	l, (ix)
-	; ld	l, a
+; drawRow(*pSpriteData++);
+	exx
+	ld	e, (ix)
 	inc	ix
-	push	bc
-	; push	de
 	call	_drawRow
-	; pop	de
-	pop	bc
-;chip8/instr_v9958_output.c:30: xx -= 16;
+	exx
+; xx -= 16;
 	ld	a,(_xx + 0)
 	ld	hl,_xx
 	add	a,0xf0
 	ld	(hl), a
-;chip8/instr_v9958_output.c:32: yy = (yAddOne + 1) & PIXEL_HEIGHT_MASK;
+; yy = (yAddOne + 1) & PIXEL_HEIGHT_MASK;
 	ld	a,(_yAddOne + 0)
 	inc	a
 	and	a,0x7f

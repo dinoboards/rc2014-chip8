@@ -730,8 +730,16 @@ l_executeSingleInstruction_00153:
 
 BCE_DXXX:
 ;chip8/byte_code_executor.c:241: draw();
+	exx			; PROTECT CHIP8 PC Counter
+	push	hl
+	exx
+
 	CALL	_tmsDraw
 _drawFunctionPtr	EQU	$-2
+
+	exx			; PROTECT CHIP8 PC Counter
+	pop	hl
+	exx
 
 	JP	BCE_POST_PROCESS
 
