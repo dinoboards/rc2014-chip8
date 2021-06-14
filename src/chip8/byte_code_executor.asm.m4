@@ -726,33 +726,18 @@ BCE_8XXE:	;  SHL Vx
 	JP	BCE_POST_PROCESS
 
 BCE_9XXX:
-;chip8/byte_code_executor.c:218: if (readFourthNibble == 0)
+; if (readFourthNibble == 0)
 	LD	a, IYL
-	and	a,0x0f
-	JP	NZ,BCE_BAD_INSTRUCTION
-;chip8/instr_pc.h:42: if (registers[nibble2nd] != registers[nibble3rd])
-	LD	e, c
-	LD	d, b
-	LD	a, (de)
-	and	a,0x0f
-	LD	l, a
-	LD	a,0x00
-	inc	a
-	LD	h, a
-	LD	e, (hl)
-	LD	a, IYL
-	rlca
-	rlca
-	rlca
-	rlca
-	and	a,0x0f
-	LD	c, a
-	LD	a,0x00
-	inc	a
-	LD	b, a
-	LD	a, (bc)
-	sub	a, e
-	JP	Z,BCE_POST_PROCESS
+	and	a, 0x0f
+	JP	NZ, BCE_BAD_INSTRUCTION
+
+BCE_9XX0:	; SNE Vx, Vy
+	SET_HL_REG_2nd()
+	SET_DE_REG_3rd()
+
+	LD	A, (DE)
+	CP	(HL)
+	JP	Z, BCE_POST_PROCESS
 	SKIP_NEXT_INSTRUCTION()
 	JP	BCE_POST_PROCESS
 
