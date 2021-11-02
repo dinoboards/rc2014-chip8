@@ -7,34 +7,32 @@ MAKEFLAGS += --no-builtin-rules
 export PATH := $(PWD)/tools/prereq/cpm/:$(PATH)
 
 .PHONY: all
-all:
-	@mkdir -p ./bin
-	$(MAKE) -C ./src all -s -j 4
+all: chip8 chip8asm
 
 header_files = $(wildcard ./chip8asm/*.h) $(wildcard ./chip8/*.h) $(wildcard ./*.h)
 
 .PHONY: chip8asm
 chip8asm:
 	@mkdir -p ./bin
-	TARGET=cpm $(MAKE) -C ./src ./bin/cpm/chip8asm.com -s -j 6 -O
+	TARGET=cpm $(MAKE) -C ./src ./bin/cpm/chip8asm.com -s -O
 	cp -u ./src/bin/cpm/chip8asm.com ./bin
 
 .PHONY: chip8
 chip8:
 	@mkdir -p ./bin
-	TARGET=msx $(MAKE) -C ./src ./bin/msx/chip8.com -s -j 6 -O
+	TARGET=msx $(MAKE) -C ./src ./bin/msx/chip8.com -s -O
 	cp -u ./src/bin/msx/chip8.com ./bin
 
 cpmchip8:
 	@mkdir -p ./bin
-	TARGET=cpm $(MAKE) -C ./src ./bin/cpm/chip8.com -s -j 6 -O
+	TARGET=cpm $(MAKE) -C ./src ./bin/cpm/chip8.com -s -O
 	cp -u ./src/bin/cpm/chip8.com ./bin/cpmchip8.com
 
 test: tstinstr tstasmbl
 
 tstinstr:
 	@mkdir -p ./bin
-	TARGET=cpm $(MAKE) -C ./src ./bin/cpm/tstinstr.com -s -j 6 -O
+	TARGET=cpm $(MAKE) -C ./src ./bin/cpm/tstinstr.com -s -O
 	cp -u ./src/bin/cpm/tstinstr.com ./bin
 	(cd bin && cpm tstinstr)
 

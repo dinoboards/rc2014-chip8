@@ -9,7 +9,12 @@ define(`MMMMMM', `
 	include "v9958.inc"
 	SECTION	CODE
 
+	PUBLIC	_getStack
 
+_getStack:
+        LD     HL, 0
+        ADD    HL, SP
+	RET
 
 _outChar:
 	ld	c, 2

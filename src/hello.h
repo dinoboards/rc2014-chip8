@@ -1,1 +1,2 @@
-extern void debug();
+extern void  debug();
+extern void *getStack();

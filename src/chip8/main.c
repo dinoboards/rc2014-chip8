@@ -46,13 +46,23 @@ char gameFileName[MAX_FILE_NAME];
 
 uint16_t txtNamBackup;
 
-void main(int argc, char *argv[]) {
+void exit_cleanup() {
+  videoClose();
+  soundOff();
+
+  msxbiosInitxt();
+  msxbiosInitPalette();
+}
+
+void main(const int argc, const unsigned char **argv) {
   parseCommandLine(argc, argv);
 
   if (CommandSwitches.isHelp) {
     printf("Usage:\r\n   chip8 <filename> [-X <delay>]\r\n\r\n");
     return;
   }
+
+  atexit(exit_cleanup);
 
   const char *pFileName = argv[1];
 
@@ -91,10 +101,4 @@ void main(int argc, char *argv[]) {
   chkMsg(fClose(defaultFCB), "Unable to close");
 
   executeROM();
-
-  videoClose();
-  soundOff();
-
-  msxbiosInitxt();
-  msxbiosInitPalette();
 }

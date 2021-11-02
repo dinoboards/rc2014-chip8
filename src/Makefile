@@ -8,7 +8,7 @@ TARGET ?= msx
 CPMBIN := ./bin/cpm/
 BIN := ./bin/$(TARGET)/
 SRC := ./
-APPS := hello tstinstr
+APPS := tstinstr chip8 chip8asm
 TARGETS := $(addsuffix .com,$(addprefix $(BIN),$(APPS)))
 
 MEASURE=
@@ -121,11 +121,11 @@ $(BIN)chip8200.bin: $(filter-out ./bin/$(TARGET)/chip8/test_%.c.o, $(addprefix $
 	$(ZCC) -zorg 512  $^ -o $(BIN)chip8200.bin
 	echo "Compiled $(notdir $@) from $(notdir $^)"
 
-$(BIN)chip8relocation-map.bin: $(addprefix $(BIN),chip8100.bin chip8200.bin)
-	@node ./extract-relocation-map.js $^ $(BIN)chip8relocation-map.bin
-
 $(BIN)chip8.loader.asm: loader.asm.m4
 	@m4 -D SRC=$(TARGET)/chip8 $^ > $@
+
+$(BIN)chip8relocation-map.bin: $(addprefix $(BIN),chip8100.bin chip8200.bin)
+	@node ./extract-relocation-map.js $^ $(BIN)chip8relocation-map.bin
 
 $(BIN)chip8.com: $(addprefix $(BIN),chip8100.bin chip8200.bin chip8.loader.asm chip8relocation-map.bin)
 	z80asm -r=256 -o"$@" -b "$(BIN)chip8.loader.asm"
@@ -158,7 +158,7 @@ $(BIN)hello.loader.asm: loader.asm.m4
 	@m4 -D SRC=$(TARGET)/hello $^ > $@
 
 $(BIN)hello.com: $(addprefix $(BIN),hello100.bin hello200.bin hello.loader.asm)
-	@node ./extract-relocation-map.js $^
+	@node ./extract-relocation-map.js $(addprefix $(BIN),hello100.bin hello200.bin hellorelocation-map.bin) 
 	z80asm -r=256 -o"$@" -b "$(BIN)hello.loader.asm"
 	echo "Compiled $(notdir $@) from $(filter-out %.h,$^)"
 
@@ -328,4 +328,4 @@ deps:
 
 clean:
 	@rm -rf bin
-	rm *.asm.lis
+	rm -f *.asm.lis

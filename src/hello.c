@@ -7,7 +7,7 @@
 // #include <stdio.h>
 // #include <string.h>
 
-// #include "hello.h"
+#include "hello.h"
 
 // uint8_t data;
 
@@ -15,7 +15,7 @@
 
 void main() {
   // assemble(2);
-  printf("Hello World I am at location: %p\r\n", &main);
+  printf("!!Hello World I am at location: %p with stack at %p\r\n", &main, getStack());
 
   // int c;
 
