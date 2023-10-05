@@ -20,9 +20,9 @@ ZCCRELFLAGS=-SO3 --max-allocs-per-node200000 -Cs"--opt-code-speed" --allow-unsaf
 endif
 
 ifeq ($(TARGET),msx)
-ZCC := zcc +msx -subtype=msxdos2 -compiler=sdcc -Cs --Werror --list -lmath32 -Cc-D__MATH_MATH32 -D__MATH_MATH32 -pragma-define:CLIB_32BIT_FLOAT=1 -Ca="-I./chip8/" -Cm="-I./chip8/" $(ZCCRELFLAGS)
+ZCC := zcc +msx -subtype=msxdos2 -compiler=sdcc --vc --less-pedantic -Cs --Werror --list -lmath32 -Cc-D__MATH_MATH32 -D__MATH_MATH32 -pragma-define:CLIB_32BIT_FLOAT=1 -Ca="-I./chip8/" -Cm="-I./chip8/" $(ZCCRELFLAGS)
 else
-ZCC := zcc +cpm  -compiler=sdcc $(ZCCRELFLAGS) -Cs --Werror --list -pragma-redirect:fputc_cons=fputc_cons_native  -Ca="-I./chip8/" -Cm="-I./chip8/" -pragma-define:noprotectmsdos -pragma-define:CRT_ENABLE_COMMANDLINE=1 -pragma-define:CRT_COMMANDLINE_REDIRECTION=0 -pragma-define:CRT_OPEN_MAX=1
+ZCC := zcc +cpm  -compiler=sdcc $(ZCCRELFLAGS) --vc --less-pedantic -Cs --Werror --list -pragma-redirect:fputc_cons=fputc_cons_native  -Ca="-I./chip8/" -Cm="-I./chip8/" -pragma-define:noprotectmsdos -pragma-define:CRT_ENABLE_COMMANDLINE=1 -pragma-define:CRT_COMMANDLINE_REDIRECTION=0 -pragma-define:CRT_OPEN_MAX=1
 endif
  #-Ca="-opt-speed"
 
@@ -158,7 +158,7 @@ $(BIN)hello.loader.asm: loader.asm.m4
 	@m4 -D SRC=$(TARGET)/hello $^ > $@
 
 $(BIN)hello.com: $(addprefix $(BIN),hello100.bin hello200.bin hello.loader.asm)
-	@node ./extract-relocation-map.js $(addprefix $(BIN),hello100.bin hello200.bin hellorelocation-map.bin) 
+	@node ./extract-relocation-map.js $(addprefix $(BIN),hello100.bin hello200.bin hellorelocation-map.bin)
 	z80asm -r=256 -o"$@" -b "$(BIN)hello.loader.asm"
 	echo "Compiled $(notdir $@) from $(filter-out %.h,$^)"
 
