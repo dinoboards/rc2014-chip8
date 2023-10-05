@@ -4,7 +4,6 @@
 #include "expr.h"
 #include "test_opcodes.h"
 #include "xstdio.h"
-#include <stdarg.h>
 #include <stdio.h>
 #include <string.h>
 

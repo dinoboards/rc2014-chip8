@@ -16,7 +16,6 @@
 #include "tms.h"
 #include "xstdio.h"
 #include "xstdlib.h"
-#include <stdarg.h>
 #include <stdio.h>
 #include <string.h>
 

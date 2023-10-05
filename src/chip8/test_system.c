@@ -3,7 +3,6 @@
 #include "systemstate.h"
 #include "timers.h"
 #include "ym2149.h"
-#include <stdarg.h>
 #include <stdio.h>
 #include <string.h>
 
