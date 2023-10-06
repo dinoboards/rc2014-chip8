@@ -1,3 +1,7 @@
+// stdio will include msx, which will include graphics.h, which create name conflict with draw() function
+// so disable it as we dont use it
+#define __GFX_H__
+
 #include "instr_output.h"
 #include "error_reports.h"
 #include "instr_tms_output.h"
