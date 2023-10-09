@@ -11,7 +11,7 @@
 static uint16_t lastCheckTime = 0;
 inline uint8_t  toLower(uint8_t c) { return ((c >= 'A' && c <= 'Z')) ? c + ('a' - 'A') : c; }
 
-bool checkForKeyPresses() {
+bool checkForKeyPresses(void) {
   if (JIFFY % 0x2)
     return true;
 
@@ -31,7 +31,7 @@ uint8_t currentButtons1;
 uint8_t currentDirection2;
 uint8_t currentButtons2;
 
-void loadControllerStates() {
+void loadControllerStates(void) {
   currentDirection1 = getControllerDirection(1);
   currentButtons1 = getControllerButton(1) | (getControllerButton(3) << 1);
   currentDirection2 = getControllerDirection(2);
@@ -78,7 +78,7 @@ uint8_t isKeyDown(const uint8_t c) __z88dk_fastcall {
   return false;
 }
 
-uint8_t currentKey() {
+uint8_t currentKey(void) {
   pConfig = gameKeys;
 
   if (isYm2149)

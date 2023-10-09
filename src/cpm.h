@@ -25,7 +25,7 @@ typedef struct CommandLineTailStruct {
 
 extern void chk(int f) __z88dk_fastcall;
 
-extern uint8_t drvAllReset();
+extern uint8_t drvAllReset(void);
 extern uint8_t drvReset(uint16_t bitmapOfDrives) __z88dk_fastcall;
 extern uint8_t drvFree(uint16_t bitmapOfDrives) __z88dk_fastcall;
 
@@ -45,7 +45,7 @@ extern void    chkMsg(uint16_t result, const char *msg);
 
 typedef struct {
   uint16_t argc;
-  char *   argv[];
+  char    *argv[];
 } MainArguments;
 
 #endif

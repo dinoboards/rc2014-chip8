@@ -13,12 +13,12 @@ static byte spriteHeight;
 byte yAddOne;
 byte xxTo;
 
-extern void waitAndClearCommandRegisters();
+extern void waitAndClearCommandRegisters(void);
 extern void drawRow(byte pSpriteData) __z88dk_fastcall;
 extern void v9958DrawPlane(byte *pSpriteData) __z88dk_fastcall;
 extern void v9958DrawDblPlane(byte *pSpriteData) __z88dk_fastcall;
 
-void v9958Draw() {
+void v9958Draw(void) {
   registers[15] = 0;
 
   xx = (registers[nibble2nd] * 2) & PIXEL_WIDTH_MASK;
@@ -67,11 +67,11 @@ void v9958DrawDblPlane(byte *pSpriteData) __z88dk_fastcall {
   }
 }
 
-void v9958Cls() { clearScreenBank0(0); }
+void v9958Cls(void) { clearScreenBank0(0); }
 
 RGB palette[16] = {{0, 0, 0}, {0xF, 0x0, 0}, {0x0, 0xF, 0}, {0, 0, 0xF}, {7, 0, 7}, {7, 7, 0}, {7, 7, 7}, {15, 7, 15}, {0, 0, 15}, {0, 15, 0}, {0, 15, 15}, {15, 0, 0}, {15, 0, 15}, {15, 15, 0}, {15, 15, 15}, {15, 15, 15}};
 
-void v9958VideoInit() {
+void v9958VideoInit(void) {
   setMode4(212, NTSC);
   setPalette(palette);
   clearScreenBank0(0);

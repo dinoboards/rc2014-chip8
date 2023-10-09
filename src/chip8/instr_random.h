@@ -2,8 +2,8 @@
 #ifndef __INSTR_RANDOM
 #define __INSTR_RANDOM
 
-extern void rnd();
-extern void seedRandom();
+extern void rnd(void);
+extern void seedRandom(void);
 
 #include "random.h"
 

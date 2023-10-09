@@ -6,8 +6,8 @@
 
 #define programStorage ((uint16_t *)0x200)
 extern uint16_t invertByteOrder(uint16_t word) __naked __z88dk_fastcall;
-extern bool     executeSingleInstruction();
-extern void     initSystemState();
-extern void     executeROM();
+extern bool     executeSingleInstruction(void);
+extern void     initSystemState(void);
+extern void     executeROM(void);
 
 #endif

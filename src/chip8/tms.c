@@ -19,4 +19,4 @@ void tmsRegisterColours(uint8_t bkColour, uint8_t fgColour) { tmsRegisters[7] = 
 
 static uint8_t tmsDriverIndex = 0;
 
-void tmsInit() { tmsClearData(&clearParams); }
+void tmsInit(void) { tmsClearData(&clearParams); }

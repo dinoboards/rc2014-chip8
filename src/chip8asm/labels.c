@@ -68,4 +68,4 @@ void addLabel(const char *label, uint16_t address, bool allowDuplicates) {
   nextEmptyPtr = next(nextEmptyPtr);
 }
 
-void initLabelStorage() { nextEmptyPtr = (labelAddresses *)&labelStorage; }
+void initLabelStorage(void) { nextEmptyPtr = (labelAddresses *)&labelStorage; }

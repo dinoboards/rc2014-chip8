@@ -1,3 +1,3 @@
 #include <stdlib.h>
 
-void errorExit() { exit(1); }
+void errorExit(void) { exit(1); }

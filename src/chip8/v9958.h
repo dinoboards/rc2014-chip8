@@ -29,8 +29,8 @@ extern void _writeRegister(uint16_t rd) __z88dk_fastcall;
 
 #define CMD_VDP_TO_VRAM 0xC0
 
-void waitForCommandCompletion();
-void setReadRegisterToZero();
+void waitForCommandCompletion(void);
+void setReadRegisterToZero(void);
 
 extern uint8_t  _color;
 extern uint16_t _toX;

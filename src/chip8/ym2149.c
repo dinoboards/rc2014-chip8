@@ -14,7 +14,7 @@ void ym2149Play(uint16_t period) __z88dk_fastcall {
   ym2149Cmd(&command);
 }
 
-void ym2149Stop() {
+void ym2149Stop(void) {
   command.volume = 0;
   command.period = 0;
   ym2149Cmd(&command);

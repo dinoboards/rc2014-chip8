@@ -5,7 +5,7 @@
 
 #include <stdio.h>
 
-void ldStVx() {
+void ldStVx(void) {
   initTimers();
   soundTimer = registers[nibble2nd];
 
@@ -53,7 +53,7 @@ static uint16_t process8Samples(uint16_t total) __z88dk_fastcall {
 
 static uint16_t total = 0;
 
-static uint16_t findSoundPeriod() __z88dk_fastcall {
+static uint16_t findSoundPeriod(void) __z88dk_fastcall {
   countOfPeriods = 0;
   lastBitIndex = AUDIO_SAMPLE_SIZE;
   lastBitState = 0;
@@ -75,7 +75,7 @@ static uint16_t findSoundPeriod() __z88dk_fastcall {
   return total * 128 / countOfPeriods;
 }
 
-void audio() {
+void audio(void) {
   audioActive = true;
   audioPeriod = findSoundPeriod();
 }

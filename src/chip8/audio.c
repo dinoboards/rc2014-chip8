@@ -4,7 +4,7 @@
 #include "ym2149.h"
 #include <stdio.h>
 
-void audioInit() {
+void audioInit(void) {
   // const bool ym2149Found = ym2149Probe();
 
   // if (ym2149Found) {
@@ -27,7 +27,7 @@ void audioPlay(uint16_t p) __z88dk_fastcall {
   // }
 }
 
-void audioStop() {
+void audioStop(void) {
   // if (isYm2149) {
   //   ym2149Stop();
   //   return;

@@ -48,26 +48,26 @@ const char *testConfigColours = "COLOR-0 = lightblue\r\n"
                                 "COLOR-1 = black\r\n"
                                 "COLOR-3 = cyan\r\n"
                                 "\x1a";
-void assertColours() {
-  expectEqualBytes(gameColours[0], COL_LIGBLUE, "COLOR-0 = LIGHT BLUE");
-  expectEqualBytes(gameColours[1], COL_BLACK, "COLOR-1 = BLACK");
-  expectEqualBytes(gameColours[3], COL_CYAN, "COLOR-14 = CYAN");
+void        assertColours() {
+         expectEqualBytes(gameColours[0], COL_LIGBLUE, "COLOR-0 = LIGHT BLUE");
+         expectEqualBytes(gameColours[1], COL_BLACK, "COLOR-1 = BLACK");
+         expectEqualBytes(gameColours[3], COL_CYAN, "COLOR-14 = CYAN");
 }
 
 const char *testConfigColoursBadIndex = "COLOR-6 = lightblue\r\n"
                                         "\x1a";
-void assertColoursBadIndex() { expectTrue(expectedErrorInvoked, "expectedError"); }
+void        assertColoursBadIndex() { expectTrue(expectedErrorInvoked, "expectedError"); }
 
 const char *testConfigRGBColours = "COLOR-0 = 1, 2, 3\r\n"
                                    "COLOR-1 = 4, 5, 6\r\n"
                                    "\x1a";
-void assertRGBColours() {
-  expectEqualBytes(palette[0].red, 1, "COLOR-0 = 1, 2, 3");
-  expectEqualBytes(palette[0].green, 2, "COLOR-0 = 1, 2, 3");
-  expectEqualBytes(palette[0].blue, 3, "COLOR-0 = 1, 2, 3");
-  expectEqualBytes(palette[1].red, 4, "COLOR-1 = 4, 5, 6");
-  expectEqualBytes(palette[1].green, 5, "COLOR-1 = 4, 5, 6");
-  expectEqualBytes(palette[1].blue, 6, "COLOR-1 = 4, 5, 6");
+void        assertRGBColours() {
+         expectEqualBytes(palette[0].red, 1, "COLOR-0 = 1, 2, 3");
+         expectEqualBytes(palette[0].green, 2, "COLOR-0 = 1, 2, 3");
+         expectEqualBytes(palette[0].blue, 3, "COLOR-0 = 1, 2, 3");
+         expectEqualBytes(palette[1].red, 4, "COLOR-1 = 4, 5, 6");
+         expectEqualBytes(palette[1].green, 5, "COLOR-1 = 4, 5, 6");
+         expectEqualBytes(palette[1].blue, 6, "COLOR-1 = 4, 5, 6");
 }
 
 const char *testConfigSingleKey = "KEY-1 = {A}\r\n"

@@ -11,7 +11,7 @@
 #include "vdp.h"
 #include <stdio.h>
 
-void draw() {
+void draw(void) {
   // int xx = (registers[nibble2nd] * 2) & 255; //PIXEL_WIDTH_MASK;
   // int yy = (registers[nibble3rd] * 2) & 127 ;//PIXEL_HEIGHT_MASK;
 
@@ -24,7 +24,7 @@ void draw() {
 #endif
 }
 
-void cls() {
+void cls(void) {
   // printf("cls\r\n");
 #ifndef CPM
   if (videoResMode == VideoResModeLow)
@@ -34,7 +34,7 @@ void cls() {
 #endif
 }
 
-bool videoInit() {
+bool videoInit(void) {
 #ifndef CPM
   const uint8_t vdpType = videoChipProbe();
 
@@ -71,9 +71,9 @@ bool videoInit() {
   return true;
 }
 
-void videoClose() { tmsVideoClose(); }
+void videoClose(void) { tmsVideoClose(); }
 
-void videoHigh() {
+void videoHigh(void) {
   videoResMode = VideoResModeHigh;
   videoPixelWidth = 128;
   videoPixelHeight = 64;
@@ -85,7 +85,7 @@ void videoHigh() {
 #endif
 }
 
-void scrlDown() {
+void scrlDown(void) {
 #ifndef CPM
   if (fourthNibble == 0)
     return;
@@ -95,7 +95,7 @@ void scrlDown() {
 #endif
 }
 
-void scrlUp() {
+void scrlUp(void) {
 #ifndef CPM
   if (fourthNibble == 0)
     return;
@@ -105,7 +105,7 @@ void scrlUp() {
 #endif
 }
 
-void scrlLeft() {
+void scrlLeft(void) {
 #ifndef CPM
   if (videoResMode != VideoResModeLow) {
     v9958ScrollLeft();
@@ -113,7 +113,7 @@ void scrlLeft() {
 #endif
 }
 
-void scrlRight() {
+void scrlRight(void) {
 #ifndef CPM
   if (videoResMode != VideoResModeLow) {
     v9958ScrollRight();

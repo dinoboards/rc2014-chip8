@@ -1,3 +1,5 @@
+#define __GFX_H__
+
 #include "audio.h"
 #include "byte_code_executor.h"
 #include "configuration_loader.h"
@@ -45,7 +47,7 @@ char gameFileName[MAX_FILE_NAME];
 
 uint16_t txtNamBackup;
 
-void exit_cleanup() {
+void exit_cleanup(void) {
   videoClose();
   soundOff();
 

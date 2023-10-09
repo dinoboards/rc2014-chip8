@@ -10,20 +10,20 @@
  * Output: none
  * Registers: all
  */
-extern void msxbiosInitxt();
+extern void msxbiosInitxt(void);
 
 /**
  * Function: restores the palette from VRAM
  * Input: none
  * Output: none
  */
-extern void msxbiosRestorePalette();
+extern void msxbiosRestorePalette(void);
 
 /**
  * Function: initialises the palette (the current palette is saved in VRAM)
  * Input: none
  * Output: none
  */
-extern void msxbiosInitPalette();
+extern void msxbiosInitPalette(void);
 
 #endif

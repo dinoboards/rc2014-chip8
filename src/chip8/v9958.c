@@ -41,7 +41,7 @@ void outRegIndInt(uint16_t b) __z88dk_fastcall {
   // clang-format on
 }
 
-uint8_t inDat() __naked __z88dk_fastcall {
+uint8_t inDat(void) __naked __z88dk_fastcall {
   // clang-format off
   __asm
   IN A, (0x98)

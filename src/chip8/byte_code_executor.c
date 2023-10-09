@@ -35,7 +35,7 @@ uint16_t invertByteOrder(uint16_t word) __naked __z88dk_fastcall {
   // clang-format on
 }
 
-inline uint16_t readInstruction() {
+inline uint16_t readInstruction(void) {
   const uint16_t r = *chip8PC;
 
   xtracef("Read instruction %04X @ %p\r\n", invertByteOrder(r), chip8PC);
@@ -44,13 +44,13 @@ inline uint16_t readInstruction() {
   return r;
 }
 
-void initSystemState() {
+void initSystemState(void) {
   memset(registers, 0, 16);
   registerI = 0;
   chip8PC = (uint16_t *)programStorage;
 }
 
-bool executeSingleInstruction() {
+bool executeSingleInstruction(void) {
   currentInstruction = readInstruction(); // high/low bytes in inverted order
 
   manageTimers();
@@ -352,7 +352,7 @@ bool executeSingleInstruction() {
   return true;
 }
 
-void executeROM() {
+void executeROM(void) {
   while (executeSingleInstruction())
     ;
 }

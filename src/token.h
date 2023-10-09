@@ -13,16 +13,16 @@ extern bool       isOnlyDigits;
 extern byte       currentLineIndex;
 extern const char commentChar;
 
-extern void getNextToken();
-extern void openTokenStream();
-extern void closeTokenStream();
-extern void getToLineEnd();
-extern char getNext();
+extern void getNextToken(void);
+extern void openTokenStream(void);
+extern void closeTokenStream(void);
+extern void getToLineEnd(void);
+extern char getNext(void);
 extern char _getNext(char *currentLine) __z88dk_fastcall;
-extern void tokeniseAlphaNumericString();
-extern void getToLineEnd();
+extern void tokeniseAlphaNumericString(void);
+extern void getToLineEnd(void);
 
-extern char getNextChar();
+extern char getNextChar(void);
 extern char skipWhiteSpace(char nextChar) __z88dk_fastcall;
 extern char skipComment(char nextChar) __z88dk_fastcall;
 extern bool tokenEquals(const char *pTest) __z88dk_fastcall;

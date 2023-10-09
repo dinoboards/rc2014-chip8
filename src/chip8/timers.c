@@ -15,13 +15,13 @@ uint16_t performanceMeasureTick = 0;
 uint16_t instructionCount = 0;
 #endif
 
-void initTimers() {
+void initTimers(void) {
   manageTimers();
   lastTimerTick = (uint8_t)getSysTimer();
 }
 
 #ifdef _MEASURE_PERFORMANCE
-void reportPerformance() {
+void reportPerformance(void) {
   instructionCount++;
 
   if (JIFFY >= performanceMeasureTick) {

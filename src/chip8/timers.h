@@ -4,8 +4,8 @@
 
 #include "datatypes.h"
 
-extern void initTimers();
-extern void manageTimers();
-// extern void configureManageTimerFunction();
+extern void initTimers(void);
+extern void manageTimers(void);
+// extern void configureManageTimerFunction(void);
 
 #endif

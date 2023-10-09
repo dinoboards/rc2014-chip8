@@ -21,7 +21,7 @@
 
 #define addIVx() (registerI += registers[nibble2nd])
 
-inline void ldVxVy() {
+inline void ldVxVy(void) {
   //(registers[nibble2nd] = registers[nibble3rd])
   // clang-format off
   __asm
@@ -48,7 +48,7 @@ inline void ldVxVy() {
 }
 
 // TODO Quicks - set I to end value
-inline void ldVxI() {
+inline void ldVxI(void) {
   // clang-format off
   __asm
     ld	    hl, (_registerI)
@@ -65,7 +65,7 @@ inline void ldVxI() {
   // clang-format on
 }
 
-inline void ldIVx() {
+inline void ldIVx(void) {
   // printf("LdIVX %p\r\n", currentInstruction);
   // clang-format off
   __asm
@@ -83,10 +83,10 @@ inline void ldIVx() {
   // clang-format on
 }
 
-extern void ldIVxVy();
-extern void ldVxVyI();
+extern void ldIVxVy(void);
+extern void ldVxVyI(void);
 
-inline void andVxVy() {
+inline void andVxVy(void) {
   // clang-format off
   __asm
     ; // LOAD VX ADDR INTO DE (2ndNibble)
@@ -112,7 +112,7 @@ inline void andVxVy() {
   // clang-format on
 }
 
-inline void orVxVy() {
+inline void orVxVy(void) {
   // clang-format off
   __asm
     ; // LOAD VX ADDR INTO DE (2ndNibble)
@@ -139,20 +139,20 @@ inline void orVxVy() {
   // clang-format on
 }
 
-inline void shrVxVy() {
+inline void shrVxVy(void) {
   uint8_t *register2ndNibble = &registers[nibble2nd];
   registers[0xF] = *register2ndNibble & 0x1;
   *register2ndNibble >>= 1;
 }
 
-inline void shlVxVy() {
+inline void shlVxVy(void) {
   uint8_t *register2ndNibble = &registers[nibble2nd];
 
   registers[0xF] = !!(*register2ndNibble & 0x80);
   *register2ndNibble <<= 1;
 }
 
-static void addVxVy() __naked {
+static void addVxVy(void) __naked {
   // clang-format off
   __asm
     ; // LOAD VY b (3rdNibble)
@@ -194,9 +194,9 @@ addVxVyClrF:
 
 uint8_t *register2ndNibble;
 
-extern void subVxVy();
+extern void subVxVy(void);
 
-static void subnVxVy() {
+static void subnVxVy(void) {
   register2ndNibble = &registers[nibble2nd];
   const uint8_t *register3rdNibble = &registers[nibble3rd];
 
@@ -208,13 +208,13 @@ static void subnVxVy() {
   registers[0xF] = f;
 }
 
-inline void xorVxVy() { registers[nibble2nd] ^= registers[nibble3rd]; }
+inline void xorVxVy(void) { registers[nibble2nd] ^= registers[nibble3rd]; }
 
 static byte units;
 static byte hundreds;
 static byte tens;
 
-static void bcdIVx() {
+static void bcdIVx(void) {
   const byte x = registers[nibble2nd];
 
   const byte im = x / 10;
@@ -228,7 +228,7 @@ static void bcdIVx() {
   *p++ = units;
 }
 
-static void ldfIVx() {
+static void ldfIVx(void) {
   const byte x = registers[nibble2nd];
 
   registerI = (uint16_t)&fonts[x * 5];

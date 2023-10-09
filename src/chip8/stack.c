@@ -10,7 +10,7 @@ byte     stackIndex = 0;
  * @brief Push the current value of chip8PC onto the stack
  * @return (void)
  */
-void pushPc() {
+void pushPc(void) {
   if (stackIndex >= MAX_STACK) {
     printf("Stack overflow\r\n");
     exit(1);
@@ -23,7 +23,7 @@ void pushPc() {
  * @brief pop from stack and update chip8PC pointer
  * @return true if stack is empty, and was unable to pop anything
  */
-bool popPc() {
+bool popPc(void) {
   if (stackIndex <= 0)
     return true;
 

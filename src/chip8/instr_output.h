@@ -4,17 +4,17 @@
 
 #include "v9958.h"
 
-extern void draw();
-extern void cls();
-extern bool videoInit();
-extern void videoClose();
-extern void videoHigh();
-extern void scrlDown();
-extern void scrlUp();
-extern void scrlLeft();
-extern void scrlRight();
+extern void draw(void);
+extern void cls(void);
+extern bool videoInit(void);
+extern void videoClose(void);
+extern void videoHigh(void);
+extern void scrlDown(void);
+extern void scrlUp(void);
+extern void scrlLeft(void);
+extern void scrlRight(void);
 
-extern void drawFrame();
+extern void drawFrame(void);
 
 #define videoPlane() _color = nibble2nd
 

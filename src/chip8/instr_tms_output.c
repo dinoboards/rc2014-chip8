@@ -24,7 +24,7 @@ static bitsDrawCommand drawCommand;
 static uint8_t  charFrameBuffer[CHAR_FRAME_SIZE];
 static uint16_t currentFrameBufferIndex = 0;
 
-void drawBits() {
+void drawBits(void) {
   // clang-format off
   __asm
 	ld	a, (_currentFrameBufferIndex + 1)
@@ -64,7 +64,7 @@ void drawBits() {
   tmsWriteByte(drawCommand.data);
 }
 
-inline void incrementXBy2() {
+inline void incrementXBy2(void) {
   drawCommand.x += 2;
   currentFrameBufferIndex += 1;
 
@@ -72,7 +72,7 @@ inline void incrementXBy2() {
     currentFrameBufferIndex -= (32);
 }
 
-inline void decrementXBy2() {
+inline void decrementXBy2(void) {
   drawCommand.x -= 2;
   currentFrameBufferIndex -= 1;
 
@@ -80,7 +80,7 @@ inline void decrementXBy2() {
     currentFrameBufferIndex += (32);
 }
 
-inline void moveToNextRow() {
+inline void moveToNextRow(void) {
   drawCommand.y += 2;
   currentFrameBufferIndex += (32 - 4);
   drawCommand.x -= 8;
@@ -98,7 +98,7 @@ inline void moveTo(byte xx, byte yy) {
 static byte topPixelData;
 static byte bottomPixelData;
 
-void drawBytesEven() {
+void drawBytesEven(void) {
   byte end = drawCommand.x + 8;
   for (; drawCommand.x < end; incrementXBy2()) {
     drawCommand.topBits = (topPixelData & 0xC0) >> 6;
@@ -109,7 +109,7 @@ void drawBytesEven() {
   }
 }
 
-void drawBytesOdd() {
+void drawBytesOdd(void) {
   drawCommand.topBits = (topPixelData & 0x80) >> 7;
   drawCommand.bottomBits = (bottomPixelData & 0x80) >> 7;
   bottomPixelData <<= 1;
@@ -131,7 +131,7 @@ void drawBytesOdd() {
   decrementXBy2();
 }
 
-void drawSpriteEvenEven() __z88dk_fastcall {
+void drawSpriteEvenEven(void) __z88dk_fastcall {
   byte *p = (byte *)registerI;
 
   if (drawCommand.length & 1) {
@@ -154,7 +154,7 @@ void drawSpriteEvenEven() __z88dk_fastcall {
     }
 }
 
-void drawSpriteOddEven() __z88dk_fastcall {
+void drawSpriteOddEven(void) __z88dk_fastcall {
   byte *p = (byte *)registerI;
 
   if (drawCommand.length & 1) {
@@ -177,7 +177,7 @@ void drawSpriteOddEven() __z88dk_fastcall {
     }
 }
 
-void drawSpriteEvenOdd() __z88dk_fastcall {
+void drawSpriteEvenOdd(void) __z88dk_fastcall {
   byte *p = (byte *)registerI;
   topPixelData = 0;
   bottomPixelData = *p++;
@@ -203,7 +203,7 @@ void drawSpriteEvenOdd() __z88dk_fastcall {
   drawBytesEven();
 }
 
-void drawSpriteOddOdd() __z88dk_fastcall {
+void drawSpriteOddOdd(void) __z88dk_fastcall {
   byte *p = (byte *)registerI;
   topPixelData = 0;
   bottomPixelData = *p++;
@@ -231,7 +231,7 @@ void drawSpriteOddOdd() __z88dk_fastcall {
 
 static tmsClearParams clsParams = {TMS_MD1_NAME_TABLE, 0x400, 0};
 
-void tmsCls() {
+void tmsCls(void) {
   tmsClearData(&clsParams);
   memset(charFrameBuffer, 0, sizeof(charFrameBuffer));
 }
@@ -265,7 +265,7 @@ static void buildPatternData(byte *pData) {
   }
 }
 
-void tmsInitPatterns() {
+void tmsInitPatterns(void) {
   byte          pixelData[8 * 16];
   tmsDataParams patternParams = {TMS_MD1_PATTERN_TABLE, sizeof(pixelData), pixelData};
 
@@ -276,7 +276,7 @@ void tmsInitPatterns() {
 static byte xx;
 static byte yy;
 
-void tmsDraw() {
+void tmsDraw(void) {
   drawCommand.length = fourthNibble;
   xx = registers[nibble2nd];
   yy = registers[nibble3rd];
@@ -302,7 +302,7 @@ void tmsDraw() {
 
 static tmsClearParams colourParams = {TMS_MD1_COLOUR_TABLE, 32, (COL_DRKGREEN << 4) + COL_BLACK};
 
-void tmsVideoInit() {
+void tmsVideoInit(void) {
   tmsInit();
   tmsRegisterColours(gameColours[0], gameColours[1]);
   colourParams.data = (gameColours[1] << 4) + gameColours[0];

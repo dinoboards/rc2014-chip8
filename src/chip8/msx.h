@@ -4,11 +4,11 @@
 #include <stdlib.h>
 
 #ifdef MSX
-#define JIFFY_ADDR  __at (0xFC9E)
-#define NEWKEY_ADDR __at (0xFBE5)
-#define PUTPNT_ADDR __at (0xF3F8)
-#define GETPNT_ADDR __at (0xF3FA)
-#define TXTNAM_ADDR __at (0xF3B3)
+#define JIFFY_ADDR  __at(0xFC9E)
+#define NEWKEY_ADDR __at(0xFBE5)
+#define PUTPNT_ADDR __at(0xF3F8)
+#define GETPNT_ADDR __at(0xF3FA)
+#define TXTNAM_ADDR __at(0xF3B3)
 #else
 #define JIFFY_ADDR
 #define NEWKEY_ADDR

@@ -39,13 +39,13 @@ void errorExpectedChar(char ch) __z88dk_fastcall {
   errorExit();
 }
 
-void errorUnexpectedContent() {
+void errorUnexpectedContent(void) {
   getToLineEnd();
   logError("\r\n%s\r\n\r\nUnexpected content after expression at line number %d\r\n", token.currentLine, currentLineNumber);
   errorExit();
 }
 
-void errorExpressionTooLong() {
+void errorExpressionTooLong(void) {
   getToLineEnd();
   logError("\r\n%s\r\n\r\nExpression item too long at line number %d\r\n", token.currentLine, currentLineNumber);
   errorExit();

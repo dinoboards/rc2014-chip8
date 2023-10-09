@@ -7,7 +7,7 @@
 
 static inline byte getRegisterIndex(TokenType c) { return (byte)c - RegisterV0; }
 
-byte expectToBeByte() {
+byte expectToBeByte(void) {
   int x = evaluate(token.value);
 
   if (x < 0 || x > 255)
@@ -16,9 +16,9 @@ byte expectToBeByte() {
   return (byte)x;
 }
 
-uint16_t expectToBeInt16() { return evaluate(token.value); }
+uint16_t expectToBeInt16(void) { return evaluate(token.value); }
 
-uint16_t expectToBeInt() {
+uint16_t expectToBeInt(void) {
   uint16_t x = evaluate(token.value);
 
   if (x > 4095) {
@@ -29,13 +29,13 @@ uint16_t expectToBeInt() {
   return x;
 }
 
-void expectToBeIRegister() {
+void expectToBeIRegister(void) {
   if (!currentIsIRegister()) {
     expectedError("I");
   }
 }
 
-byte expectToBeVRegister() {
+byte expectToBeVRegister(void) {
   if (!currentIsVRegister()) {
     expectedError("Vx");
   }
@@ -43,12 +43,12 @@ byte expectToBeVRegister() {
   return getRegisterIndex(token.type);
 }
 
-void expectToBeIndexedI() {
+void expectToBeIndexedI(void) {
   if (!currentIsIndexedI())
     expectedError("[I]");
 }
 
-void expectToBeOneOfVxOrIOrStOrDt() {
+void expectToBeOneOfVxOrIOrStOrDt(void) {
   if (currentIsVRegister())
     return;
 
@@ -64,7 +64,7 @@ void expectToBeOneOfVxOrIOrStOrDt() {
   expectedError("one of Vx, I, ST or DT");
 }
 
-void expectToBeOneOfVxOrIOrIndexedIOrStOrDt() {
+void expectToBeOneOfVxOrIOrIndexedIOrStOrDt(void) {
   if (currentIsVRegister())
     return;
 
@@ -83,7 +83,7 @@ void expectToBeOneOfVxOrIOrIndexedIOrStOrDt() {
   expectedError("one of Vx, I, [I], ST or DT");
 }
 
-void expectToBeVxOrIRegister() {
+void expectToBeVxOrIRegister(void) {
   if (currentIsVRegister())
     return;
 
@@ -93,22 +93,22 @@ void expectToBeVxOrIRegister() {
   expectedError("one of Vx or I");
 }
 
-void expectToBeST() {
+void expectToBeST(void) {
   if (!currentIsST())
     expectedError("ST");
 }
 
-void expectToBeDT() {
+void expectToBeDT(void) {
   if (!currentIsDT())
     expectedError("DT");
 }
 
-void expectToBeComma() {
+void expectToBeComma(void) {
   if (!currentIsComma())
     expectedError(",");
 }
 
-byte expectToBeNibble() {
+byte expectToBeNibble(void) {
   int x = evaluate(token.value);
 
   if (x < 0 || x > 15) {
@@ -119,27 +119,27 @@ byte expectToBeNibble() {
   return (byte)x;
 }
 
-void expectRangeOperator() {
+void expectRangeOperator(void) {
   if (!currentIsRangeOperator())
     expectedError("..");
 }
 
-void expectToBeDown() {
+void expectToBeDown(void) {
   if (!currentIsDown())
     expectedError("one of DOWN, UP, LEFT or RIGHT");
 }
 
-void expectToBeUp() {
+void expectToBeUp(void) {
   if (!currentIsUp())
     expectedError("one of DOWN, UP, LEFT or RIGHT");
 }
 
-void expectToBeLeft() {
+void expectToBeLeft(void) {
   if (!currentIsLeft())
     expectedError("one of DOWN, UP, LEFT or RIGHT");
 }
 
-void expectToBeRight() {
+void expectToBeRight(void) {
   if (!currentIsRight())
     expectedError("one of DOWN, UP, LEFT or RIGHT");
 }

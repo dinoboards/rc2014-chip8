@@ -32,14 +32,14 @@ typedef struct {
 
 extern tms9918IoPorts tmsIoPorts;
 
-extern void tmsInit();
-extern void tmsSetMode1();
+extern void tmsInit(void);
+extern void tmsSetMode1(void);
 extern void tmsRegisterColours(uint8_t bkColour, uint8_t fgColour);
 
 typedef struct {
   uint16_t tmsAddress;
   uint16_t length;
-  void *   address;
+  void    *address;
 } tmsDataParams;
 
 extern void tmsWriteData(tmsDataParams *p) __z88dk_fastcall;
@@ -53,7 +53,7 @@ typedef struct {
 
 extern void tmsClearData(tmsClearParams *p) __z88dk_fastcall;
 extern void tmsWriteByte(uint8_t b) __z88dk_fastcall;
-extern byte tmsReadByte() __z88dk_fastcall;
+extern byte tmsReadByte(void) __z88dk_fastcall;
 extern void tmsSetWriteAddr(uint16_t) __z88dk_fastcall;
 extern void tmsSetReadAddr(uint16_t) __z88dk_fastcall;
 

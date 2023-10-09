@@ -3,8 +3,8 @@
 
 #include "datatypes.h"
 
-extern void audioInit();
+extern void audioInit(void);
 extern void audioPlay(uint16_t p) __z88dk_fastcall;
-extern void audioStop();
+extern void audioStop(void);
 
 #endif

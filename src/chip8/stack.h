@@ -3,8 +3,8 @@
 #define __STACK
 #include "datatypes.h"
 
-extern void pushPc();
-extern bool popPc();
+extern void pushPc(void);
+extern bool popPc(void);
 
 /* only required public to allow tests */
 #define MAX_STACK 16

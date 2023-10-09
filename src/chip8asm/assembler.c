@@ -13,7 +13,7 @@
 
 inline void assLabel(uint8_t parseCount) { addLabel(token.value, currentAddress, parseCount != 1); }
 
-inline void assRet() { emit(0x00EE); }
+inline void assRet(void) { emit(0x00EE); }
 
 /*
 6xkk - LD Vx, byte
@@ -42,7 +42,7 @@ Set registers Vx through Vy (inclusive ) from memory starting at location I.
 The interpreter reads values from memory starting at location I into registers V0 through Vx.
 I is not incremented.
 */
-inline void assLdVx() {
+inline void assLdVx(void) {
   const byte x = expectToBeVRegister();
 
   getNext();
@@ -102,7 +102,7 @@ Store registers Vx through Vy (inclusive ) to memory starting at location I.
 
 I is not incremented.
 */
-inline void assLdIVx() {
+inline void assLdIVx(void) {
   expectToBeIndexedI();
 
   getNext();
@@ -131,7 +131,7 @@ Set I = nnn.
 
 The value of register I is set to nnn.
 */
-inline void assLdI() {
+inline void assLdI(void) {
   expectToBeIRegister();
 
   getNext();
@@ -155,7 +155,7 @@ Set sound timer = Vx.
 
 ST is set equal to the value of Vx.
 */
-inline void assLdStVx() {
+inline void assLdStVx(void) {
   expectToBeST();
 
   getNext();
@@ -174,7 +174,7 @@ Set delay timer = Vx.
 
 DT is set equal to the value of Vx.
 */
-inline void assLdDtVx() {
+inline void assLdDtVx(void) {
   expectToBeDT();
 
   getNext();
@@ -195,7 +195,7 @@ inline void assLdDtVx() {
   ld st, Vx
   LD [i], Vx
 */
-inline void assLd() {
+inline void assLd(void) {
   getNext();
   expectToBeOneOfVxOrIOrIndexedIOrStOrDt();
 
@@ -211,7 +211,7 @@ inline void assLd() {
     assLdVx();
 }
 
-inline void assDb() {
+inline void assDb(void) {
   getNext();
   int  x = expectToBeByte();
   bool isMore;
@@ -230,7 +230,7 @@ inline void assDb() {
   } while (isMore);
 }
 
-inline void assDs() {
+inline void assDs(void) {
   getNext();
   int x = expectToBeInt16();
 
@@ -240,7 +240,7 @@ inline void assDs() {
 }
 
 // Dxyn - DRW Vx, Vy, nibble
-inline void assDrw() {
+inline void assDrw(void) {
   getNext();
   const byte x = expectToBeVRegister();
 
@@ -265,7 +265,7 @@ Call subroutine at nnn.
 
 The interpreter increments the stack pointer, then puts the current PC on the top of the stack. The PC is then set to nnn.
 */
-inline void assCall() {
+inline void assCall(void) {
   getNext();
   const int16_t addr = expectToBeInt();
 
@@ -278,7 +278,7 @@ inline void assCall() {
 00E0 - CLS
 Clear the display.
 */
-inline void assCls() { emit(0x00E0); }
+inline void assCls(void) { emit(0x00E0); }
 
 /*
 7xkk - ADD Vx, byte
@@ -292,7 +292,7 @@ Set Vx = Vx + Vy, set VF = carry.
 The values of Vx and Vy are added together. If the result is greater than 8 bits (i.e., > 255,) VF is set to 1, otherwise 0. Only the lowest 8 bits of the result are kept, and stored in Vx.
 
 */
-inline void assAddVx() {
+inline void assAddVx(void) {
   const byte x = expectToBeVRegister();
 
   getNext();
@@ -316,7 +316,7 @@ Set I = I + Vx.
 
 The values of I and Vx are added, and the results are stored in I.
 */
-inline void assAddI() {
+inline void assAddI(void) {
   expectToBeIRegister();
 
   getNext();
@@ -329,7 +329,7 @@ inline void assAddI() {
   emitByte(0x1E);
 }
 
-inline void assAdd() {
+inline void assAdd(void) {
   getNext();
   expectToBeVxOrIRegister();
 
@@ -350,7 +350,7 @@ Skip next instruction if Vx = Vy.
 
 The interpreter compares register Vx to register Vy, and if they are equal, increments the program counter by 2.
 */
-inline void assSe() {
+inline void assSe(void) {
   getNext();
   const byte x = expectToBeVRegister();
 
@@ -383,7 +383,7 @@ Skip next instruction if Vx != Vy.
 
 The values of Vx and Vy are compared, and if they are not equal, the program counter is increased by 2..
 */
-inline void assSne() {
+inline void assSne(void) {
   getNext();
   const byte x = expectToBeVRegister();
 
@@ -411,7 +411,7 @@ Jump to location nnn.
 
 The interpreter sets the program counter to nnn.
 */
-inline void assJp() {
+inline void assJp(void) {
   getNext();
 
   if (currentIsVRegister()) {
@@ -439,7 +439,7 @@ Ex9E - SKP Vx
 Skip next instruction if key with the value of Vx is pressed.
 
 Checks the keyboard, and if the key corresponding to the value of Vx is currently in the down position, PC is increased by 2.*/
-inline void assSkpVx() {
+inline void assSkpVx(void) {
   getNext();
   const byte x = expectToBeVRegister();
 
@@ -453,7 +453,7 @@ Skip next instruction if key with the value of Vx is not pressed.
 
 Checks the keyboard, and if the key corresponding to the value of Vx is currently in the up position, PC is increased by 2
 */
-inline void assSknpVx() {
+inline void assSknpVx(void) {
   getNext();
   const byte x = expectToBeVRegister();
 
@@ -467,7 +467,7 @@ Set Vx = random byte AND kk.
 
 The interpreter generates a random number from 0 to 255, which is then ANDed with the value kk. The results are stored in Vx. See instruction 8xy2 for more information on AND.
 */
-inline void assRndVx() {
+inline void assRndVx(void) {
   getNext();
   const byte x = expectToBeVRegister();
 
@@ -487,7 +487,7 @@ Set Vx = Vx AND Vy.
 
 Performs a bitwise AND on the values of Vx and Vy, then stores the result in Vx. A bitwise AND compares the corrseponding bits from two values, and if both bits are 1, then the same bit in the result is also 1. Otherwise, it is 0.
 */
-inline void assAnd() {
+inline void assAnd(void) {
   getNext();
   const byte x = expectToBeVRegister();
 
@@ -505,7 +505,7 @@ Set Vx = Vx OR Vy.
 
 Performs a bitwise OR on the values of Vx and Vy, then stores the result in Vx. A bitwise OR compares the corrseponding bits from two values, and if either bit is 1, then the same bit in the result is also 1. Otherwise, it is 0.
 */
-inline void assOr() {
+inline void assOr(void) {
   getNext();
   const byte x = expectToBeVRegister();
 
@@ -524,7 +524,7 @@ Set Vx = Vx SHR 1.
 
 If the least-significant bit of Vx is 1, then VF is set to 1, otherwise 0. Then Vx is divided by 2.
 */
-inline void assShr() {
+inline void assShr(void) {
   getNext();
   const byte x = expectToBeVRegister();
 
@@ -545,7 +545,7 @@ Set Vx = Vx SHL 1.
 
 If the most-significant bit of Vx is 1, then VF is set to 1, otherwise to 0. Then Vx is multiplied by 2.
 */
-inline void assShl() {
+inline void assShl(void) {
   getNext();
   const byte x = expectToBeVRegister();
 
@@ -565,7 +565,7 @@ inline void assShl() {
 Set Vx = Vx - Vy, set VF = NOT borrow.
 
 If Vx > Vy, then VF is set to 1, otherwise 0. Then Vy is subtracted from Vx, and the results stored in Vx.*/
-inline void assSub() {
+inline void assSub(void) {
   getNext();
   const byte x = expectToBeVRegister();
 
@@ -584,7 +584,7 @@ Set Vx = Vy - Vx, set VF = NOT borrow.
 
 If Vy > Vx, then VF is set to 1, otherwise 0. Then Vx is subtracted from Vy, and the results stored in Vx.
 */
-inline void assSubn() {
+inline void assSubn(void) {
   getNext();
   const byte x = expectToBeVRegister();
 
@@ -605,7 +605,7 @@ Performs a bitwise exclusive OR on the values of Vx and Vy, then stores the resu
 the corrseponding bits from two values, and if the bits are not both the same, then the corresponding bit in the result
 is set to 1. Otherwise, it is 0.
 */
-inline void assXor() {
+inline void assXor(void) {
   getNext();
   const byte x = expectToBeVRegister();
 
@@ -624,7 +624,7 @@ Fx33 - BCD [I], Vx
 Store BCD representation of Vx in memory locations I, I+1, and I+2.
 
 The interpreter takes the decimal value of Vx, and places the hundreds digit in memory at location in I, the tens digit at location I+1, and the ones digit at location I+2.*/
-inline void assBcd() {
+inline void assBcd(void) {
   getNext();
   expectToBeIndexedI();
 
@@ -644,7 +644,7 @@ Set I = location of sprite for digit Vx.
 
 The value of I is set to the location for the hexadecimal sprite corresponding to the value of Vx. See section 2.4, Display, for more information on the Chip-8 hexadecimal font.
 */
-inline void assLdf() {
+inline void assLdf(void) {
   getNext();
   expectToBeIRegister();
 
@@ -664,7 +664,7 @@ Wait for a key press, store the value of the key in Vx.
 
 All execution stops until a key is pressed, then the value of that key is stored in Vx.
 */
-inline void assKey() {
+inline void assKey(void) {
   getNext();
   const byte x = expectToBeVRegister();
 
@@ -672,7 +672,7 @@ inline void assKey() {
   emitByte(0x0A);
 }
 
-inline void assHigh() { emit(0x00FF); }
+inline void assHigh(void) { emit(0x00FF); }
 
 /*
 FN01 - PLANE N
@@ -680,14 +680,14 @@ Set drawing plane to 0, 1, 2 or 3
 
 Default is Plane 1
 */
-inline void assPlane() {
+inline void assPlane(void) {
   getNext();
   const int x = expectToBeNibble();
 
   emitNibbles(0xF, x, 0, 1);
 }
 
-inline void assAudio() { emit(0xF002); }
+inline void assAudio(void) { emit(0xF002); }
 
 /*
 00CN - SCROLL DOWN N PIXELS
@@ -695,7 +695,7 @@ inline void assAudio() { emit(0xF002); }
 00FC - SCROLL LEFT
 00FB - SCROLL RIGHT
 */
-inline void assScroll() {
+inline void assScroll(void) {
   getNext();
   if (currentIsDown()) {
     expectToBeDown();

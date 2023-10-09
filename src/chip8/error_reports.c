@@ -4,36 +4,36 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-void expectedEqualSign() {
+void expectedEqualSign(void) {
   getToLineEnd();
   printf("\r\n%s\r\n\r\nExpected '=' but found %s\r\n at line number %d\r\n", token.currentLine, token.value, currentLineNumber);
   exit(1);
 }
 
-void unexpectedToken() {
+void unexpectedToken(void) {
   getToLineEnd();
   printf("\r\n%s\r\nUnexpected token '%c' found\r\n at line number %d\r\n", token.currentLine, tokenCurrentChar, currentLineNumber);
   exit(1);
 }
 
-void unexpectedEntry() {
+void unexpectedEntry(void) {
   getToLineEnd();
   printf("\r\n%s\r\nBad configuration found\r\n at line number %d\r\n", token.currentLine, currentLineNumber);
   exit(1);
 }
 
-void expectedColour() {
+void expectedColour(void) {
   getToLineEnd();
   printf("\r\n%s\r\nExpected a colour reference but found '%s'\r\n at line number %d\r\n", token.currentLine, token.value, currentLineNumber);
   exit(1);
 }
 
-void tmsDriverNotFound() {
+void tmsDriverNotFound(void) {
   printf("TMS driver not found\r\n");
   exit(1);
 }
 
-void warnNoTimerFound() { printf("Warning: No timer found.\r\n"); }
+void warnNoTimerFound(void) { printf("Warning: No timer found.\r\n"); }
 
 uint16_t expectedError(const char *p) __z88dk_fastcall {
   getToLineEnd();

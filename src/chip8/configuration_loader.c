@@ -7,10 +7,10 @@
 #include "v9958.h"
 #include <stdio.h>
 
-static void applyConfigColour();
-static void applyConfigKey();
+static void applyConfigColour(void);
+static void applyConfigKey(void);
 
-void applySingleConfig() {
+void applySingleConfig(void) {
   switch (token.type) {
   case TokenColour:
     applyConfigColour();
@@ -56,7 +56,7 @@ void applyConfiguration(const char *pName) __z88dk_fastcall {
   parseConfiguration(configFileName);
 }
 
-uint8_t expectToBeHexCharIdentifier() {
+uint8_t expectToBeHexCharIdentifier(void) {
   if (token.type == TokenNumber) {
     if (token.number >= 0 && token.number <= 9)
       return (uint8_t)token.number;
@@ -85,54 +85,54 @@ uint8_t expectToBeHexCharIdentifier() {
   return 0;
 }
 
-const char *expectToBeKeyIdentifier() {
+const char *expectToBeKeyIdentifier(void) {
   if (token.type != TokenIdentifier)
     return (char *)expectedError("key identifier");
 
   return token.value;
 }
 
-void expectToBeEquals() {
+void expectToBeEquals(void) {
   if (token.type != TokenEquals)
     expectedError("=");
 }
 
-void expectToBeOpenCurly() {
+void expectToBeOpenCurly(void) {
   if (token.type != TokenOpenCurly)
     expectedError("keycode within {}");
 }
 
-void expectToBeCloseCurly() {
+void expectToBeCloseCurly(void) {
   if (token.type != TokenCloseCurly)
     expectedError("Missing }");
 }
 
-void expectToBeKey() {
+void expectToBeKey(void) {
   if (token.type != TokenKey)
     expectedError("one of KEY-, CTRL- or BTN-");
 }
 
-void expectToBeDash() {
+void expectToBeDash(void) {
   if (token.type != TokenDash)
     expectedError("-");
 }
 
-void expectToBeComma() {
+void expectToBeComma(void) {
   if (token.type != TokenComma)
     expectedError(",");
 }
 
-void expectToBeAlphanumeric() {
+void expectToBeAlphanumeric(void) {
   if (token.type != TokenAlphanumeric)
     expectedError("key code");
 }
 
-void expectToBeAlphanumericOrIdentifier() {
+void expectToBeAlphanumericOrIdentifier(void) {
   if (token.type != TokenAlphanumeric && token.type != TokenIdentifier)
     expectedError("key code");
 }
 
-const ControllerDirection expectToBeDirection() {
+const ControllerDirection expectToBeDirection(void) {
   if (token.type != TokenDirection)
     return (ControllerDirection)expectedError("direction (UP, DOWN, LEFT, RIGHT, or BTN-<number>)");
 
@@ -172,7 +172,7 @@ uint8_t expectToBeNumberUp(uint8_t upper) {
   return n;
 }
 
-static void applyConfigColour() {
+static void applyConfigColour(void) {
   getNextToken();
   expectToBeDash();
 
@@ -208,7 +208,7 @@ static void applyConfigColour() {
 
 bool haveAppliedAKeyConfig = false;
 
-static void applyConfigKey() {
+static void applyConfigKey(void) {
   if (!haveAppliedAKeyConfig) {
     gameKeyCount = 0;
     haveAppliedAKeyConfig = true;

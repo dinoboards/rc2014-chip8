@@ -5,26 +5,26 @@
 
 #define REGISTER_I 17
 
-extern byte     expectToBeByte();
-extern byte     expectToBeNibble();
-extern byte     expectToBeVRegister();
-extern uint16_t expectToBeInt();
-extern uint16_t expectToBeInt16();
-extern void     expectToBeComma();
-extern void     expectToBeIRegister();
-extern void     expectToBeIndexedI();
-extern void     expectToBeOneOfVxOrIOrStOrDt();
-extern void     expectToBeOneOfVxOrIOrIndexedIOrStOrDt();
-extern void     expectToBeVxOrIRegister();
-extern void     expectRangeOperator();
+extern byte     expectToBeByte(void);
+extern byte     expectToBeNibble(void);
+extern byte     expectToBeVRegister(void);
+extern uint16_t expectToBeInt(void);
+extern uint16_t expectToBeInt16(void);
+extern void     expectToBeComma(void);
+extern void     expectToBeIRegister(void);
+extern void     expectToBeIndexedI(void);
+extern void     expectToBeOneOfVxOrIOrStOrDt(void);
+extern void     expectToBeOneOfVxOrIOrIndexedIOrStOrDt(void);
+extern void     expectToBeVxOrIRegister(void);
+extern void     expectRangeOperator(void);
 
-extern void expectToBeST();
-extern void expectToBeDT();
+extern void expectToBeST(void);
+extern void expectToBeDT(void);
 
-extern void expectToBeDown();
-extern void expectToBeUp();
-extern void expectToBeLeft();
-extern void expectToBeRight();
+extern void expectToBeDown(void);
+extern void expectToBeUp(void);
+extern void expectToBeLeft(void);
+extern void expectToBeRight(void);
 
 #define currentIsIRegister()     (token.type == RegisterI)
 #define currentIsST()            (token.type == RegisterST)

@@ -8,9 +8,9 @@
 Token      token;
 const char commentChar = ';';
 
-char getNext() { return _getNext(token.currentLine); }
+char getNext(void) { return _getNext(token.currentLine); }
 
-static bool isDecimalNumber() {
+static bool isDecimalNumber(void) {
   char nextChar = tokenCurrentChar;
 
   if (!isDigit(nextChar))
@@ -33,7 +33,7 @@ static bool isDecimalNumber() {
 
 DEF_TOKEN_EQUALS(token.value)
 
-static void testForInstructions() {
+static void testForInstructions(void) {
   token.isInstruction = true;
 
   tokenMap("ret", InstructionRet);
@@ -73,7 +73,7 @@ static void testForInstructions() {
   token.type = TokenAlphanumeric;
 }
 
-void tokeniseAlphaNumericString() {
+void tokeniseAlphaNumericString(void) {
   if (tokenCurrentChar == ':' && isOnlyAlphaNumeric) {
     token.type = TokenLabel;
     tokenCurrentChar = getNext();
@@ -118,7 +118,7 @@ void tokeniseAlphaNumericString() {
   token.type = TokenExpression;
 }
 
-static bool isIndexedI() {
+static bool isIndexedI(void) {
   if (tokenCurrentChar != '[')
     return false;
 
@@ -145,7 +145,7 @@ static bool isIndexedI() {
   return b;
 }
 
-static bool isComma() {
+static bool isComma(void) {
   if (tokenCurrentChar != ',')
     return false;
 
@@ -159,7 +159,7 @@ static bool isComma() {
   return true;
 }
 
-static bool isRangeOperator() {
+static bool isRangeOperator(void) {
   if (tokenCurrentChar != '.')
     return false;
 
@@ -178,7 +178,7 @@ static bool isRangeOperator() {
   return true;
 }
 
-void getNextToken() {
+void getNextToken(void) {
   tokenCurrentChar = skipWhiteSpace(tokenCurrentChar);
   tokenCurrentChar = skipComment(tokenCurrentChar);
 
@@ -212,7 +212,7 @@ void getNextToken() {
   errorExit();
 }
 
-void openTokenStream() {
+void openTokenStream(void) {
   openFileStream();
   currentLineNumber = 1;
 
@@ -223,4 +223,4 @@ void openTokenStream() {
   currentLineIndex = 1;
 }
 
-void closeTokenStream() { closeFileStream(); }
+void closeTokenStream(void) { closeFileStream(); }

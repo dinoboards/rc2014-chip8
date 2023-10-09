@@ -14,7 +14,7 @@ byte currentLineIndex;
 static char *pTokenValue;
 static bool  newLineStarted = true;
 
-char getNextChar() {
+char getNextChar(void) {
   char c = CR;
   while (c == CR)
     c = getNextCharRaw();
@@ -102,7 +102,7 @@ bool isAlphaNumeric(const char *p) __z88dk_fastcall {
   return true;
 }
 
-void getToLineEnd() {
+void getToLineEnd(void) {
   char c = tokenCurrentChar;
   while (c && c != '\n') {
     c = getNext();

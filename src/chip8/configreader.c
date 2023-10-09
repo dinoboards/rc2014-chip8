@@ -11,7 +11,7 @@
 Token      token;
 const char commentChar = '#';
 
-char getNext() { return _getNext(token.currentLine); }
+char getNext(void) { return _getNext(token.currentLine); }
 
 DEF_TOKEN_EQUALS(token.value)
 
@@ -22,7 +22,7 @@ DEF_TOKEN_EQUALS(token.value)
     return;                      \
   }
 
-void tokeniseAlphaNumericString() {
+void tokeniseAlphaNumericString(void) {
   tokenMap("color", TokenColour);
 
   token.isColour = true;
@@ -75,7 +75,7 @@ void tokeniseAlphaNumericString() {
   token.type = TokenAlphanumeric;
 }
 
-static bool isEqual() {
+static bool isEqual(void) {
   if (tokenCurrentChar != '=')
     return false;
 
@@ -89,7 +89,7 @@ static bool isEqual() {
   return true;
 }
 
-static bool isDash() {
+static bool isDash(void) {
   if (tokenCurrentChar != '-')
     return false;
 
@@ -103,7 +103,7 @@ static bool isDash() {
   return true;
 }
 
-static bool isComma() {
+static bool isComma(void) {
   if (tokenCurrentChar != ',')
     return false;
 
@@ -117,7 +117,7 @@ static bool isComma() {
   return true;
 }
 
-static bool isOpenCurly() {
+static bool isOpenCurly(void) {
   if (tokenCurrentChar != '{')
     return false;
 
@@ -131,7 +131,7 @@ static bool isOpenCurly() {
   return true;
 }
 
-static bool isCloseCurly() {
+static bool isCloseCurly(void) {
   if (tokenCurrentChar != '}')
     return false;
 
@@ -144,7 +144,7 @@ static bool isCloseCurly() {
 
   return true;
 }
-void getNextToken() {
+void getNextToken(void) {
   tokenCurrentChar = skipWhiteSpace(tokenCurrentChar);
   tokenCurrentChar = skipComment(tokenCurrentChar);
 
@@ -179,7 +179,7 @@ void getNextToken() {
   unexpectedToken();
 }
 
-void openTokenStream() {
+void openTokenStream(void) {
   openFileStream();
 
   currentLineNumber = 1;
@@ -192,4 +192,4 @@ void openTokenStream() {
   token.isColour = false;
 }
 
-void closeTokenStream() { closeFileStream(); }
+void closeTokenStream(void) { closeFileStream(); }

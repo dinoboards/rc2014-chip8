@@ -9,6 +9,6 @@
 #define VDP_V9958 2
 
 // Returns one of the above VDP_XXX constants
-extern uint8_t videoChipProbe();
+extern uint8_t videoChipProbe(void);
 
 #endif

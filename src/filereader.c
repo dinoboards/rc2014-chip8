@@ -4,15 +4,15 @@
 #include <stdio.h>
 
 static const char *pFileName;
-static FILE *      pFile;
+static FILE       *pFile;
 
 void setFileName(const char *fileName) { pFileName = fileName; }
 
-void openFileStream() { pFile = fopen(pFileName, "r"); }
+void openFileStream(void) { pFile = fopen(pFileName, "r"); }
 
-void closeFileStream() { fclose(pFile); }
+void closeFileStream(void) { fclose(pFile); }
 
-char getNextCharRaw() {
+char getNextCharRaw(void) {
   const char b = getc(pFile);
 
   if (feof(pFile))
