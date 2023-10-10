@@ -10,7 +10,7 @@
 #include "test_expectations.h"
 #include "test_helper.h"
 
-void testEvaluation() {
+void testEvaluation(void) {
   shouldEvaluate("1234", 1234);
   shouldEvaluate("10*2", 20);
 
@@ -39,7 +39,7 @@ void testEvaluation() {
   shouldEvaluateError("@@@", "Expression had unexpected character '@' at line number 0");
   shouldEvaluateError("[I]", "Expression had unexpected character '[' at line number 0");
 }
-void main() {
+void main(void) {
 
   testEvaluation();
 

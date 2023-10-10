@@ -12,7 +12,7 @@
 
 // void assemble(uint8_t pc) __z88dk_fastcall { data = pc; }
 
-void main() {
+void main(void) {
   // assemble(2);
   printf("!!Hello World I am at location: %p with stack at %p\r\n", &main, getStack());
 

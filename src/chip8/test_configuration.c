@@ -11,9 +11,9 @@
 bool unexpectedTokenInvoked;
 bool expectedErrorInvoked;
 
-void unexpectedEntry() {}
-void expectedEqualSign() {}
-void unexpectedToken() {
+void unexpectedEntry(void) {}
+void expectedEqualSign(void) {}
+void unexpectedToken(void) {
   printf("unexpected token type: %d, value: %s\r\n", token.type, token.value);
   unexpectedTokenInvoked = true;
 }
@@ -27,9 +27,9 @@ char *pNextChar;
 char *pConfigurationUnderTest;
 
 void setFileName(const char *fileName) { (void)fileName; }
-void openFileStream() { pNextChar = pConfigurationUnderTest; }
-void closeFileStream() {}
-char getNextCharRaw() { return *pNextChar++; }
+void openFileStream(void) { pNextChar = pConfigurationUnderTest; }
+void closeFileStream(void) {}
+char getNextCharRaw(void) { return *pNextChar++; }
 
 extern bool haveAppliedAKeyConfig;
 
@@ -48,7 +48,7 @@ const char *testConfigColours = "COLOR-0 = lightblue\r\n"
                                 "COLOR-1 = black\r\n"
                                 "COLOR-3 = cyan\r\n"
                                 "\x1a";
-void        assertColours() {
+void        assertColours(void) {
          expectEqualBytes(gameColours[0], COL_LIGBLUE, "COLOR-0 = LIGHT BLUE");
          expectEqualBytes(gameColours[1], COL_BLACK, "COLOR-1 = BLACK");
          expectEqualBytes(gameColours[3], COL_CYAN, "COLOR-14 = CYAN");
@@ -56,12 +56,12 @@ void        assertColours() {
 
 const char *testConfigColoursBadIndex = "COLOR-6 = lightblue\r\n"
                                         "\x1a";
-void        assertColoursBadIndex() { expectTrue(expectedErrorInvoked, "expectedError"); }
+void        assertColoursBadIndex(void) { expectTrue(expectedErrorInvoked, "expectedError"); }
 
 const char *testConfigRGBColours = "COLOR-0 = 1, 2, 3\r\n"
                                    "COLOR-1 = 4, 5, 6\r\n"
                                    "\x1a";
-void        assertRGBColours() {
+void        assertRGBColours(void) {
          expectEqualBytes(palette[0].red, 1, "COLOR-0 = 1, 2, 3");
          expectEqualBytes(palette[0].green, 2, "COLOR-0 = 1, 2, 3");
          expectEqualBytes(palette[0].blue, 3, "COLOR-0 = 1, 2, 3");
@@ -73,7 +73,7 @@ void        assertRGBColours() {
 const char *testConfigSingleKey = "KEY-1 = {A}\r\n"
                                   "\x1a";
 
-void assertSingleKey() {
+void assertSingleKey(void) {
   expectEqualBytes(gameKeys[0].matrixRow, 2, "gameKeys[0].matrixRow");
   expectEqualBytes(gameKeys[0].matrixMask, 1 << 6, "gameKeys[0].matrixMask");
   expectEqualBytes(gameKeys[0].hexCode, 1, "gameKeys[0].hexCode");
@@ -85,7 +85,7 @@ void assertSingleKey() {
 const char *testConfigSingleKeyA = "KEY-a = {A}\r\n"
                                    "\x1a";
 
-void assertSingleKeyA() {
+void assertSingleKeyA(void) {
   expectEqualBytes(gameKeys[0].matrixRow, 2, "gameKeys[0].matrixRow");
   expectEqualBytes(gameKeys[0].matrixMask, 1 << 6, "gameKeys[0].matrixMask");
   expectEqualBytes(gameKeys[0].hexCode, 10, "gameKeys[0].hexCode");
@@ -98,7 +98,7 @@ const char *testConfigTwoMappedKeys = "KEY-1 = {A}\r\n"
                                       "KEY-a = {Z}\r\n"
                                       "\x1a";
 
-void assertTwoMappedKeys() {
+void assertTwoMappedKeys(void) {
   expectEqualBytes(gameKeys[0].matrixRow, 2, "gameKeys[0].matrixRow");
   expectEqualBytes(gameKeys[0].matrixMask, 1 << 6, "gameKeys[0].matrixMask");
   expectEqualBytes(gameKeys[0].hexCode, 1, "gameKeys[0].hexCode");
@@ -115,7 +115,7 @@ void assertTwoMappedKeys() {
 const char *testConfigControllerDirection = "KEY-2 = CTRL-UP\r\n"
                                             "\x1a";
 
-void assertControllerDirection() {
+void assertControllerDirection(void) {
   expectEqualBytes(gameKeys[0].controllerDirection, CONTROLLER_DIRECTION_UP, "gameKeys[0].controllerDirection");
   expectEqualBytes(gameKeys[0].hexCode, 2, "gameKeys[0].hexCode");
   expectEqualBytes(gameKeys[0].type, KC_CTRL_DIR, "gameKeys[0].type");
@@ -128,7 +128,7 @@ void assertControllerDirection() {
 const char *testConfigController1Direction = "KEY-2 = CTRL-1-UP\r\n"
                                              "\x1a";
 
-void assertController1Direction() {
+void assertController1Direction(void) {
   expectEqualBytes(gameKeys[0].controllerDirection, CONTROLLER_DIRECTION_UP, "gameKeys[0].controllerDirection");
   expectEqualBytes(gameKeys[0].hexCode, 2, "gameKeys[0].hexCode");
   expectEqualBytes(gameKeys[0].type, KC_CTRL_DIR, "gameKeys[0].type");
@@ -141,7 +141,7 @@ void assertController1Direction() {
 const char *testConfigController2Direction = "KEY-2 = CTRL-2-UP\r\n"
                                              "\x1a";
 
-void assertController2Direction() {
+void assertController2Direction(void) {
   expectEqualBytes(gameKeys[0].controllerDirection, CONTROLLER_DIRECTION_UP, "gameKeys[0].controllerDirection");
   expectEqualBytes(gameKeys[0].hexCode, 2, "gameKeys[0].hexCode");
   expectEqualBytes(gameKeys[0].type, KC_CTRL_DIR, "gameKeys[0].type");
@@ -155,7 +155,7 @@ const char *testConfigMultipleKeyMapping = "KEY-1 = {RET},CTRL-1-DOWN\r\n"
                                            "KEY-2 = {tab}\r\n"
                                            "\x1a";
 
-void assertMultipleKeyMapping() {
+void assertMultipleKeyMapping(void) {
   expectEqualBytes(gameKeys[0].matrixRow, 7, "gameKeys[0].matrixRow");
   expectEqualBytes(gameKeys[0].matrixMask, ((uint8_t)1 << 7), "gameKeys[0].matrixMask");
   expectEqualBytes(gameKeys[0].hexCode, 1, "gameKeys[0].hexCode");
@@ -177,7 +177,7 @@ void assertMultipleKeyMapping() {
 const char *testConfigControllerMultipleDirection = "KEY-2 = CTRL-1-UP-RIGHT\r\n"
                                                     "\x1a";
 
-void assertControllerMultipleDirection() {
+void assertControllerMultipleDirection(void) {
   expectEqualBytes(gameKeys[0].controllerDirection, CONTROLLER_DIRECTION_UP_RIGHT, "gameKeys[0].controllerDirection");
   expectEqualBytes(gameKeys[0].hexCode, 2, "gameKeys[0].hexCode");
   expectEqualBytes(gameKeys[0].type, KC_CTRL_DIR, "gameKeys[0].type");
@@ -189,7 +189,7 @@ void assertControllerMultipleDirection() {
 const char *testConfigKeySpace = "KEy-f = {SPaCE}\r\n"
                                  "\x1a";
 
-void assertKeySpace() {
+void assertKeySpace(void) {
   expectEqualBytes(gameKeys[0].matrixRow, 8, "gameKeys[0].matrixRow");
   expectEqualBytes(gameKeys[0].matrixMask, 1 << 0, "gameKeys[0].matrixMask");
   expectEqualBytes(gameKeys[0].hexCode, 15, "gameKeys[0].hexCode");
@@ -201,7 +201,7 @@ void assertKeySpace() {
 const char *testConfigControllerSubDirection = "KEY-1 = CTRL-1-UP-LEFT\r\n"
                                                "\x1a";
 
-void assertControllerSubDirection() {
+void assertControllerSubDirection(void) {
   expectEqualBytes(gameKeys[0].controllerDirection, CONTROLLER_DIRECTION_UP_LEFT, "gameKeys[0].controllerDirection");
   expectEqualBytes(gameKeys[0].hexCode, 1, "gameKeys[0].hexCode");
   expectEqualBytes(gameKeys[0].type, KC_CTRL_DIR, "gameKeys[0].type");
@@ -214,7 +214,7 @@ const char *testConfigControllerButtons = "KEY-1 = CTRL-1-UP-LEFT\r\n"
                                           "KEY-2 = CTRL-1-BTN-1\r\n"
                                           "\x1a";
 
-void assertControllerButtons() {
+void assertControllerButtons(void) {
   expectEqualBytes(gameKeys[0].controllerDirection, CONTROLLER_DIRECTION_UP_LEFT, "gameKeys[0].controllerDirection");
   expectEqualBytes(gameKeys[0].hexCode, 1, "gameKeys[0].hexCode");
   expectEqualChars(gameKeys[0].type, KC_CTRL_DIR, "gameKeys[0].type");
@@ -232,7 +232,7 @@ const char *testConfigInvadersConfiguration = "KEY-4 = {a},CTRL-2-LEFT\r\n"
                                               "KEY-6 = {D},CTRL-2-RIGHT\r\n"
                                               "\x1a";
 
-void assertInvadersConfiguration() {
+void assertInvadersConfiguration(void) {
   expectEqualBytes(gameKeys[0].matrixRow, 2, "gameKeys[0].matrixRow");
   expectEqualBytes(gameKeys[0].matrixMask, 1 << 6, "gameKeys[0].matrixMask");
   expectEqualBytes(gameKeys[0].hexCode, 4, "gameKeys[0].hexCode");
@@ -272,9 +272,9 @@ void assertInvadersConfiguration() {
   expectFalse(expectedErrorInvoked, "expectedError");
 }
 
-extern void debug();
+extern void debug(void);
 
-void testConfigurtionParser() {
+void testConfigurtionParser(void) {
   printf("Configuration Processing:\r\n");
 
   assert(Colours);

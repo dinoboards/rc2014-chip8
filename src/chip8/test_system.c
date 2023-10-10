@@ -8,7 +8,7 @@
 
 bool appRunning = false;
 
-void resetKeySimulator() {
+void resetKeySimulator(void) {
   for (uint8_t i = 0; i < sizeof(msxNewKey); i++)
     msxNewKey[i] = 0xFF;
   JIFFY = 0;
@@ -19,26 +19,26 @@ void simulateKey(const uint8_t rowIndex, const uint8_t bitMask) {
   msxJiffy += 4;
 }
 
-uint16_t getSysTimer() { return JIFFY; }
+uint16_t getSysTimer(void) { return JIFFY; }
 
-void simulateTimerTick() {
+void simulateTimerTick(void) {
   msxJiffy++;
   manageTimers();
 }
 
 byte nextRandomNumber = 0;
 
-byte chip8Rand() { return nextRandomNumber; }
+byte chip8Rand(void) { return nextRandomNumber; }
 
 void simulateRandomNumber(byte b) { nextRandomNumber = b; }
 
-void updateMachineStateDisplay() {}
+void updateMachineStateDisplay(void) {}
 
-void tmsDriverNotFound() {}
+void tmsDriverNotFound(void) {}
 
 void ym2149Play(uint16_t period) __z88dk_fastcall { (void *)period; }
 
-void ym2149Stop() {}
+void ym2149Stop(void) {}
 
 uint8_t getControllerDirection(uint8_t port) __z88dk_fastcall {
   (void)port;
@@ -48,6 +48,6 @@ uint8_t getControllerDirection(uint8_t port) __z88dk_fastcall {
 
 uint8_t getControllerButton(uint8_t b) __z88dk_fastcall { return b; }
 
-bool ym2149Probe() { return false; }
+bool ym2149Probe(void) { return false; }
 
 audioCommand command;

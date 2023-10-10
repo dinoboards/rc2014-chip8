@@ -40,9 +40,9 @@ extern bool appRunning;
 #define KEY_ROW_2  0
 #define KEY_MASK_2 ((uint8_t)(1 << 2))
 
-extern void resetKeySimulator();
+extern void resetKeySimulator(void);
 extern void simulateKey(const uint8_t, const uint8_t);
-extern void simulateTimerTick();
+extern void simulateTimerTick(void);
 extern void simulateRandomNumber(byte b);
 
 #endif

@@ -10,29 +10,29 @@
 #include "test_system.h"
 #include <stdio.h>
 
-void setup_ld_v1_10() { programStorage[0] = invertByteOrder(LD_V1_10); }
+void setup_ld_v1_10(void) { programStorage[0] = invertByteOrder(LD_V1_10); }
 
-void verify_ld_v1_10() { expectEqualBytes(registers[1], 10, "V1"); }
+void verify_ld_v1_10(void) { expectEqualBytes(registers[1], 10, "V1"); }
 
-void setup_ld_v3_va() {
+void setup_ld_v3_va(void) {
   registers[0xA] = 23;
   programStorage[0] = invertByteOrder(LD_V3_VA);
 }
 
-void verify_ld_v3_va() { expectEqualBytes(registers[3], 23, "V3"); }
+void verify_ld_v3_va(void) { expectEqualBytes(registers[3], 23, "V3"); }
 
-void setup_ld_i_1234() { programStorage[0] = invertByteOrder(LD_I_1234); }
+void setup_ld_i_1234(void) { programStorage[0] = invertByteOrder(LD_I_1234); }
 
-void verify_ld_i_1234() { expectEqualInts(registerI, 1234, "I"); }
+void verify_ld_i_1234(void) { expectEqualInts(registerI, 1234, "I"); }
 
-void setup_ld_i_6000() {
+void setup_ld_i_6000(void) {
   programStorage[0] = invertByteOrder(LD_IL_6000_1);
   programStorage[1] = invertByteOrder(LD_IL_6000_2);
 }
 
-void verify_ld_i_6000() { expectEqualInts(registerI, 6000, "I"); }
+void verify_ld_i_6000(void) { expectEqualInts(registerI, 6000, "I"); }
 
-void setup_ld_vb_i() {
+void setup_ld_vb_i(void) {
   registerI = 0x600;
   for (int i = 0; i < 12; i++)
     ((byte *)registerI)[i] = i + 1;
@@ -40,7 +40,7 @@ void setup_ld_vb_i() {
   registers[0xC] = 99;
 }
 
-void verify_ld_vb_i() {
+void verify_ld_vb_i(void) {
   expectEqualBytes(registers[0], 1, "V0");
   expectEqualBytes(registers[1], 2, "V1");
   expectEqualBytes(registers[2], 3, "V2");
@@ -57,7 +57,7 @@ void verify_ld_vb_i() {
   // expectEqualInts(registerI, 0x600 + 12, "I"); //QUICKS
 }
 
-void setup_ld_v0_i() {
+void setup_ld_v0_i(void) {
   registerI = 0x600;
   ((byte *)registerI)[0] = 55;
   programStorage[0] = invertByteOrder(LD_V0_I);
@@ -65,13 +65,13 @@ void setup_ld_v0_i() {
   registers[0x1] = 99;
 }
 
-void verify_ld_v0_i() {
+void verify_ld_v0_i(void) {
   expectEqualBytes(registers[0], 55, "V0");
   expectEqualBytes(registers[1], 99, "V1");
   // expectEqualInts(registerI, 0x600 + 1, "I"); //quirks
 }
 
-void setup_ld_v5_v6_i() {
+void setup_ld_v5_v6_i(void) {
   registerI = 0x600;
   ((byte *)registerI)[0] = 50;
   ((byte *)registerI)[1] = 60;
@@ -86,14 +86,14 @@ void setup_ld_v5_v6_i() {
   registers[0x7] = 7;
 }
 
-void verify_ld_v5_v6_i() {
+void verify_ld_v5_v6_i(void) {
   expectEqualBytes(registers[4], 4, "V4");
   expectEqualBytes(registers[5], 50, "V5");
   expectEqualBytes(registers[6], 60, "V6");
   expectEqualBytes(registers[7], 7, "V7");
 }
 
-void setup_ld_v2_v0_i() {
+void setup_ld_v2_v0_i(void) {
   registerI = 0x600;
   ((byte *)registerI)[0] = 20;
   ((byte *)registerI)[1] = 10;
@@ -109,14 +109,14 @@ void setup_ld_v2_v0_i() {
   registers[0x7] = 7;
 }
 
-void verify_ld_v2_v0_i() {
+void verify_ld_v2_v0_i(void) {
   expectEqualBytes(registers[0], 0xFF, "V0");
   expectEqualBytes(registers[1], 10, "V1");
   expectEqualBytes(registers[2], 20, "V2");
   expectEqualBytes(registers[3], 3, "V3");
 }
 
-void setup_ld_v1_v1_i() {
+void setup_ld_v1_v1_i(void) {
   registerI = 0x600;
   ((byte *)registerI)[0] = 10;
   ((byte *)registerI)[1] = 0xFF;
@@ -132,14 +132,14 @@ void setup_ld_v1_v1_i() {
   registers[0x7] = 7;
 }
 
-void verify_ld_v1_v1_i() {
+void verify_ld_v1_v1_i(void) {
   expectEqualBytes(registers[0], 0, "V0");
   expectEqualBytes(registers[1], 10, "V1");
   expectEqualBytes(registers[2], 2, "V2");
   expectEqualBytes(registers[3], 3, "V3");
 }
 
-void setup_ld_i_ve() {
+void setup_ld_i_ve(void) {
   registerI = 0x600;
   memset((void *)registerI, 0, 16);
   programStorage[0] = invertByteOrder(LD_I_VE);
@@ -147,7 +147,7 @@ void setup_ld_i_ve() {
     registers[i] = i + 10;
 }
 
-void verify_ld_i_ve() {
+void verify_ld_i_ve(void) {
   byte *pExpected = (byte *)0x600;
   expectEqualBytes(pExpected[0x0], 10, "[i+0x0]");
   expectEqualBytes(pExpected[0x1], 11, "[i+0x1]");
@@ -167,7 +167,7 @@ void verify_ld_i_ve() {
   // expectEqualInts(registerI, 0x600 + 15, "I"); //quirks
 }
 
-void setup_ld_i_va_v1() {
+void setup_ld_i_va_v1(void) {
   registerI = 0x600;
   memset((void *)registerI, 0, 16);
   programStorage[0] = invertByteOrder(LD_I_VA_V1);
@@ -175,7 +175,7 @@ void setup_ld_i_va_v1() {
     registers[i] = i + 10;
 }
 
-void verify_ld_i_va_v1() {
+void verify_ld_i_va_v1(void) {
   byte *pExpected = (byte *)0x600;
   expectEqualBytes(pExpected[0x0], 20, "[i+0x0] (VA)");
   expectEqualBytes(pExpected[0x1], 19, "[i+0x1] (V9)");
@@ -195,7 +195,7 @@ void verify_ld_i_va_v1() {
   expectEqualInts(registerI, 0x600, "I");
 }
 
-void setup_ld_i_v2_v3() {
+void setup_ld_i_v2_v3(void) {
   registerI = 0x600;
   memset((void *)registerI, 0, 16);
   programStorage[0] = invertByteOrder(LD_I_V2_V3);
@@ -203,7 +203,7 @@ void setup_ld_i_v2_v3() {
     registers[i] = i + 10;
 }
 
-void verify_ld_i_v2_v3() {
+void verify_ld_i_v2_v3(void) {
   byte *pExpected = (byte *)0x600;
   expectEqualBytes(pExpected[0x0], 12, "[i+0x0] (V2)");
   expectEqualBytes(pExpected[0x1], 13, "[i+0x1] (V3)");
@@ -223,388 +223,388 @@ void verify_ld_i_v2_v3() {
   expectEqualInts(registerI, 0x600, "I");
 }
 
-void setup_call_1025() { programStorage[0] = invertByteOrder(CALL_1025); }
+void setup_call_1025(void) { programStorage[0] = invertByteOrder(CALL_1025); }
 
-void verify_call_1025() {
+void verify_call_1025(void) {
   expectEqualPtrs(chip8PC, (uint16_t *)1025, "PC");
   expectEqualBytes(stackIndex, 1, "Stack Index");
   expectEqualPtrs((uint16_t *)stack[0], (uint16_t *)0x202, "Stack Index");
 }
 
-void setup_bad_jump() { programStorage[0] = invertByteOrder(JP_0002); }
+void setup_bad_jump(void) { programStorage[0] = invertByteOrder(JP_0002); }
 
-void verify_bad_jump() { expectEqualPtrs(chip8PC, (uint16_t *)0x202, "PC"); }
+void verify_bad_jump(void) { expectEqualPtrs(chip8PC, (uint16_t *)0x202, "PC"); }
 
-void setup_ret_from_subroutine() {
+void setup_ret_from_subroutine(void) {
   stack[0] = 0xF000;
   stackIndex = 1;
   programStorage[0] = invertByteOrder(RET);
 }
 
-void verify_ret_from_subroutine() {
+void verify_ret_from_subroutine(void) {
   expectEqualPtrs(chip8PC, (uint16_t *)0xF000, "PC");
   expectTrue(appRunning, "appRunning");
 }
 
-void setup_final_ret() {
+void setup_final_ret(void) {
   stackIndex = 0;
   programStorage[0] = invertByteOrder(RET);
 }
 
-void verify_final_ret() { expectFalse(appRunning, "appRunning"); }
+void verify_final_ret(void) { expectFalse(appRunning, "appRunning"); }
 
-void setup_add_ve_1() {
+void setup_add_ve_1(void) {
   registers[0xE] = 3;
   programStorage[0] = invertByteOrder(ADD_VE_1);
 }
 
-void verify_add_ve_1() { expectEqualBytes(registers[0xE], 4, "VE"); }
+void verify_add_ve_1(void) { expectEqualBytes(registers[0xE], 4, "VE"); }
 
-void setup_add_i_v9() {
+void setup_add_i_v9(void) {
   registers[0x9] = 3;
   registerI = 100;
   programStorage[0] = invertByteOrder(ADD_I_V9);
 }
 
-void verify_add_i_v9() { expectEqualBytes(registerI, 103, "I"); }
+void verify_add_i_v9(void) { expectEqualBytes(registerI, 103, "I"); }
 
-void setup_add_v6_v1_no_carry() {
+void setup_add_v6_v1_no_carry(void) {
   registers[0x6] = 3;
   registers[0x1] = 2;
   programStorage[0] = invertByteOrder(ADD_V6_V1);
 }
 
-void verify_add_v6_v1_no_carry() {
+void verify_add_v6_v1_no_carry(void) {
   expectEqualBytes(registers[0x6], 5, "V6");
   expectEqualBytes(registers[0xF], 0, "VF");
 }
 
-void setup_add_v6_v1_with_carry() {
+void setup_add_v6_v1_with_carry(void) {
   registers[0x6] = 255;
   registers[0x1] = 20;
   programStorage[0] = invertByteOrder(ADD_V6_V1);
 }
 
-void verify_add_v6_v1_with_carry() {
+void verify_add_v6_v1_with_carry(void) {
   expectEqualBytes(registers[0x6], 19, "V6");
   expectEqualBytes(registers[0xF], 1, "VF");
 }
 
-void setup_se_v4_15_skips() {
+void setup_se_v4_15_skips(void) {
   registers[4] = 15;
   programStorage[0] = invertByteOrder(SE_V4_15);
 }
 
-void verify_se_v4_15_skips() { expectEqualPtrs(chip8PC, (uint16_t *)0x204, "PC"); }
+void verify_se_v4_15_skips(void) { expectEqualPtrs(chip8PC, (uint16_t *)0x204, "PC"); }
 
-void setup_se_v4_15_no_skips() {
+void setup_se_v4_15_no_skips(void) {
   registers[4] = 1;
   programStorage[0] = invertByteOrder(SE_V4_15);
 }
 
-void verify_se_v4_15_no_skips() { expectEqualPtrs(chip8PC, (uint16_t *)0x202, "PC"); }
+void verify_se_v4_15_no_skips(void) { expectEqualPtrs(chip8PC, (uint16_t *)0x202, "PC"); }
 
-void setup_se_v4_v9_skips() {
+void setup_se_v4_v9_skips(void) {
   registers[4] = 15;
   registers[9] = 15;
   programStorage[0] = invertByteOrder(SE_V4_V9);
 }
 
-void verify_se_v4_v9_skips() { expectEqualPtrs(chip8PC, (uint16_t *)0x204, "PC"); }
+void verify_se_v4_v9_skips(void) { expectEqualPtrs(chip8PC, (uint16_t *)0x204, "PC"); }
 
-void setup_se_v4_v9_no_skips() {
+void setup_se_v4_v9_no_skips(void) {
   registers[4] = 15;
   registers[9] = 10;
   programStorage[0] = invertByteOrder(SE_V4_V9);
 }
 
-void verify_se_v4_v9_no_skips() { expectEqualPtrs(chip8PC, (uint16_t *)0x202, "PC"); }
+void verify_se_v4_v9_no_skips(void) { expectEqualPtrs(chip8PC, (uint16_t *)0x202, "PC"); }
 
-void setup_sne_v0_123_skips() {
+void setup_sne_v0_123_skips(void) {
   registers[4] = 15;
   programStorage[0] = invertByteOrder(SNE_V0_123);
 }
 
-void verify_sne_v0_123_skips() { expectEqualPtrs(chip8PC, (uint16_t *)0x204, "PC"); }
+void verify_sne_v0_123_skips(void) { expectEqualPtrs(chip8PC, (uint16_t *)0x204, "PC"); }
 
-void setup_sne_v0_123_no_skips() {
+void setup_sne_v0_123_no_skips(void) {
   registers[0] = 123;
   programStorage[0] = invertByteOrder(SNE_V0_123);
 }
 
-void verify_sne_v0_123_no_skips() { expectEqualPtrs(chip8PC, (uint16_t *)0x202, "PC"); }
+void verify_sne_v0_123_no_skips(void) { expectEqualPtrs(chip8PC, (uint16_t *)0x202, "PC"); }
 
-void setup_sne_v0_v2_skips() {
+void setup_sne_v0_v2_skips(void) {
   registers[0] = 15;
   registers[2] = 25;
   programStorage[0] = invertByteOrder(SNE_V0_V2);
 }
 
-void verify_sne_v0_v2_skips() { expectEqualPtrs(chip8PC, (uint16_t *)0x204, "PC"); }
+void verify_sne_v0_v2_skips(void) { expectEqualPtrs(chip8PC, (uint16_t *)0x204, "PC"); }
 
-void setup_sne_v0_v2_no_skips() {
+void setup_sne_v0_v2_no_skips(void) {
   registers[0] = 25;
   registers[2] = 25;
   programStorage[0] = invertByteOrder(SNE_V0_V2);
 }
 
-void verify_sne_v0_v2_no_skips() { expectEqualPtrs(chip8PC, (uint16_t *)0x202, "PC"); }
+void verify_sne_v0_v2_no_skips(void) { expectEqualPtrs(chip8PC, (uint16_t *)0x202, "PC"); }
 
-void setup_jp_1026() { programStorage[0] = invertByteOrder(JP_1026); }
+void setup_jp_1026(void) { programStorage[0] = invertByteOrder(JP_1026); }
 
-void verify_jp_1026() { expectEqualPtrs(chip8PC, (uint16_t *)0x402, "PC"); }
+void verify_jp_1026(void) { expectEqualPtrs(chip8PC, (uint16_t *)0x402, "PC"); }
 
-void setup_jp_v0_1024() {
+void setup_jp_v0_1024(void) {
   registers[0] = 3;
   programStorage[0] = invertByteOrder(JP_V0_1024);
 }
 
-void verify_jp_v0_1024() { expectEqualPtrs(chip8PC, (uint16_t *)0x403, "PC"); }
+void verify_jp_v0_1024(void) { expectEqualPtrs(chip8PC, (uint16_t *)0x403, "PC"); }
 
-void setup_skp_v3_skips() {
+void setup_skp_v3_skips(void) {
   registers[3] = 0xA;
   simulateKey(KEY_ROW_A, KEY_MASK_A);
   programStorage[0] = invertByteOrder(SKP_V3);
 }
 
-void verify_skp_v3_skips() { expectEqualPtrs(chip8PC, (uint16_t *)0x204, "PC"); }
+void verify_skp_v3_skips(void) { expectEqualPtrs(chip8PC, (uint16_t *)0x204, "PC"); }
 
-void setup_skp_v3_no_skips() {
+void setup_skp_v3_no_skips(void) {
   registers[3] = 0xA;
   // simulateKey(KEY_ROW_A, KEY_MASK_A);
   programStorage[0] = invertByteOrder(SKP_V3);
 }
 
-void verify_skp_v3_no_skips() { expectEqualPtrs(chip8PC, (uint16_t *)0x202, "PC"); }
+void verify_skp_v3_no_skips(void) { expectEqualPtrs(chip8PC, (uint16_t *)0x202, "PC"); }
 
-void setup_skp_v3_wrong_key() {
+void setup_skp_v3_wrong_key(void) {
   registers[3] = 0xA;
   simulateKey(KEY_ROW_B, KEY_MASK_B);
   programStorage[0] = invertByteOrder(SKP_V3);
 }
 
-void verify_skp_v3_wrong_key() { expectEqualPtrs(chip8PC, (uint16_t *)0x202, "PC"); }
+void verify_skp_v3_wrong_key(void) { expectEqualPtrs(chip8PC, (uint16_t *)0x202, "PC"); }
 
-void setup_sknp_vd_skips() {
+void setup_sknp_vd_skips(void) {
   registers[0xD] = 0xB;
   simulateKey(KEY_ROW_A, KEY_MASK_A);
   programStorage[0] = invertByteOrder(SKNP_VD);
 }
 
-void verify_sknp_vd_skips() { expectEqualPtrs(chip8PC, (uint16_t *)0x204, "PC"); }
+void verify_sknp_vd_skips(void) { expectEqualPtrs(chip8PC, (uint16_t *)0x204, "PC"); }
 
-void setup_sknp_vd_no_skips() {
+void setup_sknp_vd_no_skips(void) {
   registers[0xD] = 0xB;
   simulateKey(KEY_ROW_B, KEY_MASK_B);
   programStorage[0] = invertByteOrder(SKNP_VD);
 }
 
-void verify_sknp_vd_no_skips() { expectEqualPtrs(chip8PC, (uint16_t *)0x202, "PC"); }
+void verify_sknp_vd_no_skips(void) { expectEqualPtrs(chip8PC, (uint16_t *)0x202, "PC"); }
 
-void setup_sknp_vd_no_keys_pressed() {
+void setup_sknp_vd_no_keys_pressed(void) {
   registers[0xD] = 0xB;
   // simulateKey(KEY_ROW_B, KEY_MASK_B);
   programStorage[0] = invertByteOrder(SKNP_VD);
 }
 
-void verify_sknp_vd_no_keys_pressed() { expectEqualPtrs(chip8PC, (uint16_t *)0x204, "PC"); }
+void verify_sknp_vd_no_keys_pressed(void) { expectEqualPtrs(chip8PC, (uint16_t *)0x204, "PC"); }
 
-void setup_key_v5() {
+void setup_key_v5(void) {
   registers[5] = 2;
   simulateKey(KEY_ROW_2, KEY_MASK_2);
   programStorage[0] = invertByteOrder(KEY_V5);
 }
 
-void verify_key_v5() {
+void verify_key_v5(void) {
   expectEqualBytes(registers[5], 2, "V5");
   expectEqualPtrs(chip8PC, (uint16_t *)0x202, "PC");
 }
 
-void setup_ld_st_v2() {
+void setup_ld_st_v2(void) {
   registers[2] = 16;
   programStorage[0] = invertByteOrder(LD_ST_V2);
 }
 
-void verify_ld_st_v2() {
+void verify_ld_st_v2(void) {
   expectEqualBytes(soundTimer, 16, "ST");
   simulateTimerTick();
   expectEqualBytes(soundTimer, 15, "ST");
 }
 
-void setup_ld_dt_v3() {
+void setup_ld_dt_v3(void) {
   registers[3] = 12;
   programStorage[0] = invertByteOrder(LD_DT_V3);
 }
 
-void verify_ld_dt_v3() {
+void verify_ld_dt_v3(void) {
   expectEqualBytes(delayTimer, 12, "DT");
   simulateTimerTick();
   expectEqualBytes(delayTimer, 11, "DT");
 }
 
-void setup_ld_va_dt() {
+void setup_ld_va_dt(void) {
   delayTimer = 0x45;
   programStorage[0] = invertByteOrder(LD_VA_DT);
 }
 
-void verify_ld_va_dt() { expectEqualBytes(registers[0xA], 0x45, "VA"); }
+void verify_ld_va_dt(void) { expectEqualBytes(registers[0xA], 0x45, "VA"); }
 
-void setup_rnd_ve_15() {
+void setup_rnd_ve_15(void) {
   simulateRandomNumber(12 + 64);
   programStorage[0] = invertByteOrder(RND_VE_15);
 }
 
-void verify_rnd_ve_15() { expectEqualBytes(registers[0xE], 12, "VE"); }
+void verify_rnd_ve_15(void) { expectEqualBytes(registers[0xE], 12, "VE"); }
 
-void setup_and_va_vb() {
+void setup_and_va_vb(void) {
   registers[0xA] = 0xF0;
   registers[0xB] = 0x81;
   programStorage[0] = invertByteOrder(AND_VA_VB);
 }
 
-void verify_and_va_vb() { expectEqualBytes(registers[0xA], 0x80, "VA"); }
+void verify_and_va_vb(void) { expectEqualBytes(registers[0xA], 0x80, "VA"); }
 
-void setup_or_v7_v2() {
+void setup_or_v7_v2(void) {
   registers[0x7] = 0x10;
   registers[0x2] = 0x01;
   programStorage[0] = invertByteOrder(OR_V7_V2);
 }
 
-void verify_or_v7_v2() { expectEqualBytes(registers[0x7], 0x11, "V7"); }
+void verify_or_v7_v2(void) { expectEqualBytes(registers[0x7], 0x11, "V7"); }
 
 // SHR Quicks issues - see https://www.reddit.com/r/EmuDev/comments/72dunw/chip8_8xy6_help/dno06ix/?utm_source=reddit&utm_medium=web2x&context=3
 
-void setup_shr_va_vb_bit_set() {
+void setup_shr_va_vb_bit_set(void) {
   registers[0xA] = 0x81;
   // registers[0xB] = 0x81;
   registers[0xF] = 0x00;
   programStorage[0] = invertByteOrder(SHR_VA_VB);
 }
 
-void verify_shr_va_vb_bit_set() {
+void verify_shr_va_vb_bit_set(void) {
   expectEqualBytes(registers[0xA], 0x40, "VA");
   // expectEqualBytes(registers[0xB], 0x81, "VB");
   expectEqualBytes(registers[0xF], 0x1, "VF");
 }
 
-void setup_shr_va_vb_bit_unset() {
+void setup_shr_va_vb_bit_unset(void) {
   registers[0xA] = 0x40;
   // registers[0xB] = 0x40;
   registers[0xF] = 0x00;
   programStorage[0] = invertByteOrder(SHR_VA_VB);
 }
 
-void verify_shr_va_vb_bit_unset() {
+void verify_shr_va_vb_bit_unset(void) {
   expectEqualBytes(registers[0xA], 0x20, "VA");
   // expectEqualBytes(registers[0xB], 0x40, "VB");
   expectEqualBytes(registers[0xF], 0x0, "VF");
 }
 
-void setup_shl_va_vb_bit_set() {
+void setup_shl_va_vb_bit_set(void) {
   registers[0xA] = 0x81;
   // registers[0xB] = 0x81;
   registers[0xF] = 0x00;
   programStorage[0] = invertByteOrder(SHL_VA_VB);
 }
 
-void verify_shl_va_vb_bit_set() {
+void verify_shl_va_vb_bit_set(void) {
   expectEqualBytes(registers[0xA], 0x02, "VA");
   // expectEqualBytes(registers[0xB], 0x81, "VB");
   expectEqualBytes(registers[0xF], 0x1, "VF");
 }
 
-void setup_shl_va_vb_bit_unset() {
+void setup_shl_va_vb_bit_unset(void) {
   registers[0xA] = 0x40;
   // registers[0xB] = 0x40;
   registers[0xF] = 0x00;
   programStorage[0] = invertByteOrder(SHL_VA_VB);
 }
 
-void verify_shl_va_vb_bit_unset() {
+void verify_shl_va_vb_bit_unset(void) {
   expectEqualBytes(registers[0xA], 0x80, "VA");
   // expectEqualBytes(registers[0xB], 0x40, "VB");
   expectEqualBytes(registers[0xF], 0x0, "VF");
 }
 
-void setup_sub_v3_ve_no_borrow() {
+void setup_sub_v3_ve_no_borrow(void) {
   registers[0x3] = 0x20;
   registers[0xE] = 0x10;
   registers[0xF] = 0x00;
   programStorage[0] = invertByteOrder(SUB_V3_VE);
 }
 
-void verify_sub_v3_ve_no_borrow() {
+void verify_sub_v3_ve_no_borrow(void) {
   expectEqualBytes(registers[0x3], 0x10, "V3");
   expectEqualBytes(registers[0xE], 0x10, "VE");
   expectEqualBytes(registers[0xF], 0x1, "VF");
 }
 
-void setup_sub_v3_ve_with_borrow() {
+void setup_sub_v3_ve_with_borrow(void) {
   registers[0x3] = 0x10;
   registers[0xE] = 0x28;
   registers[0xF] = 0x00;
   programStorage[0] = invertByteOrder(SUB_V3_VE);
 }
 
-void verify_sub_v3_ve_with_borrow() {
+void verify_sub_v3_ve_with_borrow(void) {
   expectEqualBytes(registers[0x3], 0xE8, "V3");
   expectEqualBytes(registers[0xE], 0x28, "VE");
   expectEqualBytes(registers[0xF], 0x0, "VF");
 }
 
-void setup_subn_v2_ve_no_borrow() {
+void setup_subn_v2_ve_no_borrow(void) {
   registers[0x2] = 0x10;
   registers[0xE] = 0x20;
   registers[0xF] = 0x00;
   programStorage[0] = invertByteOrder(SUBN_V2_VE);
 }
 
-void verify_subn_v2_ve_no_borrow() {
+void verify_subn_v2_ve_no_borrow(void) {
   expectEqualBytes(registers[0x2], 0x10, "V3");
   expectEqualBytes(registers[0xE], 0x20, "VE");
   expectEqualBytes(registers[0xF], 0x1, "VF");
 }
 
-void setup_subn_v2_ve_with_borrow() {
+void setup_subn_v2_ve_with_borrow(void) {
   registers[0x2] = 0x20;
   registers[0xE] = 0x10;
   registers[0xF] = 0x00;
   programStorage[0] = invertByteOrder(SUBN_V2_VE);
 }
 
-void verify_subn_v2_ve_with_borrow() {
+void verify_subn_v2_ve_with_borrow(void) {
   expectEqualBytes(registers[0x2], (uint8_t)(0x10 - 0x20), "V3");
   expectEqualBytes(registers[0xE], 0x10, "VE");
   expectEqualBytes(registers[0xF], 0x0, "VF");
 }
 
-void setup_subn_vf_v1_with_no_borrow() {
+void setup_subn_vf_v1_with_no_borrow(void) {
   registers[0x1] = 72;
   registers[0xF] = 128;
   programStorage[0] = invertByteOrder(SUBN_VF_V1);
 }
 
-void verify_subn_vf_v1_with_no_borrow() { expectEqualBytes(registers[0xF], 0x0, "VF"); }
+void verify_subn_vf_v1_with_no_borrow(void) { expectEqualBytes(registers[0xF], 0x0, "VF"); }
 
-void setup_xor_v3_ve() {
+void setup_xor_v3_ve(void) {
   registers[0x3] = 0x41;
   registers[0xE] = 0x40;
   programStorage[0] = invertByteOrder(XOR_V3_VE);
 }
 
-void verify_xor_v3_ve() {
+void verify_xor_v3_ve(void) {
   expectEqualBytes(registers[0x3], 0x01, "V3");
   expectEqualBytes(registers[0xE], 0x40, "VE");
 }
 
-void setup_bcd_i_v3() {
+void setup_bcd_i_v3(void) {
   registerI = 0x600;
   memset((void *)registerI, 0, 3);
   registers[0x3] = 128;
   programStorage[0] = invertByteOrder(BCD_I_V3);
 }
 
-void verify_bcd_i_v3() {
+void verify_bcd_i_v3(void) {
   byte *i = (byte *)0x600;
 
   expectEqualBytes(i[0], 1, "[i+0]");
@@ -612,16 +612,16 @@ void verify_bcd_i_v3() {
   expectEqualBytes(i[2], 8, "[i+2]");
 }
 
-void setup_ldf_i_v4() {
+void setup_ldf_i_v4(void) {
   registers[0x4] = 1;
   programStorage[0] = invertByteOrder(LDF_I_V4);
 }
 
-void verify_ldf_i_v4() { expectEqualInts(registerI, (uint16_t)&fonts[5], "I"); }
+void verify_ldf_i_v4(void) { expectEqualInts(registerI, (uint16_t)&fonts[5], "I"); }
 
 const byte audioPattern[16] = {0x81, 0x81, 0x81, 0x81, 0x81, 0x81, 0x81, 0x81, 0x81, 0x81, 0x81, 0x81, 0x81, 0x81, 0x81, 0x81};
 
-void setup_audio() {
+void setup_audio(void) {
   registerI = (uint16_t)audioPattern;
   audioActive = false;
   audioPeriod = 0;
@@ -629,23 +629,23 @@ void setup_audio() {
   programStorage[0] = invertByteOrder(AUDIO);
 }
 
-void verify_audio() {
+void verify_audio(void) {
   expectEqualInts(audioPeriod, 508, "audioPeriod");
   expectEqualInts(audioActive, 1, "audioActive");
 }
 
-void setup_skips_dbl_word_instruction() {
+void setup_skips_dbl_word_instruction(void) {
   registers[4] = 15;
   programStorage[0] = invertByteOrder(SE_V4_15);
   programStorage[1] = invertByteOrder(LD_IL_6000_1);
   programStorage[2] = invertByteOrder(LD_IL_6000_2);
 }
 
-void verify_skips_dbl_word_instruction() { expectEqualPtrs(chip8PC, (uint16_t *)0x206, "PC"); }
+void verify_skips_dbl_word_instruction(void) { expectEqualPtrs(chip8PC, (uint16_t *)0x206, "PC"); }
 
-extern void testConfigurtionParser();
+extern void testConfigurtionParser(void);
 
-void resetKeyConfiguration() {
+void resetKeyConfiguration(void) {
   gameKeyCount = 15;
 
   const char *str1 = "0";
@@ -670,7 +670,7 @@ void resetKeyConfiguration() {
   }
 }
 
-void main() {
+void main(void) {
   testConfigurtionParser();
 
   CommandSwitches.delayFactor = 0;

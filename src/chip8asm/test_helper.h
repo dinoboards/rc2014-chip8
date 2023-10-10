@@ -5,16 +5,16 @@
 char *content;
 bool  testErrored = false;
 
-char getNextCharRaw() {
+char getNextCharRaw(void) {
   const char b = *content;
   if (b)
     content++;
   return b;
 }
 
-void openFileStream() {}
+void openFileStream(void) {}
 
-void closeFileStream() {}
+void closeFileStream(void) {}
 
 #define MAX_LOG_CAPTURE 256
 char logBuffer[MAX_LOG_CAPTURE];
@@ -29,7 +29,7 @@ void logError(const char *msg, ...) {
   va_end(arg);
 }
 
-void errorExit() { testErrored = true; }
+void errorExit(void) { testErrored = true; }
 
 #define instructionEquals(loc, word) (programStorage[(loc)] != (byte)((word) >> 8) || programStorage[(loc) + 1] != (byte)((word)&0xFF))
 
