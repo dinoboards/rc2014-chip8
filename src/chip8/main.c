@@ -81,7 +81,7 @@ void main(const int argc, const unsigned char **argv) {
   initSystemState();
   seedRandom();
 
-  uint16_t *ptr = programStorage;
+  uint16_t *ptr        = programStorage;
   int       noMoreData = 0;
 
   uint16_t total = 0;

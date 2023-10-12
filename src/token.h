@@ -28,13 +28,13 @@ extern char skipComment(char nextChar) __z88dk_fastcall;
 extern bool tokenEquals(const char *pTest) __z88dk_fastcall;
 extern bool isAlphaNumeric(const char *p) __z88dk_fastcall;
 
-#define tokenMap(a, b)  \
-  if (tokenEquals(a)) { \
-    token.type = b;     \
-    return;             \
+#define tokenMap(a, b)                                                                                                             \
+  if (tokenEquals(a)) {                                                                                                            \
+    token.type = b;                                                                                                                \
+    return;                                                                                                                        \
   }
 
-#define DEF_TOKEN_EQUALS(tokenValue) \
+#define DEF_TOKEN_EQUALS(tokenValue)                                                                                               \
   bool tokenEquals(const char *pTest) __z88dk_fastcall { return strcasecmp(tokenValue, pTest) == 0; }
 
 #endif

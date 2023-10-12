@@ -24,7 +24,8 @@ void unexpectedEntry(void) {
 
 void expectedColour(void) {
   getToLineEnd();
-  printf("\r\n%s\r\nExpected a colour reference but found '%s'\r\n at line number %d\r\n", token.currentLine, token.value, currentLineNumber);
+  printf("\r\n%s\r\nExpected a colour reference but found '%s'\r\n at line number %d\r\n", token.currentLine, token.value,
+         currentLineNumber);
   exit(1);
 }
 
@@ -37,7 +38,8 @@ void warnNoTimerFound(void) { printf("Warning: No timer found.\r\n"); }
 
 uint16_t expectedError(const char *p) __z88dk_fastcall {
   getToLineEnd();
-  printf("\r\n%s\r\n\r\nExpected '%s' but found %s\r\n at line number %d\r\n", p, token.currentLine, token.value, currentLineNumber);
+  printf("\r\n%s\r\n\r\nExpected '%s' but found %s\r\n at line number %d\r\n", p, token.currentLine, token.value,
+         currentLineNumber);
   exit(1);
   return 0;
 }

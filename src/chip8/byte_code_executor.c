@@ -47,7 +47,7 @@ inline uint16_t readInstruction(void) {
 void initSystemState(void) {
   memset(registers, 0, 16);
   registerI = 0;
-  chip8PC = (uint16_t *)programStorage;
+  chip8PC   = (uint16_t *)programStorage;
 }
 
 bool executeSingleInstruction(void) {
@@ -61,7 +61,8 @@ bool executeSingleInstruction(void) {
   fourthNibble = readFourthNibble;
 
 #ifdef CPM
-  printf("\n%04X: %04X V0=%02X V1=%02X I=%04X", chip8PC - 1, invertByteOrder(currentInstruction), registers[0], registers[1], registerI);
+  printf("\n%04X: %04X V0=%02X V1=%02X I=%04X", chip8PC - 1, invertByteOrder(currentInstruction), registers[0], registers[1],
+         registerI);
 #endif
 
   switch (firstNibble) {

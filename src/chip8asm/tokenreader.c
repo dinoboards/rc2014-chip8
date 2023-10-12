@@ -20,13 +20,13 @@ static bool isDecimalNumber(void) {
 
   while (isCharExpression(nextChar)) {
     *pTokenValue++ = nextChar;
-    nextChar = getNext();
+    nextChar       = getNext();
   }
 
-  *pTokenValue = '\0';
+  *pTokenValue        = '\0';
   tokenTerminatorChar = nextChar;
-  tokenCurrentChar = nextChar;
-  token.type = TokenExpression;
+  tokenCurrentChar    = nextChar;
+  token.type          = TokenExpression;
 
   return true;
 }
@@ -70,12 +70,12 @@ static void testForInstructions(void) {
   tokenMap("right", TokenRight);
 
   token.isInstruction = false;
-  token.type = TokenAlphanumeric;
+  token.type          = TokenAlphanumeric;
 }
 
 void tokeniseAlphaNumericString(void) {
   if (tokenCurrentChar == ':' && isOnlyAlphaNumeric) {
-    token.type = TokenLabel;
+    token.type       = TokenLabel;
     tokenCurrentChar = getNext();
     return;
   }
@@ -135,12 +135,12 @@ static bool isIndexedI(void) {
 
   tokenCurrentChar = getNextChar();
 
-  token.value[0] = '[';
-  token.value[1] = 'I';
-  token.value[2] = ']';
-  token.value[3] = '\0';
+  token.value[0]      = '[';
+  token.value[1]      = 'I';
+  token.value[2]      = ']';
+  token.value[3]      = '\0';
   tokenTerminatorChar = tokenCurrentChar;
-  token.type = RegisterIndexedI;
+  token.type          = RegisterIndexedI;
 
   return b;
 }
@@ -151,10 +151,10 @@ static bool isComma(void) {
 
   tokenCurrentChar = getNext();
 
-  token.value[0] = ',';
-  token.value[1] = '\0';
+  token.value[0]      = ',';
+  token.value[1]      = '\0';
   tokenTerminatorChar = tokenCurrentChar;
-  token.type = TokenComma;
+  token.type          = TokenComma;
 
   return true;
 }
@@ -169,11 +169,11 @@ static bool isRangeOperator(void) {
 
   tokenCurrentChar = getNext();
 
-  token.value[0] = '.';
-  token.value[1] = '.';
-  token.value[2] = '\0';
+  token.value[0]      = '.';
+  token.value[1]      = '.';
+  token.value[2]      = '\0';
   tokenTerminatorChar = tokenCurrentChar;
-  token.type = TokenRangeOperator;
+  token.type          = TokenRangeOperator;
 
   return true;
 }
@@ -182,11 +182,11 @@ void getNextToken(void) {
   tokenCurrentChar = skipWhiteSpace(tokenCurrentChar);
   tokenCurrentChar = skipComment(tokenCurrentChar);
 
-  token.value[0] = '\0';
+  token.value[0]      = '\0';
   tokenTerminatorChar = '\0';
-  token.type = TokenEnd;
+  token.type          = TokenEnd;
   token.isInstruction = false;
-  token.isVRegister = false;
+  token.isVRegister   = false;
 
   if (!tokenCurrentChar) {
     tokenTerminatorChar = tokenCurrentChar;
@@ -216,11 +216,11 @@ void openTokenStream(void) {
   openFileStream();
   currentLineNumber = 1;
 
-  char nextChar = getNext();
-  tokenCurrentChar = nextChar;
+  char nextChar        = getNext();
+  tokenCurrentChar     = nextChar;
   token.currentLine[0] = nextChar;
   token.currentLine[1] = '\0';
-  currentLineIndex = 1;
+  currentLineIndex     = 1;
 }
 
 void closeTokenStream(void) { closeFileStream(); }

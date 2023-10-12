@@ -31,7 +31,7 @@ void main(int argc, char *argv[]) {
   replaceExtension(newFileName, fileName, ".CH8");
   FILE *pFile = fopen(newFileName, "w");
 
-  char *pBuffer = (char *)programStorage;
+  char *pBuffer    = (char *)programStorage;
   char *pBufferEnd = pBuffer + currentAddress;
 
   for (char *p = pBuffer; p < pBufferEnd; p++)

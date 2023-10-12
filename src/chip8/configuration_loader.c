@@ -196,9 +196,9 @@ static void applyConfigColour(void) {
     getNextToken();
     const uint8_t blue = expectToBeNumberUp(15);
 
-    palette[b].red = red;
+    palette[b].red   = red;
     palette[b].green = green;
-    palette[b].blue = blue;
+    palette[b].blue  = blue;
 
     return;
   }
@@ -210,7 +210,7 @@ bool haveAppliedAKeyConfig = false;
 
 static void applyConfigKey(void) {
   if (!haveAppliedAKeyConfig) {
-    gameKeyCount = 0;
+    gameKeyCount          = 0;
     haveAppliedAKeyConfig = true;
   }
   getNextToken();
@@ -234,7 +234,7 @@ loop:
     getNextToken();
 
     if (token.type == TokenNumber) {
-      const uint8_t controllerId = expectToBeNumberUp(2);
+      const uint8_t controllerId          = expectToBeNumberUp(2);
       gameKeys[gameKeyCount].controllerId = controllerId - 1;
 
       getNextToken();
@@ -250,7 +250,7 @@ loop:
       getNextToken();
       const uint8_t direction = expectToBeNumberUp(3);
 
-      gameKeys[gameKeyCount].type = KC_CTRL_BTNS;
+      gameKeys[gameKeyCount].type              = KC_CTRL_BTNS;
       gameKeys[gameKeyCount].controllerButtons = direction;
 
       gameKeyCount++;
@@ -261,15 +261,15 @@ loop:
         getNextToken(); // Dash
 
         getNextToken(); // sub-direction
-        const uint8_t subDirection = expectToBeSubDirection(direction);
-        gameKeys[gameKeyCount].type = KC_CTRL_DIR;
+        const uint8_t subDirection                 = expectToBeSubDirection(direction);
+        gameKeys[gameKeyCount].type                = KC_CTRL_DIR;
         gameKeys[gameKeyCount].controllerDirection = subDirection;
 
         gameKeyCount++;
         return;
       }
 
-      gameKeys[gameKeyCount].type = KC_CTRL_DIR;
+      gameKeys[gameKeyCount].type                = KC_CTRL_DIR;
       gameKeys[gameKeyCount].controllerDirection = direction;
 
       gameKeyCount++;
@@ -284,7 +284,7 @@ loop:
 
     MatrixMapping *mapping = codeToMatrix(token.value);
 
-    gameKeys[gameKeyCount].matrixRow = mapping->rowIndex;
+    gameKeys[gameKeyCount].matrixRow  = mapping->rowIndex;
     gameKeys[gameKeyCount].matrixMask = mapping->bitMask;
 
     gameKeys[gameKeyCount].type = KC_ASCII;

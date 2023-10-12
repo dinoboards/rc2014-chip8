@@ -15,11 +15,11 @@ char getNext(void) { return _getNext(token.currentLine); }
 
 DEF_TOKEN_EQUALS(token.value)
 
-#define tokenDirectionMap(v, d)  \
-  if (tokenEquals(v)) {          \
-    token.type = TokenDirection; \
-    token.number = d;            \
-    return;                      \
+#define tokenDirectionMap(v, d)                                                                                                    \
+  if (tokenEquals(v)) {                                                                                                            \
+    token.type   = TokenDirection;                                                                                                 \
+    token.number = d;                                                                                                              \
+    return;                                                                                                                        \
   }
 
 void tokeniseAlphaNumericString(void) {
@@ -55,7 +55,7 @@ void tokeniseAlphaNumericString(void) {
     }
 
     if ((c >= 'A' && c <= 'Z')) {
-      token.type = TokenIdentifier;
+      token.type     = TokenIdentifier;
       token.value[0] = c + ('a' - 'A'); // to lower it
       return;
     }
@@ -67,7 +67,7 @@ void tokeniseAlphaNumericString(void) {
   tokenDirectionMap("right", CONTROLLER_DIRECTION_RIGHT);
 
   if (isOnlyDigits) {
-    token.type = TokenNumber;
+    token.type   = TokenNumber;
     token.number = xstrtol(token.value, (char *)0, 10);
     return;
   }
@@ -81,10 +81,10 @@ static bool isEqual(void) {
 
   tokenCurrentChar = getNext();
 
-  token.value[0] = '=';
-  token.value[1] = '\0';
+  token.value[0]      = '=';
+  token.value[1]      = '\0';
   tokenTerminatorChar = tokenCurrentChar;
-  token.type = TokenEquals;
+  token.type          = TokenEquals;
 
   return true;
 }
@@ -95,10 +95,10 @@ static bool isDash(void) {
 
   tokenCurrentChar = getNext();
 
-  token.value[0] = '-';
-  token.value[1] = '\0';
+  token.value[0]      = '-';
+  token.value[1]      = '\0';
   tokenTerminatorChar = tokenCurrentChar;
-  token.type = TokenDash;
+  token.type          = TokenDash;
 
   return true;
 }
@@ -109,10 +109,10 @@ static bool isComma(void) {
 
   tokenCurrentChar = getNext();
 
-  token.value[0] = ',';
-  token.value[1] = '\0';
+  token.value[0]      = ',';
+  token.value[1]      = '\0';
   tokenTerminatorChar = tokenCurrentChar;
-  token.type = TokenComma;
+  token.type          = TokenComma;
 
   return true;
 }
@@ -123,10 +123,10 @@ static bool isOpenCurly(void) {
 
   tokenCurrentChar = getNext();
 
-  token.value[0] = '{';
-  token.value[1] = '\0';
+  token.value[0]      = '{';
+  token.value[1]      = '\0';
   tokenTerminatorChar = tokenCurrentChar;
-  token.type = TokenOpenCurly;
+  token.type          = TokenOpenCurly;
 
   return true;
 }
@@ -137,10 +137,10 @@ static bool isCloseCurly(void) {
 
   tokenCurrentChar = getNext();
 
-  token.value[0] = '{';
-  token.value[1] = '\0';
+  token.value[0]      = '{';
+  token.value[1]      = '\0';
   tokenTerminatorChar = tokenCurrentChar;
-  token.type = TokenCloseCurly;
+  token.type          = TokenCloseCurly;
 
   return true;
 }
@@ -148,10 +148,10 @@ void getNextToken(void) {
   tokenCurrentChar = skipWhiteSpace(tokenCurrentChar);
   tokenCurrentChar = skipComment(tokenCurrentChar);
 
-  token.value[0] = '\0';
+  token.value[0]      = '\0';
   tokenTerminatorChar = '\0';
-  token.type = TokenEnd;
-  token.isColour = false;
+  token.type          = TokenEnd;
+  token.isColour      = false;
 
   if (!tokenCurrentChar || tokenCurrentChar == CTRL_Z) {
     tokenTerminatorChar = tokenCurrentChar;
@@ -184,12 +184,12 @@ void openTokenStream(void) {
 
   currentLineNumber = 1;
 
-  char nextChar = getNext();
-  tokenCurrentChar = nextChar;
+  char nextChar        = getNext();
+  tokenCurrentChar     = nextChar;
   token.currentLine[0] = nextChar;
   token.currentLine[1] = '\0';
-  currentLineIndex = 1;
-  token.isColour = false;
+  currentLineIndex     = 1;
+  token.isColour       = false;
 }
 
 void closeTokenStream(void) { closeFileStream(); }

@@ -6,29 +6,29 @@
 
 extern bool appRunning;
 
-#define assert(a)                                  \
-  {                                                \
-    xprintf(#a "\r\n");                            \
-    soundTimer = 0;                                \
-    resetKeySimulator();                           \
-    initSystemState();                             \
-    setup_##a();                                   \
-    appRunning = executeSingleInstruction();       \
-    expectEqualBytes(appRunning, 1, "appRunning"); \
-    verify_##a();                                  \
-    xprintf("\r\n");                               \
+#define assert(a)                                                                                                                  \
+  {                                                                                                                                \
+    xprintf(#a "\r\n");                                                                                                            \
+    soundTimer = 0;                                                                                                                \
+    resetKeySimulator();                                                                                                           \
+    initSystemState();                                                                                                             \
+    setup_##a();                                                                                                                   \
+    appRunning = executeSingleInstruction();                                                                                       \
+    expectEqualBytes(appRunning, 1, "appRunning");                                                                                 \
+    verify_##a();                                                                                                                  \
+    xprintf("\r\n");                                                                                                               \
   }
 
-#define assertTerminates(a)                  \
-  {                                          \
-    printf(#a "\r\n");                       \
-    soundTimer = 0;                          \
-    resetKeySimulator();                     \
-    initSystemState();                       \
-    setup_##a();                             \
-    appRunning = executeSingleInstruction(); \
-    verify_##a();                            \
-    printf("\r\n");                          \
+#define assertTerminates(a)                                                                                                        \
+  {                                                                                                                                \
+    printf(#a "\r\n");                                                                                                             \
+    soundTimer = 0;                                                                                                                \
+    resetKeySimulator();                                                                                                           \
+    initSystemState();                                                                                                             \
+    setup_##a();                                                                                                                   \
+    appRunning = executeSingleInstruction();                                                                                       \
+    verify_##a();                                                                                                                  \
+    printf("\r\n");                                                                                                                \
   }
 
 #define MAX_CAPTURE_TEXT 128

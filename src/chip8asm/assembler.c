@@ -289,7 +289,8 @@ Adds the value kk to the value of register Vx, then stores the result in Vx.
 8xy4 - ADD Vx, Vy
 Set Vx = Vx + Vy, set VF = carry.
 
-The values of Vx and Vy are added together. If the result is greater than 8 bits (i.e., > 255,) VF is set to 1, otherwise 0. Only the lowest 8 bits of the result are kept, and stored in Vx.
+The values of Vx and Vy are added together. If the result is greater than 8 bits (i.e., > 255,) VF is set to 1, otherwise 0. Only
+the lowest 8 bits of the result are kept, and stored in Vx.
 
 */
 inline void assAddVx(void) {
@@ -465,7 +466,8 @@ inline void assSknpVx(void) {
 Cxkk - RND Vx, byte
 Set Vx = random byte AND kk.
 
-The interpreter generates a random number from 0 to 255, which is then ANDed with the value kk. The results are stored in Vx. See instruction 8xy2 for more information on AND.
+The interpreter generates a random number from 0 to 255, which is then ANDed with the value kk. The results are stored in Vx. See
+instruction 8xy2 for more information on AND.
 */
 inline void assRndVx(void) {
   getNext();
@@ -485,7 +487,8 @@ inline void assRndVx(void) {
 8xy2 - AND Vx, Vy
 Set Vx = Vx AND Vy.
 
-Performs a bitwise AND on the values of Vx and Vy, then stores the result in Vx. A bitwise AND compares the corrseponding bits from two values, and if both bits are 1, then the same bit in the result is also 1. Otherwise, it is 0.
+Performs a bitwise AND on the values of Vx and Vy, then stores the result in Vx. A bitwise AND compares the corrseponding bits from
+two values, and if both bits are 1, then the same bit in the result is also 1. Otherwise, it is 0.
 */
 inline void assAnd(void) {
   getNext();
@@ -503,7 +506,8 @@ inline void assAnd(void) {
 /*8xy1 - OR Vx, Vy
 Set Vx = Vx OR Vy.
 
-Performs a bitwise OR on the values of Vx and Vy, then stores the result in Vx. A bitwise OR compares the corrseponding bits from two values, and if either bit is 1, then the same bit in the result is also 1. Otherwise, it is 0.
+Performs a bitwise OR on the values of Vx and Vy, then stores the result in Vx. A bitwise OR compares the corrseponding bits from
+two values, and if either bit is 1, then the same bit in the result is also 1. Otherwise, it is 0.
 */
 inline void assOr(void) {
   getNext();
@@ -623,7 +627,8 @@ inline void assXor(void) {
 Fx33 - BCD [I], Vx
 Store BCD representation of Vx in memory locations I, I+1, and I+2.
 
-The interpreter takes the decimal value of Vx, and places the hundreds digit in memory at location in I, the tens digit at location I+1, and the ones digit at location I+2.*/
+The interpreter takes the decimal value of Vx, and places the hundreds digit in memory at location in I, the tens digit at location
+I+1, and the ones digit at location I+2.*/
 inline void assBcd(void) {
   getNext();
   expectToBeIndexedI();
@@ -642,7 +647,8 @@ inline void assBcd(void) {
 Fx29 - LDF I, Vx
 Set I = location of sprite for digit Vx.
 
-The value of I is set to the location for the hexadecimal sprite corresponding to the value of Vx. See section 2.4, Display, for more information on the Chip-8 hexadecimal font.
+The value of I is set to the location for the hexadecimal sprite corresponding to the value of Vx. See section 2.4, Display, for
+more information on the Chip-8 hexadecimal font.
 */
 inline void assLdf(void) {
   getNext();
@@ -730,9 +736,9 @@ inline void assScroll(void) {
 }
 
 void assemble(byte pc) __z88dk_fastcall {
-  parseCount = pc; // WARNING - SDCC can sometimes optimise this to cause a 16bit write to a 8 bit storage variable
+  parseCount     = pc; // WARNING - SDCC can sometimes optimise this to cause a 16bit write to a 8 bit storage variable
   currentAddress = 0x200;
-  programPtr = programStorage;
+  programPtr     = programStorage;
 
   // setFileStream(defaultFCB);
   openTokenStream();
@@ -742,7 +748,8 @@ void assemble(byte pc) __z88dk_fastcall {
   while (token.type != TokenEnd) {
     switch (token.type) {
     case TokenLabel: {
-      assLabel(pc); // TODO WARNING SDCC BUG if we change this to parseCount - the assigned above for parseCount will assign a 16bit value - to an 8 bit storage variable!
+      assLabel(pc); // TODO WARNING SDCC BUG if we change this to parseCount - the assigned above for parseCount will assign a 16bit
+                    // value - to an 8 bit storage variable!
       break;
     }
 

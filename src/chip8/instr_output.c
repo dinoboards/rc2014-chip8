@@ -59,10 +59,10 @@ bool videoInit(void) {
   const uint8_t vdpType = VDP_V9958;
 #endif
 
-  videoResMode = VideoResModeLow;
-  videoPixelWidth = 64;
-  videoPixelHeight = 32;
-  videoPixelWidthMask = 63;
+  videoResMode         = VideoResModeLow;
+  videoPixelWidth      = 64;
+  videoPixelHeight     = 32;
+  videoPixelWidthMask  = 63;
   videoPixelHeightMask = 31;
 
 #ifndef CPM
@@ -74,10 +74,10 @@ bool videoInit(void) {
 void videoClose(void) { tmsVideoClose(); }
 
 void videoHigh(void) {
-  videoResMode = VideoResModeHigh;
-  videoPixelWidth = 128;
-  videoPixelHeight = 64;
-  videoPixelWidthMask = 127;
+  videoResMode         = VideoResModeHigh;
+  videoPixelWidth      = 128;
+  videoPixelHeight     = 64;
+  videoPixelWidthMask  = 127;
   videoPixelHeightMask = 63;
 
 #ifndef CPM

@@ -5,7 +5,8 @@
 
 void expectedError(const char *msg) __z88dk_fastcall {
   getToLineEnd();
-  logError("\r\n%s\r\n\r\nExpected %s but found %s\r\n at line number %d\r\n", token.currentLine, msg, token.value, currentLineNumber);
+  logError("\r\n%s\r\n\r\nExpected %s but found %s\r\n at line number %d\r\n", token.currentLine, msg, token.value,
+           currentLineNumber);
   errorExit();
 }
 
@@ -23,13 +24,15 @@ void errorBadExpression(const char *expression) __z88dk_fastcall {
 
 void errorIntTooLarge(const uint16_t x) __z88dk_fastcall {
   getToLineEnd();
-  logError("\r\n%s\r\n\r\nInteger literal '%d' at line number %d exceeds chips 8 12 bit limit.\r\n", token.currentLine, x, currentLineNumber);
+  logError("\r\n%s\r\n\r\nInteger literal '%d' at line number %d exceeds chips 8 12 bit limit.\r\n", token.currentLine, x,
+           currentLineNumber);
   errorExit();
 }
 
 void errorUnexpectedCharacter(char ch) __z88dk_fastcall {
   getToLineEnd();
-  logError("\r\n%s\r\n\r\nExpression had unexpected character '%c' at line number %d\r\n", token.currentLine, ch, currentLineNumber);
+  logError("\r\n%s\r\n\r\nExpression had unexpected character '%c' at line number %d\r\n", token.currentLine, ch,
+           currentLineNumber);
   errorExit();
 }
 

@@ -31,14 +31,15 @@ void logError(const char *msg, ...) {
 
 void errorExit(void) { testErrored = true; }
 
-#define instructionEquals(loc, word) (programStorage[(loc)] != (byte)((word) >> 8) || programStorage[(loc) + 1] != (byte)((word)&0xFF))
+#define instructionEquals(loc, word)                                                                                               \
+  (programStorage[(loc)] != (byte)((word) >> 8) || programStorage[(loc) + 1] != (byte)((word)&0xFF))
 
 void shouldAssemble(const char *source, uint16_t expectedWord) {
-  content = (char *)source;
+  content           = (char *)source;
   programStorage[0] = 0;
   programStorage[1] = 0;
-  testErrored = false;
-  logBuffer[0] = '\0';
+  testErrored       = false;
+  logBuffer[0]      = '\0';
 
   initLabelStorage();
   assemble(1);
@@ -60,11 +61,11 @@ void shouldAssemble(const char *source, uint16_t expectedWord) {
 }
 
 void shouldAssembleDblWidth(const char *source, uint16_t expectedWord1, uint16_t expectedWord2) {
-  content = (char *)source;
+  content           = (char *)source;
   programStorage[0] = 0;
   programStorage[1] = 0;
-  testErrored = false;
-  logBuffer[0] = '\0';
+  testErrored       = false;
+  logBuffer[0]      = '\0';
 
   initLabelStorage();
   assemble(1);
@@ -80,17 +81,18 @@ void shouldAssembleDblWidth(const char *source, uint16_t expectedWord1, uint16_t
   }
 
   if (instructionEquals(0, expectedWord1) && instructionEquals(2, expectedWord2)) {
-    printf(RED "  Failure: translated to %02X%02X%02X%02X\r\n\r\n" RESET, (int)programStorage[0], (int)programStorage[1], (int)programStorage[2], (int)programStorage[3]);
+    printf(RED "  Failure: translated to %02X%02X%02X%02X\r\n\r\n" RESET, (int)programStorage[0], (int)programStorage[1],
+           (int)programStorage[2], (int)programStorage[3]);
     testFailure = true;
   }
 }
 
 void shouldAssembleDS(const char *source, uint16_t expectedPCCount) {
-  content = (char *)source;
+  content           = (char *)source;
   programStorage[0] = 0;
   programStorage[1] = 0;
-  testErrored = false;
-  logBuffer[0] = '\0';
+  testErrored       = false;
+  logBuffer[0]      = '\0';
 
   initLabelStorage();
   assemble(1);
@@ -112,11 +114,11 @@ void shouldAssembleDS(const char *source, uint16_t expectedPCCount) {
 }
 
 void shouldError(const char *source, const char *errorMessage) {
-  content = (char *)source;
+  content           = (char *)source;
   programStorage[0] = 0;
   programStorage[1] = 0;
-  testErrored = false;
-  logBuffer[0] = '\0';
+  testErrored       = false;
+  logBuffer[0]      = '\0';
 
   initLabelStorage();
   assemble(1);
@@ -138,7 +140,7 @@ void shouldError(const char *source, const char *errorMessage) {
 }
 
 void shouldEvaluate(const char *expression, int expectedValue) {
-  testErrored = false;
+  testErrored  = false;
   logBuffer[0] = '\0';
 
   printf("%s should evaluate to %d\r\n", expression, expectedValue);
@@ -154,7 +156,7 @@ void shouldEvaluate(const char *expression, int expectedValue) {
 }
 
 void shouldEvaluateError(const char *expression, const char *expectedErrorMessage) {
-  testErrored = false;
+  testErrored  = false;
   logBuffer[0] = '\0';
 
   printf("%s should generate error of %s\r\n", expression, expectedErrorMessage);

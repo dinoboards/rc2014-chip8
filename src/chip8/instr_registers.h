@@ -11,10 +11,10 @@
 
 #define addVxByte() (registers[nibble2nd] += lowByte)
 
-#define ldDtVx()                         \
-  {                                      \
-    initTimers();                        \
-    (delayTimer = registers[nibble2nd]); \
+#define ldDtVx()                                                                                                                   \
+  {                                                                                                                                \
+    initTimers();                                                                                                                  \
+    (delayTimer = registers[nibble2nd]);                                                                                           \
   }
 
 #define ldVxDt() (registers[nibble2nd] = delayTimer)
@@ -141,7 +141,7 @@ inline void orVxVy(void) {
 
 inline void shrVxVy(void) {
   uint8_t *register2ndNibble = &registers[nibble2nd];
-  registers[0xF] = *register2ndNibble & 0x1;
+  registers[0xF]             = *register2ndNibble & 0x1;
   *register2ndNibble >>= 1;
 }
 
@@ -197,10 +197,10 @@ uint8_t *register2ndNibble;
 extern void subVxVy(void);
 
 static void subnVxVy(void) {
-  register2ndNibble = &registers[nibble2nd];
+  register2ndNibble                = &registers[nibble2nd];
   const uint8_t *register3rdNibble = &registers[nibble3rd];
 
-  const byte f = *register2ndNibble <= *register3rdNibble;
+  const byte f       = *register2ndNibble <= *register3rdNibble;
   *register2ndNibble = *register3rdNibble - *register2ndNibble;
 
   // quirks - set flag before subtraction
@@ -218,14 +218,14 @@ static void bcdIVx(void) {
   const byte x = registers[nibble2nd];
 
   const byte im = x / 10;
-  units = x - im * 10;
-  hundreds = im / 10;
-  tens = im - hundreds * 10;
+  units         = x - im * 10;
+  hundreds      = im / 10;
+  tens          = im - hundreds * 10;
 
   byte *p = (byte *)registerI;
-  *p++ = hundreds;
-  *p++ = tens;
-  *p++ = units;
+  *p++    = hundreds;
+  *p++    = tens;
+  *p++    = units;
 }
 
 static void ldfIVx(void) {

@@ -2,10 +2,8 @@
 #define __MSX_DOS
 
 /**
- * Function: initialises the screen to TEXT1 mode (40 x 24). In this routine, the palette is not initialised. To initialise the palette, call INIPLT in SUB-ROM after this call.
- * Input:
- * TXTNAM for the pattern name table
- * TXTCGP for the pattern generator table
+ * Function: initialises the screen to TEXT1 mode (40 x 24). In this routine, the palette is not initialised. To initialise the
+ * palette, call INIPLT in SUB-ROM after this call. Input: TXTNAM for the pattern name table TXTCGP for the pattern generator table
  * LINL40 for the length of one line
  * Output: none
  * Registers: all

@@ -90,8 +90,8 @@ inline void moveToNextRow(void) {
 }
 
 inline void moveTo(byte xx, byte yy) {
-  drawCommand.y = yy & (PIXEL_HEIGHT - 1);
-  drawCommand.x = xx & (PIXEL_WIDTH - 1);
+  drawCommand.y           = yy & (PIXEL_HEIGHT - 1);
+  drawCommand.x           = xx & (PIXEL_WIDTH - 1);
   currentFrameBufferIndex = (drawCommand.y << 4) + (drawCommand.x >> 1);
 }
 
@@ -101,7 +101,7 @@ static byte bottomPixelData;
 void drawBytesEven(void) {
   byte end = drawCommand.x + 8;
   for (; drawCommand.x < end; incrementXBy2()) {
-    drawCommand.topBits = (topPixelData & 0xC0) >> 6;
+    drawCommand.topBits    = (topPixelData & 0xC0) >> 6;
     drawCommand.bottomBits = (bottomPixelData & 0xC0) >> 6;
     bottomPixelData <<= 2;
     topPixelData <<= 2;
@@ -110,7 +110,7 @@ void drawBytesEven(void) {
 }
 
 void drawBytesOdd(void) {
-  drawCommand.topBits = (topPixelData & 0x80) >> 7;
+  drawCommand.topBits    = (topPixelData & 0x80) >> 7;
   drawCommand.bottomBits = (bottomPixelData & 0x80) >> 7;
   bottomPixelData <<= 1;
   topPixelData <<= 1;
@@ -121,7 +121,7 @@ void drawBytesOdd(void) {
   byte end = drawCommand.x + 7;
 
   for (; drawCommand.x < end; incrementXBy2()) {
-    drawCommand.topBits = (topPixelData & 0xC0) >> 6;
+    drawCommand.topBits    = (topPixelData & 0xC0) >> 6;
     drawCommand.bottomBits = (bottomPixelData & 0xC0) >> 6;
     bottomPixelData <<= 2;
     topPixelData <<= 2;
@@ -136,18 +136,18 @@ void drawSpriteEvenEven(void) __z88dk_fastcall {
 
   if (drawCommand.length & 1) {
     for (byte i = 0; i < drawCommand.length - 1; i += 2) {
-      topPixelData = *p++;
+      topPixelData    = *p++;
       bottomPixelData = *p++;
       drawBytesEven();
       moveToNextRow();
     }
 
-    topPixelData = *p++;
+    topPixelData    = *p++;
     bottomPixelData = 0;
     drawBytesEven();
   } else
     for (byte i = 0; i < drawCommand.length; i += 2) {
-      topPixelData = *p++;
+      topPixelData    = *p++;
       bottomPixelData = *p++;
       drawBytesEven();
       moveToNextRow();
@@ -159,18 +159,18 @@ void drawSpriteOddEven(void) __z88dk_fastcall {
 
   if (drawCommand.length & 1) {
     for (byte i = 0; i < drawCommand.length - 1; i += 2) {
-      topPixelData = *p++;
+      topPixelData    = *p++;
       bottomPixelData = *p++;
       drawBytesOdd();
       moveToNextRow();
     }
 
-    topPixelData = *p++;
+    topPixelData    = *p++;
     bottomPixelData = 0;
     drawBytesOdd();
   } else
     for (byte i = 0; i < drawCommand.length; i += 2) {
-      topPixelData = *p++;
+      topPixelData    = *p++;
       bottomPixelData = *p++;
       drawBytesOdd();
       moveToNextRow();
@@ -178,8 +178,8 @@ void drawSpriteOddEven(void) __z88dk_fastcall {
 }
 
 void drawSpriteEvenOdd(void) __z88dk_fastcall {
-  byte *p = (byte *)registerI;
-  topPixelData = 0;
+  byte *p         = (byte *)registerI;
+  topPixelData    = 0;
   bottomPixelData = *p++;
   drawBytesEven();
   moveToNextRow();
@@ -189,7 +189,7 @@ void drawSpriteEvenOdd(void) __z88dk_fastcall {
 
   if (drawCommand.length >= 3)
     for (byte i = 0; i < ((drawCommand.length - 1) & 0xFE); i += 2) {
-      topPixelData = *p++;
+      topPixelData    = *p++;
       bottomPixelData = *p++;
       drawBytesEven();
       moveToNextRow();
@@ -198,14 +198,14 @@ void drawSpriteEvenOdd(void) __z88dk_fastcall {
   if (drawCommand.length & 1)
     return;
 
-  topPixelData = *p;
+  topPixelData    = *p;
   bottomPixelData = 0;
   drawBytesEven();
 }
 
 void drawSpriteOddOdd(void) __z88dk_fastcall {
-  byte *p = (byte *)registerI;
-  topPixelData = 0;
+  byte *p         = (byte *)registerI;
+  topPixelData    = 0;
   bottomPixelData = *p++;
   drawBytesOdd();
   moveToNextRow();
@@ -215,7 +215,7 @@ void drawSpriteOddOdd(void) __z88dk_fastcall {
 
   if (drawCommand.length >= 3)
     for (byte i = 0; i < ((drawCommand.length - 1) & 0xFE); i += 2) {
-      topPixelData = *p++;
+      topPixelData    = *p++;
       bottomPixelData = *p++;
       drawBytesOdd();
       moveToNextRow();
@@ -224,7 +224,7 @@ void drawSpriteOddOdd(void) __z88dk_fastcall {
   if (drawCommand.length & 1)
     return;
 
-  topPixelData = *p;
+  topPixelData    = *p;
   bottomPixelData = 0;
   drawBytesOdd();
 }
@@ -238,7 +238,7 @@ void tmsCls(void) {
 
 static void buildPatternData(byte *pData) {
   for (byte i = 0; i < 16; i++) {
-    byte top = 0;
+    byte top    = 0;
     byte bottom = 0;
 
     if (i & 0x1) {
@@ -278,8 +278,8 @@ static byte yy;
 
 void tmsDraw(void) {
   drawCommand.length = fourthNibble;
-  xx = registers[nibble2nd];
-  yy = registers[nibble3rd];
+  xx                 = registers[nibble2nd];
+  yy                 = registers[nibble3rd];
 
   registers[0xF] = 0;
 

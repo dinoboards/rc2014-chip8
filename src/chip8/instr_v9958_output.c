@@ -27,10 +27,10 @@ void v9958Draw(void) {
   if (fourthNibble == 0) {
     fourthNibble = 16;
     if (_color == 3) {
-      _color = 1;
+      _color                   = 1;
       const uint8_t originalYY = yy;
       v9958DrawDblPlane((byte *)registerI);
-      yy = originalYY;
+      yy     = originalYY;
       _color = 2;
       v9958DrawDblPlane((byte *)(registerI + 32));
       _color = 3;
@@ -41,10 +41,10 @@ void v9958Draw(void) {
   }
 
   if (_color == 3) {
-    _color = 1;
+    _color                   = 1;
     const uint8_t originalYY = yy;
     v9958DrawPlane((byte *)registerI);
-    yy = originalYY;
+    yy     = originalYY;
     _color = 2;
     v9958DrawPlane((byte *)(registerI + fourthNibble));
     _color = 3;
@@ -69,7 +69,8 @@ void v9958DrawDblPlane(byte *pSpriteData) __z88dk_fastcall {
 
 void v9958Cls(void) { clearScreenBank0(0); }
 
-RGB palette[16] = {{0, 0, 0}, {0xF, 0x0, 0}, {0x0, 0xF, 0}, {0, 0, 0xF}, {7, 0, 7}, {7, 7, 0}, {7, 7, 7}, {15, 7, 15}, {0, 0, 15}, {0, 15, 0}, {0, 15, 15}, {15, 0, 0}, {15, 0, 15}, {15, 15, 0}, {15, 15, 15}, {15, 15, 15}};
+RGB palette[16] = {{0, 0, 0},  {0xF, 0x0, 0}, {0x0, 0xF, 0}, {0, 0, 0xF}, {7, 0, 7},   {7, 7, 0},   {7, 7, 7},    {15, 7, 15},
+                   {0, 0, 15}, {0, 15, 0},    {0, 15, 15},   {15, 0, 0},  {15, 0, 15}, {15, 15, 0}, {15, 15, 15}, {15, 15, 15}};
 
 void v9958VideoInit(void) {
   setMode4(212, NTSC);

@@ -33,15 +33,15 @@ char getNextCharRaw(void) { return *pNextChar++; }
 
 extern bool haveAppliedAKeyConfig;
 
-#define assert(config)                                    \
-  {                                                       \
-    haveAppliedAKeyConfig = 0;                            \
-    pConfigurationUnderTest = (char *)testConfig##config; \
-    unexpectedTokenInvoked = false;                       \
-    expectedErrorInvoked = false;                         \
-    printf(#config ": \r\n");                             \
-    parseConfiguration("");                               \
-    assert##config();                                     \
+#define assert(config)                                                                                                             \
+  {                                                                                                                                \
+    haveAppliedAKeyConfig   = 0;                                                                                                   \
+    pConfigurationUnderTest = (char *)testConfig##config;                                                                          \
+    unexpectedTokenInvoked  = false;                                                                                               \
+    expectedErrorInvoked    = false;                                                                                               \
+    printf(#config ": \r\n");                                                                                                      \
+    parseConfiguration("");                                                                                                        \
+    assert##config();                                                                                                              \
   }
 
 const char *testConfigColours = "COLOR-0 = lightblue\r\n"

@@ -20,13 +20,13 @@ void ldStVx(void) {
     audioPlay(0x700);
 }
 
-static uint8_t countOfPeriods = 0;
-static uint8_t lastBitIndex = 0;
-static uint8_t lastBitState = 0;
-static uint8_t currentBitIndex = 0;
-static uint8_t currentBitState = 0;
+static uint8_t countOfPeriods         = 0;
+static uint8_t lastBitIndex           = 0;
+static uint8_t lastBitState           = 0;
+static uint8_t currentBitIndex        = 0;
+static uint8_t currentBitState        = 0;
 static uint8_t indexWithinCurrentByte = 0;
-static uint8_t currentByte = 0;
+static uint8_t currentByte            = 0;
 
 static uint16_t process8Samples(uint16_t total) __z88dk_fastcall {
   uint8_t indexWithinCurrentByte = 9;
@@ -54,14 +54,14 @@ static uint16_t process8Samples(uint16_t total) __z88dk_fastcall {
 static uint16_t total = 0;
 
 static uint16_t findSoundPeriod(void) __z88dk_fastcall {
-  countOfPeriods = 0;
-  lastBitIndex = AUDIO_SAMPLE_SIZE;
-  lastBitState = 0;
-  currentBitIndex = 0;
-  currentBitState = 0;
+  countOfPeriods         = 0;
+  lastBitIndex           = AUDIO_SAMPLE_SIZE;
+  lastBitState           = 0;
+  currentBitIndex        = 0;
+  currentBitState        = 0;
   indexWithinCurrentByte = 0;
-  currentByte = 0;
-  total = 0;
+  currentByte            = 0;
+  total                  = 0;
 
   const uint8_t *pPattern = (const uint8_t *)registerI;
 

@@ -15,7 +15,7 @@ void setup_ld_v1_10(void) { programStorage[0] = invertByteOrder(LD_V1_10); }
 void verify_ld_v1_10(void) { expectEqualBytes(registers[1], 10, "V1"); }
 
 void setup_ld_v3_va(void) {
-  registers[0xA] = 23;
+  registers[0xA]    = 23;
   programStorage[0] = invertByteOrder(LD_V3_VA);
 }
 
@@ -37,7 +37,7 @@ void setup_ld_vb_i(void) {
   for (int i = 0; i < 12; i++)
     ((byte *)registerI)[i] = i + 1;
   programStorage[0] = invertByteOrder(LD_VB_I);
-  registers[0xC] = 99;
+  registers[0xC]    = 99;
 }
 
 void verify_ld_vb_i(void) {
@@ -58,11 +58,11 @@ void verify_ld_vb_i(void) {
 }
 
 void setup_ld_v0_i(void) {
-  registerI = 0x600;
+  registerI              = 0x600;
   ((byte *)registerI)[0] = 55;
-  programStorage[0] = invertByteOrder(LD_V0_I);
-  registers[0x0] = 00;
-  registers[0x1] = 99;
+  programStorage[0]      = invertByteOrder(LD_V0_I);
+  registers[0x0]         = 00;
+  registers[0x1]         = 99;
 }
 
 void verify_ld_v0_i(void) {
@@ -72,18 +72,18 @@ void verify_ld_v0_i(void) {
 }
 
 void setup_ld_v5_v6_i(void) {
-  registerI = 0x600;
+  registerI              = 0x600;
   ((byte *)registerI)[0] = 50;
   ((byte *)registerI)[1] = 60;
-  programStorage[0] = invertByteOrder(LD_V5_V6_I);
-  registers[0x0] = 0;
-  registers[0x1] = 1;
-  registers[0x2] = 2;
-  registers[0x3] = 3;
-  registers[0x4] = 4;
-  registers[0x5] = 5;
-  registers[0x6] = 6;
-  registers[0x7] = 7;
+  programStorage[0]      = invertByteOrder(LD_V5_V6_I);
+  registers[0x0]         = 0;
+  registers[0x1]         = 1;
+  registers[0x2]         = 2;
+  registers[0x3]         = 3;
+  registers[0x4]         = 4;
+  registers[0x5]         = 5;
+  registers[0x6]         = 6;
+  registers[0x7]         = 7;
 }
 
 void verify_ld_v5_v6_i(void) {
@@ -94,19 +94,19 @@ void verify_ld_v5_v6_i(void) {
 }
 
 void setup_ld_v2_v0_i(void) {
-  registerI = 0x600;
+  registerI              = 0x600;
   ((byte *)registerI)[0] = 20;
   ((byte *)registerI)[1] = 10;
   ((byte *)registerI)[2] = 0xFF;
-  programStorage[0] = invertByteOrder(LD_V2_V0_I);
-  registers[0x0] = 0;
-  registers[0x1] = 1;
-  registers[0x2] = 2;
-  registers[0x3] = 3;
-  registers[0x4] = 4;
-  registers[0x5] = 5;
-  registers[0x6] = 6;
-  registers[0x7] = 7;
+  programStorage[0]      = invertByteOrder(LD_V2_V0_I);
+  registers[0x0]         = 0;
+  registers[0x1]         = 1;
+  registers[0x2]         = 2;
+  registers[0x3]         = 3;
+  registers[0x4]         = 4;
+  registers[0x5]         = 5;
+  registers[0x6]         = 6;
+  registers[0x7]         = 7;
 }
 
 void verify_ld_v2_v0_i(void) {
@@ -117,19 +117,19 @@ void verify_ld_v2_v0_i(void) {
 }
 
 void setup_ld_v1_v1_i(void) {
-  registerI = 0x600;
+  registerI              = 0x600;
   ((byte *)registerI)[0] = 10;
   ((byte *)registerI)[1] = 0xFF;
   ((byte *)registerI)[2] = 0xFF;
-  programStorage[0] = invertByteOrder(LD_V1_V1_I);
-  registers[0x0] = 0;
-  registers[0x1] = 1;
-  registers[0x2] = 2;
-  registers[0x3] = 3;
-  registers[0x4] = 4;
-  registers[0x5] = 5;
-  registers[0x6] = 6;
-  registers[0x7] = 7;
+  programStorage[0]      = invertByteOrder(LD_V1_V1_I);
+  registers[0x0]         = 0;
+  registers[0x1]         = 1;
+  registers[0x2]         = 2;
+  registers[0x3]         = 3;
+  registers[0x4]         = 4;
+  registers[0x5]         = 5;
+  registers[0x6]         = 6;
+  registers[0x7]         = 7;
 }
 
 void verify_ld_v1_v1_i(void) {
@@ -236,8 +236,8 @@ void setup_bad_jump(void) { programStorage[0] = invertByteOrder(JP_0002); }
 void verify_bad_jump(void) { expectEqualPtrs(chip8PC, (uint16_t *)0x202, "PC"); }
 
 void setup_ret_from_subroutine(void) {
-  stack[0] = 0xF000;
-  stackIndex = 1;
+  stack[0]          = 0xF000;
+  stackIndex        = 1;
   programStorage[0] = invertByteOrder(RET);
 }
 
@@ -247,30 +247,30 @@ void verify_ret_from_subroutine(void) {
 }
 
 void setup_final_ret(void) {
-  stackIndex = 0;
+  stackIndex        = 0;
   programStorage[0] = invertByteOrder(RET);
 }
 
 void verify_final_ret(void) { expectFalse(appRunning, "appRunning"); }
 
 void setup_add_ve_1(void) {
-  registers[0xE] = 3;
+  registers[0xE]    = 3;
   programStorage[0] = invertByteOrder(ADD_VE_1);
 }
 
 void verify_add_ve_1(void) { expectEqualBytes(registers[0xE], 4, "VE"); }
 
 void setup_add_i_v9(void) {
-  registers[0x9] = 3;
-  registerI = 100;
+  registers[0x9]    = 3;
+  registerI         = 100;
   programStorage[0] = invertByteOrder(ADD_I_V9);
 }
 
 void verify_add_i_v9(void) { expectEqualBytes(registerI, 103, "I"); }
 
 void setup_add_v6_v1_no_carry(void) {
-  registers[0x6] = 3;
-  registers[0x1] = 2;
+  registers[0x6]    = 3;
+  registers[0x1]    = 2;
   programStorage[0] = invertByteOrder(ADD_V6_V1);
 }
 
@@ -280,8 +280,8 @@ void verify_add_v6_v1_no_carry(void) {
 }
 
 void setup_add_v6_v1_with_carry(void) {
-  registers[0x6] = 255;
-  registers[0x1] = 20;
+  registers[0x6]    = 255;
+  registers[0x1]    = 20;
   programStorage[0] = invertByteOrder(ADD_V6_V1);
 }
 
@@ -291,60 +291,60 @@ void verify_add_v6_v1_with_carry(void) {
 }
 
 void setup_se_v4_15_skips(void) {
-  registers[4] = 15;
+  registers[4]      = 15;
   programStorage[0] = invertByteOrder(SE_V4_15);
 }
 
 void verify_se_v4_15_skips(void) { expectEqualPtrs(chip8PC, (uint16_t *)0x204, "PC"); }
 
 void setup_se_v4_15_no_skips(void) {
-  registers[4] = 1;
+  registers[4]      = 1;
   programStorage[0] = invertByteOrder(SE_V4_15);
 }
 
 void verify_se_v4_15_no_skips(void) { expectEqualPtrs(chip8PC, (uint16_t *)0x202, "PC"); }
 
 void setup_se_v4_v9_skips(void) {
-  registers[4] = 15;
-  registers[9] = 15;
+  registers[4]      = 15;
+  registers[9]      = 15;
   programStorage[0] = invertByteOrder(SE_V4_V9);
 }
 
 void verify_se_v4_v9_skips(void) { expectEqualPtrs(chip8PC, (uint16_t *)0x204, "PC"); }
 
 void setup_se_v4_v9_no_skips(void) {
-  registers[4] = 15;
-  registers[9] = 10;
+  registers[4]      = 15;
+  registers[9]      = 10;
   programStorage[0] = invertByteOrder(SE_V4_V9);
 }
 
 void verify_se_v4_v9_no_skips(void) { expectEqualPtrs(chip8PC, (uint16_t *)0x202, "PC"); }
 
 void setup_sne_v0_123_skips(void) {
-  registers[4] = 15;
+  registers[4]      = 15;
   programStorage[0] = invertByteOrder(SNE_V0_123);
 }
 
 void verify_sne_v0_123_skips(void) { expectEqualPtrs(chip8PC, (uint16_t *)0x204, "PC"); }
 
 void setup_sne_v0_123_no_skips(void) {
-  registers[0] = 123;
+  registers[0]      = 123;
   programStorage[0] = invertByteOrder(SNE_V0_123);
 }
 
 void verify_sne_v0_123_no_skips(void) { expectEqualPtrs(chip8PC, (uint16_t *)0x202, "PC"); }
 
 void setup_sne_v0_v2_skips(void) {
-  registers[0] = 15;
-  registers[2] = 25;
+  registers[0]      = 15;
+  registers[2]      = 25;
   programStorage[0] = invertByteOrder(SNE_V0_V2);
 }
 
 void verify_sne_v0_v2_skips(void) { expectEqualPtrs(chip8PC, (uint16_t *)0x204, "PC"); }
 
 void setup_sne_v0_v2_no_skips(void) {
-  registers[0] = 25;
-  registers[2] = 25;
+  registers[0]      = 25;
+  registers[2]      = 25;
   programStorage[0] = invertByteOrder(SNE_V0_V2);
 }
 
@@ -355,7 +355,7 @@ void setup_jp_1026(void) { programStorage[0] = invertByteOrder(JP_1026); }
 void verify_jp_1026(void) { expectEqualPtrs(chip8PC, (uint16_t *)0x402, "PC"); }
 
 void setup_jp_v0_1024(void) {
-  registers[0] = 3;
+  registers[0]      = 3;
   programStorage[0] = invertByteOrder(JP_V0_1024);
 }
 
@@ -421,7 +421,7 @@ void verify_key_v5(void) {
 }
 
 void setup_ld_st_v2(void) {
-  registers[2] = 16;
+  registers[2]      = 16;
   programStorage[0] = invertByteOrder(LD_ST_V2);
 }
 
@@ -432,7 +432,7 @@ void verify_ld_st_v2(void) {
 }
 
 void setup_ld_dt_v3(void) {
-  registers[3] = 12;
+  registers[3]      = 12;
   programStorage[0] = invertByteOrder(LD_DT_V3);
 }
 
@@ -443,7 +443,7 @@ void verify_ld_dt_v3(void) {
 }
 
 void setup_ld_va_dt(void) {
-  delayTimer = 0x45;
+  delayTimer        = 0x45;
   programStorage[0] = invertByteOrder(LD_VA_DT);
 }
 
@@ -457,27 +457,28 @@ void setup_rnd_ve_15(void) {
 void verify_rnd_ve_15(void) { expectEqualBytes(registers[0xE], 12, "VE"); }
 
 void setup_and_va_vb(void) {
-  registers[0xA] = 0xF0;
-  registers[0xB] = 0x81;
+  registers[0xA]    = 0xF0;
+  registers[0xB]    = 0x81;
   programStorage[0] = invertByteOrder(AND_VA_VB);
 }
 
 void verify_and_va_vb(void) { expectEqualBytes(registers[0xA], 0x80, "VA"); }
 
 void setup_or_v7_v2(void) {
-  registers[0x7] = 0x10;
-  registers[0x2] = 0x01;
+  registers[0x7]    = 0x10;
+  registers[0x2]    = 0x01;
   programStorage[0] = invertByteOrder(OR_V7_V2);
 }
 
 void verify_or_v7_v2(void) { expectEqualBytes(registers[0x7], 0x11, "V7"); }
 
-// SHR Quicks issues - see https://www.reddit.com/r/EmuDev/comments/72dunw/chip8_8xy6_help/dno06ix/?utm_source=reddit&utm_medium=web2x&context=3
+// SHR Quicks issues - see
+// https://www.reddit.com/r/EmuDev/comments/72dunw/chip8_8xy6_help/dno06ix/?utm_source=reddit&utm_medium=web2x&context=3
 
 void setup_shr_va_vb_bit_set(void) {
   registers[0xA] = 0x81;
   // registers[0xB] = 0x81;
-  registers[0xF] = 0x00;
+  registers[0xF]    = 0x00;
   programStorage[0] = invertByteOrder(SHR_VA_VB);
 }
 
@@ -490,7 +491,7 @@ void verify_shr_va_vb_bit_set(void) {
 void setup_shr_va_vb_bit_unset(void) {
   registers[0xA] = 0x40;
   // registers[0xB] = 0x40;
-  registers[0xF] = 0x00;
+  registers[0xF]    = 0x00;
   programStorage[0] = invertByteOrder(SHR_VA_VB);
 }
 
@@ -503,7 +504,7 @@ void verify_shr_va_vb_bit_unset(void) {
 void setup_shl_va_vb_bit_set(void) {
   registers[0xA] = 0x81;
   // registers[0xB] = 0x81;
-  registers[0xF] = 0x00;
+  registers[0xF]    = 0x00;
   programStorage[0] = invertByteOrder(SHL_VA_VB);
 }
 
@@ -516,7 +517,7 @@ void verify_shl_va_vb_bit_set(void) {
 void setup_shl_va_vb_bit_unset(void) {
   registers[0xA] = 0x40;
   // registers[0xB] = 0x40;
-  registers[0xF] = 0x00;
+  registers[0xF]    = 0x00;
   programStorage[0] = invertByteOrder(SHL_VA_VB);
 }
 
@@ -527,9 +528,9 @@ void verify_shl_va_vb_bit_unset(void) {
 }
 
 void setup_sub_v3_ve_no_borrow(void) {
-  registers[0x3] = 0x20;
-  registers[0xE] = 0x10;
-  registers[0xF] = 0x00;
+  registers[0x3]    = 0x20;
+  registers[0xE]    = 0x10;
+  registers[0xF]    = 0x00;
   programStorage[0] = invertByteOrder(SUB_V3_VE);
 }
 
@@ -540,9 +541,9 @@ void verify_sub_v3_ve_no_borrow(void) {
 }
 
 void setup_sub_v3_ve_with_borrow(void) {
-  registers[0x3] = 0x10;
-  registers[0xE] = 0x28;
-  registers[0xF] = 0x00;
+  registers[0x3]    = 0x10;
+  registers[0xE]    = 0x28;
+  registers[0xF]    = 0x00;
   programStorage[0] = invertByteOrder(SUB_V3_VE);
 }
 
@@ -553,9 +554,9 @@ void verify_sub_v3_ve_with_borrow(void) {
 }
 
 void setup_subn_v2_ve_no_borrow(void) {
-  registers[0x2] = 0x10;
-  registers[0xE] = 0x20;
-  registers[0xF] = 0x00;
+  registers[0x2]    = 0x10;
+  registers[0xE]    = 0x20;
+  registers[0xF]    = 0x00;
   programStorage[0] = invertByteOrder(SUBN_V2_VE);
 }
 
@@ -566,9 +567,9 @@ void verify_subn_v2_ve_no_borrow(void) {
 }
 
 void setup_subn_v2_ve_with_borrow(void) {
-  registers[0x2] = 0x20;
-  registers[0xE] = 0x10;
-  registers[0xF] = 0x00;
+  registers[0x2]    = 0x20;
+  registers[0xE]    = 0x10;
+  registers[0xF]    = 0x00;
   programStorage[0] = invertByteOrder(SUBN_V2_VE);
 }
 
@@ -579,16 +580,16 @@ void verify_subn_v2_ve_with_borrow(void) {
 }
 
 void setup_subn_vf_v1_with_no_borrow(void) {
-  registers[0x1] = 72;
-  registers[0xF] = 128;
+  registers[0x1]    = 72;
+  registers[0xF]    = 128;
   programStorage[0] = invertByteOrder(SUBN_VF_V1);
 }
 
 void verify_subn_vf_v1_with_no_borrow(void) { expectEqualBytes(registers[0xF], 0x0, "VF"); }
 
 void setup_xor_v3_ve(void) {
-  registers[0x3] = 0x41;
-  registers[0xE] = 0x40;
+  registers[0x3]    = 0x41;
+  registers[0xE]    = 0x40;
   programStorage[0] = invertByteOrder(XOR_V3_VE);
 }
 
@@ -600,7 +601,7 @@ void verify_xor_v3_ve(void) {
 void setup_bcd_i_v3(void) {
   registerI = 0x600;
   memset((void *)registerI, 0, 3);
-  registers[0x3] = 128;
+  registers[0x3]    = 128;
   programStorage[0] = invertByteOrder(BCD_I_V3);
 }
 
@@ -613,7 +614,7 @@ void verify_bcd_i_v3(void) {
 }
 
 void setup_ldf_i_v4(void) {
-  registers[0x4] = 1;
+  registers[0x4]    = 1;
   programStorage[0] = invertByteOrder(LDF_I_V4);
 }
 
@@ -622,7 +623,7 @@ void verify_ldf_i_v4(void) { expectEqualInts(registerI, (uint16_t)&fonts[5], "I"
 const byte audioPattern[16] = {0x81, 0x81, 0x81, 0x81, 0x81, 0x81, 0x81, 0x81, 0x81, 0x81, 0x81, 0x81, 0x81, 0x81, 0x81, 0x81};
 
 void setup_audio(void) {
-  registerI = (uint16_t)audioPattern;
+  registerI   = (uint16_t)audioPattern;
   audioActive = false;
   audioPeriod = 0;
 
@@ -635,7 +636,7 @@ void verify_audio(void) {
 }
 
 void setup_skips_dbl_word_instruction(void) {
-  registers[4] = 15;
+  registers[4]      = 15;
   programStorage[0] = invertByteOrder(SE_V4_15);
   programStorage[1] = invertByteOrder(LD_IL_6000_1);
   programStorage[2] = invertByteOrder(LD_IL_6000_2);
@@ -649,24 +650,24 @@ void resetKeyConfiguration(void) {
   gameKeyCount = 15;
 
   const char *str1 = "0";
-  char       *str = (char *)str1;
+  char       *str  = (char *)str1;
 
   for (int i = 0; i <= 9; i++) {
-    *str = i + '0';
+    *str                   = i + '0';
     const MatrixMapping *p = codeToMatrix(str);
-    gameKeys[i].matrixRow = p->rowIndex;
+    gameKeys[i].matrixRow  = p->rowIndex;
     gameKeys[i].matrixMask = p->bitMask;
-    gameKeys[i].type = KC_ASCII;
-    gameKeys[i].hexCode = i;
+    gameKeys[i].type       = KC_ASCII;
+    gameKeys[i].hexCode    = i;
   }
 
   for (int i = 10; i <= 15; i++) {
-    *str = i + 'a' - 10;
+    *str                   = i + 'a' - 10;
     const MatrixMapping *p = codeToMatrix(str);
-    gameKeys[i].matrixRow = p->rowIndex;
+    gameKeys[i].matrixRow  = p->rowIndex;
     gameKeys[i].matrixMask = p->bitMask;
-    gameKeys[i].type = KC_ASCII;
-    gameKeys[i].hexCode = i;
+    gameKeys[i].type       = KC_ASCII;
+    gameKeys[i].hexCode    = i;
   }
 }
 

@@ -14,12 +14,12 @@ inline uint8_t call(void) {
 
 #define ret() popPc()
 
-#define skipNextInstruction()                 \
-  {                                           \
-    if (*chip8PC == LOAD_I_LARGE_INSTRUCTION) \
-      chip8PC += 2;                           \
-    else                                      \
-      chip8PC += 1;                           \
+#define skipNextInstruction()                                                                                                      \
+  {                                                                                                                                \
+    if (*chip8PC == LOAD_I_LARGE_INSTRUCTION)                                                                                      \
+      chip8PC += 2;                                                                                                                \
+    else                                                                                                                           \
+      chip8PC += 1;                                                                                                                \
   }
 
 inline void seVxByte(void) {

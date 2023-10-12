@@ -33,14 +33,15 @@ uint8_t currentButtons2;
 
 void loadControllerStates(void) {
   currentDirection1 = getControllerDirection(1);
-  currentButtons1 = getControllerButton(1) | (getControllerButton(3) << 1);
+  currentButtons1   = getControllerButton(1) | (getControllerButton(3) << 1);
   currentDirection2 = getControllerDirection(2);
-  currentButtons2 = getControllerButton(2) | (getControllerButton(4) << 1);
+  currentButtons2   = getControllerButton(2) | (getControllerButton(4) << 1);
 }
 
 #define matchingSerialChar() (IS_KEY_PRESSED(config.matrixRow, config.matrixMask))
 #define matchingDirection(n) (isYm2149 && config.controllerId == (n - 1) && config.controllerDirection == currentDirection##n)
-#define matchingButtons(n)   (isYm2149 && config.controllerId == (n - 1) && ((currentButtons##n & config.controllerButtons) == config.controllerButtons))
+#define matchingButtons(n)                                                                                                         \
+  (isYm2149 && config.controllerId == (n - 1) && ((currentButtons##n & config.controllerButtons) == config.controllerButtons))
 
 uint8_t isKeyDown(const uint8_t c) __z88dk_fastcall {
   pConfig = gameKeys;

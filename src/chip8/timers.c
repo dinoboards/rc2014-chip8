@@ -12,7 +12,7 @@ uint8_t lastTimerTick;
 
 #ifdef _MEASURE_PERFORMANCE
 uint16_t performanceMeasureTick = 0;
-uint16_t instructionCount = 0;
+uint16_t instructionCount       = 0;
 #endif
 
 void initTimers(void) {
@@ -26,7 +26,7 @@ void reportPerformance(void) {
 
   if (JIFFY >= performanceMeasureTick) {
     printf("Count: '%d'\r\n", (instructionCount / 2));
-    instructionCount = 0;
+    instructionCount       = 0;
     performanceMeasureTick = JIFFY + 120;
   }
 }

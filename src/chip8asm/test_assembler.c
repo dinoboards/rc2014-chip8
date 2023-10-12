@@ -34,7 +34,8 @@ void testEvaluation(void) {
   shouldEvaluate("2 | (3 & 0)", 2 | (3 & 0));
   shouldEvaluate("(2 | 3) & 0", (2 | 3) & 0);
 
-  shouldEvaluateError("A1234567890A1234567890A1234567890A1234567890A1234567890A1234567890A1234567890*10", "Expression item too long");
+  shouldEvaluateError("A1234567890A1234567890A1234567890A1234567890A1234567890A1234567890A1234567890*10",
+                      "Expression item too long");
 
   shouldEvaluateError("@@@", "Expression had unexpected character '@' at line number 0");
   shouldEvaluateError("[I]", "Expression had unexpected character '[' at line number 0");

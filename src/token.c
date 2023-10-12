@@ -31,14 +31,14 @@ char _getNext(char *currentLine) __z88dk_fastcall {
 
   if (newLineStarted) {
     currentLineNumber++;
-    currentLine[0] = '\0';
+    currentLine[0]   = '\0';
     currentLineIndex = 0;
-    newLineStarted = false;
+    newLineStarted   = false;
   }
 
   if (result != '\r' && result != '\n') {
     currentLine[currentLineIndex++] = result;
-    currentLine[currentLineIndex] = '\0';
+    currentLine[currentLineIndex]   = '\0';
   }
 
   newLineStarted = result == '\n';
@@ -78,8 +78,8 @@ bool isAlphaNumeric(const char *p) __z88dk_fastcall {
   pTokenValue = (char *)p;
 
   isOnlyAlphaNumeric = true;
-  isOnlyLetters = true;
-  isOnlyDigits = true;
+  isOnlyLetters      = true;
+  isOnlyDigits       = true;
 
   while (isCharExpression(tokenCurrentChar)) {
     if (!isCharAlpha(tokenCurrentChar))
@@ -91,11 +91,11 @@ bool isAlphaNumeric(const char *p) __z88dk_fastcall {
     if (!isDigit(tokenCurrentChar))
       isOnlyDigits = false;
 
-    *pTokenValue++ = tokenCurrentChar;
+    *pTokenValue++   = tokenCurrentChar;
     tokenCurrentChar = getNext();
   }
 
-  *pTokenValue = '\0';
+  *pTokenValue        = '\0';
   tokenTerminatorChar = tokenCurrentChar;
   tokeniseAlphaNumericString();
 

@@ -16,7 +16,18 @@ static int         tokenIndex = 0;
 static char        currentChar;
 static const char *expressionPtr;
 
-typedef enum { UNKNOWN, ADD_SUB_OP, MUL_DIV_REM_OP, OP_OR, AND_OP, LEFT_PAREN, RIGHT_PAREN, NUMBER, ALPHA, END_INPUT } LookAheadTokens;
+typedef enum {
+  UNKNOWN,
+  ADD_SUB_OP,
+  MUL_DIV_REM_OP,
+  OP_OR,
+  AND_OP,
+  LEFT_PAREN,
+  RIGHT_PAREN,
+  NUMBER,
+  ALPHA,
+  END_INPUT
+} LookAheadTokens;
 
 static LookAheadTokens lookAhead;
 
@@ -25,7 +36,7 @@ int16_t expr(void);
 
 inline void reset(void) {
   tokenIndex = 0;
-  token[0] = '\0';
+  token[0]   = '\0';
 }
 
 inline void ignore(void) { currentChar = *expressionPtr++; }
@@ -61,8 +72,8 @@ void readCh(void) {
   }
 
   token[tokenIndex++] = currentChar;
-  token[tokenIndex] = '\0';
-  currentChar = *expressionPtr++;
+  token[tokenIndex]   = '\0';
+  currentChar         = *expressionPtr++;
 }
 
 void scan(void) {
@@ -124,7 +135,7 @@ START:
   case '\n':
   case '\0':
     currentChar = ' '; // delayed ignore()
-    lookAhead = END_INPUT;
+    lookAhead   = END_INPUT;
     return;
 
   default:
