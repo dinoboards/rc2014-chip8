@@ -12,7 +12,7 @@ Copy the pre-built released units, and install them on your RC2014.  Also grab a
 
 The chip8.com file is designed to be started from CPM (any version).
 
-> Remeber it does require RomWBW hbios and the TMS graphics module (lores only) or the [V9958 module](https://www.tindie.com/products/dinotron/v9958-msx-video-board-for-rc2014/) (highres)
+> Remeber it does require RomWBW hbios and the TMS graphics module (lores only) or the [V99x8 module](https://www.tindie.com/products/dinotron/v99x8-msx-rgb-video-module-for-rc2014/) (highres)
 
 To run a prebuilt ROM, on your RC2014:
 
@@ -79,12 +79,12 @@ Example:
 ## Hardware
 
 As part of the hardware development I have been undertaking to develop MSX compatible modules for the RC2014 platform, I have used this chip8 port to test and explore the V9958 and other MSX modules I have been designing:
-* [V9958 video board](https://www.tindie.com/products/dinotron/v9958-msx-video-board-for-rc2014/)
+* [V99x8 video board](https://www.tindie.com/products/dinotron/v99x8-msx-rgb-video-module-for-rc2014)
 * [MSX compatible GAME card](https://github.com/vipoo/rc2014-game)
 
 ### Video Output devices
 
-I have tested this code on my RC2014 system with a [TMS9918 video board](https://github.com/jblang/TMS9918A) and the [V9958 video board](https://www.tindie.com/products/dinotron/v9958-msx-video-board-for-rc2014/).
+I have tested this code on my RC2014 system with a [TMS9918 video board](https://github.com/jblang/TMS9918A) and the [V99x8 video board](https://www.tindie.com/products/dinotron/v99x8-msx-rgb-video-module-for-rc2014/).
 
 Chip8 represents the screen as a simple bitmap (64x32) or (128x64) pixels. Due to the way the TMS9918A chip works, its not actually able to generate the hires image.  The V9958 is more than capable of generating the required resolution/colours.
 
