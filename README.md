@@ -1,6 +1,4 @@
-# Chip-8 assembler and interpeter for RC2014
-
-[![Build Status](https://travis-ci.com/vipoo/rc2014-chip8.svg?branch=master)](https://travis-ci.com/vipoo/rc2014-chip8)
+# Chip-8 assembler and interpreter for RC2014
 
 Chip-8 is a byte code interpreter to execute small games and graphic demos.  Originally designed for early 8 bit computer, its been ported to many platforms.  See here for more information of [Chip 8](https://en.wikipedia.org/wiki/CHIP-8)
 
@@ -12,7 +10,7 @@ Copy the pre-built released units, and install them on your RC2014.  Also grab a
 
 The chip8.com file is designed to be started from CPM (any version).
 
-> Remeber it does require RomWBW hbios and the TMS graphics module (lores only) or the [V99x8 module](https://www.tindie.com/products/dinotron/v99x8-msx-rgb-video-module-for-rc2014/) (highres)
+> Remember it does require RomWBW hbios and the TMS graphics module (lores only) or the [V99x8 module](https://www.tindie.com/products/dinotron/v99x8-msx-rgb-video-module-for-rc2014/) (highres)
 
 To run a prebuilt ROM, on your RC2014:
 
@@ -121,7 +119,7 @@ See the test-samples for some examples of colour and key mappings.
 
 ### See Also
 
-https://github.com/mattmikolay/chip-8/wiki/CHIP%E2%80%908-Instruction-Set     a  sdddddddddddddddddd
+https://github.com/mattmikolay/chip-8/wiki/CHIP%E2%80%908-Instruction-Set
 
 http://devernay.free.fr/hacks/chip8/C8TECH10.HTM
 
